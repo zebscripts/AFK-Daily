@@ -192,12 +192,12 @@ The script is developed in a way to exit whenever something doesn't go as planne
 **Either way, if something doesn't go as planned, be sure to hit `Control+C` in the terminal to stop the script from executing!**
 
 These are known issues that you might stumble across:
-- If Soren is already open and ready to be fought, there's a possibility that the script won't quick battle Soren.
-- There's a chance uncollected Bounties won't get collected, and the script tries to start them instead. This doesn't break the script, but as a down-side it won't start every Bounty!
-- Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. En example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
-- I've encountered problems collecting daily quest chests on Bluestacks. If the script exits while collecting them, please collect them yourself, as well as Mail!
+- [#3](https://github.com/zebscripts/afk-daily/issues/3) If Soren is already open and ready to be fought, there's a possibility that the script won't quick battle Soren.
+- [#5](https://github.com/zebscripts/afk-daily/issues/5) There's a chance uncollected Bounties won't get collected, and the script tries to start them instead. This doesn't break the script, but as a down-side it won't start every Bounty!
+- [#4](https://github.com/zebscripts/afk-daily/issues/4) Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
+- [#2](https://github.com/zebscripts/afk-daily/issues/2) I've encountered problems collecting daily quest chests on Bluestacks. If the script exits while collecting them, please collect them yourself, as well as Mail!
 
-If you encounter an issue that is *not* listed above, feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones as well.
+If you encounter an issue that is *not* listed above, feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
 
 ## Planned features
 - [ ] Add some sort of config, ideally a `./deploy.sh config`
