@@ -28,9 +28,6 @@ This script is meant to automate the process of daily activities within the [AFK
 - [Planned features](#planned-features)
 - [Tips](#tips)
 - [FAQ](#faq)
-    - [Do I need a rooted device?](#do-i-need-a-rooted-device)
-    - [Can I get banned by using this script?](#can-i-get-banned-by-using-this-script)
-    - [Will this ever be available on iOS?](#will-this-ever-be-available-on-ios)
 - [Feature Requests](#feature-requests)
 
 ## Features
@@ -230,14 +227,11 @@ Here are some tips to keep in mind:
 - If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` didn't get saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
 
 ## FAQ
-#### Do I need a rooted device?
-Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
+**Do I need a rooted device?** Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
 
-#### Can I get banned by using this script?
-I haven't talked with Lilith about it yet, though I do plan on doing so. I'll update this question whenever I get an answer from them. I hope not...
+**Can I get banned by using this script?** I've tried to get in contact with them through various means, and until this day I haven't gotten an answer from them yet.
 
-#### Will this ever be available on iOS?
-Nope.
+**Will this ever be available on iOS?** Nope.
 
 ## Feature Requests
 Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
