@@ -601,7 +601,7 @@ sleep 1
 input tap 970 380 # Open menu for friends, etc
 
 switchTab "Campaign"
-sleep 1
+sleep 3
 switchTab "Dark Forest"
 sleep 1
 switchTab "Ranhorn"
