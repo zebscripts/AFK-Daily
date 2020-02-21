@@ -410,7 +410,7 @@ function guildHunts() {
 
     # TODO: Make sure 2x and Auto are enabled
     # TODO: Have a variable decide if fight wrizz or not
-    # Sart checking for a finished Battle after 40 seconds
+    # Start checking for a finished Battle after 40 seconds
     # waitForBattleToFinish 85
     #wait
     #input tap 550 800
@@ -437,13 +437,15 @@ function guildHunts() {
     sleep 1
 
     getColor 550 1850
+
     # If Soren is open
-    # FIXME: Soren is open though it doesnt fight
-    if [ "$RGB" == "422819" ]; then
+    if [ "$RGB" == "412818" ]; then
         quickBattleGuildBosses
+        
     # If Soren is closed
     else
         getColor 580 1753
+
         # If soren is "openable" and canOpenSoren == true
         if [ "$RGB" == "fae0ac" ] && [ "$canOpenSoren" == true ]; then
             input tap 550 1850
@@ -619,7 +621,6 @@ soloBounties
 teamBounties
 arenaOfHeroes
 legendsTournament
-exit
 kingsTower
 
 # RANHORN TAB

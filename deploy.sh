@@ -103,26 +103,27 @@ function deploy() {
 clear
 
 checkLineEndings "afk-daily.sh"
-restartAdb
 
 # Check where to deploy
 if [ "$1" ]; then
     # BlueStacks
     if [ "$1" == "bluestacks" ] || [ "$1" == "bs" ] || [ "$1" == "-bluestacks" ] || [ "$1" == "-bs" ]; then
+        restartAdb
         checkForDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
 
     # Nox
     elif [ "$1" == "nox" ] || [ "$1" == "n" ] || [ "$1" == "-nox" ] || [ "$1" == "-n" ]; then
+        restartAdb
         checkForDevice "Nox"
         deploy "Nox" "$noxDirectory"
 
     # Interactive Options
-    elif [ "$1" == "options" ] || [ "$1" == "opt" ] || [ "$1" == "-opt" ]; then
-        echo "hehe"
-        #read
+    elif [ "$1" == "dev" ]; then
+        deploy "Personal" "$personalDirectory"
     fi
 # Try to recognize device automatically
 else
+    restartAdb
     checkForDevice
 fi
