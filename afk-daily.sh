@@ -4,12 +4,10 @@
 # CONFIG: Modify accordingly to your game!
 canOpenSoren=false
 totalAmountArenaTries=2+0
-totalAmountLegendTournamentTries=0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
 endAtSoren=true
 # TODO: End at legends torunament to bet
-# TODO: totalAmountLegendTournamentTries is the same as totalAmountArenaTries-2
 # TODO: Let player choose VIP and script knows how often
 
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
@@ -358,7 +356,7 @@ function legendsTournament() {
 
     # Repeat a battle for as long as totalAmountArenaTries
     local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountLegendTournamentTries" ]; do
+    until [ "$COUNT" -gt "$totalAmountArenaTries-2" ]; do
         input tap 550 1840
         sleep 1
         input tap 800 1140
@@ -621,6 +619,7 @@ soloBounties
 teamBounties
 arenaOfHeroes
 legendsTournament
+exit
 kingsTower
 
 # RANHORN TAB

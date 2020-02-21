@@ -177,14 +177,13 @@ Running the script on Nox:
 In order to take actions in the game, the script is dependent on some variables that are set on the beginning of each script. In order to change these, open `afk-daily.sh` with a text editor of choice, and change them.
 
 **`afk-daily.sh`:**
-| Variable                           | Description                                                                                                                        | Default |
-| :--------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `canOpenSoren`                     | Set to `true` if the player has permissions to open Soren.                                                                         | `false` |
-| `totalAmountArenaTries`            | The total amount of tries the player may fight in the Arena of Heroes. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
-| `totalAmountLegendTournamentTries` | The total amount of tries the player may fight in the Legends Tournament.                                                          |   `0`   |
-| `totalAmountGuildBossTries`        | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.           |  `2+0`  |
-| `totalAmountDailyQuests`           | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                             |   `8`   |
-| `endAtSoren`                       | If set to `true`, the script will execute, and when finished end at Soren.                                                         | `true`  |
+| Variable                    | Description                                                                                                              | Default |
+| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
+| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               | `false` |
+| `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |   `8`   |
+| `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `true`  |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case something doesn't go as planned and the script does not exit, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
