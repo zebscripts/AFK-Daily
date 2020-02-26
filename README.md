@@ -65,7 +65,7 @@ There are quite a few requirements in order to run this script. In a perfect wor
 > I'm planning to make the installation a lot easier by letting the script install ADB for you. I'll make sure to update this README whenever that happens!
 
 1. **ADB**: The script relies on ADB to communicate with your device. So installing ADB is really a no-brainer. Here's a [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to do it. Please make sure to add it to your $PATH as well, here's [another link](https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378).
-2. **`.sh`:** In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there's many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
+2. **`.sh`:** In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there are many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
 
 <hr>
 
