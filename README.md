@@ -191,7 +191,6 @@ The script is developed in a way to exit whenever something doesn't go as planne
 **Either way, if something doesn't go as planned, be sure to hit `Control+C` in the terminal to stop the script from executing!**
 
 These are known issues that you might stumble across:
-- [#5](https://github.com/zebscripts/afk-daily/issues/5) There's a chance uncollected Bounties won't get collected, and the script tries to start them instead. This doesn't break the script, but as a down-side it won't start every Bounty!
 - [#4](https://github.com/zebscripts/afk-daily/issues/4) Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
 - [#2](https://github.com/zebscripts/afk-daily/issues/2) I've encountered problems collecting daily quest chests on Bluestacks. If the script exits while collecting them, please collect them yourself, as well as Mail!
 
@@ -227,7 +226,12 @@ Here are some tips to keep in mind:
 ## FAQ
 **Do I need a rooted device?** Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
 
-**Can I get banned by using this script?** I've tried to get in contact with them through various means, and until this day I haven't gotten an answer from them yet.
+**Can I get banned by using this script?** I've tried to get in contact with Lilith through various means, and until this day I haven't gotten an answer from them. In their [Term os Service](https://www.lilithgames.com/termofservice.html) is the following quote:
+> You agree not to do any of the following while using our Services, Lilith Content, or User Content: [...] Use cheats, exploits, hacks, bots, mods or third party software designed to gain an advantage, perceived or actual, over other Members, or modify or interfere with the Service; [...]
+
+In my opinion, this does **not** include this script, as players don't gain any type of advantage over other players. Maybe time in their life, but that's about it... I can also let you know there's a really low chance for Lilith to find out you're using this script, unless they actively try to search for it. And I doubt they're willing to spend resources into that.
+
+Do with this information what you will. Use at your own risk.
 
 **Will this ever be available on iOS?** Nope.
 

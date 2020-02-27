@@ -22,14 +22,17 @@ else
 fi
 
 # --- Functions --- #
-# Test function: change apps, take screenshot, get rgb, change apps, exit. Params: X, Y
-# TODO: Accept amount of times Parameter
+# Test function: change apps, take screenshot, get rgb, change apps, exit. Params: X, Y, amountTimes, waitTime
 function test() {
     #startApp
     #switchApp
-    sleep 2
-    getColor "$1" "$2"
-    echo "RGB: $RGB"
+    local COUNT=0
+    until [ "$COUNT" -ge "$3" ]; do
+        sleep $4
+        getColor "$1" "$2"
+        echo "RGB: $RGB"
+        ((COUNT = COUNT + 1)) # Increment
+    done
     #switchApp
     exit
 }
@@ -132,8 +135,8 @@ function waitForBattleToFinish() {
 
 # Repeat a battle for as long as totalAmountArenaTries
 function quickBattleGuildBosses() {
-    local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountGuildBossTries" ]; do
+    local COUNT=0
+    until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
         input tap 710 1840
         wait
         input tap 720 1300
@@ -226,7 +229,7 @@ function soloBounties() {
     getColor 650 520
     until [ "$RGB" != "80f7f3" ]; do
         input tap 915 470
-        sleep 2
+        sleep 1
         getColor 650 520
     done
 
@@ -282,7 +285,7 @@ function teamBounties() {
     getColor 650 520
     until [ "$RGB" != "80f7f3" ]; do
         input tap 930 500
-        sleep 2
+        sleep 1
         getColor 650 520
     done
 
@@ -315,8 +318,8 @@ function arenaOfHeroes() {
     sleep 1
 
     # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountArenaTries" ]; do
+    local COUNT=0
+    until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
         input tap 820 1400
         sleep 1
         input tap 550 1850
@@ -355,8 +358,8 @@ function legendsTournament() {
     wait
 
     # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountArenaTries-2" ]; do
+    local COUNT=0
+    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
         input tap 550 1840
         sleep 1
         input tap 800 1140
@@ -420,8 +423,8 @@ function guildHunts() {
     # Wrizz
     # TODO: Check if possible to fight wrizz
     # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountGuildBossTries" ]; do
+    local COUNT=0
+    until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
         input tap 710 1840
         wait
         input tap 720 1300
@@ -441,7 +444,7 @@ function guildHunts() {
     # If Soren is open
     if [ "$RGB" == "412818" ]; then
         quickBattleGuildBosses
-        
+
     # If Soren is closed
     else
         getColor 580 1753
@@ -515,14 +518,12 @@ function collectQuestChests() {
     input tap 960 250
     wait
 
-    # Collects quests for as long as totalAmountDailyQuests
-    local COUNT=1
-    until [ "$COUNT" -gt "$totalAmountDailyQuests" ]; do
+    # Collect Quests
+    getColor 700 670
+    while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
-        sleep 1
-        ((COUNT = COUNT + 1)) # Increment
-        # TODO: No need to echo everytime a chest is collected
-        verifyRGB 1050 490 8e2f29 "Successfully collected daily Quest." "I lost myself collecting daily Quests. You'll have to go collect those on your own! I'm sorry Master."
+        wait
+        getColor 700 670
     done
 
     input tap 330 430
@@ -580,8 +581,8 @@ function visitSoren() {
 # NC='\033[0m' # No Color
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
-# Test function
-# test 550 1850
+# Test function (X, Y, amountTimes, waitTime)
+# test 700 670 3 1
 
 # --- Script Start --- #
 echo "Starting script..."
@@ -627,7 +628,7 @@ kingsTower
 switchTab "Ranhorn"
 guildHunts
 twistedRealmBoss
-storeBuyDust
+storeBuyDust # TODO: Buy elite soulstone as well
 collectQuestChests
 collectMail
 
