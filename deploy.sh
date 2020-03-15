@@ -9,8 +9,8 @@ bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
 
 # Do not modify!
-cBlue='\033[0;34m'
 cNc='\033[0m'
+cBlue='\033[0;34m'
 
 # --- Functions --- #
 # Restarts ADB server
