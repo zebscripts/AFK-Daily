@@ -7,6 +7,7 @@ totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
 endAtSoren=true
+pvpEvent=true
 # TODO: End at legends torunament to bet
 # TODO: Let player choose VIP and script knows how often
 
@@ -309,7 +310,11 @@ function teamBounties() {
 function arenaOfHeroes() {
     input tap 740 1050
     sleep 1
-    input tap 550 450
+    if [ "$pvpEvent" == false ]; then
+        input tap 550 450
+    else
+        input tap 550 900
+    fi
     sleep 1
     input tap 1000 1800
     input tap 980 410
@@ -347,7 +352,11 @@ function legendsTournament() {
     # input tap 740 1050
     # sleep 1
     ## End of testing ##
-    input tap 550 900
+    if [ "$pvpEvent" == false ]; then
+        input tap 550 900
+    else
+        input tap 550 1450
+    fi
     sleep 1
     input tap 550 280
     sleep 2
