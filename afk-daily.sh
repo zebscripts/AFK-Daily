@@ -228,9 +228,9 @@ function soloBounties() {
 
     # Check if there are bounties to collect
     getColor 650 520
-    until [ "$RGB" != "80f7f3" ]; do
+    until [ "$RGB" != "80f6ef" ]; do
         input tap 915 470
-        sleep 1
+        sleep 0.5
         getColor 650 520
     done
 
@@ -284,9 +284,9 @@ function teamBounties() {
 
     # Check if there are bounties to collect
     getColor 650 520
-    until [ "$RGB" != "80f7f3" ]; do
+    until [ "$RGB" != "80f6ef" ]; do
         input tap 930 500
-        sleep 1
+        sleep 0.5
         getColor 650 520
     done
 
@@ -434,6 +434,13 @@ function guildHunts() {
     # Repeat a battle for as long as totalAmountArenaTries
     local COUNT=0
     until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
+        # Check if its possible to fight wrizz
+        # getColor 710 1840
+        # if [ "$RGB" != "9de7bd" ]; then
+        #     echo "Enough of wrizz! Going out."
+        #     break
+        # fi
+
         input tap 710 1840
         wait
         input tap 720 1300
@@ -470,7 +477,7 @@ function guildHunts() {
     input tap 70 1810
 
     sleep 1
-    verifyRGB 570 260 5c5c85 "Successfully battled Wrizz."
+    verifyRGB 70 1000 a9a95f "Successfully battled Wrizz."
 }
 
 # Battles against the Twisted Realm Boss
@@ -529,7 +536,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff2" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -591,7 +598,7 @@ function visitSoren() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 700 670 3 1
+# test 700 670 3 0.5
 
 # --- Script Start --- #
 echo "Starting script..."

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: Add colors
+
 # --- Variables --- #
 # CONFIG: Modify if needed. But if something doesn't work, it's not my fault.
 
@@ -27,7 +29,7 @@ function checkLineEndings() {
     printf "Checking Line endings of file $1... "
     if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
         printf "Found CLRF! Converting to LF... "
-        dos2unix $1 1>/dev/null
+        dos2unix $1 2>/dev/null
 
         if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
             printf "\nFailed to convert $1 to LF. Please do it yourself.\n"
