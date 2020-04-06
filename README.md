@@ -43,6 +43,7 @@ As of now, the script is capable of completing the following inside the game:
 - Fight in the Kings Tower
 - Fight Wrizz
 - Fight Soren if available. Can also open Soren for you.
+- Fight in the Twisted Realm
 - Buy daily Dust from the Store
 - Collect daily Quest Chests
 - Collect Mail
@@ -224,16 +225,23 @@ Here are some tips to keep in mind:
 - If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` didn't get saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
 
 ## FAQ
-**Do I need a rooted device?** Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
+**Do I need a rooted device?**
 
-**Can I get banned by using this script?** I've tried to get in contact with Lilith through various means, and until this day I haven't gotten an answer from them. In their [Term os Service](https://www.lilithgames.com/termofservice.html) is the following quote:
+Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
+
+**Can I get banned by using this script?**
+
+I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. In their [Term os Service](https://www.lilithgames.com/termofservice.html) is the following quote:
+
 > You agree not to do any of the following while using our Services, Lilith Content, or User Content: [...] Use cheats, exploits, hacks, bots, mods or third party software designed to gain an advantage, perceived or actual, over other Members, or modify or interfere with the Service; [...]
 
 In my opinion, this does **not** include this script, as players don't gain any type of advantage over other players. Maybe time in their life, but that's about it... I can also let you know there's a really low chance for Lilith to find out you're using this script, unless they actively try to search for it. And I doubt they're willing to spend resources into that.
 
-Do with this information what you will. Use at your own risk.
+Do with this information what you want. I'm not responsible at all if anything happens to your account. **Use at your own risk.**
 
-**Will this ever be available on iOS?** Nope.
+**Will this ever be available on iOS?**
+
+Nope.
 
 ## Feature Requests
 Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
