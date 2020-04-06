@@ -7,12 +7,12 @@ totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
 endAtSoren=true
-pvpEvent=true
 # TODO: End at legends torunament to bet
 # TODO: Let player choose VIP and script knows how often
 
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
+pvpEvent=false
 
 # Do not modify
 RGB=00000000
