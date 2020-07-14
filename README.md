@@ -48,7 +48,7 @@ As of now, the script is capable of completing the following inside the game:
 - Collect daily Quest Chests
 - Collect Mail
 
-There are more features planned though, check them out [here](planned-features)!
+There are more features planned though, check them out [here](#planned-features)!
 
 ## Supported Platforms
 There are **three different platforms** where you're able to run this script, namely your **personal Android device**, as well as two Android emulators: [**Bluestacks**](https://www.bluestacks.com/) and [**Nox**](https://www.bignox.com/). iOS will never be a thing, there's no need to ask for it.
@@ -59,14 +59,24 @@ Which one you want to use is up to you. Keep in mind that AFK Arena saves chat m
 There are quite a few requirements in order to run this script. In a perfect world this all works flawlessly, but we're not in a perfect world, so be prepared for some hic-ups here and there...
 
 **For advanced users:**
-1. Have ADB installed. Make sure it's in your $PATH!
+1. Have ADB installed. Make sure it's in your `$PATH`!
 2. Be able to run `.sh` files
 
 **For normal users:**
 > I'm planning to make the installation a lot easier by letting the script install ADB for you. I'll make sure to update this README whenever that happens!
 
-1. **ADB**: The script relies on ADB to communicate with your device. So installing ADB is really a no-brainer. Here's a [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to do it. Please make sure to add it to your $PATH as well, here's [another link](https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378).
+1. **ADB**: The script relies on ADB to communicate with your device. So installing ADB is really a no-brainer. Here's a [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to do it. Please make sure to add it to your `$PATH` as well, here's [another link](https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378).
 2. **`.sh`:** In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there are many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
+
+<hr>
+
+**AFK-Arena:** You actually need to be quite advanced in the game to be able to run this script. For now, the script assumes you're already **at least at stage 15-1**. Plans to take newer players into consideration exist, they're not yet implemented though. Here are the necessary in-game features, along with their respective unlock levels:
+- **Mercenaries:** Stage 6-40
+- **Quick-battle Guild:** VIP 6 or higher
+- **Skip battle in arena:** VIP 6 or higher
+- **Auto-fill Heroes in quests:** VIP 6 or higher (or stage 12-40)
+- **Twisted Realm:** Stage 14-40
+- **Factional Towers:** Stage 15-1
 
 <hr>
 
@@ -108,16 +118,6 @@ There are quite a few requirements in order to run this script. In a perfect wor
        - Change the phone model to `Google Pixel 2`
 2. **AFK Arena:** Install the game. Duh.
 3. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging inside Nox. In case you didn't, go do that now. It's under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
-
-<hr>
-
-**AFK-Arena:** You actually need to be quite advanced in the game to be able to run this script. For now, the script assumes you're already **at least at stage 15-1**. Plans to take newer players into consideration exist, they're not yet implemented though. Here are the necessary in-game features, along with their respective unlock levels:
-- **Mercenaries:** Stage 6-40
-- **Quick-battle Guild:** VIP 6 or higher
-- **Skip battle in arena:** VIP 6 or higher
-- **Auto-fill Heroes in quests:** VIP 6 or higher (or stage 12-40)
-- **Twisted Realm:** Stage 14-40
-- **Factional Towers:** Stage 15-1
 
 <hr>
 
@@ -175,7 +175,7 @@ Running the script on Nox:
 ```
 
 ## Config/Variables
-In order to take actions in the game, the script is dependent on some variables that are set on the beginning of each script. In order to change these, open `afk-daily.sh` with a text editor of choice, and change them.
+In order to take actions in the game, the script is dependent on some variables that are set at the beginning of the it. In order to change these, open `afk-daily.sh` with a text editor of choice, and update them.
 
 **`afk-daily.sh`:**
 | Variable                    | Description                                                                                                              | Default |
@@ -187,7 +187,7 @@ In order to take actions in the game, the script is dependent on some variables 
 | `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `true`  |
 
 ## Issues
-The script is developed in a way to exit whenever something doesn't go as planned. In case something doesn't go as planned and the script does not exit, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
+The script is developed in a way to exit whenever something doesn't go as planned. In case something doesn't go as planned and the script does not exit, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
 
 **Either way, if something doesn't go as planned, be sure to hit `Control+C` in the terminal to stop the script from executing!**
 
@@ -211,18 +211,19 @@ If you encounter an issue that is *not* listed above, feel free to [open a new i
 - [x] ~~Android emulator compatibility (Aiming for Bluestacks and Nox)~~
 - [ ] Actually try to beat the campaign level every 3 days to maximize farm
 - [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
-- [ ] Compatibility for users who aren't as advanced in the game.
+- [ ] Compatibility for users who aren't as advanced in the game:
   - [ ] Mercenaries
   - [ ] Bounties without auto-fill
   - [ ] Arenas without skipping
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
+- [ ] Collect daily rewards from Oak Inn
 
 ## Tips
 Here are some tips to keep in mind:
 - Don't try to run the script with more than one device connected
 - Whenever something happens that you don't want to happen, just hit `Control+C` on the terminal and the script will instantly stop! *Note: If you happen to `Ctrl+C` while the script is `sleeping`, the terminal never exits. Please close and reopen it.*
-- If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` didn't get saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
+- If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` is not saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
 
 ## FAQ
 **Do I need a rooted device?**
@@ -231,13 +232,13 @@ Probably not. I've tried my best to take most of the things into consideration t
 
 **Can I get banned by using this script?**
 
-I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. In their [Term os Service](https://www.lilithgames.com/termofservice.html) is the following quote:
+I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Term of Service](https://www.lilithgames.com/termofservice.html) states the following:
 
 > You agree not to do any of the following while using our Services, Lilith Content, or User Content: [...] Use cheats, exploits, hacks, bots, mods or third party software designed to gain an advantage, perceived or actual, over other Members, or modify or interfere with the Service; [...]
 
 In my opinion, this does **not** include this script, as players don't gain any type of advantage over other players. Maybe time in their life, but that's about it... I can also let you know there's a really low chance for Lilith to find out you're using this script, unless they actively try to search for it. And I doubt they're willing to spend resources into that.
 
-Do with this information what you want. I'm not responsible at all if anything happens to your account. **Use at your own risk.**
+Do with this information what you want. I'm *not responsible at all* if anything happens to your account. **Use at your own risk.**
 
 **Will this ever be available on iOS?**
 
