@@ -6,18 +6,22 @@
 	</p>
 
   <!-- Badges -->
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> Since I haven't updated the script in a while now, things are most likely not working as intended. This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. With that said, the main reason to why I haven't been updating the script is because I was unhappy with the way I was dealing with things. It slowly started being a very big script/mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run this script in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh)), or try and make your own fork to temporarily fix RGB values and make the script usable. Thank you for your understanding!
+> The main reason to why I haven't been updating the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run this script in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 <!-- > I'd be happy to hear some feedback! If you tried this out for yourself, let me know please. -->
 
+## Disclaimer
+This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. So use it at your own risk after a new patch comes out. I'll try my best to keep it updated every now and then.
+
 ## Table of Contents <!-- omit in toc -->
+- [Disclaimer](#disclaimer)
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
 - [Requirements & Installation](#requirements--installation)
@@ -193,7 +197,6 @@ The script is developed in a way to exit whenever something doesn't go as planne
 
 These are known issues that you might stumble across:
 - [#4](https://github.com/zebscripts/afk-daily/issues/4) Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
-- [#2](https://github.com/zebscripts/afk-daily/issues/2) I've encountered problems collecting daily quest chests on Bluestacks. If the script exits while collecting them, please collect them yourself, as well as Mail!
 - [#10](https://github.com/zebscripts/AFK-Daily/issues/10) If bounties are already dispatched, the script exits, instead of continuing with the next task.
 
 If you encounter an issue that is *not* listed above, feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.

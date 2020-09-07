@@ -40,7 +40,7 @@ function test() {
 
 # Default wait time for actions
 function wait() {
-    sleep 0.5
+    sleep 1
 }
 
 # Starts the app
@@ -153,9 +153,7 @@ function quickBattleGuildBosses() {
 function lootAfkChest() {
     input tap 550 1500
     sleep 1
-    input tap 550 1350
-    sleep 1
-    input tap 550 1850
+    input tap 750 1350
     sleep 1
 
     wait
@@ -228,7 +226,7 @@ function soloBounties() {
 
     # Check if there are bounties to collect
     getColor 650 520
-    until [ "$RGB" != "80f6ef" ]; do
+    until [ "$RGB" != "7ff7ef" ]; do
         input tap 915 470
         sleep 0.5
         getColor 650 520
@@ -254,23 +252,23 @@ function soloBounties() {
     wait
     input tap 350 1160
     input tap 750 1160
-    input tap 915 1520
-    wait
-    input tap 350 1160
-    input tap 750 1160
     input swipe 550 1100 550 800 500
     wait
-    input tap 915 1350
+    input tap 915 960
     wait
     input tap 350 1160
     input tap 750 1160
-    input tap 915 1560
+    input tap 915 1170
+    wait
+    input tap 350 1160
+    input tap 750 1160
+    input tap 915 1380
     wait
     input tap 350 1160
     input tap 750 1160
 
     wait
-    verifyRGB 650 1820 ac5714 "Successfully finished Solo Bounties."
+    verifyRGB 650 1740 a7541a "Successfully finished Solo Bounties."
 }
 
 # Starts Team Bounties
@@ -283,19 +281,19 @@ function teamBounties() {
     wait
 
     # Check if there are bounties to collect
-    getColor 650 520
-    until [ "$RGB" != "80f6ef" ]; do
-        input tap 930 500
+    getColor 650 570
+    until [ "$RGB" != "84fefb" ]; do
+        input tap 930 550
         sleep 0.5
-        getColor 650 520
+        getColor 650 570
     done
 
-    input tap 930 500
+    input tap 930 550
     wait
     input tap 350 1160
     input tap 750 1160
     wait
-    input tap 930 710
+    input tap 930 770
     wait
     input tap 350 1160
     input tap 750 1160
@@ -329,7 +327,7 @@ function arenaOfHeroes() {
         sleep 1
         input tap 550 1850
         sleep 2
-        input tap 880 1470
+        input tap 760 1470
         wait
         input tap 550 1550
         wait
@@ -494,7 +492,7 @@ function twistedRealmBoss() {
     sleep 1
     input tap 550 1850
 
-    # Sart checking for a finished Battle after 40 seconds
+    # Start checking for a finished Battle after 40 seconds
     waitForBattleToFinish 50
 
     sleep 1
@@ -519,7 +517,7 @@ function storeBuyDust() {
     sleep 1
     input tap 170 840
     wait
-    input tap 550 1420
+    input tap 550 1540
     sleep 1
     input tap 550 1220
     wait
@@ -536,7 +534,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "7dfff2" ]; do
+    while [ "$RGB" == "7cfff3" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -644,12 +642,12 @@ kingsTower
 switchTab "Ranhorn"
 guildHunts
 twistedRealmBoss
-storeBuyDust # TODO: Buy elite soulstone as well
+storeBuyDust # TODO: Buy other stuff as well
 collectQuestChests
 collectMail
 
 # EXTRA
-if [ "$endAtSoren" == true ]; then
+if [ "$endAtSoren" == true ]; then # TODO: Visit Oak inn instead (probably depends on user level)
     visitSoren
 fi
 
