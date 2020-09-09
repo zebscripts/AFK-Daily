@@ -97,7 +97,8 @@ function deploy() {
     printf "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
 
     adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
-    adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push the script to phone
+    adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to phone
+    adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to phone
     adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2"    # Run script. Comment line if you don't want to run the script after pushing
 }
 
@@ -105,6 +106,7 @@ function deploy() {
 clear
 
 checkLineEndings "afk-daily.sh"
+checkLineEndings "config.sh"
 
 # Check where to deploy
 if [ "$1" ]; then
