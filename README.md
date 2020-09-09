@@ -179,7 +179,7 @@ Running the script on Nox:
 ```
 
 ## Config/Variables
-In order to take actions in the game, the script is dependent on some variables that are set at the beginning of the it. In order to change these, open `afk-daily.sh` with a text editor of choice, and update them.
+In order to take actions in the game, the script is dependent on some variables that are set at the beginning of the it. In order to change these, open `config.sh` with a text editor of choice, and update them.
 
 **`afk-daily.sh`:**
 | Variable                    | Description                                                                                                              | Default |
