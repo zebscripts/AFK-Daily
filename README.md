@@ -6,9 +6,12 @@
 	</p>
 
   <!-- Badges -->
+  <!-- Script status -->
   <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
+  <!-- Latest patch -->
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.47-blue.svg"></img></a>
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
@@ -188,7 +191,7 @@ In order to take actions in the game, the script is dependent on some variables 
 | `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |   `8`   |
-| `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `true`  |
+| `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `false`  |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case something doesn't go as planned and the script does not exit, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...

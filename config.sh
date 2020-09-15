@@ -5,4 +5,4 @@ canOpenSoren=false
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
-endAtSoren=true
+endAtSoren=false
