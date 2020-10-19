@@ -243,11 +243,13 @@ Probably not. I've tried my best to take most of the things into consideration t
 
 **Can I get banned by using this script?**
 
-I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Term of Service](https://www.lilithgames.com/termofservice.html) states the following:
+I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Terms of Service](https://www.lilithgames.com/termofservice.html) states the following:
 
 > You agree not to do any of the following while using our Services, Lilith Content, or User Content: [...] Use cheats, exploits, hacks, bots, mods or third party software designed to gain an advantage, perceived or actual, over other Members, or modify or interfere with the Service; [...]
 
 In my opinion, this does **not** include this script, as players don't gain any type of advantage over other players. Maybe time in their life, but that's about it... I can also let you know there's a really low chance for Lilith to find out you're using this script, unless they actively try to search for it. And I doubt they're willing to spend resources into that.
+
+Though Lilith has confirmed, that using Bluestacks macros is allowed in the game. [Here's an image](https://imgur.com/Ho0O4ev) for that. This makes me believe my script is also allowed.
 
 Do with this information what you want. I'm *not responsible at all* if anything happens to your account. **Use at your own risk.**
 
