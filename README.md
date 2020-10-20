@@ -8,16 +8,16 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
+  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.48-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.49-blue.svg"></img></a>
   </p>
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-<!-- > Dispatching and collecting bounties might be bugged. -->
+> Dispatching and collecting bounties is bugged. Script does not detect the correct RGB values. You will have to send bounties on your own most likely.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 <!-- > I'd be happy to hear some feedback! If you tried this out for yourself, let me know please. -->
