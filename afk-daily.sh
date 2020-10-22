@@ -118,13 +118,18 @@ function switchTab() {
     esac
 }
 
-# Checks for a battle to finish. Params: Seconds
-function waitForBattleToFinish() {
+# Checks for a battle to finish. Params: Seconds, X, Y, RGB
+function loopUntilRGB() {
     sleep "$1"
-    while [ "$RGB" != "ca9c5d" ]; do
+    getColor $2 $3
+    while [ "$RGB" != "$4" ]; do
         sleep 1
-        getColor 420 380
+        getColor $2 $3
     done
+    # while [ "$RGB" != "ca9c5d" ]; do
+    #     sleep 1
+    #     getColor 420 380
+    # done
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
@@ -218,11 +223,11 @@ function soloBounties() {
     sleep 1
 
     # Check if there are bounties to collect
-    getColor 650 520
-    until [ "$RGB" != "7af6ee" ]; do
+    getColor 650 565
+    until [ "$RGB" != "73efe5" ]; do
         input tap 915 470
         sleep 0.5
-        getColor 650 520
+        getColor 650 565
     done
 
     input tap 915 470
@@ -319,9 +324,7 @@ function arenaOfHeroes() {
         input tap 820 1400
         sleep 1
         input tap 550 1850
-        sleep 2
-        input tap 760 1470
-        wait
+        loopUntilRGB 2 750 694 d4a248
         input tap 550 1550
         wait
         input tap 550 1550
@@ -414,7 +417,7 @@ function guildHunts() {
     # TODO: Make sure 2x and Auto are enabled
     # TODO: Have a variable decide if fight wrizz or not
     # Start checking for a finished Battle after 40 seconds
-    # waitForBattleToFinish 85
+    # loopUntilRGB 85 420 380 ca9c5d
     #wait
     #input tap 550 800
     #input tap 550 800
@@ -486,7 +489,7 @@ function twistedRealmBoss() {
     input tap 550 1850
 
     # Start checking for a finished Battle after 40 seconds
-    waitForBattleToFinish 50
+    loopUntilRGB 30 420 380 ca9c5d
 
     sleep 1
     input tap 550 800
@@ -589,7 +592,10 @@ function visitSoren() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 700 670 3 0.5
+# test 750 694 3 0.5
+# test 650 565 3 0.5 # Check for Solo Bounties RGB
+# test 650 570 3 0.5 # Check for Team Bounties RGB
+# test 700 670 3 0.5 # Check for chest collection RGB
 
 # --- Script Start --- #
 echo "Starting script..."
