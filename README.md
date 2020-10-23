@@ -22,13 +22,12 @@
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 <!-- > I'd be happy to hear some feedback! If you tried this out for yourself, let me know please. -->
 
-## Disclaimer
+## Disclaimer <!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. So use it at your own risk after a new patch comes out. I'll try my best to keep it updated every now and then.
 
 The main reason to why I haven't been adding features to the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run this script in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
 
 ## Table of Contents <!-- omit in toc -->
-- [Disclaimer](#disclaimer)
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
 - [Requirements & Installation](#requirements--installation)
