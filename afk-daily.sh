@@ -223,11 +223,11 @@ function soloBounties() {
     sleep 1
 
     # Check if there are bounties to collect
-    getColor 650 520
+    getColor 660 520
     until [ "$RGB" != "7af5ed" ]; do
         input tap 915 470
         sleep 0.5
-        getColor 650 565
+        getColor 660 520
     done
 
     input tap 915 470
