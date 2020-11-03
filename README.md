@@ -23,9 +23,9 @@ This script is meant to automate the process of daily activities within the [AFK
 <!-- > I'd be happy to hear some feedback! If you tried this out for yourself, let me know please. -->
 
 ## Disclaimer <!-- omit in toc -->  
-This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. So use it at your own risk after a new patch comes out. I'll try my best to keep it updated every now and then.
+This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on. I'll try my best to keep it updated!
 
-The main reason to why I haven't been adding features to the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run this script in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
+The main reason to why I haven't been adding features to the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run it in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
 
 ## Table of Contents <!-- omit in toc -->
 - [Features](#features)
@@ -39,6 +39,7 @@ The main reason to why I haven't been adding features to the script is because I
 - [Tips](#tips)
 - [FAQ](#faq)
 - [Feature Requests](#feature-requests)
+- [Troubleshooting](#troubleshooting)
 
 ## Features
 As of now, the script is capable of completing the following inside the game:
@@ -185,9 +186,8 @@ Running the script on Nox:
 ```
 
 ## Config/Variables
-In order to take actions in the game, the script is dependent on some variables that are set at the beginning of the it. In order to change these, open `config.sh` with a text editor of choice, and update them.
+The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them.
 
-**`afk-daily.sh`:**
 | Variable                    | Description                                                                                                              | Default |
 | :-------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               | `false` |
@@ -197,28 +197,27 @@ In order to take actions in the game, the script is dependent on some variables 
 | `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `false` |
 
 ## Issues
-The script is developed in a way to exit whenever something doesn't go as planned. In case something doesn't go as planned and the script does not exit, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
+The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
 
 **Either way, if something doesn't go as planned, be sure to hit `Control+C` in the terminal to stop the script from executing!**
 
 These are known issues that you might stumble across:
-- [#4](https://github.com/zebscripts/afk-daily/issues/4) Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
-- [#10](https://github.com/zebscripts/AFK-Daily/issues/10) If bounties are already dispatched, the script exits, instead of continuing with the next task.
+- [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
 
-If you encounter an issue that is *not* listed above, feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
+If you encounter an issue that is *not* listed above or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
 
 ## Planned features
-- [ ] Add some sort of config, ideally a `./deploy.sh config`
-- [x] ~~Check if there are Bounty Quests to collect before sending out heroes on quests~~
+- [x] Add some sort of config, ideally a `./deploy.sh config`
+- [x] Check if there are Bounty Quests to collect before sending out heroes on quests
 - [ ] Fight in more than just the main tower
 - [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
-- [x] ~~Fight the twisted realm as well~~
+- [x] Fight the twisted realm as well
 - [ ] Collect Soulstones
 - [ ] Collect weekly quests
 - [ ] Collect Merchant Daily/Weekly/Monthly rewards (Will probably never happen if the games interface stays the same)
 - [ ] Make script output pretty
 - [ ] Test for screen size with `adb shell wm size`
-- [x] ~~Android emulator compatibility (Aiming for Bluestacks and Nox)~~
+- [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
 - [ ] Actually try to beat the campaign level every 3 days to maximize farm
 - [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
 - [ ] Compatibility for users who aren't as advanced in the game:
@@ -258,3 +257,8 @@ Nope.
 
 ## Feature Requests
 Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
+
+## Troubleshooting
+**`hexdump: not found`**
+
+This is most likely because your device does not have [busybox](https://play.google.com/store/apps/details?id=stericson.busybox) installed. Either install it on your device or try an emulator like Bluestacks out.
