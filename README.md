@@ -69,6 +69,16 @@ Which one you want to use is up to you. Keep in mind that AFK Arena saves chat m
 ## Requirements & Installation
 There are quite a few requirements in order to run this script. In a perfect world this all works flawlessly, but we're not in a perfect world, so be prepared for some hic-ups here and there...
 
+**AFK-Arena:** You actually need to be quite advanced in the game to be able to run this script. For now, the script assumes you're already **at least at stage 15-1**. Plans to take newer players into consideration exist, they're not yet implemented though. Here are the necessary in-game features, along with their respective unlock levels:
+- **Mercenaries:** Stage 6-40
+- **Quick-battle Guild:** VIP 6 or higher
+- **Skip battle in arena:** VIP 6 or higher
+- **Auto-fill Heroes in quests:** VIP 6 or higher (or stage 12-40)
+- **Twisted Realm:** Stage 14-40
+- **Factional Towers:** Stage 15-1
+
+<hr>
+
 **For advanced users:**
 1. Have ADB installed. Make sure it's in your `$PATH`!
 2. Be able to run `.sh` files
@@ -78,16 +88,6 @@ There are quite a few requirements in order to run this script. In a perfect wor
 
 1. **ADB**: The script relies on ADB to communicate with your device. So installing ADB is really a no-brainer. Here's a [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to do it. Please make sure to add it to your `$PATH` as well, here's [another link](https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378).
 2. **`.sh`:** In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there are many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
-
-<hr>
-
-**AFK-Arena:** You actually need to be quite advanced in the game to be able to run this script. For now, the script assumes you're already **at least at stage 15-1**. Plans to take newer players into consideration exist, they're not yet implemented though. Here are the necessary in-game features, along with their respective unlock levels:
-- **Mercenaries:** Stage 6-40
-- **Quick-battle Guild:** VIP 6 or higher
-- **Skip battle in arena:** VIP 6 or higher
-- **Auto-fill Heroes in quests:** VIP 6 or higher (or stage 12-40)
-- **Twisted Realm:** Stage 14-40
-- **Factional Towers:** Stage 15-1
 
 <hr>
 
@@ -256,9 +256,11 @@ Do with this information what you want. I'm *not responsible at all* if anything
 Nope.
 
 ## Feature Requests
-Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
+Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [Discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
 
 ## Troubleshooting
+If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041). I'll try my best to help you.
+
 **`hexdump: not found`**
 
 This is most likely because your device does not have [busybox](https://play.google.com/store/apps/details?id=stericson.busybox) installed. Either install it on your device or try an emulator like Bluestacks out.
