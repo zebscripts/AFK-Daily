@@ -224,9 +224,9 @@ function soloBounties() {
 
     # Check if there are bounties to collect
     getColor 660 520
-    until [ "$RGB" != "7af5ed" ]; do
+    until [ "$RGB" != "7af7ee" ]; do
         input tap 915 470
-        sleep 0.5
+        sleep 1
         getColor 660 520
     done
 
@@ -280,9 +280,9 @@ function teamBounties() {
 
     # Check if there are bounties to collect
     getColor 650 570
-    until [ "$RGB" != "84fef7" ]; do
+    until [ "$RGB" != "84fff8" ]; do
         input tap 930 550
-        sleep 0.5
+        sleep 1
         getColor 650 570
     done
 
@@ -530,7 +530,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "7cfef0" ]; do
+    while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
         wait
         getColor 700 670
