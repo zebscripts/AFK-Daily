@@ -223,11 +223,11 @@ function soloBounties() {
     sleep 1
 
     # Check if there are bounties to collect
-    getColor 660 520
-    until [ "$RGB" != "7af7ee" ]; do
+    getColor 660 555
+    until [ "$RGB" != "81fff7" ]; do
         input tap 915 470
         sleep 1
-        getColor 660 520
+        getColor 660 555
     done
 
     input tap 915 470
@@ -593,7 +593,7 @@ function visitSoren() {
 
 # Test function (X, Y, amountTimes, waitTime)
 # test 750 694 3 0.5
-# test 660 520 3 0.5 # Check for Solo Bounties RGB
+# test 660 555 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
 
