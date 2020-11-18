@@ -8,16 +8,16 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
+  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.50-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.51-blue.svg"></img></a>
   </p>
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-<!-- > Dispatching and collecting bounties is still bugged. I'll take a look at it next reset. -->
+> As usual, dispatching and collecting bounties does not work as expected on a new patch. You'll have to do those yourself.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
