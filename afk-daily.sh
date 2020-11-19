@@ -450,18 +450,17 @@ function guildHunts() {
     input tap 970 890
     sleep 1
 
-    getColor 550 1850
-
+    getColor 715 1815
     # If Soren is open
-    if [ "$RGB" == "412818" ]; then
+    if [ "$RGB" == "8ae5c4" ]; then
         quickBattleGuildBosses
 
     # If Soren is closed
-    else
+    elif [ "$canOpenSoren" == true ]; then
         getColor 580 1753
 
-        # If soren is "openable" and canOpenSoren == true
-        if [ "$RGB" == "fae0ac" ] && [ "$canOpenSoren" == true ]; then
+        # If soren is "openable"
+        if [ "$RGB" == "fae0ac" ]; then
             input tap 550 1850
             wait
             input tap 700 1250
@@ -598,6 +597,7 @@ function visitSoren() {
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
+# test 715 1815 3 0.5 # Check if Soren is open
 
 # --- Script Start --- #
 echo "Starting script..."
