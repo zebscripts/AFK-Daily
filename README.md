@@ -12,7 +12,7 @@
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.51.03-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.52.04-blue.svg"></img></a>
   </p>
 </div>
 
@@ -24,7 +24,7 @@ This script is meant to automate the process of daily activities within the [AFK
 <p align="center"><img src="https://i.imgur.com/ahQaOJx.png" alt="Example script output"></p>
 
 ## Disclaimer <!-- omit in toc -->  
-This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on. I'll try my best to keep it updated!
+This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
 
 The main reason to why I haven't been adding features to the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run it in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
 
