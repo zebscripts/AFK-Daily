@@ -8,8 +8,8 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.52.06-blue.svg"></img></a>
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> As usual, dispatching and collecting bounties does not work as expected on a new patch.
+<!-- > As usual, dispatching and collecting bounties does not work as expected on a new patch. -->
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
@@ -74,6 +74,7 @@ There are quite a few requirements in order to run this script. In a perfect wor
 - **Mercenaries:** Stage 6-40
 - **Quick-battle Guild:** VIP 6 or higher
 - **Skip battle in arena:** VIP 6 or higher
+- **Unlock Bounty Autofill and Dispatch:** VIP 6 or higher
 - **Auto-fill Heroes in quests:** VIP 6 or higher (or stage 12-40)
 - **Twisted Realm:** Stage 14-40
 - **Factional Towers:** Stage 15-1

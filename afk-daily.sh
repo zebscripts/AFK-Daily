@@ -223,48 +223,53 @@ function soloBounties() {
     sleep 1
 
     # Check if there are bounties to collect
-    getColor 660 520
-    until [ "$RGB" != "7af7ee" ]; do
-        input tap 915 470
-        sleep 1
-        getColor 660 520
-    done
+    # getColor 660 520
+    # until [ "$RGB" != "7af7ee" ]; do
+    #     input tap 915 470
+    #     sleep 1
+    #     getColor 660 520
+    # done
 
     # TODO: Before doing all this, check if there are bounties to send heroes on
-    input tap 915 470
+    # input tap 915 470
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 680
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 890
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 1100
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 1310
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input swipe 550 1100 550 800 500
+    # wait
+    # input tap 915 960
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 1170
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # input tap 915 1380
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+
+    input tap 780 1550 # Collect all
+    input tap 350 1550 # Dispatch all
     wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 680
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 890
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 1100
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 1310
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input swipe 550 1100 550 800 500
-    wait
-    input tap 915 960
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 1170
-    wait
-    input tap 350 1160
-    input tap 750 1160
-    input tap 915 1380
-    wait
-    input tap 350 1160
-    input tap 750 1160
+    input tap 550 1500 # Confirm
 
     wait
     verifyRGB 650 1740 a7541a "Successfully finished Solo Bounties."
@@ -280,22 +285,28 @@ function teamBounties() {
     wait
 
     # Check if there are bounties to collect
-    getColor 650 570
-    until [ "$RGB" != "84fff8" ]; do
-        input tap 930 550
-        sleep 1
-        getColor 650 570
-    done
+    # getColor 650 570
+    # until [ "$RGB" != "84fff8" ]; do
+    #     input tap 930 550
+    #     sleep 1
+    #     getColor 650 570
+    # done
 
-    input tap 930 550
+    # input tap 930 550
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    # wait
+    # input tap 930 770
+    # wait
+    # input tap 350 1160
+    # input tap 750 1160
+    
+    input tap 780 1550 # Collect all
+    input tap 350 1550 # Dispatch all
     wait
-    input tap 350 1160
-    input tap 750 1160
-    wait
-    input tap 930 770
-    wait
-    input tap 350 1160
-    input tap 750 1160
+    input tap 550 1500 # Confirm
+
     wait
     input tap 70 1810
 
