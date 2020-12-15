@@ -1,46 +1,61 @@
 #!/bin/bash
 
-# TODO: Add colors
+source ./lib/print.sh
 
 # --- Variables --- #
-# CONFIG: Modify if needed. But if something doesn't work, it's not my fault.
-
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
-
-# Do not modify!
-cNc='\033[0m'
-cBlue='\033[0;34m'
+configFile="config.sh"
 
 # --- Functions --- #
-# Restarts ADB server
-function restartAdb() {
-    printf "Restarting ADB... "
-    adb kill-server
-    adb start-server 1>/dev/null 2>&1
-    printf "Done.\n"
+# Creates a config.sh file if not found
+function createConfig() {
+    printTask "Searching for config.sh file..."
+    if [ -f "$configFile" ]; then
+        printSuccess "Found!"
+    else
+        printWarn "Not found!"
+        printTask "Creating new config.sh file..."
+        printf "# CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables
+totalAmountArenaTries=2+0
+totalAmountGuildBossTries=2+0
+totalAmountDailyQuests=8
+canOpenSoren=false
+endAtSoren=false" >config.sh
+        printSuccess "Created!\n"
+        printInfo "Please edit config.sh if necessary and run this script again."
+        exit
+    fi
 }
 
 # Check if afk-daily.sh has correct Line endings (LF)
 # Params: file
 function checkLineEndings() {
-    printf "Checking Line endings of file $1... "
+    printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
     if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
-        printf "Found CLRF! Converting to LF... "
+        printWarn "Found CLRF!"
+        printTask "Converting to LF..."
         dos2unix $1 2>/dev/null
 
         if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
-            printf "\nFailed to convert $1 to LF. Please do it yourself.\n"
-            printf "Exiting...\n"
+            printError "Failed to convert $1 to LF. Please do it yourself."
             exit
         else
-            printf "Success!\n"
+            printSuccess "Converted!"
         fi
     else
-        printf "Passed!\n"
+        printSuccess "Passed!"
     fi
+}
+
+# Restarts ADB server
+function restartAdb() {
+    printTask "Restarting ADB..."
+    adb kill-server
+    adb start-server 1>/dev/null 2>&1
+    printSuccess "Restarted!"
 }
 
 # Check if adb recognizes a device.
@@ -50,40 +65,42 @@ function checkForDevice() {
     if [ "$#" -gt "0" ]; then
         # Nox
         if [ "$1" == "Nox" ]; then
-            printf "Searching for Nox through ADB... "
+            printTask "Searching for Nox through ADB..."
             adb connect localhost:62001 1>/dev/null
             if ! adb get-state 1>/dev/null; then
-                printf "Exiting..."
+                printError "Not found!"
                 exit
             else
-                printf "Found!\n"
+                printSuccess "Found!"
             fi
         # Bluestacks
         elif [ "$1" == "Bluestacks" ]; then
-            printf "Searching for Bluestacks through ADB... "
+            printTask "Searching for Bluestacks through ADB... "
             if ! adb get-state 1>/dev/null; then
-                printf "Exiting..."
+                printError "Not found!"
                 exit
             else
-                printf "Found!\n"
+                printSuccess "Found!"
             fi
         fi
     # If parameters aren't sent
     else
-        printf "Searching for device through ADB... "
+        printTask "Searching for device through ADB..."
 
         # Checks if adb finds device
         if ! adb get-state 1>/dev/null 2>&1; then
-            printf "\nNo device found! Please make sure it's connected.\nIf you're trying to use Nox, please run this script with './deploy nox'!\nExiting."
+            printError "No device found!"
+            printInfo "Please make sure it's connected."
+            printInfo "If you're trying to use Nox, please run this script with './deploy nox'!"
             exit
         else
             # Bluestacks
             if [[ $(adb devices) =~ emulator ]]; then
-                printf "Found!\n"
+                printSuccess "Found!"
                 deploy "Bluestacks" "$bluestacksDirectory"
             # Personal
             else
-                printf "Found!\n"
+                printSuccess "Found!"
                 deploy "Personal" "$personalDirectory"
             fi
         fi
@@ -93,18 +110,20 @@ function checkForDevice() {
 # Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
 # Params: platform, directory
 function deploy() {
-    printf "Platform: ${cBlue}$1${cNc}\n"
-    printf "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
+    printf "\n"
+    printInfo "Platform: ${cBlue}$1${cNc}"
+    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
 
     adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
-    adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to phone
-    adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to phone
+    adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
+    adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
     adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2"    # Run script. Comment line if you don't want to run the script after pushing
 }
 
 # --- Script Start --- #
 clear
 
+createConfig
 checkLineEndings "afk-daily.sh"
 checkLineEndings "config.sh"
 

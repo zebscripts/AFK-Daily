@@ -192,10 +192,10 @@ The script acts depending on a set of variables. In order to change these, open 
 
 | Variable                    | Description                                                                                                              | Default |
 | :-------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               | `false` |
 | `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |   `8`   |
+| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               | `false` |
 | `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `false` |
 
 ## Issues
