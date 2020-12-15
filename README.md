@@ -140,7 +140,8 @@ There are quite a few requirements in order to run this script. In a perfect wor
 2. Open `afk-daily.sh` with any editor of choice and edit variables accordingly. More on this [here](#configvariables).
 3. Connect your device to the computer (or start your emulator of choice).
 4. Run `./deploy.sh`.
-5. Watch your device magically play for you. It's fun! I promise.
+5. Configure [`config.sh`](#configvariables) if necessary.
+6. Watch your device magically play for you. It's fun! I promise.
 
 **For normal users:** 
 1. Clone/Download this repository to your desired directory.
@@ -150,7 +151,8 @@ There are quite a few requirements in order to run this script. In a perfect wor
    - **Mac/Linux:** Open a terminal, and `cd` into your directory.
 4. Connect your device to the computer (or start your emulator of choice).
 5. Type `./deploy.sh` into your terminal.
-6. Watch your device magically play for you. It's fun! I promise.
+6. Configure [`config.sh`](#configvariables) if necessary.
+7. Watch your device magically play for you. It's fun! I promise.
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
 - Check for File line endings
