@@ -338,7 +338,7 @@ function arenaOfHeroes() {
         input tap 550 1850
         loopUntilRGB 2 750 694 d4a248
         input tap 550 1550
-        wait
+        sleep 1
         input tap 550 1550
         sleep 1
         ((COUNT = COUNT + 1)) # Increment
@@ -376,17 +376,15 @@ function legendsTournament() {
     local COUNT=0
     until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
         input tap 550 1840
-        sleep 1
+        sleep 3
         input tap 800 1140
-        sleep 1
-        input tap 670 1110
-        sleep 1
+        sleep 3
         input tap 550 1850
-        sleep 2
-        input tap 880 1470
-        sleep 1
+        sleep 3
+        input tap 770 1470
+        sleep 3
         input tap 550 800
-        sleep 1
+        sleep 3
         ((COUNT = COUNT + 1)) # Increment
     done
 
@@ -541,7 +539,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff1" ]; do
         input tap 930 680
         wait
         getColor 700 670
