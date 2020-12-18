@@ -301,7 +301,7 @@ function teamBounties() {
     # wait
     # input tap 350 1160
     # input tap 750 1160
-    
+
     input tap 780 1550 # Collect all
     input tap 350 1550 # Dispatch all
     wait
@@ -491,29 +491,36 @@ function twistedRealmBoss() {
     # input tap 380 360
     # sleep 3
     ## End of testing ##
-    input tap 820 820
-    sleep 1
-    input tap 550 1850
-    sleep 1
-    input tap 550 1850
 
-    # Start checking for a finished Battle after 40 seconds
-    loopUntilRGB 30 420 380 ca9c5d
+    # Check if TR is being calculated
+    getColor 740 690
+    if [ "$RGB" == "be6c3c" ]; then
+        echo "Twisted realm is being calculated, skipping..."
+    else
+        input tap 820 820
+        sleep 1
+        input tap 550 1850
+        sleep 1
+        input tap 550 1850
 
-    sleep 1
-    input tap 550 800
-    sleep 3
-    input tap 550 800
-    wait
+        # Start checking for a finished Battle after 40 seconds
+        loopUntilRGB 30 420 380 ca9c5d
 
-    # TODO: Repeat battle if variable says so
+        sleep 1
+        input tap 550 800
+        sleep 3
+        input tap 550 800
+        wait
+
+        # TODO: Repeat battle if variable says so
+    fi
 
     input tap 70 1810
     wait
     input tap 70 1810
 
     sleep 1
-    verifyRGB 20 1775 d49a61 "Successfully battled Twisted Realm Boss."
+    verifyRGB 20 1775 d49a61 "Successfully checked Twisted Realm Boss out."
 }
 
 # Buys daily dust from ths store
@@ -601,7 +608,7 @@ function visitSoren() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 750 694 3 0.5
+# test 740 690 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
