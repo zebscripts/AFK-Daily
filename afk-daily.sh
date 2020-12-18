@@ -84,9 +84,8 @@ function verifyRGB() {
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
         echo "VerifyRGB: Failure! Expected "$3", but got "$RGB" instead."
-        echo ""
+        echo
         echo "$5"
-        # switchApp
         exit
     else
         echo "$4"
@@ -109,7 +108,12 @@ function switchTab() {
     "Ranhorn")
         input tap 110 1850
         wait
-        verifyRGB 20 1775 d49a61 "Successfully switched to the Rahorn Tab."
+        verifyRGB 20 1775 d49a61 "Successfully switched to the Ranhorn Tab."
+        ;;
+    "Chat")
+        input tap 970 1850
+        wait
+        verifyRGB 550 1690 ffffff "Successfully switched to the Chat Tab."
         ;;
     *)
         echo "Failed to switch to another Tab."
@@ -145,6 +149,44 @@ function buyStoreItem() {
     input tap 550 1540
     sleep 1
     input tap 550 1700
+}
+
+# Checks where to end the script
+function checkWhereToEnd() {
+    case "$endAt" in
+    "oak")
+        switchTab "Ranhorn"
+        input tap 780 280
+        ;;
+    "soren")
+        switchTab "Ranhorn"
+        input tap 380 360
+        sleep 3
+        input tap 290 860
+        sleep 1
+        input tap 970 890
+        ;;
+    "mail")
+        input tap 960 630
+        ;;
+    "chat")
+        switchTab "Chat"
+        ;;
+    "tavern")
+        switchTab "Ranhorn"
+        input tap 300 1400
+        ;;
+    "merchants")
+        input tap 120 290
+        ;;
+    *)
+        echo "Unknown location to end script on. Ignoring..."
+        ;;
+    esac
+
+    if [ "$endAtSoren" == true ]; then # TODO: Visit Oak inn instead (probably depends on user level)
+        visitSoren
+    fi
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
@@ -613,27 +655,13 @@ collectMail() {
     verifyRGB 20 1775 d49a61 "Successfully collected Mail."
 }
 
-# Says Hi to Soren
-function visitSoren() {
-    switchTab "Ranhorn"
-    input tap 380 360
-    sleep 3
-    input tap 290 860
-    sleep 1
-    input tap 970 890
-
-    wait
-    echo
-    verifyRGB 540 1220 aa42d0 "Go back to the game to say Hi to Soren!" "Somehow I didn't manage to say Hi to Soren... Guess he got scared."
-}
-
 # TODO: Make it pretty
 # RED='\033[0;34m'
 # NC='\033[0m' # No Color
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 740 230 3 0.5
+# test 550 1690 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -699,10 +727,8 @@ buyFromStore
 collectQuestChests
 collectMail
 
-# EXTRA
-if [ "$endAtSoren" == true ]; then # TODO: Visit Oak inn instead (probably depends on user level)
-    visitSoren
-fi
+# Ends at given location
+checkWhereToEnd
 
 echo
 echo "End of script!"

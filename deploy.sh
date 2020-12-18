@@ -18,15 +18,16 @@ function createConfig() {
     else
         printWarn "Not found!"
         printTask "Creating new config.sh file..."
-        printf "# CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables
+        printf '# CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
 canOpenSoren=false
-endAtSoren=false
 buyStoreDust=false
 buyStorePoeCoins=false
-buyStoreEmblems=false" >config.sh
+buyStoreEmblems=false
+waitForUpdate=true
+endAt="merchants"' >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
         exit
@@ -127,8 +128,8 @@ function deploy() {
 clear
 
 createConfig
-checkLineEndings "afk-daily.sh"
 checkLineEndings "config.sh"
+checkLineEndings "afk-daily.sh"
 
 # Check where to deploy
 if [ "$1" ]; then
