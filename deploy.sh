@@ -23,7 +23,10 @@ totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 totalAmountDailyQuests=8
 canOpenSoren=false
-endAtSoren=false" >config.sh
+endAtSoren=false
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStoreEmblems=false" >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
         exit

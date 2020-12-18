@@ -126,10 +126,15 @@ function loopUntilRGB() {
         sleep 1
         getColor $2 $3
     done
-    # while [ "$RGB" != "ca9c5d" ]; do
-    #     sleep 1
-    #     getColor 420 380
-    # done
+}
+
+# Buys an item from the Store. Params: X, Y
+function buyStoreItem() {
+    input tap $1 $2
+    sleep 1
+    input tap 550 1540
+    sleep 1
+    input tap 550 1220
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
@@ -527,12 +532,22 @@ function twistedRealmBoss() {
 function storeBuyDust() {
     input tap 330 1650
     sleep 1
-    input tap 170 840
-    wait
-    input tap 550 1540
-    sleep 1
-    input tap 550 1220
-    wait
+
+    # Dust
+    if [ "$buyStoreDust" == true ]; then
+        buyStoreItem 180 840
+        wait
+    fi
+    # Poe Coins
+    if [ "$buyStorePoeCoins" == true ]; then
+        buyStoreItem 670 1430
+        wait
+    fi
+    # Emblems
+    if [ "$buyStoreEmblems" == true ]; then
+        buyStoreItem 180 1430
+        wait
+    fi
     input tap 70 1810
 
     wait
