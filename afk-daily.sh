@@ -118,11 +118,21 @@ function switchTab() {
     esac
 }
 
-# Checks for a battle to finish. Params: Seconds, X, Y, RGB
+# Loops until RGB is not equal. Params: Seconds, X, Y, RGB
 function loopUntilRGB() {
     sleep "$1"
     getColor $2 $3
     while [ "$RGB" != "$4" ]; do
+        sleep 1
+        getColor $2 $3
+    done
+}
+
+# Loops until RGB is equal. Params: Seconds, X, Y, RGB
+function loopUntilNotRGB() {
+    sleep "$1"
+    getColor $2 $3
+    while [ "$RGB" == "$4" ]; do
         sleep 1
         getColor $2 $3
     done
@@ -528,8 +538,8 @@ function twistedRealmBoss() {
     verifyRGB 20 1775 d49a61 "Successfully checked Twisted Realm Boss out."
 }
 
-# Buys daily dust from ths store
-function storeBuyDust() {
+# Buy items from store
+function buyFromStore() {
     input tap 330 1650
     sleep 1
 
@@ -623,7 +633,7 @@ function visitSoren() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 740 690 3 0.5
+# test 740 230 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -654,6 +664,17 @@ sleep 1
 switchTab "Ranhorn"
 sleep 1
 
+# Check if game is being updated
+getColor 740 230
+if [ "$RGB" == "ffff7b" ]; then
+    echo "Game is being updated!"
+    if [ "$waitForUpdate" == true ]; then
+        loopUntilNotRGB 20 740 230 ffff7b
+        echo "Game finished updating."
+    fi
+    echo "Continuing with script..."
+fi
+
 # CAMPAIGN TAB
 switchTab "Campaign"
 lootAfkChest
@@ -674,7 +695,7 @@ kingsTower
 switchTab "Ranhorn"
 guildHunts
 twistedRealmBoss
-storeBuyDust # TODO: Buy other stuff as well
+buyFromStore
 collectQuestChests
 collectMail
 

@@ -198,10 +198,11 @@ The script acts depending on a set of variables. In order to change these, open 
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |   `8`   |
 | `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               | `false` |
-| `endAtSoren`                | If set to `true`, the script will execute, and when finished end at Soren.                                               | `false` |
-| `buyStoreDust`              | If set to `true`, buys Dust from the store for Gold.                                                                     | `false` |
-| `buyStorePoeCoins`          | If set to `true`, buys Poe Coins from the store for Gold.                                                                | `false` |
-| `buyStoreEmblems`           | If set to `true`, buys Emblems from the store for Gold.                                                                  | `false` |
+| `endAtSoren`                | If `true`, end at Soren.                                                                                                 | `false` |
+| `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                            | `false` |
+| `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                       | `false` |
+| `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                         | `false` |
+| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                  | `true`  |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
