@@ -37,7 +37,6 @@ endAt="merchants"' >config.sh
 
     # Validate config file
     validateConfig
-    exit
 }
 
 # Checks for every necessary variable that needs to be defined in config.sh
