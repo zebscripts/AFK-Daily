@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Has to be saved with LF line endings!
+
 source ./lib/print.sh
 
 # --- Variables --- #
@@ -11,7 +13,7 @@ configFile="config.sh"
 
 # --- Functions --- #
 # Creates a config.sh file if not found
-function createConfig() {
+function checkConfig() {
     printTask "Searching for config.sh file..."
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
@@ -32,6 +34,31 @@ endAt="merchants"' >config.sh
         printInfo "Please edit config.sh if necessary and run this script again."
         exit
     fi
+
+    # Validate config file
+    validateConfig
+    exit
+}
+
+# Checks for every necessary variable that needs to be defined in config.sh
+function validateConfig() {
+    source config.sh
+    printTask "Validating config.sh..."
+    if [[ -z $totalAmountArenaTries || -z \
+        $totalAmountGuildBossTries || -z \
+        $totalAmountDailyQuests || -z \
+        $canOpenSoren || -z \
+        $buyStoreDust || -z \
+        $buyStorePoeCoins || -z \
+        $buyStoreEmblems || -z \
+        $waitForUpdate || -z \
+        $endAt ]]; then
+        printError "config.sh has missing/wrong entries."
+        printInfo "Please either delete config.sh and run the script again to generate a new one, or check the following link for help:"
+        printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
+        exit
+    fi
+    printSuccess "Passed!"
 }
 
 # Check if afk-daily.sh has correct Line endings (LF)
@@ -127,7 +154,7 @@ function deploy() {
 # --- Script Start --- #
 clear
 
-createConfig
+checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
 
