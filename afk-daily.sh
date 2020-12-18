@@ -134,7 +134,7 @@ function buyStoreItem() {
     sleep 1
     input tap 550 1540
     sleep 1
-    input tap 550 1220
+    input tap 550 1700
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
