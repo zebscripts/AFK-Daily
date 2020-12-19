@@ -67,7 +67,7 @@ function readRGB() {
     RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
     RGB=${RGB:9:9}
     RGB="${RGB// /}"
-    # echo "RGB: $RGB"
+    # echo "[INFO] RGB: $RGB"
 }
 
 # Sets RGB. Params: X, Y
@@ -80,12 +80,12 @@ function getColor() {
 function verifyRGB() {
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
-        echo "VerifyRGB: Failure! Expected "$3", but got "$RGB" instead."
+        echo "[ERROR] VerifyRGB: Failure! Expected "$3", but got "$RGB" instead."
         echo
-        echo "$5"
+        echo "[ERROR] $5"
         exit
     else
-        echo "$4"
+        echo "[OK] $4"
     fi
 }
 
@@ -95,26 +95,22 @@ function switchTab() {
     "Campaign")
         input tap 550 1850
         wait
-        verifyRGB 450 1775 cc9261 "Successfully switched to the Campaign Tab."
+        verifyRGB 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
         ;;
     "Dark Forest")
         input tap 300 1850
         wait
-        verifyRGB 240 1775 d49a61 "Successfully switched to the Dark Forest Tab."
+        verifyRGB 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
         ;;
     "Ranhorn")
         input tap 110 1850
         wait
-        verifyRGB 20 1775 d49a61 "Successfully switched to the Ranhorn Tab."
+        verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
         ;;
     "Chat")
         input tap 970 1850
         wait
-        verifyRGB 550 1690 ffffff "Successfully switched to the Chat Tab."
-        ;;
-    *)
-        echo "Failed to switch to another Tab."
-        exit
+        verifyRGB 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
         ;;
     esac
 }
@@ -194,13 +190,9 @@ function checkWhereToEnd() {
         input tap 120 290
         ;;
     *)
-        echo "Unknown location to end script on. Ignoring..."
+        echo "[WARN] Unknown location to end script on. Ignoring..."
         ;;
     esac
-
-    if [ "$endAtSoren" == true ]; then # TODO: Visit Oak inn instead (probably depends on user level)
-        visitSoren
-    fi
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
@@ -230,7 +222,7 @@ function lootAfkChest() {
     sleep 1
 
     wait
-    verifyRGB 450 1775 cc9261 "AFK Chest looted."
+    verifyRGB 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
 }
 
 # Challenges a boss in the campaign
@@ -252,7 +244,7 @@ function challengeBoss() {
     input tap 230 960
 
     wait
-    verifyRGB 450 1775 cc9261 "Challenged boss in campaign."
+    verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
 }
 
 # Collects fast rewards
@@ -266,7 +258,7 @@ function fastRewards() {
     input tap 400 1250
 
     wait
-    verifyRGB 450 1775 cc9261 "Fast Rewards collected."
+    verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
 
 # Collects and sends companion points, as well as auto lending mercenaries
@@ -289,7 +281,7 @@ function collectFriendsAndMercenaries() {
     # TODO: Check if its necessary to send mercenaries
 
     wait
-    verifyRGB 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries."
+    verifyRGB 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries." "Failed to collect/send companion points or failed to auto lend mercenaries."
 }
 
 # Starts Solo bounties
@@ -347,7 +339,7 @@ function soloBounties() {
     input tap 550 1500 # Confirm
 
     wait
-    verifyRGB 650 1740 a7541a "Successfully finished Solo Bounties."
+    verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
 }
 
 # Starts Team Bounties
@@ -386,7 +378,7 @@ function teamBounties() {
     input tap 70 1810
 
     wait
-    verifyRGB 240 1775 d49a61 "Successfully finished Team Bounties."
+    verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
 # Does the daily arena of heroes battles
@@ -422,7 +414,7 @@ function arenaOfHeroes() {
             ((COUNT = COUNT + 1)) # Increment
         done
     else
-        echo "New Season! Not fighting in the arena of heroes..."
+        echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
 
     input tap 1000 380
@@ -430,7 +422,7 @@ function arenaOfHeroes() {
     input tap 70 1810
 
     sleep 1
-    verifyRGB 850 130 3c2814 "Successfully battled at the Arena of Heroes."
+    verifyRGB 850 130 3c2814 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
 }
 
 # Does the daily Legends tournament battles
@@ -474,7 +466,7 @@ function legendsTournament() {
     input tap 70 1810
 
     wait
-    verifyRGB 240 1775 d49a61 "Successfully battled at the Legends Tournament."
+    verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
 }
 
 # Battles once in the kings tower
@@ -495,7 +487,7 @@ function kingsTower() {
     input tap 70 1810
 
     wait
-    verifyRGB 240 1775 d49a61 "Successfully battled at the Kings Tower."
+    verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
 
 # Battles against Guild boss Wrizz
@@ -561,7 +553,7 @@ function guildHunts() {
     input tap 70 1810
 
     sleep 1
-    verifyRGB 70 1000 a9a95f "Successfully battled Wrizz."
+    verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
 }
 
 # Battles against the Twisted Realm Boss
@@ -576,7 +568,7 @@ function twistedRealmBoss() {
     # Check if TR is being calculated
     getColor 740 690
     if [ "$RGB" == "be6c3c" ]; then
-        echo "Twisted realm is being calculated, skipping..."
+        echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         input tap 820 820
         sleep 1
@@ -601,7 +593,7 @@ function twistedRealmBoss() {
     input tap 70 1810
 
     sleep 1
-    verifyRGB 20 1775 d49a61 "Successfully checked Twisted Realm Boss out."
+    verifyRGB 20 1775 d49a61 "Checked Twisted Realm Boss out." "Failed to check the Twisted Realm out."
 }
 
 # Buy items from store
@@ -627,7 +619,7 @@ function buyFromStore() {
     input tap 70 1810
 
     wait
-    verifyRGB 20 1775 d49a61 "Successfully bought daily Dust from the store."
+    verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
 }
 
 # Collects
@@ -662,7 +654,7 @@ function collectQuestChests() {
     input tap 70 1650
 
     sleep 1
-    verifyRGB 20 1775 d49a61 "Successfully collected daily Quest chests."
+    verifyRGB 20 1775 d49a61 "Collected daily quest chests." "Failed to collect daily quest chests."
 }
 
 # Collects mail
@@ -676,7 +668,7 @@ collectMail() {
     input tap 110 1850
 
     wait
-    verifyRGB 20 1775 d49a61 "Successfully collected Mail."
+    verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
 
 # Collects Daily/Weekly/Monthly from the merchants page
@@ -704,13 +696,8 @@ function collectMerchants() {
     input tap 70 1810
 
     wait
-    verifyRGB 20 1775 d49a61 "Successfully collected Merchants."
+    verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
-
-# TODO: Make it pretty
-# RED='\033[0;34m'
-# NC='\033[0m' # No Color
-# printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
 # test 200 1800 3 0.5
@@ -721,7 +708,7 @@ function collectMerchants() {
 # test 715 1815 3 0.5 # Check if Soren is open
 
 # --- Script Start --- #
-echo "Starting script..."
+echo "[INFO] Starting script..."
 echo
 closeApp
 sleep 0.5
@@ -747,12 +734,13 @@ sleep 1
 # Check if game is being updated
 getColor 740 230
 if [ "$RGB" == "ffff7b" ]; then
-    echo "Game is being updated!"
+    echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
         loopUntilNotRGB 20 740 230 ffff7b
-        echo "Game finished updating."
+        echo "[INFO]: Game finished updating."
+    else
+        echo "[WARN]: Not waiting for update to finish."
     fi
-    echo "Continuing with script..."
 fi
 
 # CAMPAIGN TAB
@@ -784,5 +772,5 @@ collectMerchants
 checkWhereToEnd
 
 echo
-echo "End of script!"
+echo "[INFO] End of script!"
 exit

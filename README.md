@@ -222,7 +222,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 - [x] Fight the twisted realm as well
 - [ ] Collect Soulstones
 - [ ] Collect weekly quests
-- [ ] Collect Merchant Daily/Weekly/Monthly rewards (Will probably never happen if the games interface stays the same)
+- [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
 - [ ] Make script output pretty
 - [ ] Test for screen size with `adb shell wm size`
 - [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
@@ -261,7 +261,7 @@ Do with this information what you want. I'm *not responsible at all* if anything
 
 **Will this ever be available on iOS?**
 
-Nope.
+Nope. Instead, install Bluestacks and run this script.
 
 ## Feature Requests
 Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [Discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
