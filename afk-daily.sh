@@ -16,10 +16,8 @@ else
 fi
 
 # --- Functions --- #
-# Test function: change apps, take screenshot, get rgb, change apps, exit. Params: X, Y, amountTimes, waitTime
+# Test function: take screenshot, get rgb, exit. Params: X, Y, amountTimes, waitTime
 function test() {
-    #startApp
-    #switchApp
     local COUNT=0
     until [ "$COUNT" -ge "$3" ]; do
         sleep $4
@@ -27,7 +25,6 @@ function test() {
         echo "RGB: $RGB"
         ((COUNT = COUNT + 1)) # Increment
     done
-    #switchApp
     exit
 }
 
@@ -139,6 +136,23 @@ function loopUntilNotRGB() {
     while [ "$RGB" == "$4" ]; do
         sleep 1
         getColor $2 $3
+    done
+}
+
+# Waits until a battle has ended. Params: Seconds
+function waitBattleFinish() {
+    sleep "$1"
+    local finished=false
+    while [ $finished == false ]; do
+        getColor 560 350
+        if [ "$RGB" == "b8894d" ]; then
+            finished=true
+        elif [ "$RGB" == "171932" ]; then
+            finished=true
+        elif [ "$RGB" == "45331d" ]; then
+            finished=true
+        fi
+        sleep 1
     done
 }
 
@@ -393,7 +407,7 @@ function arenaOfHeroes() {
         input tap 820 1400
         sleep 1
         input tap 550 1850
-        loopUntilRGB 2 750 694 d4a248
+        waitBattleFinish 2
         input tap 550 1550
         sleep 1
         input tap 550 1550
@@ -420,11 +434,11 @@ function legendsTournament() {
     else
         input tap 550 1450
     fi
-    sleep 1
-    input tap 550 280
     sleep 2
+    input tap 550 280
+    sleep 3
     input tap 550 1550
-    sleep 1
+    sleep 3
     input tap 1000 1800
     input tap 990 380
     wait
@@ -433,15 +447,15 @@ function legendsTournament() {
     local COUNT=0
     until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
         input tap 550 1840
-        sleep 3
+        sleep 4
         input tap 800 1140
-        sleep 3
+        sleep 4
         input tap 550 1850
-        sleep 3
+        sleep 4
         input tap 770 1470
-        sleep 3
+        sleep 4
         input tap 550 800
-        sleep 3
+        sleep 4
         ((COUNT = COUNT + 1)) # Increment
     done
 
@@ -661,7 +675,7 @@ collectMail() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 550 1690 3 0.5
+# test 560 350 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB

@@ -21,7 +21,7 @@
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
-<p align="center"><img src="https://i.imgur.com/ahQaOJx.png" alt="Example script output"></p>
+<p align="center"><img src="https://i.imgur.com/fdcmW37.png" alt="Example script output"></p>
 
 ## Disclaimer <!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
