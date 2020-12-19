@@ -679,6 +679,34 @@ collectMail() {
     verifyRGB 20 1775 d49a61 "Successfully collected Mail."
 }
 
+# Collects Daily/Weekly/Monthly from the merchants page
+function collectMerchants() {
+    input tap 120 300 # Merchants
+    sleep 2
+    input tap 510 1820 # Merchant Ship
+    wait
+    input tap 200 750 # Free bundle
+    wait
+    input tap 550 300 # Collect rewards
+    wait
+    input tap 280 1620 # Weekly Deals
+    wait
+    input tap 200 750 # Free bundle
+    wait
+    input tap 550 300 # Collect rewards
+    wait
+    input tap 460 1620 # Monthly Deals
+    wait
+    input tap 200 750 # Free bundle
+    wait
+    input tap 550 300 # Collect rewards
+    wait
+    input tap 70 1810
+
+    wait
+    verifyRGB 20 1775 d49a61 "Successfully collected Merchants."
+}
+
 # TODO: Make it pretty
 # RED='\033[0;34m'
 # NC='\033[0m' # No Color
@@ -750,6 +778,7 @@ twistedRealmBoss
 buyFromStore
 collectQuestChests
 collectMail
+collectMerchants
 
 # Ends at given location
 checkWhereToEnd
