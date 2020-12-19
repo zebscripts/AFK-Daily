@@ -225,6 +225,10 @@ function lootAfkChest() {
     input tap 750 1350
     sleep 1
 
+    # Tap campaign in case of level up
+    input tap 550 1850
+    sleep 1
+
     wait
     verifyRGB 450 1775 cc9261 "AFK Chest looted."
 }
