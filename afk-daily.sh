@@ -401,19 +401,25 @@ function arenaOfHeroes() {
     input tap 540 1800
     sleep 1
 
-    # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=0
-    until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
-        input tap 820 1400
-        sleep 1
-        input tap 550 1850
-        waitBattleFinish 2
-        input tap 550 1550
-        sleep 1
-        input tap 550 1550
-        sleep 1
-        ((COUNT = COUNT + 1)) # Increment
-    done
+    # Check for new season
+    getColor 200 1800
+    if [ "$RGB" != "382314" ]; then
+        # Repeat a battle for as long as totalAmountArenaTries
+        local COUNT=0
+        until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
+            input tap 820 1400
+            sleep 1
+            input tap 550 1850
+            waitBattleFinish 2
+            input tap 550 1550
+            sleep 1
+            input tap 550 1550
+            sleep 1
+            ((COUNT = COUNT + 1)) # Increment
+        done
+    else
+        echo "New Season! Not fighting in the arena of heroes..."
+    fi
 
     input tap 1000 380
     wait
@@ -675,7 +681,7 @@ collectMail() {
 # printf "I ${RED}love${NC} Stack Overflow\n"
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+# test 200 1800 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
