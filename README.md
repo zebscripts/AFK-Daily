@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-<!-- > As usual, dispatching and collecting bounties does not work as expected on a new patch. -->
+> If script ends at the beginning stating `[WARN] Game is being updated!` and nothing happens, restart it. Will fix this in the next update.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
