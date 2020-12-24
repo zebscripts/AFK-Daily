@@ -26,8 +26,6 @@ This script is meant to automate the process of daily activities within the [AFK
 ## Disclaimer <!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
 
-The main reason to why I haven't been adding features to the script is because I was unhappy with the way I was dealing with it. It slowly started being a very big mess, so I started spending resources into changing that. This includes making it easier for non-programmers to use this script. So right now, I ask for your patience while I develop another tool meant to run it in a "nicer" fashion. If you don't want to wait, you can either check one of the available and updated forks (for example [this very interesting one](https://github.com/Fortigate/AFK-Daily)), or try and make your own fork to temporarily fix/change anything as you wish. Thank you for your understanding!
-
 ## Table of Contents <!-- omit in toc -->
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
@@ -59,11 +57,13 @@ As of now, the script is capable of completing the following inside the game:
 - Buy daily Dust from the Store
 - Collect daily Quest Chests
 - Collect Mail
+- Collect Daily/Weekly/Monthly rewards from Merchants
+- Collect Oak Inn presents
 
 There are more features planned though, check them out [here](#planned-features)!
 
 ## Supported Platforms
-There are **three different platforms** where you're able to run this script, namely your **personal Android device**, as well as two Android emulators: [**Bluestacks**](https://www.bluestacks.com/) and [**Nox**](https://www.bignox.com/). iOS will never be a thing, there's no need to ask for it.
+There are **three different platforms** where you're able to run this script, namely your **personal Android device**, as well as two Android emulators: [**Bluestacks**](https://www.bluestacks.com/) and [**Nox**](https://www.bignox.com/). iOS will never be a thing, there's no need to ask for it (just install Bluestacks instead).
 
 Which one you want to use is up to you. Keep in mind that AFK Arena saves chat messages locally on your device, so if you use an emulator and switch between your devices often, your chat might look a bit messy. Personally, I recommend either your personal device or Bluestacks, as Nox has worse performance compared to Bluestacks and worse compatibility with this script.
 
@@ -97,15 +97,6 @@ There are quite a few requirements in order to run this script. In a perfect wor
 
 <hr>
 
-*Personal Device:*
-1. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging on your phone. In case you didn't, go do that now. It's under the `Phone Setup` part.
-2. **Resolution:** Make sure your Device is set to `1920x1080`. I'm not sure if any other resolutions work, but hey, give it a try and let me know!
-3. **AFK Arena:** Install the game. Duh.
-4. **Root:** Should be *optional*, but is always nice to have.
-5. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** Should also be *optional*, but if something doesn't work, install it and try again.
-
-<hr>
-
 *Bluestacks:*
 1. **Settings:** Under Bluestacks settings, make sure to make the following changes:
    1. **Display:**
@@ -131,6 +122,15 @@ There are quite a few requirements in order to run this script. In a perfect wor
        - Change the phone model to `Google Pixel 2`
 2. **AFK Arena:** Install the game. Duh.
 3. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging inside Nox. In case you didn't, go do that now. It's under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
+
+<hr>
+
+*Personal Device:*
+1. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging on your phone. In case you didn't, go do that now. It's under the `Phone Setup` part.
+2. **Resolution:** Make sure your Device is set to `1920x1080`.
+3. **AFK Arena:** Install the game. Duh.
+4. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
+5. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** This will install one specific command that the script uses for pixel analysis.
 
 <hr>
 
@@ -192,17 +192,17 @@ Running the script on Nox:
 ## Config/Variables
 The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. **Do not delete any.**
 
-| Variable                    | Description                                                                                                              |   Default   |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :---------: |
-| `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |    `2+0`    |
-| `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |    `2+0`    |
-| `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |     `8`     |
-| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               |   `false`   |
-| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`.         | `campaign` |
-| `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                            |   `false`   |
-| `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                       |   `false`   |
-| `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                         |   `false`   |
-| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                  |   `true`    |
+| Variable                    | Description                                                                                                                  |  Default   |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :--------: |
+| `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`.     |   `2+0`    |
+| `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.     |   `2+0`    |
+| `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                       |    `8`     |
+| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                   |  `false`   |
+| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`. | `campaign` |
+| `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                |  `false`   |
+| `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                           |  `false`   |
+| `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                             |  `false`   |
+| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                      |   `true`   |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
@@ -223,7 +223,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 - [ ] Collect Soulstones
 - [ ] Collect weekly quests
 - [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
-- [ ] Make script output pretty
+- [x] Make script output pretty
 - [ ] Test for screen size with `adb shell wm size`
 - [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
 - [ ] Actually try to beat the campaign level every 3 days to maximize farm
@@ -243,10 +243,6 @@ Here are some tips to keep in mind:
 - If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` is not saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
 
 ## FAQ
-**Do I need a rooted device?**
-
-Probably not. I've tried my best to take most of the things into consideration to not use root, but maybe I've let something slip through. Also, this only affects Personal Devices, as the emulators usually give you root permissions.
-
 **Can I get banned by using this script?**
 
 I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Terms of Service](https://www.lilithgames.com/termofservice.html) states the following:
@@ -264,7 +260,7 @@ Do with this information what you want. I'm *not responsible at all* if anything
 Nope. Instead, install Bluestacks and run this script.
 
 ## Feature Requests
-Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [Discord](http://discordapp.com/users/241655863616471041), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
+Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
 
 ## Troubleshooting
 If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041). I'll try my best to help you.

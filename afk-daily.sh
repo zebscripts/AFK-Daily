@@ -174,7 +174,6 @@ function oakSearchPresent() {
 
     getColor 540 990 # 1 red 833f0e blue 903da0
     if [ "$RGB" == "833f0e" ]; then
-        echo "Found present at 1!"
         input tap 540 990 # Tap present
         sleep 3
         input tap 540 1650 # Ok
@@ -184,7 +183,6 @@ function oakSearchPresent() {
     else
         getColor 540 800 # 2 red a21a1a blue 9a48ab
         if [ "$RGB" == "a21a1a" ]; then
-            echo "Found present at 2!"
             input tap 540 800
             sleep 3
             input tap 540 1650 # Ok
@@ -194,7 +192,6 @@ function oakSearchPresent() {
         else
             getColor 540 610 # 3 red aa2b27 blue b260aa
             if [ "$RGB" == "aa2b27" ]; then
-                echo "Found present at 3!"
                 input tap 540 610
                 sleep 3
                 input tap 540 1650 # Ok
@@ -204,7 +201,6 @@ function oakSearchPresent() {
             else
                 getColor 540 420 # 4 red bc3f36 blue c58c7b
                 if [ "$RGB" == "bc3f36" ]; then
-                    echo "Found present at 4!"
                     input tap 540 420
                     sleep 3
                     input tap 540 1650 # Ok
@@ -214,7 +210,6 @@ function oakSearchPresent() {
                 else
                     getColor 540 220 # 5 red bb3734 blue 9442a5
                     if [ "$RGB" == "bb3734" ]; then
-                        echo "Found present at 5!"
                         input tap 540 220
                         sleep 3
                         input tap 540 1650 # Ok
@@ -223,7 +218,6 @@ function oakSearchPresent() {
                         oakRes=1
                     else
                         # If no present found, search for other tabs
-                        echo "No present found!"
                         oakRes=0
                     fi
                 fi
@@ -237,22 +231,18 @@ function oakPresentTab() {
     oakPresentTabs=0
     getColor 270 1800 # 1 gift c79856
     if [ "$RGB" == "c79856" ]; then
-        echo "Found Tab 1!"
         ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
     fi
     getColor 410 1800 # 2 gift b68444
     if [ "$RGB" == "b68444" ]; then
-        echo "Found Tab 2!"
         ((oakPresentTabs = oakPresentTabs + 200)) # Increment
     fi
     getColor 550 1800 # 3 gift a67032
     if [ "$RGB" == "a67032" ]; then
-        echo "Found Tab 3!"
         ((oakPresentTabs = oakPresentTabs + 30)) # Increment
     fi
     getColor 690 1800 # 4 gift ae7c40
     if [ "$RGB" == "ae7c40" ]; then
-        echo "Found Tab 4!"
         ((oakPresentTabs = oakPresentTabs + 4)) # Increment
     fi
 }
@@ -1013,7 +1003,6 @@ function oakInn() {
                 fi
             fi
         fi
-        echo "Got a present!"
 
         sleep 2
         ((COUNT = COUNT + 1)) # Increment
@@ -1034,8 +1023,6 @@ function oakInn() {
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
-# oakInn
-# exit
 
 # --- Script Start --- #
 echo "[INFO] Starting script..."
