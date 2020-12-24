@@ -21,15 +21,23 @@ function checkConfig() {
         printWarn "Not found!"
         printTask "Creating new config.sh file..."
         printf '# CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables
+
+# Player
+canOpenSoren=false
+
+# General
+waitForUpdate=true
+endAt="campaign"
+
+# Repetitions
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
-totalAmountDailyQuests=8
-canOpenSoren=false
-buyStoreDust=false
-buyStorePoeCoins=false
+
+# Store
+buyStoreDust=true
+buyStorePoeCoins=true
 buyStoreEmblems=false
-waitForUpdate=true
-endAt="merchants"' >config.sh
+' >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
         exit
@@ -44,14 +52,14 @@ function validateConfig() {
     source config.sh
     printTask "Validating config.sh..."
     if [[ -z $totalAmountArenaTries || -z \
-        $totalAmountGuildBossTries || -z \
-        $totalAmountDailyQuests || -z \
         $canOpenSoren || -z \
+        $waitForUpdate || -z \
+        $endAt || -z \
+        $totalAmountArenaTries || -z \
+        $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
-        $buyStoreEmblems || -z \
-        $waitForUpdate || -z \
-        $endAt ]]; then
+        $buyStoreEmblems ]]; then
         printError "config.sh has missing/wrong entries."
         printInfo "Please either delete config.sh and run the script again to generate a new one, or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"

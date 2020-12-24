@@ -4,9 +4,11 @@
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
 pvpEvent=false
+totalAmountOakRewards=3
 
 # Do not modify
 RGB=00000000
+oakRes=0
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     source /$1/scripts/afk-arena/config.sh
@@ -67,7 +69,7 @@ function readRGB() {
     RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
     RGB=${RGB:9:9}
     RGB="${RGB// /}"
-    # echo "[INFO] RGB: $RGB"
+    # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
 }
 
 # Sets RGB. Params: X, Y
@@ -141,11 +143,14 @@ function waitBattleFinish() {
     local finished=false
     while [ $finished == false ]; do
         getColor 560 350
-        if [ "$RGB" == "b8894d" ]; then
+        if [ "$RGB" == "b8894d" ]; then # Victory
+            battleFailed=false
             finished=true
-        elif [ "$RGB" == "171932" ]; then
+        elif [ "$RGB" == "171932" ]; then # Failed
+            battleFailed=true
             finished=true
-        elif [ "$RGB" == "45331d" ]; then
+        elif [ "$RGB" == "45331d" ]; then # Victory with reward
+            battleFailed=false
             finished=true
         fi
         sleep 1
@@ -159,6 +164,272 @@ function buyStoreItem() {
     input tap 550 1540
     sleep 1
     input tap 550 1700
+}
+
+# Searches for a "good" present in oak Inn
+function oakSearchPresent() {
+    # Swipe all the way down
+    input swipe 400 1600 400 310 50
+    sleep 1
+
+    getColor 540 990 # 1 red 833f0e blue 903da0
+    if [ "$RGB" == "833f0e" ]; then
+        echo "Found present at 1!"
+        input tap 540 990 # Tap present
+        sleep 3
+        input tap 540 1650 # Ok
+        sleep 1
+        input tap 540 1650 # Collect reward
+        oakRes=1
+    else
+        getColor 540 800 # 2 red a21a1a blue 9a48ab
+        if [ "$RGB" == "a21a1a" ]; then
+            echo "Found present at 2!"
+            input tap 540 800
+            sleep 3
+            input tap 540 1650 # Ok
+            sleep 1
+            input tap 540 1650 # Collect reward
+            oakRes=1
+        else
+            getColor 540 610 # 3 red aa2b27 blue b260aa
+            if [ "$RGB" == "aa2b27" ]; then
+                echo "Found present at 3!"
+                input tap 540 610
+                sleep 3
+                input tap 540 1650 # Ok
+                sleep 1
+                input tap 540 1650 # Collect reward
+                oakRes=1
+            else
+                getColor 540 420 # 4 red bc3f36 blue c58c7b
+                if [ "$RGB" == "bc3f36" ]; then
+                    echo "Found present at 4!"
+                    input tap 540 420
+                    sleep 3
+                    input tap 540 1650 # Ok
+                    sleep 1
+                    input tap 540 1650 # Collect reward
+                    oakRes=1
+                else
+                    getColor 540 220 # 5 red bb3734 blue 9442a5
+                    if [ "$RGB" == "bb3734" ]; then
+                        echo "Found present at 5!"
+                        input tap 540 220
+                        sleep 3
+                        input tap 540 1650 # Ok
+                        sleep 1
+                        input tap 540 1650 # Collect reward
+                        oakRes=1
+                    else
+                        # If no present found, search for other tabs
+                        echo "No present found!"
+                        oakRes=0
+                    fi
+                fi
+            fi
+        fi
+    fi
+}
+
+# Search available present tabs in Oak Inn
+function oakPresentTab() {
+    oakPresentTabs=0
+    getColor 270 1800 # 1 gift c79856
+    if [ "$RGB" == "c79856" ]; then
+        echo "Found Tab 1!"
+        ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
+    fi
+    getColor 410 1800 # 2 gift b68444
+    if [ "$RGB" == "b68444" ]; then
+        echo "Found Tab 2!"
+        ((oakPresentTabs = oakPresentTabs + 200)) # Increment
+    fi
+    getColor 550 1800 # 3 gift a67032
+    if [ "$RGB" == "a67032" ]; then
+        echo "Found Tab 3!"
+        ((oakPresentTabs = oakPresentTabs + 30)) # Increment
+    fi
+    getColor 690 1800 # 4 gift ae7c40
+    if [ "$RGB" == "ae7c40" ]; then
+        echo "Found Tab 4!"
+        ((oakPresentTabs = oakPresentTabs + 4)) # Increment
+    fi
+}
+
+# Tries to collect a present from one Oak Inn friend
+function oakTryCollectPresent() {
+    # Search for a "good" present
+    oakSearchPresent
+    if [ $oakRes == 0 ]; then
+        # If no present found, search for other tabs
+        oakPresentTab
+        case $oakPresentTabs in
+        0)
+            oakRes=0
+            ;;
+        4)
+            input tap 690 1800
+            sleep 3
+            oakSearchPresent
+            ;;
+        30)
+            input tap 550 1800
+            sleep 3
+            oakSearchPresent
+            ;;
+        34)
+            input tap 550 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 690 1800
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        200)
+            input tap 410 1800
+            sleep 3
+            oakSearchPresent
+            ;;
+        204)
+            input tap 410 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 690 1800
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        230)
+            input tap 410 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 550 1800
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        234)
+            input tap 410 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 550 1800
+                sleep 3
+                oakSearchPresent
+                if [ $oakRes == 0 ]; then
+                    input tap 690 1800
+                    sleep 3
+                    oakSearchPresent
+                fi
+            fi
+            ;;
+        1000)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            ;;
+        1004)
+            input tap 270
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 690
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        1030)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 550 1800
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        1034)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 550 1800
+                sleep 3
+                oakSearchPresent
+                if [ $oakRes == 0 ]; then
+                    input tap 690 1800
+                    sleep 3
+                    oakSearchPresent
+                fi
+            fi
+            ;;
+        1200)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 410 1800
+                sleep 3
+                oakSearchPresent
+            fi
+            ;;
+        1204)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 410 1800
+                sleep 3
+                oakSearchPresent
+                if [ $oakRes == 0 ]; then
+                    input tap 690 1800
+                    sleep 3
+                    oakSearchPresent
+                fi
+            fi
+            ;;
+        1230)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 410 1800
+                sleep 3
+                oakSearchPresent
+                if [ $oakRes == 0 ]; then
+                    input tap 550 1800
+                    sleep 3
+                    oakSearchPresent
+                fi
+            fi
+            ;;
+        1234)
+            input tap 270 1800
+            sleep 3
+            oakSearchPresent
+            if [ $oakRes == 0 ]; then
+                input tap 410 1800
+                sleep 3
+                oakSearchPresent
+                if [ $oakRes == 0 ]; then
+                    input tap 550 1800
+                    sleep 3
+                    oakSearchPresent
+                    if [ $oakRes == 0 ]; then
+                        input tap 690 1800
+                        sleep 3
+                        oakSearchPresent
+                    fi
+                fi
+            fi
+            ;;
+        esac
+    fi
 }
 
 # Checks where to end the script
@@ -188,6 +459,9 @@ function checkWhereToEnd() {
         ;;
     "merchants")
         input tap 120 290
+        ;;
+    "campaign")
+        input tap 550 1850
         ;;
     *)
         echo "[WARN] Unknown location to end script on. Ignoring..."
@@ -407,9 +681,11 @@ function arenaOfHeroes() {
             sleep 1
             input tap 550 1850
             waitBattleFinish 2
-            input tap 550 1550
-            sleep 1
-            input tap 550 1550
+            if [ "$battleFailed" == false ]; then
+                input tap 550 1550 # Collect
+                sleep 1
+            fi
+            input tap 550 1550 # Finish battle
             sleep 1
             ((COUNT = COUNT + 1)) # Increment
         done
@@ -561,13 +837,13 @@ function twistedRealmBoss() {
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     ## For testing only! Keep as comment ##
-    # input tap 380 360
-    # sleep 3
+    input tap 380 360
+    sleep 3
     ## End of testing ##
 
     # Check if TR is being calculated
     getColor 740 690
-    if [ "$RGB" == "be6c3c" ]; then
+    if [ "$RGB" == "bf6c3a" ]; then # TODO: Needs to be checked if works
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         input tap 820 820
@@ -699,13 +975,67 @@ function collectMerchants() {
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
+# Collect Oak Inn
+function oakInn() {
+    input tap 780 270 # Oak Inn
+    sleep 5
+
+    local COUNT=0
+    until [ "$COUNT" -ge "$totalAmountOakRewards" ]; do
+        input tap 1050 950 # Friends
+        wait
+        input tap 1025 400 # Top Friend
+        sleep 5
+
+        oakTryCollectPresent
+        # If return value is still 0, no presents were found at first friend
+        if [ $oakRes == 0 ]; then
+            # Switch friend and search again
+            input tap 1050 950 # Friends
+            wait
+            input tap 1025 530 # Second friend
+            sleep 5
+
+            oakTryCollectPresent
+            # If return value is again 0, no presents were found at second friend
+            if [ $oakRes == 0 ]; then
+                # Switch friend and search again
+                input tap 1050 950 # Friends
+                wait
+                input tap 1025 650 # Third friend
+                sleep 5
+
+                oakTryCollectPresent
+                # If return value is still freaking 0, I give up
+                if [ $oakRes == 0 ]; then
+                    verifyRGB 20 1775 d49a61 "This makes no sense." "Couldn't collect Oak Inn presents, sowy."
+                    return
+                fi
+            fi
+        fi
+        echo "Got a present!"
+
+        sleep 2
+        ((COUNT = COUNT + 1)) # Increment
+    done
+
+    input tap 70 1810
+    sleep 3
+    input tap 70 1810
+
+    wait
+    verifyRGB 20 1775 d49a61 "Collected Oak Inn presents." "Failed to collect Oak Inn presents."
+}
+
 # Test function (X, Y, amountTimes, waitTime)
-# test 200 1800 3 0.5
+# test 740 690 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
+# oakInn
+# exit
 
 # --- Script Start --- #
 echo "[INFO] Starting script..."
@@ -730,14 +1060,16 @@ switchTab "Dark Forest"
 sleep 1
 switchTab "Ranhorn"
 sleep 1
+switchTab "Campaign"
 
 # Check if game is being updated
-getColor 740 230
-if [ "$RGB" == "ffff7b" ]; then
+getColor 740 205
+if [ "$RGB" == "ffc25c" ]; then
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
-        loopUntilNotRGB 20 740 230 ffff7b
-        echo "[INFO]: Game finished updating."
+        echo "[INFO]: Waiting for game to finish update..."
+        loopUntilNotRGB 20 740 205 ffc25c
+        echo "[OK]: Game finished updating."
     else
         echo "[WARN]: Not waiting for update to finish."
     fi
@@ -767,8 +1099,10 @@ buyFromStore
 collectQuestChests
 collectMail
 collectMerchants
+oakInn
 
 # Ends at given location
+sleep 1
 checkWhereToEnd
 
 echo

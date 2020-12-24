@@ -198,7 +198,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |    `2+0`    |
 | `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                   |     `8`     |
 | `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                               |   `false`   |
-| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`.         | `merchants` |
+| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`.         | `campaign` |
 | `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                            |   `false`   |
 | `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                       |   `false`   |
 | `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                         |   `false`   |
@@ -234,7 +234,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
   - [ ] Arenas without skipping
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
-- [ ] Collect daily rewards from Oak Inn
+- [x] Collect daily rewards from Oak Inn
 
 ## Tips
 Here are some tips to keep in mind:
