@@ -139,21 +139,20 @@ There are quite a few requirements in order to run this script. In a perfect wor
 ## Usage
 **For advanced users:**
 1. Clone this repo and `cd` into it .
-2. Open `afk-daily.sh` with any editor of choice and edit variables accordingly. More on this [here](#configvariables).
-3. Connect your device to the computer (or start your emulator of choice).
-4. Run `./deploy.sh`.
-5. Configure [`config.sh`](#configvariables) if necessary.
-6. Watch your device magically play for you. It's fun! I promise.
+2. Connect your device to the computer (or start your emulator of choice).
+3. Run `./deploy.sh` to generate [`config.sh`](#configvariables) and change its values if necessary.
+4. Run `./deploy.sh` again to run script.
+5. Watch your device magically play for you. It's fun! I promise.
 
 **For normal users:** 
 1. Clone/Download this repository to your desired directory.
-2. Open `afk-daily.sh` with any editor of choice and edit variables accordingly. More on this [here](#configvariables).
-3. Open up a terminal at said directory:
+2. Open up a terminal at said directory:
    - **Windows:** Open the directory, hold `Shift+Right Mouse Click` inside it, and click on `Git Bash here`.
    - **Mac/Linux:** Open a terminal, and `cd` into your directory.
-4. Connect your device to the computer (or start your emulator of choice).
-5. Type `./deploy.sh` into your terminal.
-6. Configure [`config.sh`](#configvariables) if necessary.
+3. Connect your device to the computer (or start your emulator of choice).
+4. Type `./deploy.sh` into your terminal.
+5. Configure [`config.sh`](#configvariables) if necessary.
+6. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
 7. Watch your device magically play for you. It's fun! I promise.
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
@@ -192,7 +191,7 @@ Running the script on Nox:
 ```
 
 ## Config/Variables
-The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. **Do not delete any.**
+The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. If you do not have/see a `config.sh` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside inside `config.sh`.**
 
 | Variable                    | Description                                                                                                                  |  Default   |
 | :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :--------: |
@@ -204,7 +203,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                |  `false`   |
 | `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                           |  `false`   |
 | `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                             |  `false`   |
-| `collectOakPresents`        | If `true`, collects Oak Inn red presents. Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".             |  `false`   |
+| `collectOakPresents`        | If `true`, collects Oak Inn red presents. **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".**             |  `false`   |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
@@ -259,13 +258,13 @@ Do with this information what you want. I'm *not responsible at all* if anything
 
 **Will this ever be available on iOS?**
 
-Nope. Instead, install Bluestacks and run this script.
+Nope. Install Bluestacks and run this script.
 
 ## Feature Requests
-Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by hitting me up on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989), or by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
+Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
 
 ## Troubleshooting
-If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041). I'll try my best to help you.
+If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989). I'll try my best to help you.
 
 **`hexdump: not found`**
 
