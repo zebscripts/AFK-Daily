@@ -827,8 +827,8 @@ function twistedRealmBoss() {
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     ## For testing only! Keep as comment ##
-    input tap 380 360
-    sleep 3
+    # input tap 380 360
+    # sleep 3
     ## End of testing ##
 
     # Check if TR is being calculated
@@ -837,9 +837,9 @@ function twistedRealmBoss() {
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         input tap 820 820
-        sleep 1
+        sleep 2
         input tap 550 1850
-        sleep 1
+        sleep 2
         input tap 550 1850
 
         # Start checking for a finished Battle after 40 seconds
@@ -1063,20 +1063,20 @@ if [ "$RGB" == "ffc25c" ]; then
 fi
 
 # CAMPAIGN TAB
-switchTab "Campaign"
-lootAfkChest
-challengeBoss
-fastRewards
-collectFriendsAndMercenaries
-lootAfkChest
+# switchTab "Campaign"
+# lootAfkChest
+# challengeBoss
+# fastRewards
+# collectFriendsAndMercenaries
+# lootAfkChest
 
 # DARK FOREST TAB
-switchTab "Dark Forest"
-soloBounties
-teamBounties
-arenaOfHeroes
-legendsTournament
-kingsTower
+# switchTab "Dark Forest"
+# soloBounties
+# teamBounties
+# arenaOfHeroes
+# legendsTournament
+# kingsTower
 
 # RANHORN TAB
 switchTab "Ranhorn"
@@ -1086,7 +1086,9 @@ buyFromStore
 collectQuestChests
 collectMail
 collectMerchants
-oakInn
+if [ "$collectOakPresents" == true ]; then
+    oakInn
+fi
 
 # Ends at given location
 sleep 1

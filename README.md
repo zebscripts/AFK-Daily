@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> If script ends at the beginning stating `[WARN] Game is being updated!` and nothing happens, restart it. Will fix this in the next update.
+<!-- > If script ends at the beginning stating `[WARN] Game is being updated!` and nothing happens, restart it. Will fix this in the next update. -->
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
@@ -25,6 +25,8 @@ This script is meant to automate the process of daily activities within the [AFK
 
 ## Disclaimer <!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
+
+Since lately I've been adding quite a lot of new features and bug fixes, this README is slowly but surely starting to get a big mess. I'll be working on an organized wiki one day, but for now this will do. For those who want to get a quick overview of this project instead of reading it all: Install an emulator (bluestacks) and the rest of the dependencies, run the script, update the freshly generated `config.sh` file, run script again and watch how game gets played. 
 
 ## Table of Contents <!-- omit in toc -->
 - [Features](#features)
@@ -58,7 +60,7 @@ As of now, the script is capable of completing the following inside the game:
 - Collect daily Quest Chests
 - Collect Mail
 - Collect Daily/Weekly/Monthly rewards from Merchants
-- Collect Oak Inn presents
+- Collect Oak Inn presents (necessary to enable "Hide Inn Heroes" in the game settings)
 
 There are more features planned though, check them out [here](#planned-features)!
 
@@ -194,15 +196,15 @@ The script acts depending on a set of variables. In order to change these, open 
 
 | Variable                    | Description                                                                                                                  |  Default   |
 | :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :--------: |
+| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                   |  `false`   |
+| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                      |   `true`   |
+| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`. | `campaign` |
 | `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`.     |   `2+0`    |
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.     |   `2+0`    |
-| `totalAmountDailyQuests`    | The total amount of daily Quest Chests the player is able to collect. This will probably never change.                       |    `8`     |
-| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                   |  `false`   |
-| `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`. | `campaign` |
 | `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                |  `false`   |
 | `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                           |  `false`   |
 | `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                             |  `false`   |
-| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                      |   `true`   |
+| `collectOakPresents`        | If `true`, collects Oak Inn red presents. Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".             |  `false`   |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...

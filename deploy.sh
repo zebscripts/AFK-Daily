@@ -37,6 +37,9 @@ totalAmountGuildBossTries=2+0
 buyStoreDust=true
 buyStorePoeCoins=true
 buyStoreEmblems=false
+
+# Oak Inn
+collectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 ' >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
