@@ -679,14 +679,14 @@ function arenaOfHeroes() {
             sleep 1
             ((COUNT = COUNT + 1)) # Increment
         done
+
+        input tap 1000 380
+        wait
     else
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
 
-    input tap 1000 380
-    wait
     input tap 70 1810
-
     sleep 1
     verifyRGB 850 130 3c2814 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
 }
