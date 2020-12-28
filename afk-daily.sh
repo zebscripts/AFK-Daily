@@ -514,11 +514,11 @@ function challengeBoss() {
 # Collects fast rewards
 function fastRewards() {
     input tap 950 1660
-    wait
-    input tap 710 1260
     sleep 1
+    input tap 710 1260
+    sleep 2
     input tap 560 1800
-    wait
+    sleep 1
     input tap 400 1250
 
     wait
