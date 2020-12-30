@@ -940,25 +940,25 @@ collectMail() {
 # Collects Daily/Weekly/Monthly from the merchants page
 function collectMerchants() {
     input tap 120 300 # Merchants
-    sleep 2
+    sleep 3
     input tap 510 1820 # Merchant Ship
-    wait
+    sleep 2
     input tap 200 750 # Free bundle
-    wait
+    sleep 1
     input tap 550 300 # Collect rewards
-    wait
+    sleep 1
     input tap 280 1620 # Weekly Deals
-    wait
+    sleep 1
     input tap 200 750 # Free bundle
-    wait
+    sleep 1
     input tap 550 300 # Collect rewards
-    wait
+    sleep 1
     input tap 460 1620 # Monthly Deals
-    wait
+    sleep 1
     input tap 200 750 # Free bundle
-    wait
+    sleep 1
     input tap 550 300 # Collect rewards
-    wait
+    sleep 1
     input tap 70 1810
 
     wait
