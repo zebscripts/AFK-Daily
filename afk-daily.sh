@@ -673,10 +673,10 @@ function arenaOfHeroes() {
             waitBattleFinish 2
             if [ "$battleFailed" == false ]; then
                 input tap 550 1550 # Collect
-                sleep 1
+                sleep 2
             fi
             input tap 550 1550 # Finish battle
-            sleep 1
+            sleep 2
             ((COUNT = COUNT + 1)) # Increment
         done
 
@@ -728,7 +728,7 @@ function legendsTournament() {
     done
 
     input tap 70 1810
-    wait
+    sleep 2
     input tap 70 1810
 
     wait
@@ -767,9 +767,9 @@ function guildHunts() {
     # TODO: Have a variable decide if fight wrizz or not
     # Start checking for a finished Battle after 40 seconds
     # loopUntilRGB 85 420 380 ca9c5d
-    #wait
-    #input tap 550 800
-    #input tap 550 800
+    # wait
+    # input tap 550 800
+    # input tap 550 800
     #wait
 
     # Wrizz
