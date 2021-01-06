@@ -2,6 +2,7 @@
 
 # Has to be saved with LF line endings!
 
+# Source
 source ./lib/print.sh
 
 # --- Variables --- #
@@ -11,7 +12,62 @@ bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
 configFile="config.sh"
 
+# Do not modify
+adb=adb
+
 # --- Functions --- #
+# Checks for ADB and installs if not present
+function checkAdb() {
+    printTask "Checking for adb..."
+    # Check for custom adb directory
+    if [ ! -d "./adb/platform-tools" ]; then
+        # Check if ADB is already installed (with Path)
+        if command -v adb &>/dev/null; then
+            printSuccess "Found in PATH!"
+        else
+            # If not, install it locally for this script
+            printWarn "Not found!"
+            printTask "Installing adb..."
+            mkdir -p adb # Create directory
+            cd ./adb  # Change to new directory
+
+            # Install depending on installed OS
+            case "$OSTYPE" in
+            "msys")
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
+                unzip ./platform-tools-latest-windows.zip                                           # Unzip
+                rm ./platform-tools-latest-windows.zip                                              # Delete .zip
+                ;;
+            "darwin")
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
+                unzip ./platform-tools-latest-darwin.zip                                           # Unzip
+                rm ./platform-tools-latest-darwin.zip                                              # Delete .zip
+                ;;
+            "linux-gnu")
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
+                unzip ./platform-tools-latest-linux.zip                                           # Unzip
+                rm ./platform-tools-latest-linux.zip                                              # Delete .zip
+                ;;
+            *)
+                printError "Couldn't find OS."
+                printInfo "Please download platform-tools for your respective OS, unzip it into the ./adb folder and run this script again."
+                printInfo "Windows: https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
+                printInfo "MacOS: https://dl.google.com/android/repository/platform-tools-latest-darwin.zip"
+                printInfo "Linux: https://dl.google.com/android/repository/platform-tools-latest-linux.zip"
+                exit
+                ;;
+            esac
+
+            cd ..                        # Change directory back
+            adb=./adb/platform-tools/adb # Set adb path
+            printSuccess "Installed!"
+        fi
+    else
+        printSuccess "Found locally!"
+        adb=./adb/platform-tools/adb
+    fi
+}
+
 # Creates a config.sh file if not found
 function checkConfig() {
     printTask "Searching for config.sh file..."
@@ -94,8 +150,8 @@ function checkLineEndings() {
 # Restarts ADB server
 function restartAdb() {
     printTask "Restarting ADB..."
-    adb kill-server
-    adb start-server 1>/dev/null 2>&1
+    $adb kill-server
+    $adb start-server 1>/dev/null 2>&1
     printSuccess "Restarted!"
 }
 
@@ -107,8 +163,8 @@ function checkForDevice() {
         # Nox
         if [ "$1" == "Nox" ]; then
             printTask "Searching for Nox through ADB..."
-            adb connect localhost:62001 1>/dev/null
-            if ! adb get-state 1>/dev/null; then
+            $adb connect localhost:62001 1>/dev/null
+            if ! $adb get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
             else
@@ -117,7 +173,7 @@ function checkForDevice() {
         # Bluestacks
         elif [ "$1" == "Bluestacks" ]; then
             printTask "Searching for Bluestacks through ADB... "
-            if ! adb get-state 1>/dev/null; then
+            if ! $adb get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
             else
@@ -129,14 +185,14 @@ function checkForDevice() {
         printTask "Searching for device through ADB..."
 
         # Checks if adb finds device
-        if ! adb get-state 1>/dev/null 2>&1; then
+        if ! $adb get-state 1>/dev/null 2>&1; then
             printError "No device found!"
             printInfo "Please make sure it's connected."
             printInfo "If you're trying to use Nox, please run this script with './deploy nox'!"
             exit
         else
             # Bluestacks
-            if [[ $(adb devices) =~ emulator ]]; then
+            if [[ $($adb devices) =~ emulator ]]; then
                 printSuccess "Found!"
                 deploy "Bluestacks" "$bluestacksDirectory"
             # Personal
@@ -155,15 +211,16 @@ function deploy() {
     printInfo "Platform: ${cBlue}$1${cNc}"
     printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
 
-    adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
-    adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
-    adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
-    adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2"    # Run script. Comment line if you don't want to run the script after pushing
+    $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
+    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
+    $adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2"    # Run script. Comment line if you don't want to run the script after pushing
 }
 
 # --- Script Start --- #
 clear
 
+checkAdb
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"

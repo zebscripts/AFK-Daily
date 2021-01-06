@@ -12,7 +12,7 @@
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.54.05-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.54.06-blue.svg"></img></a>
   </p>
 </div>
 
@@ -67,7 +67,7 @@ There are more features planned though, check them out [here](#planned-features)
 ## Supported Platforms
 There are **three different platforms** where you're able to run this script, namely your **personal Android device**, as well as two Android emulators: [**Bluestacks**](https://www.bluestacks.com/) and [**Nox**](https://www.bignox.com/). iOS will never be a thing, there's no need to ask for it (just install Bluestacks instead).
 
-Which one you want to use is up to you. Keep in mind that AFK Arena saves chat messages locally on your device, so if you use an emulator and switch between your devices often, your chat might look a bit messy. Personally, I recommend either your personal device or Bluestacks, as Nox has worse performance compared to Bluestacks and worse compatibility with this script.
+Which one you want to use is up to you. Keep in mind that AFK Arena saves chat messages locally on your device, so if you use an emulator and switch between your devices often, your chat might look a bit messy. Personally, I recommend either your personal device or Bluestacks, as Nox has worse compatibility with this script.
 
 ## Requirements & Installation
 There are quite a few requirements in order to run this script. In a perfect world this all works flawlessly, but we're not in a perfect world, so be prepared for some hic-ups here and there...
@@ -88,10 +88,8 @@ There are quite a few requirements in order to run this script. In a perfect wor
 2. Be able to run `.sh` files
 
 **For normal users:**
-> I'm planning to make the installation a lot easier by letting the script install ADB for you. I'll make sure to update this README whenever that happens!
 
-1. **ADB**: The script relies on ADB to communicate with your device. So installing ADB is really a no-brainer. Here's a [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to do it. Please make sure to add it to your `$PATH` as well, here's [another link](https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378).
-2. **`.sh`:** In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there are many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
+In order to run the script, you'll need to be able to run/execute `.sh` files. This shouldn't be a problem in MacOS or Linux, *but Windows definitely needs extra software for that*. If you're on windows, there are many options available (a quick google search on "how to run sh scripts on windows" will help you), though I recommend installing [Git Bash](https://gitforwindows.org/), as its the easiest method in my opinion. I'm also going to assume you installed Git Bash for the rest of the installation.
 
 <hr>
 
@@ -123,12 +121,12 @@ There are quite a few requirements in order to run this script. In a perfect wor
    3. **Phone model & Internet:**
        - Change the phone model to `Google Pixel 2`
 2. **AFK Arena:** Install the game. Duh.
-3. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging inside Nox. In case you didn't, go do that now. It's under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
+3. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 
 <hr>
 
 *Personal Device:*
-1. **USB Debugging:** If you've followed the first [link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to install ADB, you should have also enabled USB Debugging on your phone. In case you didn't, go do that now. It's under the `Phone Setup` part.
+1. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 2. **Resolution:** Make sure your Device is set to `1920x1080`.
 3. **AFK Arena:** Install the game. Duh.
 4. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
@@ -156,6 +154,7 @@ There are quite a few requirements in order to run this script. In a perfect wor
 7. Watch your device magically play for you. It's fun! I promise.
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
+- Check if adb is installed, and if not install it.
 - Check for File line endings
 - Check what type of device is connected per ADB, and connect accordingly*
 - Deploy the script on your device to be able to run it
