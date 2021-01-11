@@ -453,6 +453,16 @@ function checkWhereToEnd() {
     "campaign")
         input tap 550 1850
         ;;
+    "championship")
+        switchTab "Dark Forest"
+        input tap 740 1050
+        sleep 1
+        if [ "$pvpEvent" == false ]; then
+            input tap 550 1370
+        else
+            input tap 550 1820
+        fi
+        ;;
     *)
         echo "[WARN] Unknown location to end script on. Ignoring..."
         ;;

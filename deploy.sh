@@ -83,7 +83,7 @@ canOpenSoren=false
 
 # General
 waitForUpdate=true
-endAt="campaign"
+endAt="championship"
 
 # Repetitions
 totalAmountArenaTries=2+0
