@@ -229,20 +229,20 @@ function oakSearchPresent() {
 # Search available present tabs in Oak Inn
 function oakPresentTab() {
     oakPresentTabs=0
-    getColor 270 1800 # 1 gift c79856
-    if [ "$RGB" == "c79856" ]; then
+    getColor 270 1800 # 1 gift cf9a67
+    if [ "$RGB" == "cf9a67" ]; then
         ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
     fi
-    getColor 410 1800 # 2 gift b68444
-    if [ "$RGB" == "b68444" ]; then
+    getColor 410 1800 # 2 gift be8350
+    if [ "$RGB" == "be8350" ]; then
         ((oakPresentTabs = oakPresentTabs + 200)) # Increment
     fi
-    getColor 550 1800 # 3 gift a67032
-    if [ "$RGB" == "a67032" ]; then
+    getColor 550 1800 # 3 gift ae6c39
+    if [ "$RGB" == "ae6c39" ]; then
         ((oakPresentTabs = oakPresentTabs + 30)) # Increment
     fi
-    getColor 690 1800 # 4 gift ae7c40
-    if [ "$RGB" == "ae7c40" ]; then
+    getColor 690 1800 # 4 gift b07840
+    if [ "$RGB" == "b07840" ]; then
         ((oakPresentTabs = oakPresentTabs + 4)) # Increment
     fi
 }
@@ -1017,7 +1017,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 740 690 3 0.5
+# test 690 1800 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB

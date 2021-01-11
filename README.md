@@ -202,7 +202,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                |  `false`   |
 | `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                           |  `false`   |
 | `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                             |  `false`   |
-| `collectOakPresents`        | If `true`, collects Oak Inn red presents. **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".**             |  `false`   |
+| `collectOakPresents`        | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents.         |  `false`   |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
