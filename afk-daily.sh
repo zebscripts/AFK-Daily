@@ -3,7 +3,7 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-pvpEvent=false
+pvpEvent=true
 totalAmountOakRewards=3
 
 # Do not modify
@@ -229,20 +229,20 @@ function oakSearchPresent() {
 # Search available present tabs in Oak Inn
 function oakPresentTab() {
     oakPresentTabs=0
-    getColor 270 1800 # 1 gift cf9a67
-    if [ "$RGB" == "cf9a67" ]; then
+    getColor 270 1800 # 1 gift c79663
+    if [ "$RGB" == "c79663" ]; then
         ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
     fi
-    getColor 410 1800 # 2 gift be8350
-    if [ "$RGB" == "be8350" ]; then
+    getColor 410 1800 # 2 gift bb824f
+    if [ "$RGB" == "bb824f" ]; then
         ((oakPresentTabs = oakPresentTabs + 200)) # Increment
     fi
-    getColor 550 1800 # 3 gift ae6c39
-    if [ "$RGB" == "ae6c39" ]; then
+    getColor 550 1800 # 3 gift af6e3b
+    if [ "$RGB" == "af6e3b" ]; then
         ((oakPresentTabs = oakPresentTabs + 30)) # Increment
     fi
-    getColor 690 1800 # 4 gift b07840
-    if [ "$RGB" == "b07840" ]; then
+    getColor 690 1800 # 4 gift b57b45
+    if [ "$RGB" == "b57b45" ]; then
         ((oakPresentTabs = oakPresentTabs + 4)) # Increment
     fi
 }
@@ -460,7 +460,7 @@ function checkWhereToEnd() {
         if [ "$pvpEvent" == false ]; then
             input tap 550 1370
         else
-            input tap 550 1820
+            input tap 550 1680
         fi
         ;;
     *)
@@ -905,7 +905,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "7dfff1" ]; do
+    while [ "$RGB" == "7efff2" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1033,6 +1033,10 @@ function oakInn() {
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
+# test 270 1800 3 0.5 # Oak Inn Present Tab 1
+# test 410 1800 3 0.5 # Oak Inn Present Tab 2
+# test 550 1800 3 0.5 # Oak Inn Present Tab 3
+# test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
 # --- Script Start --- #
 echo "[INFO] Starting script..."

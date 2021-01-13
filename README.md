@@ -8,9 +8,9 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.55.02-blue.svg"></img></a>
   </p>
