@@ -489,7 +489,7 @@ function lootAfkChest() {
     input tap 550 1500
     sleep 1
     input tap 750 1350
-    sleep 1
+    sleep 2
 
     # Tap campaign in case of level up
     input tap 550 1850
@@ -1065,7 +1065,7 @@ if [ "$RGB" == "ffc25c" ]; then
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
         echo "[INFO]: Waiting for game to finish update..."
-        loopUntilNotRGB 20 740 205 ffc25c
+        loopUntilNotRGB 5 740 205 ffc25c
         echo "[OK]: Game finished updating."
     else
         echo "[WARN]: Not waiting for update to finish."
