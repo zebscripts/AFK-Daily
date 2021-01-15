@@ -131,12 +131,13 @@ function validateConfig() {
 # Params: file
 function checkLineEndings() {
     printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
-    if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
+    file $1
+    if [[ $(head -1 $1 | cat -A) =~ \^M ]]; then
         printWarn "Found CLRF!"
         printTask "Converting to LF..."
         dos2unix $1 2>/dev/null
 
-        if [[ $(head -1 afk-daily.sh | cat -A) =~ \^M ]]; then
+        if [[ $(head -1 $1 | cat -A) =~ \^M ]]; then
             printError "Failed to convert $1 to LF. Please do it yourself."
             exit
         else
