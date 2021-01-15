@@ -131,7 +131,6 @@ function validateConfig() {
 # Params: file
 function checkLineEndings() {
     printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
-    file $1
     if [[ $(head -1 $1 | cat -A) =~ \^M ]]; then
         printWarn "Found CLRF!"
         printTask "Converting to LF..."
