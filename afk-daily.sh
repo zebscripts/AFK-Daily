@@ -971,7 +971,7 @@ function collectMerchants() {
     sleep 1
     input tap 70 1810
 
-    wait
+    sleep 1
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
