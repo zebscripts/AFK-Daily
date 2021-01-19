@@ -1008,8 +1008,8 @@ function oakInn() {
                 oakTryCollectPresent
                 # If return value is still freaking 0, I give up
                 if [ $oakRes == 0 ]; then
-                    verifyRGB 20 1775 d49a61 "This makes no sense." "Couldn't collect Oak Inn presents, sowy."
-                    return
+                    echo "[WARN] Couldn't collect Oak Inn presents, sowy."
+                    break
                 fi
             fi
         fi
@@ -1023,7 +1023,7 @@ function oakInn() {
     input tap 70 1810
 
     wait
-    verifyRGB 20 1775 d49a61 "Collected Oak Inn presents." "Failed to collect Oak Inn presents."
+    verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
 }
 
 # Test function (X, Y, amountTimes, waitTime)
@@ -1077,29 +1077,29 @@ if [ "$RGB" == "ffc25c" ]; then
 fi
 
 # CAMPAIGN TAB
-switchTab "Campaign"
-lootAfkChest
-challengeBoss
-fastRewards
-collectFriendsAndMercenaries
-lootAfkChest
+# switchTab "Campaign"
+# lootAfkChest
+# challengeBoss
+# fastRewards
+# collectFriendsAndMercenaries
+# lootAfkChest
 
 # DARK FOREST TAB
-switchTab "Dark Forest"
-soloBounties
-teamBounties
-arenaOfHeroes
-legendsTournament
-kingsTower
+# switchTab "Dark Forest"
+# soloBounties
+# teamBounties
+# arenaOfHeroes
+# legendsTournament
+# kingsTower
 
 # RANHORN TAB
 switchTab "Ranhorn"
-guildHunts
-twistedRealmBoss
-buyFromStore
-collectQuestChests
-collectMail
-collectMerchants
+# guildHunts
+# twistedRealmBoss
+# buyFromStore
+# collectQuestChests
+# collectMail
+# collectMerchants
 if [ "$collectOakPresents" == true ]; then
     oakInn
 fi

@@ -26,7 +26,9 @@ This script is meant to automate the process of daily activities within the [AFK
 ## Disclaimer <!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
 
-Since lately I've been adding quite a lot of new features and bug fixes, this README is slowly but surely starting to get a big mess. I'll be working on an organized wiki one day, but for now this will do. For those who want to get a quick overview of this project instead of reading it all: Install an emulator (bluestacks) and the rest of the dependencies, run the script, update the freshly generated `config.sh` file, run script again and watch how game gets played. 
+Since lately I've been adding quite a lot of new features and bug fixes, this README is slowly but surely starting to get a big mess. I'll be working on an organized wiki one day, but for now this will do.
+
+**For those who want to get a quick overview of this project instead of reading it all**: Install an emulator (bluestacks) and the rest of the dependencies, [change some bluestacks settings](#requirements--installation), run the script, update the freshly generated `config.sh` file, run script again and watch how the game gets played.
 
 ## Table of Contents <!-- omit in toc -->
 - [Features](#features)
@@ -192,17 +194,17 @@ Running the script on Nox:
 ## Config/Variables
 The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. If you do not have/see a `config.sh` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside inside `config.sh`.**
 
-| Variable                    | Description                                                                                                                                  |  Default   |
-| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- | :--------: |
-| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                                   |  `false`   |
-| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                                      |   `true`   |
+| Variable                    | Description                                                                                                                                  |    Default     |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
+| `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                                   |    `false`     |
+| `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                                      |     `true`     |
 | `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`. | `championship` |
-| `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`.                     |   `2+0`    |
-| `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.                     |   `2+0`    |
-| `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                                |  `false`   |
-| `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                                           |  `false`   |
-| `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                                             |  `false`   |
-| `collectOakPresents`        | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents.                         |  `false`   |
+| `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`.                     |     `2+0`      |
+| `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.                     |     `2+0`      |
+| `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                                |    `false`     |
+| `buyStorePoeCoins`          | If `true`, buys Poe Coins from the store for Gold.                                                                                           |    `false`     |
+| `buyStoreEmblems`           | If `true`, buys Emblems from the store for Gold.                                                                                             |    `false`     |
+| `collectOakPresents`        | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents.                         |    `false`     |
 
 ## Issues
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
@@ -268,3 +270,7 @@ If you're having trouble running this script, feel free to send me a message on 
 **`hexdump: not found`**
 
 This is most likely because your device does not have [busybox](https://play.google.com/store/apps/details?id=stericson.busybox) installed. Either install it on your device or try an emulator like Bluestacks out.
+
+**`protocol fault: stat response has wrong message id`**
+
+This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
