@@ -16,6 +16,11 @@ function printInfo() {
     printf "${cCyan}Info:${cNc} $1\n"
 }
 
+# Tip
+function printTip() {
+    printf "${cGreen}Tip:${cNc} $1\n"
+}
+
 # Success
 function printSuccess() {
     printf "${cGreen}Success:${cNc} $1\n"

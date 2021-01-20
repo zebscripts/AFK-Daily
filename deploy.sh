@@ -16,6 +16,14 @@ configFile="config.sh"
 adb=adb
 
 # --- Functions --- #
+# Checks for script update (with git)
+function checkForUpdate() {
+    if command -v git &>/dev/null; then
+        printTask "Checking for updates..."
+        git pull
+    fi
+}
+
 # Checks for ADB and installs if not present
 function checkAdb() {
     printTask "Checking for adb..."
@@ -188,7 +196,7 @@ function checkForDevice() {
         if ! $adb get-state 1>/dev/null 2>&1; then
             printError "No device found!"
             printInfo "Please make sure it's connected."
-            printInfo "If you're trying to use Nox, please run this script with './deploy nox'!"
+            printTip "If you're trying to use Nox, please run this script with './deploy nox'!"
             exit
         else
             # Bluestacks
@@ -222,6 +230,7 @@ clear
 
 checkAdb
 checkConfig
+checkForUpdate
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
 

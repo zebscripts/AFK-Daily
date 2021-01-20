@@ -145,15 +145,19 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 5. Watch your device magically play for you. It's fun! I promise.
 
 **For normal users:** 
-1. Clone/Download this repository to your desired directory.
+1. Create a folder on your machine to save this script in
 2. Open up a terminal at said directory:
-   - **Windows:** Open the directory, hold `Shift+Right Mouse Click` inside it, and click on `Git Bash here`.
+   - **Windows:** Open the directory, `Shift+Right Mouse Click` inside it, and click on `Git Bash here`.
    - **Mac/Linux:** Open a terminal, and `cd` into your directory.
-3. Connect your device to the computer (or start your emulator of choice).
-4. Type `./deploy.sh` into your terminal.
-5. Configure [`config.sh`](#configvariables) if necessary.
-6. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
-7. Watch your device magically play for you. It's fun! I promise.
+3. Clone this repository by running `git clone https://github.com/zebscripts/AFK-Daily.git` in the terminal.
+4. Run `cd AFK-Daily` in the terminal.
+5. Connect your device to the computer (or start your emulator of choice).
+6. Type `./deploy.sh` into your terminal.
+7. Configure [`config.sh`](#configvariables) if necessary.
+8. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
+9. Watch your device magically play for you. It's fun! I promise.
+
+If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5.
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
 - Check if adb is installed, and if not install it.
