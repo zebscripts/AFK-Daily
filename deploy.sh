@@ -20,7 +20,7 @@ adb=adb
 function checkForUpdate() {
     if command -v git &>/dev/null; then
         printTask "Checking for updates..."
-        git pull
+        git pull &>/dev/null && printSuccess "Checked for updates!" || printWarn "Couldn't check for updates. Please do it manually from time to time."
     fi
 }
 
