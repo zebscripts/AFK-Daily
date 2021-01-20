@@ -1077,29 +1077,29 @@ if [ "$RGB" == "ffc25c" ]; then
 fi
 
 # CAMPAIGN TAB
-# switchTab "Campaign"
-# lootAfkChest
-# challengeBoss
-# fastRewards
-# collectFriendsAndMercenaries
-# lootAfkChest
+switchTab "Campaign"
+lootAfkChest
+challengeBoss
+fastRewards
+collectFriendsAndMercenaries
+lootAfkChest
 
 # DARK FOREST TAB
-# switchTab "Dark Forest"
-# soloBounties
-# teamBounties
-# arenaOfHeroes
-# legendsTournament
-# kingsTower
+switchTab "Dark Forest"
+soloBounties
+teamBounties
+arenaOfHeroes
+legendsTournament
+kingsTower
 
 # RANHORN TAB
 switchTab "Ranhorn"
-# guildHunts
-# twistedRealmBoss
-# buyFromStore
-# collectQuestChests
-# collectMail
-# collectMerchants
+guildHunts
+twistedRealmBoss
+buyFromStore
+collectQuestChests
+collectMail
+collectMerchants
 if [ "$collectOakPresents" == true ]; then
     oakInn
 fi
