@@ -771,7 +771,7 @@ function guildHunts() {
     input tap 380 360
     sleep 3
     input tap 290 860
-    sleep 1
+    sleep 3
 
     # TODO: Make sure 2x and Auto are enabled
     # TODO: Have a variable decide if fight wrizz or not
