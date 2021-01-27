@@ -118,8 +118,7 @@ collectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Set
 function validateConfig() {
     source config.sh
     printTask "Validating config.sh..."
-    if [[ -z $totalAmountArenaTries || -z \
-        $canOpenSoren || -z \
+    if [[ -z $canOpenSoren || -z \
         $waitForUpdate || -z \
         $endAt || -z \
         $totalAmountArenaTries || -z \

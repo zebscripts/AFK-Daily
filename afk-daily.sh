@@ -3,7 +3,7 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-pvpEvent=false # Set to `true` if "Heroes of Esperia" event is live
+pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -456,7 +456,7 @@ function checkWhereToEnd() {
     "championship")
         switchTab "Dark Forest"
         input tap 740 1050
-        sleep 1
+        sleep 2
         if [ "$pvpEvent" == false ]; then
             input tap 550 1370
         else
@@ -658,16 +658,16 @@ function teamBounties() {
 # Does the daily arena of heroes battles
 function arenaOfHeroes() {
     input tap 740 1050
-    sleep 1
+    sleep 2
     if [ "$pvpEvent" == false ]; then
         input tap 550 450
     else
         input tap 550 900
     fi
-    sleep 1
+    sleep 2
     input tap 1000 1800
     input tap 980 410
-    wait
+    sleep 2
     input tap 540 1800
     sleep 1
 
@@ -678,7 +678,7 @@ function arenaOfHeroes() {
         local COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
             input tap 820 1400
-            sleep 1
+            sleep 2
             input tap 550 1850
             waitBattleFinish 2
             if [ "$battleFailed" == false ]; then
@@ -686,7 +686,7 @@ function arenaOfHeroes() {
                 sleep 2
             fi
             input tap 550 1550 # Finish battle
-            sleep 2
+            sleep 3
             ((COUNT = COUNT + 1)) # Increment
         done
 
@@ -795,6 +795,7 @@ function guildHunts() {
         # fi
 
         input tap 710 1840
+        // TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
         wait
         input tap 720 1300
         sleep 1

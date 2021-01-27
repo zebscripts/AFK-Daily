@@ -8,16 +8,16 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.56.02-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.56.03-blue.svg"></img></a>
   </p>
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> There's a slight chance Chest Quest collection does not work. Just collect them yourself, and I'll fix it on next reset.
+> **Latest info:** Please keep your script updated! I've updated the [Usage](#usage) section to take automatic updates into consideration. Please follow those steps in order to benefit the most from this script.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
@@ -157,7 +157,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 8. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
 9. Watch your device magically play for you. It's fun! I promise.
 
-If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5.
+**If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error**, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5. Keep in mind automatic updates won't be working then. [Send me a message](#troubleshooting), I'd be happy to help!
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
 - Check if adb is installed, and if not install it.
@@ -217,6 +217,7 @@ The script is developed in a way to exit whenever something doesn't go as planne
 
 These are known issues that you might stumble across:
 - [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
+- [`#32`](https://github.com/zebscripts/AFK-Daily/issues/32) - Script breaks whenever resources are full. Please make sure to always collect them/spend them.
 
 If you encounter an issue that is *not* listed above or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
 
