@@ -3,7 +3,7 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
+pvpEvent=false # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -905,7 +905,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "7efff2" ]; do
+    while [ "$RGB" == "7cfff3" ]; do
         input tap 930 680
         wait
         getColor 700 670
