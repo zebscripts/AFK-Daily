@@ -11,9 +11,11 @@ RGB=00000000
 oakRes=0
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
+    # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     source /$1/scripts/afk-arena/config.sh
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
+    # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
     source /storage/emulated/0/scripts/afk-arena/config.sh
 fi
 
@@ -143,13 +145,16 @@ function waitBattleFinish() {
     local finished=false
     while [ $finished == false ]; do
         getColor 560 350
-        if [ "$RGB" == "b8894d" ]; then # Victory
+        if [ "$RGB" == "b8894d" ]; then
+            # Victory
             battleFailed=false
             finished=true
-        elif [ "$RGB" == "171932" ]; then # Failed
+        elif [ "$RGB" == "171932" ]; then
+            # Failed
             battleFailed=true
             finished=true
-        elif [ "$RGB" == "45331d" ]; then # Victory with reward
+        elif [ "$RGB" == "45331d" ] || [ "$RGB" == "44331c" ]; then # First RGB local device, second bluestacks
+            # Victory with reward
             battleFailed=false
             finished=true
         fi
@@ -795,7 +800,7 @@ function guildHunts() {
         # fi
 
         input tap 710 1840
-        // TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+        # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
         wait
         input tap 720 1300
         sleep 1
@@ -1028,7 +1033,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 690 1800 3 0.5
+# test 560 350 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB

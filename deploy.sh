@@ -175,7 +175,7 @@ function checkForDevice() {
                 printError "Not found!"
                 exit
             else
-                printSuccess "Found!"
+                printSuccess "Found Nox!"
             fi
         # Bluestacks
         elif [ "$1" == "Bluestacks" ]; then
@@ -184,7 +184,7 @@ function checkForDevice() {
                 printError "Not found!"
                 exit
             else
-                printSuccess "Found!"
+                printSuccess "Found Bluestacks!"
             fi
         fi
     # If parameters aren't sent
@@ -200,11 +200,11 @@ function checkForDevice() {
         else
             # Bluestacks
             if [[ $($adb devices) =~ emulator ]]; then
-                printSuccess "Found!"
+                printSuccess "Found Bluestacks!"
                 deploy "Bluestacks" "$bluestacksDirectory"
             # Personal
             else
-                printSuccess "Found!"
+                printSuccess "Found Personal Device!"
                 deploy "Personal" "$personalDirectory"
             fi
         fi
