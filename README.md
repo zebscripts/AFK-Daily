@@ -57,7 +57,7 @@ As of now, the script is capable of completing the following inside the game:
 - Fight in the Kings Tower
 - Fight Wrizz
 - Fight Soren if available. Can also open Soren for you.
-- Fight in the Twisted Realm
+- Fight in the Twisted Realm (necessary to have at least fought once against each TR boss for the game to save your formation)
 - Buy daily Dust from the Store
 - Collect daily Quest Chests
 - Collect Mail
@@ -218,6 +218,7 @@ The script is developed in a way to exit whenever something doesn't go as planne
 These are known issues that you might stumble across:
 - [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
 - [`#32`](https://github.com/zebscripts/AFK-Daily/issues/32) - Script breaks whenever resources are full. Please make sure to always collect them/spend them.
+- [`#33`](https://github.com/zebscripts/AFK-Daily/issues/33) - Script waits forever in the Arena of Heroes
 
 If you encounter an issue that is *not* listed above or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
 
