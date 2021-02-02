@@ -34,7 +34,7 @@ function test() {
 
 # Default wait time for actions
 function wait() {
-    sleep 1
+    sleep 2
 }
 
 # Starts the app
@@ -753,13 +753,13 @@ function legendsTournament() {
 # Battles once in the kings tower
 function kingsTower() {
     input tap 500 870
-    sleep 1
+    sleep 2
     input tap 550 900
-    sleep 1
+    sleep 2
     input tap 540 1350
-    sleep 1
+    sleep 2
     input tap 550 1850
-    sleep 1
+    sleep 2
     input tap 80 1460
     input tap 230 960
     wait
