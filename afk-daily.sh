@@ -761,6 +761,7 @@ function kingsTower() {
     input tap 550 1850
     sleep 2
     input tap 80 1460
+    sleep 1
     input tap 230 960
     wait
     input tap 70 1810
