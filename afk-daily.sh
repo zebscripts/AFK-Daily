@@ -671,10 +671,11 @@ function arenaOfHeroes() {
     fi
     sleep 2
     input tap 1000 1800
+    wait
     input tap 980 410
     sleep 2
     input tap 540 1800
-    sleep 1
+    sleep 2
 
     # Check for new season
     getColor 200 1800
