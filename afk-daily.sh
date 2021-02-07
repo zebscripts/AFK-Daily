@@ -679,7 +679,8 @@ function arenaOfHeroes() {
 
     # Check for new season
     getColor 200 1800
-    if [ "$RGB" != "382314" ]; then
+    echo $RGB
+    if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
         # Repeat a battle for as long as totalAmountArenaTries
         local COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
@@ -1035,7 +1036,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+# test 200 1800 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
