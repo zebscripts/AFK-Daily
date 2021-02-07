@@ -679,7 +679,6 @@ function arenaOfHeroes() {
 
     # Check for new season
     getColor 200 1800
-    echo $RGB
     if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
         # Repeat a battle for as long as totalAmountArenaTries
         local COUNT=0
