@@ -494,7 +494,7 @@ function lootAfkChest() {
     input tap 550 1500
     sleep 1
     input tap 750 1350
-    sleep 2
+    sleep 3
 
     # Tap campaign in case of level up
     input tap 550 1850
@@ -818,7 +818,7 @@ function guildHunts() {
 
     getColor 715 1815
     # If Soren is open
-    if [ "$RGB" == "8ae5c4" ]; then
+    if [ "$RGB" == "89e3cb" ]; then
         quickBattleGuildBosses
 
     # If Soren is closed
@@ -1035,7 +1035,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 200 1800 3 0.5
+# test 715 1815 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
