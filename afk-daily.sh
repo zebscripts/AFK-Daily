@@ -703,7 +703,7 @@ function arenaOfHeroes() {
     fi
 
     input tap 70 1810
-    sleep 1
+    sleep 2
     verifyRGB 850 130 3c2814 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
 }
 
@@ -1035,7 +1035,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 715 1815 3 0.5
+# test 850 130 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
