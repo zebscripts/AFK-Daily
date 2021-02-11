@@ -697,7 +697,7 @@ function arenaOfHeroes() {
         done
 
         input tap 1000 380
-        wait
+        sleep 3
     else
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
