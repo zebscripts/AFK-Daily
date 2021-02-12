@@ -697,14 +697,14 @@ function arenaOfHeroes() {
         done
 
         input tap 1000 380
-        sleep 3
+        wait
     else
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
 
     input tap 70 1810
-    sleep 2
-    verifyRGB 850 130 3c2814 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+    wait
+    verifyRGB 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
 }
 
 # Does the daily Legends tournament battles
@@ -1035,7 +1035,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 850 130 3 0.5
+# test 760 70 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
