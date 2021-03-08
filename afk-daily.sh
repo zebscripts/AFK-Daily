@@ -683,7 +683,7 @@ function arenaOfHeroes() {
         # Repeat a battle for as long as totalAmountArenaTries
         local COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
-            input tap 820 1400
+            input tap 820 1220
             sleep 2
             input tap 550 1850
             waitBattleFinish 2
