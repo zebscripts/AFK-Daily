@@ -818,7 +818,7 @@ function guildHunts() {
 
     getColor 715 1815
     # If Soren is open
-    if [ "$RGB" == "89e3cb" ]; then
+    if [ "$RGB" == "8ae5c4" ]; then
         quickBattleGuildBosses
 
     # If Soren is closed
@@ -913,7 +913,7 @@ function collectQuestChests() {
 
     # Collect Quests
     getColor 700 670
-    while [ "$RGB" == "7cfff3" ]; do
+    while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
         wait
         getColor 700 670
