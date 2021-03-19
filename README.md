@@ -8,8 +8,8 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
+  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.59.05-blue.svg"></img></a>
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> **Latest info:** Please keep your script updated! I've updated the [Usage](#usage) section to take automatic updates into consideration. Please follow those steps in order to benefit the most from this script.
+> **Current known issues:** The script is failing to realise when AFK Arena is updating. This can cause issues collecting Oak Inn presents in case the update is not yet done at the end of the script. And automatic script updates are apparently broken as well. I'll try to fix those whenever possible!
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
@@ -129,7 +129,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 
 *Personal Device:*
 1. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
-2. **Resolution:** Make sure your Device is set to `1920x1080`.
+2. **Resolution:** Make sure your Device is set to `1080x1920`.
 3. **AFK Arena:** Install the game. Duh.
 4. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
 5. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** This will install one specific command that the script uses for pixel analysis.
@@ -268,7 +268,7 @@ Do with this information what you want. I'm *not responsible at all* if anything
 Nope. Install Bluestacks and run this script.
 
 ## Feature Requests
-Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by opening a new [issue](https://github.com/zebscripts/afk-daily/issues/new)!
+Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by writing it in the [discussion board](https://github.com/zebscripts/AFK-Daily/discussions/categories/ideas)!
 
 ## Troubleshooting
 If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989). I'll try my best to help you.

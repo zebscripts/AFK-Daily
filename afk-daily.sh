@@ -522,7 +522,7 @@ function challengeBoss() {
     wait
     input tap 230 960
 
-    # Check if change formation
+    # Check for multi-battle
     getColor 450 1775
     if [ "$RGB" != "cc9261" ]; then
         input tap 70 1810
