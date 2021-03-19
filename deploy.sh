@@ -20,7 +20,13 @@ adb=adb
 function checkForUpdate() {
     if command -v git &>/dev/null; then
         printTask "Checking for updates..."
-        git pull &>/dev/null && printSuccess "Checked/updated!" || printWarn "Couldn't check for updates. Please do it manually from time to time."
+        if git pull; then
+            printSuccess "Checked/Updated!"
+        elif git fetch --all && git reset --hard origin/master; then
+            printSuccess "Checked/Updated!"
+        else
+            printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'. Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+        fi
     fi
 }
 

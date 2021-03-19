@@ -17,20 +17,22 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> **Current known issues:** The script is failing to realise when AFK Arena is updating. This can cause issues collecting Oak Inn presents in case the update is not yet done at the end of the script. And automatic script updates are apparently broken as well. I'll try to fix those whenever possible!
+> [Please make sure to update to the latest version of the script!](https://github.com/zebscripts/AFK-Daily#troubleshooting) It'll fix auto-updating (hopefully), so you'll never have to manually update it again.
+
+> **Current known issues:** The script is failing to realise when AFK Arena is updating. This can cause issues collecting Oak Inn presents in case the update is not yet done at the end of the script.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
 <p align="center"><img src="https://i.imgur.com/gcr9vZf.png" alt="Example script output"></p>
 
-## Disclaimer <!-- omit in toc -->  
+## Disclaimer<!-- omit in toc -->  
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
 
 Since lately I've been adding quite a lot of new features and bug fixes, this README is slowly but surely starting to get a big mess. I'll be working on an organized wiki one day, but for now this will do.
 
 **For those who want to get a quick overview of this project instead of reading it all**: Install an emulator (bluestacks) and the rest of the dependencies, [change some bluestacks settings](#requirements--installation), run the script, update the freshly generated `config.sh` file, run script again and watch how the game gets played.
 
-## Table of Contents <!-- omit in toc -->
+## Table of Contents<!-- omit in toc -->
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
 - [Requirements & Installation](#requirements--installation)
@@ -272,6 +274,10 @@ Have a feature in mind? An idea? Something that isn't implemented yet? Maybe eve
 
 ## Troubleshooting
 If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989). I'll try my best to help you.
+
+**The script does not auto-update to the latest version**
+
+You can easily update the script yourself by typing `git pull` in the terminal. If it still doesn't work, then I recommend deleting every file besides `config.sh` and running `git pull https://github.com/zebscripts/AFK-Daily`.
 
 **`hexdump: not found`**
 
