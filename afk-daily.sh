@@ -522,6 +522,12 @@ function challengeBoss() {
     wait
     input tap 230 960
 
+    # Check if change formation
+    getColor 450 1775
+    if [ "$RGB" != "cc9261" ]; then
+        input tap 230 960
+    fi
+
     wait
     verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
 }
