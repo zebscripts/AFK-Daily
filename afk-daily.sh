@@ -521,6 +521,7 @@ function challengeBoss() {
     input tap 80 1460
     wait
     input tap 230 960
+    sleep 1
 
     # Check for multi-battle
     getColor 450 1775
@@ -855,13 +856,14 @@ function twistedRealmBoss() {
     # sleep 3
     ## End of testing ##
 
+    input tap 820 820
+    sleep 2
+
     # Check if TR is being calculated
-    getColor 740 690
-    if [ "$RGB" == "bf6c3a" ]; then # TODO: Needs to be checked if works
+    getColor 540 1220
+    if [ "$RGB" == "9aedc1" ]; then
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
-        input tap 820 820
-        sleep 2
         input tap 550 1850
         sleep 2
         input tap 550 1850
@@ -875,7 +877,7 @@ function twistedRealmBoss() {
         input tap 550 800
         wait
 
-        # TODO: Repeat battle if variable says so
+    # TODO: Repeat battle if variable says so
     fi
 
     input tap 70 1810
@@ -1041,7 +1043,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 760 70 3 0.5
+# test 450 1775 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
