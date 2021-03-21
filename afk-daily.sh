@@ -1049,6 +1049,7 @@ function oakInn() {
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 700 670 3 0.5 # Check for chest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
+# test 740 205 3 0.5 # Check if game is updating
 # test 270 1800 3 0.5 # Oak Inn Present Tab 1
 # test 410 1800 3 0.5 # Oak Inn Present Tab 2
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
@@ -1081,11 +1082,11 @@ switchTab "Campaign"
 
 # Check if game is being updated
 getColor 740 205
-if [ "$RGB" == "ffc25c" ]; then
+if [ "$RGB" == "ffc15b" ]; then
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
         echo "[INFO]: Waiting for game to finish update..."
-        loopUntilNotRGB 5 740 205 ffc25c
+        loopUntilNotRGB 5 740 205 ffc15b
         echo "[OK]: Game finished updating."
     else
         echo "[WARN]: Not waiting for update to finish."
