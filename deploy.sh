@@ -98,6 +98,7 @@ canOpenSoren=false
 # General
 waitForUpdate=true
 endAt="championship"
+arenaHeroesOpponent=5
 
 # Repetitions
 totalAmountArenaTries=2+0
@@ -127,6 +128,7 @@ function validateConfig() {
     if [[ -z $canOpenSoren || -z \
         $waitForUpdate || -z \
         $endAt || -z \
+        $arenaHeroesOpponent || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \

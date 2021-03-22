@@ -8,8 +8,8 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.59.05-blue.svg"></img></a>
@@ -18,8 +18,6 @@
 
 <!-- Uncomment the following quote whenever the script is Failing -->
 > [Please make sure to update to the latest version of the script!](https://github.com/zebscripts/AFK-Daily#troubleshooting) It'll fix auto-updating (hopefully), so you'll never have to manually update it again.
-
-> **Current known issues:** The script is failing to realise when AFK Arena is updating. This can cause issues collecting Oak Inn presents in case the update is not yet done at the end of the script.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
@@ -205,6 +203,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `canOpenSoren`              | Set to `true` if the player has permissions to open Soren.                                                                                   |    `false`     |
 | `waitForUpdate`             | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                                      |     `true`     |
 | `endAt`                     | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`. | `championship` |
+| `arenaHeroesOpponent`       | Choose which opponent to fight in the Arena of Heroes. Possible entries: `1`, `2`, `3`, `4`, `5`. `1` being at the top, `5` at the bottom.   |      `5`       |
 | `totalAmountArenaTries`     | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`.                     |     `2+0`      |
 | `totalAmountGuildBossTries` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.                     |     `2+0`      |
 | `buyStoreDust`              | If `true`, buys Dust from the store for Gold.                                                                                                |    `false`     |
