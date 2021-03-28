@@ -222,6 +222,12 @@ function checkForDevice() {
 # Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
 # Params: platform, directory
 function deploy() {
+    # Check for resolution
+    if [[ $(adb shell wm size) != *"1080x1920"* ]]; then
+        printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
+        exit
+    fi
+
     printf "\n"
     printInfo "Platform: ${cBlue}$1${cNc}"
     printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"

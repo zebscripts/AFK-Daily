@@ -1084,6 +1084,7 @@ startApp
 sleep 10
 
 # Loops until the game has launched
+getColor 450 1775
 while [ "$RGB" != "cc9261" ]; do
     sleep 1
     getColor 450 1775
