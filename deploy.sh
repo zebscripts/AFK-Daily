@@ -223,7 +223,7 @@ function checkForDevice() {
 # Params: platform, directory
 function deploy() {
     # Check for resolution
-    if [[ $(adb shell wm size) != *"1080x1920"* ]]; then
+    if [[ $($adb shell wm size) != *"1080x1920"* ]]; then
         printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
         exit
     fi
