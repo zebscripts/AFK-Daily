@@ -803,7 +803,7 @@ function kingsTower() {
 # Battles against Guild boss Wrizz
 function guildHunts() {
     input tap 380 360
-    sleep 3
+    sleep 6
     input tap 290 860
     sleep 3
 
