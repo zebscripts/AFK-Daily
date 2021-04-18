@@ -8,8 +8,8 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
+  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
+  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.61.04-blue.svg"></img></a>
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> [Please make sure to update to the latest version of the script!](https://github.com/zebscripts/AFK-Daily#troubleshooting) It'll fix auto-updating (hopefully), so you'll never have to manually update it again.
+> Fortune chests still need to be tested further, they might break the script when trying to fight Guild Hunts.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
