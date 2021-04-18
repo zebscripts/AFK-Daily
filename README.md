@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> Fortune chests still need to be tested further, they might break the script when trying to fight Guild Hunts.
+> Fortune chests still need to be tested further, they might break the script when trying to fight Guild Hunts. Please collect any fortune chests before running the script, that should fix this issue.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
 
