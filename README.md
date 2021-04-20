@@ -8,8 +8,8 @@
   <!-- Badges -->
   <!-- Script status -->
   <p>
-  <!-- <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a> -->
-  <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a>
+  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
+  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.61.04-blue.svg"></img></a>
@@ -17,9 +17,9 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> Fortune chests still need to be tested further, they might break the script when trying to fight Guild Hunts. Please collect any fortune chests before running the script, that should fix this issue.
+> Fortune chests should be fixed. In case one pops up, the script will attempt to automatically open it.
 
-This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly.
+This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly. If you like my work, please consider starring this repository as it lets me know people use this script, which motivates me to keep working on it! :)
 
 <p align="center"><img src="https://i.imgur.com/gcr9vZf.png" alt="Example script output"></p>
 

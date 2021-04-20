@@ -804,6 +804,16 @@ function kingsTower() {
 function guildHunts() {
     input tap 380 360
     sleep 10
+
+    # Check for fortune chest
+    getColor 380 500
+    if [ "$RGB" == "793929" ]; then
+        input tap 560 1300
+        sleep 2
+        input tap 540 1830
+    fi
+    wait
+
     input tap 290 860
     sleep 3
 
@@ -1063,7 +1073,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 450 1775 3 0.5
+# test 380 500 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
