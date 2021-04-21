@@ -99,7 +99,34 @@ canOpenSoren=false
 waitForUpdate=true
 endAt="championship"
 arenaHeroesOpponent=5
-collectMerchantFreebies=false
+
+# Actions
+
+## Campaign
+doLootAfkChest=true
+doChallengeBoss=true
+doFastRewards=true
+doCollectFriendsAndMercenaries=true
+
+## Dark Forest
+doSoloBounties=true
+doTeamBounties=true
+doArenaOfHeroes=true
+doLegendsTournament=true
+doKingsTower=true
+
+## Ranhorn
+doGuildHunts=true
+doTwistedRealmBoss=true
+doBuyFromStore=true
+doStrenghenCrystal=false
+doCompanionPointsSummon=false
+doCollectOakPresents=true # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
+
+# End
+doCollectQuestChests=true
+doCollectMail=true
+doCollectMerchantFreebies=true
 
 # Repetitions
 totalAmountArenaTries=2+0
@@ -109,9 +136,6 @@ totalAmountGuildBossTries=2+0
 buyStoreDust=true
 buyStorePoeCoins=true
 buyStoreEmblems=false
-
-# Oak Inn
-collectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 ' >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
@@ -130,7 +154,24 @@ function validateConfig() {
         $waitForUpdate || -z \
         $endAt || -z \
         $arenaHeroesOpponent || -z \
-        $collectMerchantFreebies || -z \
+        $doLootAfkChest || -z \
+        $doChallengeBoss || -z \
+        $doFastRewards || -z \
+        $doCollectFriendsAndMercenaries || -z \
+        $doSoloBounties || -z \
+        $doTeamBounties || -z \
+        $doArenaOfHeroes || -z \
+        $doLegendsTournament || -z \
+        $doKingsTower || -z \
+        $doGuildHunts || -z \
+        $doTwistedRealmBoss || -z \
+        $doBuyFromStore || -z \
+        $doCollectOakPresents || -z \
+        $doStrenghenCrystal || -z \
+        $doCompanionPointsSummon || -z \
+        $doCollectQuestChests || -z \
+        $doCollectMail || -z \
+        $doCollectMerchantFreebies || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \

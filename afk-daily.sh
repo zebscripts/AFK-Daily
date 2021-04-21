@@ -620,6 +620,7 @@ function soloBounties() {
     # input tap 750 1160
 
     input tap 780 1550 # Collect all
+    sleep 1            # Fix: Sometimes goes too fast
     input tap 350 1550 # Dispatch all
     wait
     input tap 550 1500 # Confirm
@@ -656,6 +657,7 @@ function teamBounties() {
     # input tap 750 1160
 
     input tap 780 1550 # Collect all
+    sleep 1            # Fix: Sometimes goes too fast
     input tap 350 1550 # Dispatch all
     wait
     input tap 550 1500 # Confirm
@@ -1021,6 +1023,56 @@ function collectMerchants() {
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
+# If red square, strenghen Crystal
+function strenghenCrystal() {
+    input tap 750 1025 # Crystal
+    sleep 3
+
+    # TODO: Detect if free slot, and take it.
+
+    input tap 550 1850 # Strenghen Crystal
+    sleep 1
+    input tap 200 1850 # If level up %5 = 0
+    sleep 1
+
+    input tap 70 1810
+
+    wait
+    verifyRGB 20 1775 d49a61 "Strenghened crystal." "Failed to strenghen crystal."
+}
+
+# Let's do a "free" summon
+function nobleTavern() {
+    input tap 280 1370 # The Noble Tavern
+    sleep 3
+
+    input tap 600 1820 # The noble tavern again
+    sleep 1
+
+    getColor 897 852
+    until [ "$RGB" == "ecd383" ]; do # Looking for heart
+        #echo "RGB: $RGB"   # for testing
+        input tap 870 1630 # Next pannel
+        sleep 1
+
+        getColor 897 852
+    done
+
+    input tap 350 1450 # Summon
+    sleep 3
+    input tap 540 908  # Click on the card
+    sleep 2
+    input tap 70 1810  # close
+    sleep 1
+    input tap 550 1700 # if auto dez...
+    sleep 1
+
+    input tap 70 1810
+
+    wait
+    verifyRGB 20 1775 d49a61 "Companion points summon." "Failed to summon."
+}
+
 # Collect Oak Inn
 function oakInn() {
     input tap 780 270 # Oak Inn
@@ -1126,29 +1178,33 @@ fi
 
 # CAMPAIGN TAB
 switchTab "Campaign"
-lootAfkChest
-challengeBoss
-fastRewards
-collectFriendsAndMercenaries
-lootAfkChest
+if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
+if [ "$doFastRewards" == true ]; then fastRewards; fi
+if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
+if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 
 # DARK FOREST TAB
 switchTab "Dark Forest"
-soloBounties
-teamBounties
-arenaOfHeroes
-legendsTournament
-kingsTower
+if [ "$doSoloBounties" == true ]; then soloBounties; fi
+if [ "$doTeamBounties" == true ]; then teamBounties; fi
+if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
+if [ "$doLegendsTournament" == true ]; then legendsTournament; fi
+if [ "$doKingsTower" == true ]; then kingsTower; fi
 
 # RANHORN TAB
 switchTab "Ranhorn"
-guildHunts
-twistedRealmBoss
-buyFromStore
-collectQuestChests
-collectMail
-if [ "$collectMerchantFreebies" == true ]; then collectMerchants; fi
+if [ "$doGuildHunts" == true ]; then guildHunts; fi
+if [ "$doTwistedRealmBoss" == true ]; then twistedRealmBoss; fi
+if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
+if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
 if [ "$collectOakPresents" == true ]; then oakInn; fi
+
+# END
+if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
+if [ "$doCollectMail" == true ]; then collectMail; fi
+if [ "$collectMerchantFreebies" == true ]; then collectMerchants; fi
 
 # Ends at given location
 sleep 1
