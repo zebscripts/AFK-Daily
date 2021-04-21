@@ -999,19 +999,43 @@ function collectMerchants() {
     sleep 3
     input tap 510 1820 # Merchant Ship
     sleep 2
-    input tap 200 750 # Free bundle
+	
+	getColor 370 650
+	# Checks for Special Daily Bundles
+	if [ "$RGB" != "ba0a07" ]; then
+	    input tap 200 1200
+	    wait
+	else
+	    input tap 200 750 # Free bundle
+	fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
     input tap 280 1620 # Weekly Deals
     sleep 1
-    input tap 200 750 # Free bundle
+	
+	getColor 370 650
+	# Checks for Special Weekly Bundles
+	if [ "$RGB" != "ba0a07" ]; then
+	    input tap 200 1200
+	    wait
+	else
+	    input tap 200 750 # Free bundle
+	fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
     input tap 460 1620 # Monthly Deals
     sleep 1
-    input tap 200 750 # Free bundle
+	
+	getColor 370 650
+	# Checks for Special Monthly Bundles
+	if [ "$RGB" != "ba0a07" ]; then
+	    input tap 200 1200
+	    wait
+	else
+	    input tap 200 750 # Free bundle
+	fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
