@@ -999,19 +999,40 @@ function collectMerchants() {
     sleep 3
     input tap 510 1820 # Merchant Ship
     sleep 2
-    input tap 200 750 # Free bundle
+
+    getColor 375 940
+    # Checks for Special Daily Bundles
+    if [ "$RGB" != "0b080a" ]; then
+        input tap 200 1200
+    else
+        input tap 200 750
+    fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
     input tap 280 1620 # Weekly Deals
     sleep 1
-    input tap 200 750 # Free bundle
+
+    getColor 375 940
+    # Checks for Special Weekly Bundles
+    if [ "$RGB" != "050a0f" ]; then
+        input tap 200 1200
+    else
+        input tap 200 750
+    fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
     input tap 460 1620 # Monthly Deals
     sleep 1
-    input tap 200 750 # Free bundle
+
+    getColor 375 940
+    # Checks for Special Monthly Bundles
+    if [ "$RGB" != "0b080a" ]; then
+        input tap 200 1200
+    else
+        input tap 200 750
+    fi
     sleep 1
     input tap 550 300 # Collect rewards
     sleep 1
@@ -1073,7 +1094,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 380 500 3 0.5
+# test 375 940 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
