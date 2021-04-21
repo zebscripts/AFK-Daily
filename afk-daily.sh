@@ -1147,10 +1147,8 @@ twistedRealmBoss
 buyFromStore
 collectQuestChests
 collectMail
-collectMerchants
-if [ "$collectOakPresents" == true ]; then
-    oakInn
-fi
+if [ "$collectMerchantFreebies" == true ]; then collectMerchants; fi
+if [ "$collectOakPresents" == true ]; then oakInn; fi
 
 # Ends at given location
 sleep 1
