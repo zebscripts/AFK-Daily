@@ -1162,7 +1162,7 @@ fi
 # kingsTower
 
 # RANHORN TAB
-# switchTab "Ranhorn"
+switchTab "Ranhorn"
 # guildHunts
 # twistedRealmBoss
 # buyFromStore
