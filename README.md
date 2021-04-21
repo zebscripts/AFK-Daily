@@ -23,7 +23,8 @@ This script is meant to automate the process of daily activities within the [AFK
 
 <p align="center"><img src="https://i.imgur.com/gcr9vZf.png" alt="Example script output"></p>
 
-## Disclaimer<!-- omit in toc -->  
+## Disclaimer<!-- omit in toc -->
+
 This is a very fragile script (it relies on pixel accuracy), which means the probability of encountering a new error every time a new patch rolls out by Lilith is pretty high. Keep an eye on the `Patch` badge to check the latest game version this script was tested on.
 
 **I am not responsible for any type of ban or unintentional purchase! Use this script at your own risk.** I will do my best to try and make it as robust and straightforward as possible.
@@ -33,6 +34,7 @@ Since lately I've been adding quite a lot of new features and bug fixes, this RE
 **For those who want to get a quick overview of this project instead of reading it all**: Install an emulator (bluestacks) and the rest of the dependencies, [change some bluestacks settings](#requirements--installation), run the script, update the freshly generated `config.sh` file, run script again and watch how the game gets played.
 
 ## Table of Contents<!-- omit in toc -->
+
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
 - [Requirements & Installation](#requirements--installation)
@@ -47,7 +49,9 @@ Since lately I've been adding quite a lot of new features and bug fixes, this RE
 - [Troubleshooting](#troubleshooting)
 
 ## Features
+
 As of now, the script is capable of completing the following inside the game:
+
 - Loot AFK chest
 - Fight the current campaign level
 - Collect Fast Rewards
@@ -69,14 +73,17 @@ As of now, the script is capable of completing the following inside the game:
 There are more features planned though, check them out [here](#planned-features)!
 
 ## Supported Platforms
+
 There are **three different platforms** where you're able to run this script, namely your **personal Android device**, as well as two Android emulators: [**Bluestacks**](https://www.bluestacks.com/) and [**Nox**](https://www.bignox.com/). iOS will never be a thing, there's no need to ask for it (just install Bluestacks instead).
 
 Which one you want to use is up to you. Keep in mind that AFK Arena saves chat messages locally on your device, so if you use an emulator and switch between your devices often, your chat might look a bit messy. Personally, I recommend either your personal device or Bluestacks, as Nox has worse compatibility with this script.
 
 ## Requirements & Installation
+
 There are quite a few requirements in order to run this script. In a perfect world this all works flawlessly, but we're not in a perfect world, so be prepared for some hic-ups here and there...
 
 **AFK-Arena:** You actually need to be quite advanced in the game to be able to run this script. For now, the script assumes you're already **at least at stage 15-1**. Plans to take newer players into consideration exist, they're not yet implemented though. Here are the necessary in-game features, along with their respective unlock levels:
+
 - **Mercenaries:** Stage 6-40
 - **Quick-battle Guild:** VIP 6 or higher
 - **Skip battle in arena:** VIP 6 or higher
@@ -88,6 +95,7 @@ There are quite a few requirements in order to run this script. In a perfect wor
 <hr>
 
 **For advanced users:**
+
 1. Have ADB installed. Make sure it's in your `$PATH`!
 2. Be able to run `.sh` files
 
@@ -102,6 +110,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 <hr>
 
 *Bluestacks:*
+
 1. **Settings:** Under Bluestacks settings, make sure to make the following changes:
    1. **Display:**
       - Change the resolution to `1080x1920`
@@ -116,6 +125,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 <hr>
 
 *Nox:*
+
 1. **Settings:** Under Nox settings, make sure to make the following changes:
    1. **General:**
        - Enable Root
@@ -130,6 +140,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 <hr>
 
 *Personal Device:*
+
 1. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 2. **Resolution:** Make sure your Device is set to `1080x1920`.
 3. **AFK Arena:** Install the game. Duh.
@@ -139,14 +150,17 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 <hr>
 
 ## Usage
+
 **For advanced users:**
+
 1. Clone this repo and `cd` into it .
 2. Connect your device to the computer (or start your emulator of choice).
 3. Run `./deploy.sh` to generate [`config.sh`](#configvariables) and change its values if necessary.
 4. Run `./deploy.sh` again to run script.
 5. Watch your device magically play for you. It's fun! I promise.
 
-**For normal users:** 
+**For normal users:**
+
 1. Create a folder on your machine to save this script in
 2. Open up a terminal at said directory:
    - **Windows:** Open the directory, `Shift+Right Mouse Click` inside it, and click on `Git Bash here`.
@@ -162,6 +176,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 **If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error**, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5. Keep in mind automatic updates won't be working then. [Send me a message](#troubleshooting), I'd be happy to help!
 
 While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
+
 - Check if adb is installed, and if not install it.
 - Check for File line endings
 - Check what type of device is connected per ADB, and connect accordingly*
@@ -170,6 +185,7 @@ While creating this repository and script, I wanted to make it as easy as possib
 *\* Unfortunately it won't detect nox without you specifying it as an optional parameter. At least not yet.*
 
 You can also execute the script with the following optional parameters:
+
 ```sh
 ./deploy.sh [platform]
 
@@ -181,23 +197,29 @@ You can also execute the script with the following optional parameters:
 ```
 
 ## Examples
+
 The most basic way to run the script:
-```
+
+```sh
 ./deploy.sh
 ```
+
 *Note: By running the above command, the script will automatically try to figure out what platform you want to run the script on! If this doesn't work, please specify the platform.*
 
 Running the script on Bluestacks:
-```
+
+```sh
 ./deploy.sh bs
 ```
 
 Running the script on Nox:
-```
+
+```sh
 ./deploy.sh nox
 ```
 
 ## Config/Variables
+
 The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. If you do not have/see a `config.sh` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside inside `config.sh`.**
 
 | Variable                    | Description                                                                                                                                                                                                         |    Default     |
@@ -215,11 +237,13 @@ The script acts depending on a set of variables. In order to change these, open 
 | `collectOakPresents`        | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents.                                                                                                |    `false`     |
 
 ## Issues
+
 The script is developed in a way to exit whenever something doesn't go as planned. In case it does *not* exit though, it's either still OK and you'll have to correct it yourself after it's finished, or (in very rare occasions) it just straight up breaks stuff. I have never had someone "call me" while the script was running for example, so I have no idea what would happen there...
 
 **Either way, if something doesn't go as planned, be sure to hit `Control+C` in the terminal to stop the script from executing!**
 
 These are known issues that you might stumble across:
+
 - [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
 - [`#32`](https://github.com/zebscripts/AFK-Daily/issues/32) - Script breaks whenever resources are full. Please make sure to always collect them/spend them.
 - [`#33`](https://github.com/zebscripts/AFK-Daily/issues/33) - Script waits forever in the Arena of Heroes
@@ -227,6 +251,7 @@ These are known issues that you might stumble across:
 If you encounter an issue that is *not* listed above or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
 
 ## Planned features
+
 - [x] Add some sort of config, ideally a `./deploy.sh config`
 - [x] Check if there are Bounty Quests to collect before sending out heroes on quests
 - [ ] Fight in more than just the main tower
@@ -250,12 +275,15 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 - [ ] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
 
 ## Tips
+
 Here are some tips to keep in mind:
+
 - Don't try to run the script with more than one device connected
 - Whenever something happens that you don't want to happen, just hit `Control+C` on the terminal and the script will instantly stop! *Note: If you happen to `Ctrl+C` while the script is `sleeping`, the terminal never exits. Please close and reopen it.*
 - If for some reason the script returns errors like `: not found[0]: syntax error`, it's probably because `afk-daily.sh` is not saved wth `LF` line endings. Supposedly the script already does the conversion for you, but it appears you'll have to [do it yourself](https://support.nesi.org.nz/hc/en-gb/articles/218032857-Converting-from-Windows-style-to-UNIX-style-line-endings). Apologies.
 
 ## FAQ
+
 **Can I get banned by using this script?**
 
 I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Terms of Service](https://www.lilithgames.com/termofservice.html) states the following:
@@ -273,9 +301,11 @@ Do with this information what you want. I'm *not responsible at all* if anything
 Nope. Install Bluestacks and run this script.
 
 ## Feature Requests
+
 Have a feature in mind? An idea? Something that isn't implemented yet? Maybe even a completely different script for the game? Let me know by writing it in the [discussion board](https://github.com/zebscripts/AFK-Daily/discussions/categories/ideas)!
 
 ## Troubleshooting
+
 If you're having trouble running this script, feel free to send me a message on [Discord](http://discordapp.com/users/241655863616471041)(Zebiano#2989). I'll try my best to help you.
 
 **The script does not auto-update to the latest version**
