@@ -1220,12 +1220,12 @@ if [ "$doTwistedRealmBoss" == true ]; then twistedRealmBoss; fi
 if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
 if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
 if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
-if [ "$collectOakPresents" == true ]; then oakInn; fi
+if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
 # END
 if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
 if [ "$doCollectMail" == true ]; then collectMail; fi
-if [ "$collectMerchantFreebies" == true ]; then collectMerchants; fi
+if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
 
 # Ends at given location
 sleep 1
