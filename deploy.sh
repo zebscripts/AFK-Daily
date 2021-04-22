@@ -90,16 +90,14 @@ function checkConfig() {
     else
         printWarn "Not found!"
         printTask "Creating new config.sh file..."
-        printf '# CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables
-
+        printf '# --- CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
 # Player
 canOpenSoren=false
+arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
 endAt="championship"
-arenaHeroesOpponent=5
-collectMerchantFreebies=false
 
 # Repetitions
 totalAmountArenaTries=2+0
@@ -110,8 +108,32 @@ buyStoreDust=true
 buyStorePoeCoins=true
 buyStoreEmblems=false
 
-# Oak Inn
-collectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
+# --- Actions --- #
+# Campaign
+doLootAfkChest=true
+doChallengeBoss=true
+doFastRewards=true
+doCollectFriendsAndMercenaries=true
+
+# Dark Forest
+doSoloBounties=true
+doTeamBounties=true
+doArenaOfHeroes=true
+doLegendsTournament=true
+doKingsTower=true
+
+# Ranhorn
+doGuildHunts=true
+doTwistedRealmBoss=true
+doBuyFromStore=true
+doStrenghenCrystal=true
+doCompanionPointsSummon=false
+doCollectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
+
+# End
+doCollectQuestChests=true
+doCollectMail=true
+doCollectMerchantFreebies=false
 ' >config.sh
         printSuccess "Created!\n"
         printInfo "Please edit config.sh if necessary and run this script again."
@@ -127,15 +149,32 @@ function validateConfig() {
     source config.sh
     printTask "Validating config.sh..."
     if [[ -z $canOpenSoren || -z \
+        $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
         $endAt || -z \
-        $arenaHeroesOpponent || -z \
-        $collectMerchantFreebies || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
-        $buyStoreEmblems ]]; then
+        $buyStoreEmblems || -z \
+        $doLootAfkChest || -z \
+        $doChallengeBoss || -z \
+        $doFastRewards || -z \
+        $doCollectFriendsAndMercenaries || -z \
+        $doSoloBounties || -z \
+        $doTeamBounties || -z \
+        $doArenaOfHeroes || -z \
+        $doLegendsTournament || -z \
+        $doKingsTower || -z \
+        $doGuildHunts || -z \
+        $doTwistedRealmBoss || -z \
+        $doBuyFromStore || -z \
+        $doStrenghenCrystal || -z \
+        $doCompanionPointsSummon || -z \
+        $doCollectOakPresents || -z \
+        $doCollectQuestChests || -z \
+        $doCollectMail || -z \
+        $doCollectMerchantFreebies ]]; then
         printError "config.sh has missing/wrong entries."
         printInfo "Please either delete config.sh and run the script again to generate a new one, or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
