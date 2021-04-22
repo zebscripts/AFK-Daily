@@ -625,12 +625,25 @@ function soloBounties() {
     wait
     input tap 550 1500 # Confirm
 
-    wait
-    verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+    # Return to Tab if $doTeamBounties == false
+    if [ "$doTeamBounties" == false ]; then
+        wait
+        input tap 70 1810
+        wait
+        verifyRGB 240 1775 d49a61 "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+    else
+        wait
+        verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+    fi
 }
 
-# Starts Team Bounties
+# Starts Team Bounties. Params: startFromTab
 function teamBounties() {
+    # Check if starting from tab or already inside activity
+    if [ "$1" == true ]; then
+        input tap 600 1320
+        sleep 1
+    fi
     ## For testing only! Keep as comment ##
     # input tap 600 1320
     # sleep 1
@@ -731,13 +744,27 @@ function arenaOfHeroes() {
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
 
-    input tap 70 1810
-    wait
-    verifyRGB 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+    # Return to Tab if $doLegendsTournament == false
+    if [ "$doLegendsTournament" == false ]; then
+        input tap 70 1810
+        sleep 2
+        input tap 70 1810
+        wait
+        verifyRGB 240 1775 d49a61 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+    else
+        input tap 70 1810
+        wait
+        verifyRGB 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+    fi
 }
 
-# Does the daily Legends tournament battles
+# Does the daily Legends tournament battles. Params: startFromTab
 function legendsTournament() {
+    # Check if starting from tab or already inside activity
+    if [ "$1" == true ]; then
+        input tap 740 1050
+        sleep 1
+    fi
     ## For testing only! Keep as comment ##
     # input tap 740 1050
     # sleep 1
@@ -873,19 +900,33 @@ function guildHunts() {
             quickBattleGuildBosses
         fi
     fi
-    input tap 70 1810
 
-    sleep 1
-    verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
+    # Return to Tab if $doGuildHunts == false
+    if [ "$doGuildHunts" == false ]; then
+        input tap 70 1810
+        wait
+        input tap 70 1810
+        sleep 1
+        verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
+    else
+        input tap 70 1810
+        sleep 1
+        verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
+    fi
 }
 
-# Battles against the Twisted Realm Boss
+# Battles against the Twisted Realm Boss. Params: startFromTab
 function twistedRealmBoss() {
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
+    # Check if starting from tab or already inside activity
+    if [ "$1" == true ]; then
+        input tap 380 360
+        sleep 10
+    fi
     ## For testing only! Keep as comment ##
     # input tap 380 360
-    # sleep 3
+    # sleep 10
     ## End of testing ##
 
     input tap 820 820
@@ -908,14 +949,12 @@ function twistedRealmBoss() {
         sleep 3
         input tap 550 800
         wait
-
-    # TODO: Repeat battle if variable says so
+        # TODO: Repeat battle if variable says so
     fi
 
     input tap 70 1810
     wait
     input tap 70 1810
-
     sleep 1
     verifyRGB 20 1775 d49a61 "Checked Twisted Realm Boss out." "Failed to check the Twisted Realm out."
 }
@@ -923,7 +962,7 @@ function twistedRealmBoss() {
 # Buy items from store
 function buyFromStore() {
     input tap 330 1650
-    sleep 1
+    sleep 3
 
     # Dust
     if [ "$buyStoreDust" == true ]; then
@@ -948,6 +987,7 @@ function buyFromStore() {
 
 # Collects
 function collectQuestChests() {
+    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     input tap 960 250
     wait
 
@@ -983,6 +1023,7 @@ function collectQuestChests() {
 
 # Collects mail
 collectMail() {
+    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     input tap 960 630
     wait
     input tap 790 1470
@@ -1046,20 +1087,19 @@ function collectMerchants() {
 
 # If red square, strenghen Crystal
 function strenghenCrystal() {
-    input tap 750 1025 # Crystal
+    input tap 760 1030 # Crystal
     sleep 3
 
     # TODO: Detect if free slot, and take it.
 
     input tap 550 1850 # Strenghen Crystal
-    sleep 1
-    input tap 200 1850 # If level up %5 = 0
-    sleep 1
+    sleep 2
+    input tap 200 1850 # Close level up window
+    sleep 2
 
     input tap 70 1810
-
     wait
-    verifyRGB 20 1775 d49a61 "Strenghened crystal." "Failed to strenghen crystal."
+    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
 
 # Let's do a "free" summon
@@ -1070,28 +1110,25 @@ function nobleTavern() {
     input tap 600 1820 # The noble tavern again
     sleep 1
 
-    getColor 897 852
-    until [ "$RGB" == "ecd383" ]; do # Looking for heart
-        #echo "RGB: $RGB"   # for testing
+    getColor 875 835
+    until [ "$RGB" == "f38d67" ]; do # Looking for heart
         input tap 870 1630 # Next pannel
         sleep 1
-
-        getColor 897 852
+        getColor 875 835
     done
 
-    input tap 350 1450 # Summon
+    input tap 320 1450 # Summon
     sleep 3
-    input tap 540 908  # Click on the card
+    input tap 540 900 # Click on the card
+    sleep 3
+    input tap 70 1810 # close
     sleep 2
-    input tap 70 1810  # close
-    sleep 1
-    input tap 550 1700 # if auto dez...
+    input tap 550 1820 # Collect rewards
     sleep 1
 
     input tap 70 1810
-
     wait
-    verifyRGB 20 1775 d49a61 "Companion points summon." "Failed to summon."
+    verifyRGB 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
 }
 
 # Collect Oak Inn
@@ -1146,7 +1183,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 375 940 3 0.5
+# test 875 835 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1159,7 +1196,7 @@ function oakInn() {
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
 # --- Script Start --- #
-echo "[INFO] Starting script... (`date`) "
+echo "[INFO] Starting script... ($(date)) "
 echo
 closeApp
 sleep 0.5
@@ -1208,15 +1245,21 @@ if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 # DARK FOREST TAB
 switchTab "Dark Forest"
 if [ "$doSoloBounties" == true ]; then soloBounties; fi
-if [ "$doTeamBounties" == true ]; then teamBounties; fi
+if [ "$doTeamBounties" == true ]; then
+    if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
+fi
 if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
-if [ "$doLegendsTournament" == true ]; then legendsTournament; fi
+if [ "$doLegendsTournament" == true ]; then
+    if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
+fi
 if [ "$doKingsTower" == true ]; then kingsTower; fi
 
 # RANHORN TAB
 switchTab "Ranhorn"
 if [ "$doGuildHunts" == true ]; then guildHunts; fi
-if [ "$doTwistedRealmBoss" == true ]; then twistedRealmBoss; fi
+if [ "$doTwistedRealmBoss" == true ]; then
+    if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
+fi
 if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
 if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
 if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
@@ -1232,5 +1275,5 @@ sleep 1
 checkWhereToEnd
 
 echo
-echo "[INFO] End of script! (`date`) "
+echo "[INFO] End of script! ($(date)) "
 exit
