@@ -9,10 +9,12 @@ totalAmountOakRewards=3
 # Do not modify
 RGB=00000000
 oakRes=0
+forceFightCampaign=false
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     source /$1/scripts/afk-arena/config.sh
+	forceFightCampaign=$2
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
@@ -515,19 +517,46 @@ function challengeBoss() {
         input tap 550 1450
     fi
 
-    sleep 2
-    input tap 550 1850
-    sleep 1
-    input tap 80 1460
-    wait
-    input tap 230 960
-    sleep 1
+	# Finish battle if been 3 days
+	if [ "$forceFightCampaign" = "true" ]; then
+		battles=0
+		sleep 2
+		getColor 640 1330 # check for battle screen
+		while [ "$RGB" = "eacb95" ] && [ "$battles" -lt "$maxCampaignFights" ]; do
+			# Start battle
+			input tap 550 1850 # tap battle
+			# Wait until its over
+			waitBattleFinish 10
+			input tap 550 1720 # tap try again
+			wait
+			getColor 640 1330 # check for battle screen
+			let "battles++"
+		done
+			getColor 450 1775 # check if home
+			if [ "$RGB" != "cc9261" ]; then # not home
+				input tap 60 1850 # tap lower left arrow to exit
+				sleep 1
+				getColor 450 1775 # check if home
+				if [ "$RGB" != "cc9261" ]; then # not home
+					sleep 1
+					input tap 700 1260 # tap confirm
+				fi
+			fi
+	else # quick exit battle
+		sleep 2
+		input tap 550 1850 # tap battle
+		sleep 1
+		input tap 80 1460 # tap pause
+		wait
+		input tap 230 960 # tap exit
+		sleep 1
 
-    # Check for multi-battle
-    getColor 450 1775
-    if [ "$RGB" != "cc9261" ]; then
-        input tap 70 1810
-    fi
+		# Check for multi-battle
+		getColor 450 1775
+		if [ "$RGB" != "cc9261" ]; then
+			input tap 70 1810
+		fi
+	fi
 
     wait
     verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
@@ -1194,6 +1223,7 @@ function oakInn() {
 # test 410 1800 3 0.5 # Oak Inn Present Tab 2
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
+# test 640 1330 3 0.5 # yellow bg in battle screen
 
 # --- Script Start --- #
 echo "[INFO] Starting script... ($(date)) "
