@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> Fortune chests should be fixed. In case one pops up, the script will attempt to automatically open it.
+> **Big changes with the last update! Please delete your `config.sh` file and run the script to generate a new one.** You're now more in control of the script, by choosing which parts of it to run. This also helps in case one feature is broken, just turning it off temporarily works around the issue. Or even if the script fails, just run it again without running the stuff before the error.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly. If you like my work, please consider starring this repository as it lets me know people use this script, which motivates me to keep working on it! :)
 
