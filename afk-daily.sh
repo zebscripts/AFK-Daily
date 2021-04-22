@@ -1159,7 +1159,7 @@ function oakInn() {
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
 # --- Script Start --- #
-echo "[INFO] Starting script..."
+echo "[INFO] Starting script... (`date`) "
 echo
 closeApp
 sleep 0.5
@@ -1232,5 +1232,5 @@ sleep 1
 checkWhereToEnd
 
 echo
-echo "[INFO] End of script!"
+echo "[INFO] End of script! (`date`) "
 exit
