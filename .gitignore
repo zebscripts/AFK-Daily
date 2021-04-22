@@ -1,5 +1,5 @@
 # Custom
 .vscode
-config.sh
+config*.sh
 adb
 .markdownlint.json
