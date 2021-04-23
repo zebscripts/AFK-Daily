@@ -518,8 +518,9 @@ function challengeBoss() {
     fi
     sleep 2
 
-    # Finish battle if been 3 days
+    # Fight battle or not
     if [ "$forceFightCampaign" == "true" ]; then
+        # Fight in the campaign because of Mythic Trick
         echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
         local COUNT=0
 
@@ -569,8 +570,8 @@ function challengeBoss() {
         wait
 
         # Check for confirm to exit button
-        getColor 450 1775
-        if [ "$RGB" != "cc9261" ]; then
+        getColor 715 1260
+        if [ "$RGB" == "feffff" ]; then
             input tap 60 1850 # Return
             wait
         fi
