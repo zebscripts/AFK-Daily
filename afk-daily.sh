@@ -14,7 +14,7 @@ if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     source /$1/scripts/afk-arena/config.sh
-	forceFightCampaign=$2
+    forceFightCampaign=$2
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
@@ -147,7 +147,7 @@ function waitBattleFinish() {
     local finished=false
     while [ $finished == false ]; do
         getColor 560 350
-        if [ "$RGB" == "b8894d" ]; then
+        if [ "$RGB" == "b8894d" ] || [ "$RGB" == "b7894c" ]; then # First RGB local device, second bluestacks
             # Victory
             battleFailed=false
             finished=true
@@ -513,50 +513,82 @@ function challengeBoss() {
 
     # Check if boss
     getColor 550 740
-    if [ "$RGB" = "f2d79f" ]; then
+    if [ "$RGB" == "f2d79f" ]; then
         input tap 550 1450
     fi
+    sleep 2
 
-	# Finish battle if been 3 days
-	if [ "$forceFightCampaign" = "true" ]; then
-		battles=0
-		sleep 2
-		getColor 640 1330 # check for battle screen
-		while [ "$RGB" = "eacb95" ] && [ "$battles" -lt "$maxCampaignFights" ]; do
-			# Start battle
-			input tap 550 1850 # tap battle
-			# Wait until its over
-			waitBattleFinish 10
-			input tap 550 1720 # tap try again
-			wait
-			getColor 640 1330 # check for battle screen
-			let "battles++"
-		done
-			getColor 450 1775 # check if home
-			if [ "$RGB" != "cc9261" ]; then # not home
-				input tap 60 1850 # tap lower left arrow to exit
-				sleep 1
-				getColor 450 1775 # check if home
-				if [ "$RGB" != "cc9261" ]; then # not home
-					sleep 1
-					input tap 700 1260 # tap confirm
-				fi
-			fi
-	else # quick exit battle
-		sleep 2
-		input tap 550 1850 # tap battle
-		sleep 1
-		input tap 80 1460 # tap pause
-		wait
-		input tap 230 960 # tap exit
-		sleep 1
+    # Finish battle if been 3 days
+    if [ "$forceFightCampaign" == "true" ]; then
+        echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
+        local COUNT=0
 
-		# Check for multi-battle
-		getColor 450 1775
-		if [ "$RGB" != "cc9261" ]; then
-			input tap 70 1810
-		fi
-	fi
+        # Check for battle screen
+        getColor 20 1200
+        while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+            input tap 550 1850  # Battle
+            waitBattleFinish 10 # Wait until battle is over
+
+            # Check battle result
+            if [ "$battleFailed" == false ]; then # Win
+                # Check for next stage
+                getColor 550 1670
+                if [ "$RGB" == "e2dddc" ]; then
+                    input tap 550 1670 # Next Stage
+                    sleep 6
+
+                    # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
+                    # Tap top of the screen to close any possible Limited Offers
+                    # input tap 550 75
+                    # sleep 2
+
+                    # Check if boss
+                    getColor 550 740
+                    if [ "$RGB" == "f2d79f" ]; then
+                        input tap 550 1450
+                        sleep 5
+                    fi
+                else
+                    input tap 550 1150 # Continue to next battle
+                    sleep 3
+                fi
+            else # Loose
+                # Try again
+                input tap 550 1720
+                sleep 5
+
+                ((COUNT = COUNT + 1)) # Increment
+            fi
+
+            # Check for battle screen
+            getColor 20 1200
+        done
+
+        # Return to campaign
+        input tap 60 1850 # Return
+        wait
+
+        # Check for confirm to exit button
+        getColor 450 1775
+        if [ "$RGB" != "cc9261" ]; then
+            input tap 60 1850 # Return
+            wait
+        fi
+    else
+        # Quick exit battle
+        input tap 550 1850 # Battle
+        sleep 1
+        input tap 80 1460 # Pause
+        wait
+        input tap 230 960 # Exit
+        sleep 1
+
+        # Check for multi-battle
+        getColor 450 1775
+        if [ "$RGB" != "cc9261" ]; then
+            input tap 70 1810
+        fi
+    fi
 
     wait
     verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
@@ -1139,8 +1171,9 @@ function nobleTavern() {
     input tap 600 1820 # The noble tavern again
     sleep 1
 
+    # Looking for heart
     getColor 875 835
-    until [ "$RGB" == "f38d67" ]; do # Looking for heart
+    until [ "$RGB" == "f38d67" ]; do
         input tap 870 1630 # Next pannel
         sleep 1
         getColor 875 835
@@ -1212,7 +1245,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 875 835 3 0.5
+# test 560 350 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1223,7 +1256,6 @@ function oakInn() {
 # test 410 1800 3 0.5 # Oak Inn Present Tab 2
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
-# test 640 1330 3 0.5 # yellow bg in battle screen
 
 # --- Script Start --- #
 echo "[INFO] Starting script... ($(date)) "
@@ -1268,6 +1300,7 @@ fi
 switchTab "Campaign"
 if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
+exit
 if [ "$doFastRewards" == true ]; then fastRewards; fi
 if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
 if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
