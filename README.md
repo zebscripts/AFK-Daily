@@ -61,7 +61,7 @@ Since lately I've been adding quite a lot of new features and bug fixes, this RE
 As of now, the script is capable of completing the following inside the game:
 
 - Loot AFK chest
-- Fight the current campaign level
+- Fight the current campaign level (automatically fights every three days for Mythic Trick)
 - Collect Fast Rewards
 - Send Companion Points to friends
 - Auto Lend Mercenaries
