@@ -572,7 +572,7 @@ function challengeBoss() {
         # Check for confirm to exit button
         getColor 715 1260
         if [ "$RGB" == "feffff" ]; then
-            input tap 60 1850 # Return
+            input tap 715 1260 # Confirm
             wait
         fi
     else
