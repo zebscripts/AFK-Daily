@@ -1301,7 +1301,6 @@ fi
 switchTab "Campaign"
 if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
-exit
 if [ "$doFastRewards" == true ]; then fastRewards; fi
 if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
 if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
