@@ -11,9 +11,11 @@ personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
 configFile="config.sh"
+tempFile=".afkscript.tmp"
 
 # Do not modify
 adb=adb
+forceFightCampaign=false
 
 # --- Functions --- #
 # Checks for script update (with git)
@@ -100,6 +102,7 @@ waitForUpdate=true
 endAt="championship"
 
 # Repetitions
+maxCampaignFights=10
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 
@@ -152,6 +155,7 @@ function validateConfig() {
         $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
         $endAt || -z \
+        $maxCampaignFights || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
@@ -260,6 +264,31 @@ function checkForDevice() {
     fi
 }
 
+# Check date to decide whether to beat campaign or not.
+function checkDate() {
+    printTask "Checking last time script was run..."
+	if [ -f $tempFile ]; then
+		value=$(< $tempFile) # Time of last beat campaign
+		now=$(date +"%s") # Current time
+		let "difference = $now - $value" # Time since last beat campaign
+		
+		# If been longer than 3 days, set forceFightCampaign=true
+		if [ $difference -gt 255600 ]; then
+			forceFightCampaign=true
+		fi
+	fi
+}
+
+# Overwrite temp file with date if has been greater than 3 days or it doesn't exist
+function saveDate(){
+	if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
+		echo $(date +"%s") > .afkscript.tmp # Write date to file
+
+        # Make file invisible if on windows
+        if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi
+	fi
+}
+
 # Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
 # Params: platform, directory
 function deploy() {
@@ -276,7 +305,7 @@ function deploy() {
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2"    # Run script. Comment line if you don't want to run the script after pushing
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" && saveDate # Run script. Comment line if you don't want to run the script after pushing to device
 }
 
 # --- Script Start --- #
@@ -287,6 +316,7 @@ checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
+checkDate
 
 # Check where to deploy
 if [ "$1" ]; then
