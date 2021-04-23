@@ -682,6 +682,54 @@ function teamBounties() {
     verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
+# Fix: Script waits forever in the Arena of Heroes #33
+# Attempts to tap the closest Arena of Heroes opponent. Params: opponent
+function tapClosestOpponent() {
+  # Depending on the opponent number sent as a parameter ($1), this function
+  # would attempt to check if there's an opponent above the one sent.
+  # If there isn't, check the one above that one and so on until one is found.
+  # When found, tap on the opponent and exit function.
+    case $1 in
+        1)
+            # Refresh
+            input tap 815 540
+            wait
+            ;;
+        2)
+            getColor 820 700 # Opponent 1
+            if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                input tap 820 700
+            else
+                tapClosestOpponent 1
+            fi
+            ;;
+        3)
+            getColor 820 870 # Opponent 2
+            if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                input tap 820 870
+            else
+                tapClosestOpponent 2
+            fi
+            ;;
+        4)
+            getColor 820 1050 # Opponent 3
+            if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
+                input tap 820 1050
+            else
+                tapClosestOpponent 3
+            fi
+            ;;
+        5)
+            getColor 820 1220 # Opponent 4
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                input tap 820 1220
+            else
+                tapClosestOpponent 4
+            fi
+            ;;
+    esac
+}
+
 # Does the daily arena of heroes battles
 function arenaOfHeroes() {
     input tap 740 1050
@@ -703,43 +751,79 @@ function arenaOfHeroes() {
     getColor 200 1800
     if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
         # Repeat a battle for as long as totalAmountArenaTries
+
+        getColor 820 700 # Opponent 1
+        echo "Opponent 1 -> $RGB"
+        getColor 820 870 # Opponent 2
+        echo "Opponent 2 -> $RGB"
+        getColor 820 1050 # Opponent 3
+        echo "Opponent 3 -> $RGB"
+        getColor 820 1220 # Opponent 4
+        echo "Opponent 4 -> $RGB"
+        getColor 820 1400 # Opponent 5
+        echo "Opponent 5 -> $RGB"
+
         local COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
             # Refresh
             # input tap 815 540
             # wait
+
             # Fight specific opponent
+            #                                Free         x1
+            #  Opponent 1: 820 700      ->              a7f1b7
+            #  Opponent 2: 820 870      ->              aff3c0
+            #  Opponent 3: 820 1050     ->              a7f1b7
+            #  Opponent 4: 820 1220     ->  2daab4      aff3c0
+            #  Opponent 5: 820 1400     ->        aaf2bb
             case $arenaHeroesOpponent in
             1)
-                input tap 820 700
+                # Check if opponent exists
+                # If yes, input tap 820 700
+                # If no, tapClosestOpponent 1
+
+                # input tap 820 700
+                getColor 820 700 # Opponent 1
+                if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
+                    input tap 820 700
+                else
+                    tapClosestOpponent 1
+                fi
                 ;;
             2)
-                input tap 820 870
+                # input tap 820 870
+                getColor 820 870 # Opponent 2
+                if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                    input tap 820 870
+                else
+                    tapClosestOpponent 2
+                fi
                 ;;
             3)
-                input tap 820 1050
+                # input tap 820 1050
+                getColor 820 1050 # Opponent 3
+                if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
+                    input tap 820 1050
+                else
+                    tapClosestOpponent 3
+                fi
                 ;;
             4)
-                # Fix: Script waits forever in the Arena of Heroes #33
-                getColor 820 1220
-                if [ "$RGB" == "aff3c0" ] || [ "$RGB" == "2daab4" ]; then # Looking for the button
-                    input tap 820 1220 # Opponent 4
+                # input tap 820 1220
+                getColor 820 1220 # Opponent 4
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                    input tap 820 1220
                 else
-                    input tap 820 1050 # Opponent 3
+                    tapClosestOpponent 4
                 fi
                 ;;
             5)
-                # Fix: Script waits forever in the Arena of Heroes #33
-                getColor 820 1400
+                # input tap 820 1400
+                getColor 820 1400 # Opponent 5
                 if [ "$RGB" == "aaf2bb" ]; then # Looking for the button
-                    input tap 820 1400 # Opponent 5
+                    input tap 820 1400
                 else
-                    getColor 820 1220
-                    if [ "$RGB" == "aff3c0" ] || [ "$RGB" == "2daab4" ]; then # Looking for the button
-                        input tap 820 1220 # Opponent 4
-                    else
-                        input tap 820 1050 # Opponent 3
-                    fi
+                    tapClosestOpponent 5
                 fi
                 ;;
             esac
