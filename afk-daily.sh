@@ -720,10 +720,27 @@ function arenaOfHeroes() {
                 input tap 820 1050
                 ;;
             4)
-                input tap 820 1220
+                # Fix: Script waits forever in the Arena of Heroes #33
+                getColor 820 1220
+                if [ "$RGB" == "aff3c0" ] || [ "$RGB" == "2daab4" ]; then # Looking for the button
+                    input tap 820 1220 # Opponent 4
+                else
+                    input tap 820 1050 # Opponent 3
+                fi
                 ;;
             5)
-                input tap 820 1400
+                # Fix: Script waits forever in the Arena of Heroes #33
+                getColor 820 1400
+                if [ "$RGB" == "aaf2bb" ]; then # Looking for the button
+                    input tap 820 1400 # Opponent 5
+                else
+                    getColor 820 1220
+                    if [ "$RGB" == "aff3c0" ] || [ "$RGB" == "2daab4" ]; then # Looking for the button
+                        input tap 820 1220 # Opponent 4
+                    else
+                        input tap 820 1050 # Opponent 3
+                    fi
+                fi
                 ;;
             esac
             sleep 2
