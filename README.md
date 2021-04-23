@@ -334,7 +334,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
 - [x] Collect daily rewards from Oak Inn
-- [ ] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+- [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
 
 ## Tips
 
