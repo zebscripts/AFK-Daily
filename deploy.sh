@@ -282,7 +282,10 @@ function checkDate() {
 # Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 function saveDate(){
 	if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
-		echo $(date +"%s") > .afkscript.tmp
+		echo $(date +"%s") > .afkscript.tmp # Write date to file
+
+        # Make file invisible if on windows
+        if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi
 	fi
 }
 
