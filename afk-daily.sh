@@ -694,10 +694,11 @@ function tapClosestOpponent() {
             # Refresh
             input tap 815 540
             wait
+            tapClosestOpponent 5
             ;;
         2)
             getColor 820 700 # Opponent 1
-            if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+            if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
                 input tap 820 700
             else
                 tapClosestOpponent 1
@@ -705,7 +706,7 @@ function tapClosestOpponent() {
             ;;
         3)
             getColor 820 870 # Opponent 2
-            if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
                 input tap 820 870
             else
                 tapClosestOpponent 2
@@ -751,18 +752,6 @@ function arenaOfHeroes() {
     getColor 200 1800
     if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
         # Repeat a battle for as long as totalAmountArenaTries
-
-        getColor 820 700 # Opponent 1
-        echo "Opponent 1 -> $RGB"
-        getColor 820 870 # Opponent 2
-        echo "Opponent 2 -> $RGB"
-        getColor 820 1050 # Opponent 3
-        echo "Opponent 3 -> $RGB"
-        getColor 820 1220 # Opponent 4
-        echo "Opponent 4 -> $RGB"
-        getColor 820 1400 # Opponent 5
-        echo "Opponent 5 -> $RGB"
-
         local COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
             # Refresh
@@ -771,9 +760,9 @@ function arenaOfHeroes() {
 
             # Fight specific opponent
             #                                Free         x1
-            #  Opponent 1: 820 700      ->              a7f1b7
-            #  Opponent 2: 820 870      ->              aff3c0
-            #  Opponent 3: 820 1050     ->              a7f1b7
+            #  Opponent 1: 820 700      ->        a7f1b7
+            #  Opponent 2: 820 870      ->  2eaab4      aff3c0
+            #  Opponent 3: 820 1050     ->        a7f1b7
             #  Opponent 4: 820 1220     ->  2daab4      aff3c0
             #  Opponent 5: 820 1400     ->        aaf2bb
             case $arenaHeroesOpponent in
@@ -793,7 +782,7 @@ function arenaOfHeroes() {
             2)
                 # input tap 820 870
                 getColor 820 870 # Opponent 2
-                if [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
                     input tap 820 870
                 else
                     tapClosestOpponent 2
