@@ -9,10 +9,12 @@ totalAmountOakRewards=3
 # Do not modify
 RGB=00000000
 oakRes=0
+forceFightCampaign=false
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     source /$1/scripts/afk-arena/config.sh
+    forceFightCampaign=$2
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
@@ -145,7 +147,7 @@ function waitBattleFinish() {
     local finished=false
     while [ $finished == false ]; do
         getColor 560 350
-        if [ "$RGB" == "b8894d" ]; then
+        if [ "$RGB" == "b8894d" ] || [ "$RGB" == "b7894c" ]; then # First RGB local device, second bluestacks
             # Victory
             battleFailed=false
             finished=true
@@ -511,22 +513,82 @@ function challengeBoss() {
 
     # Check if boss
     getColor 550 740
-    if [ "$RGB" = "f2d79f" ]; then
+    if [ "$RGB" == "f2d79f" ]; then
         input tap 550 1450
     fi
-
     sleep 2
-    input tap 550 1850
-    sleep 1
-    input tap 80 1460
-    wait
-    input tap 230 960
-    sleep 1
 
-    # Check for multi-battle
-    getColor 450 1775
-    if [ "$RGB" != "cc9261" ]; then
-        input tap 70 1810
+    # Fight battle or not
+    if [ "$forceFightCampaign" == "true" ]; then
+        # Fight in the campaign because of Mythic Trick
+        echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
+        local COUNT=0
+
+        # Check for battle screen
+        getColor 20 1200
+        while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+            input tap 550 1850  # Battle
+            waitBattleFinish 10 # Wait until battle is over
+
+            # Check battle result
+            if [ "$battleFailed" == false ]; then # Win
+                # Check for next stage
+                getColor 550 1670
+                if [ "$RGB" == "e2dddc" ]; then
+                    input tap 550 1670 # Next Stage
+                    sleep 6
+
+                    # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
+                    # Tap top of the screen to close any possible Limited Offers
+                    # input tap 550 75
+                    # sleep 2
+
+                    # Check if boss
+                    getColor 550 740
+                    if [ "$RGB" == "f2d79f" ]; then
+                        input tap 550 1450
+                        sleep 5
+                    fi
+                else
+                    input tap 550 1150 # Continue to next battle
+                    sleep 3
+                fi
+            else # Loose
+                # Try again
+                input tap 550 1720
+                sleep 5
+
+                ((COUNT = COUNT + 1)) # Increment
+            fi
+
+            # Check for battle screen
+            getColor 20 1200
+        done
+
+        # Return to campaign
+        input tap 60 1850 # Return
+        wait
+
+        # Check for confirm to exit button
+        getColor 715 1260
+        if [ "$RGB" == "feffff" ]; then
+            input tap 715 1260 # Confirm
+            wait
+        fi
+    else
+        # Quick exit battle
+        input tap 550 1850 # Battle
+        sleep 1
+        input tap 80 1460 # Pause
+        wait
+        input tap 230 960 # Exit
+        sleep 1
+
+        # Check for multi-battle
+        getColor 450 1775
+        if [ "$RGB" != "cc9261" ]; then
+            input tap 70 1810
+        fi
     fi
 
     wait
@@ -829,7 +891,7 @@ function arenaOfHeroes() {
         done
 
         input tap 1000 380
-        wait
+        sleep 4
     else
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
@@ -853,7 +915,7 @@ function legendsTournament() {
     # Check if starting from tab or already inside activity
     if [ "$1" == true ]; then
         input tap 740 1050
-        sleep 1
+        sleep 2
     fi
     ## For testing only! Keep as comment ##
     # input tap 740 1050
@@ -870,6 +932,7 @@ function legendsTournament() {
     input tap 550 1550
     sleep 3
     input tap 1000 1800
+    wait
     input tap 990 380
     wait
 
@@ -1210,8 +1273,9 @@ function nobleTavern() {
     input tap 600 1820 # The noble tavern again
     sleep 1
 
+    # Looking for heart
     getColor 875 835
-    until [ "$RGB" == "f38d67" ]; do # Looking for heart
+    until [ "$RGB" == "f38d67" ]; do
         input tap 870 1630 # Next pannel
         sleep 1
         getColor 875 835
@@ -1283,7 +1347,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 875 835 3 0.5
+# test 560 350 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB

@@ -61,22 +61,23 @@ Since lately I've been adding quite a lot of new features and bug fixes, this RE
 As of now, the script is capable of completing the following inside the game:
 
 - Loot AFK chest
-- Fight the current campaign level
+- Fight the current campaign level (automatically fights every three days for Mythic Trick)
 - Collect Fast Rewards
-- Send Companion Points to friends
-- Auto Lend Mercenaries
+- Send and receive Companion Points
+- Auto-lend Mercenaries
 - Send Heroes on Solo and Team Bounty Quests
 - Fight in the Arena of Heroes
 - Fight in the Legends Tournament
 - Fight in the Kings Tower
-- Fight Wrizz
-- Fight Soren if available. Can also open Soren for you.
+- Fight Wrizz and Soren if available. Can also open Soren for you.
 - Fight in the Twisted Realm (necessary to have at least fought once against each TR boss for the game to save your formation)
-- Buy daily Dust from the Store
+- Buy various items from the Store
+- Strengthen the Resonating Crystal
+- Summon one Hero with Companion Points
+- Collect Oak Inn presents (necessary to enable "Hide Inn Heroes" in the game settings)
 - Collect daily Quest Chests
 - Collect Mail
 - Collect Daily/Weekly/Monthly rewards from Merchants
-- Collect Oak Inn presents (necessary to enable "Hide Inn Heroes" in the game settings)
 
 There are more features planned though, check them out [here](#planned-features)!
 
@@ -248,6 +249,7 @@ The script acts depending on a set of variables. In order to change these, open 
 
 | Variable                     |   Type   | Description                                                                                                              | Default                   |
 | :--------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----------------------: |
+| `maxCampaignFights`          | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |           `10`            |
 | `totalAmountArenaTries`      | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |           `2+0`           |
 | `totalAmountTournamentTries` | `Number` | The total amount of tries the player may fight in the Tournament.                                                        | `totalAmountArenaTries-2` |
 | `totalAmountGuildBossTries`  | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |           `2+0`           |
@@ -334,7 +336,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
 - [x] Collect daily rewards from Oak Inn
-- [ ] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+- [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
 
 ## Tips
 
