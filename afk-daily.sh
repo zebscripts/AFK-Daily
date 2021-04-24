@@ -801,7 +801,7 @@ function arenaOfHeroes() {
         done
 
         input tap 1000 380
-        wait
+        sleep 4
     else
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
@@ -825,7 +825,7 @@ function legendsTournament() {
     # Check if starting from tab or already inside activity
     if [ "$1" == true ]; then
         input tap 740 1050
-        sleep 1
+        sleep 2
     fi
     ## For testing only! Keep as comment ##
     # input tap 740 1050
@@ -842,6 +842,7 @@ function legendsTournament() {
     input tap 550 1550
     sleep 3
     input tap 1000 1800
+    wait
     input tap 990 380
     wait
 
