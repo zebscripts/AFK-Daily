@@ -101,6 +101,7 @@ endAt="championship"
 
 # Repetitions
 totalAmountArenaTries=2+0
+totalAmountTournamentTries=$((totalAmountArenaTries - 2))
 totalAmountGuildBossTries=2+0
 
 # Store
@@ -153,6 +154,7 @@ function validateConfig() {
         $waitForUpdate || -z \
         $endAt || -z \
         $totalAmountArenaTries || -z \
+        $totalAmountTournamentTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
