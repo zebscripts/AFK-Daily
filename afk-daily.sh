@@ -1249,12 +1249,17 @@ function strenghenCrystal() {
     sleep 2
     getColor 700 1250
     if [ "$RGB" == "9aedc4" ]; then
-        input tap 700 1250 # Confirm level up window
-        sleep 2
-        input tap 200 1850 # Close level up window
-        sleep .5
-        input tap 200 1850 # Close gift window
-        sleep 2
+        if [ $allowCrystalLevelUp == true ]; then
+            input tap 700 1250 # Confirm level up window
+            sleep 2
+            input tap 200 1850 # Close level up window
+            sleep .5
+            input tap 200 1850 # Close gift window
+            sleep 2
+        else
+            input tap 200 1850
+            sleep 1
+        fi
     fi
 
     input tap 200 1850 # Better safe than sorry

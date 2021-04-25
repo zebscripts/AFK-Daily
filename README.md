@@ -289,6 +289,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
 | `doStrenghenCrystal`      | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
+| `allowCrystalLevelUp`     | `Boolean` | If `true`, and `doStrenghenCrystal=true` strengthens the resonating Crystal and level up if possible.                | `false` |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
 | `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |
 
