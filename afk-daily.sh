@@ -1042,6 +1042,24 @@ function buyFromStore() {
         buyStoreItem 180 1430
         wait
     fi
+    # Elite Hero Soulstones
+    if [ "$buyStoreEliteStones" == true ]; then
+        getColor 410 850 # check top row, 2nd tile
+        if [ "$RGB" == "9787c9" ]; then # tested twice, worked twice.
+            buyStoreItem 410 850
+            wait
+        fi
+        getColor 650 850 # check top row, 3rd tile
+        if [ "$RGB" == "544077" ]; then
+            buyStoreItem 650 850
+            wait
+        fi
+        getColor 910 850 # check top row, 4th tile
+        if [ "$RGB" == "a569d7" ]; then # tested once, worked once.
+            buyStoreItem 910 850
+            wait
+        fi
+    fi
     input tap 70 1810
 
     wait
@@ -1247,7 +1265,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+# test 910 850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1298,45 +1316,45 @@ if [ "$RGB" == "ffc15b" ]; then
     fi
 fi
 
-# CAMPAIGN TAB
-switchTab "Campaign"
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
-if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
-if [ "$doFastRewards" == true ]; then fastRewards; fi
-if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+# # CAMPAIGN TAB
+# switchTab "Campaign"
+# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+# if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
+# if [ "$doFastRewards" == true ]; then fastRewards; fi
+# if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
+# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 
-# DARK FOREST TAB
-switchTab "Dark Forest"
-if [ "$doSoloBounties" == true ]; then soloBounties; fi
-if [ "$doTeamBounties" == true ]; then
-    if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
-fi
-if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
-if [ "$doLegendsTournament" == true ]; then
-    if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
-fi
-if [ "$doKingsTower" == true ]; then kingsTower; fi
+# # DARK FOREST TAB
+# switchTab "Dark Forest"
+# if [ "$doSoloBounties" == true ]; then soloBounties; fi
+# if [ "$doTeamBounties" == true ]; then
+#     if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
+# fi
+# if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
+# if [ "$doLegendsTournament" == true ]; then
+#     if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
+# fi
+# if [ "$doKingsTower" == true ]; then kingsTower; fi
 
 # RANHORN TAB
 switchTab "Ranhorn"
-if [ "$doGuildHunts" == true ]; then guildHunts; fi
-if [ "$doTwistedRealmBoss" == true ]; then
-    if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
-fi
+# if [ "$doGuildHunts" == true ]; then guildHunts; fi
+# if [ "$doTwistedRealmBoss" == true ]; then
+#     if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
+# fi
 if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
-if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
-if [ "$doCollectOakPresents" == true ]; then oakInn; fi
+# if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+# if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
+# if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
-# END
-if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
-if [ "$doCollectMail" == true ]; then collectMail; fi
-if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
+# # END
+# if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
+# if [ "$doCollectMail" == true ]; then collectMail; fi
+# if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
 
-# Ends at given location
-sleep 1
-checkWhereToEnd
+# # Ends at given location
+# sleep 1
+# checkWhereToEnd
 
 echo
 echo "[INFO] End of script! ($(date)) "
