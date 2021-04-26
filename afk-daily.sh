@@ -3,7 +3,7 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-pvpEvent=false # Set to `true` if "Heroes of Esperia" event is live
+pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -23,53 +23,53 @@ fi
 
 # --- Functions --- #
 # Test function: take screenshot, get rgb, exit. Params: X, Y, amountTimes, waitTime
-function test() {
-    local COUNT=0
+test() {
+    COUNT=0
     until [ "$COUNT" -ge "$3" ]; do
-        sleep $4
+        sleep "$4"
         getColor "$1" "$2"
         echo "RGB: $RGB"
-        ((COUNT = COUNT + 1)) # Increment
+        COUNT=$((COUNT + 1))                    # Increment
     done
     exit
 }
 
 # Default wait time for actions
-function wait() {
+wait() {
     sleep 2
 }
 
 # Starts the app
-function startApp() {
+startApp() {
     monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
     sleep 1
     disableOrientation
 }
 
 # Closes the app
-function closeApp() {
+closeApp() {
     am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
 }
 
 # Switches between last app
-function switchApp() {
+switchApp() {
     input keyevent KEYCODE_APP_SWITCH
     input keyevent KEYCODE_APP_SWITCH
 }
 
 # Disables automatic orientation
-function disableOrientation() {
+disableOrientation() {
     content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
 }
 
 # Takes a screenshot and saves it
-function takeScreenshot() {
+takeScreenshot() {
     screencap "$SCREENSHOTLOCATION"
 }
 
 # Gets pixel color. Params: X, Y
-function readRGB() {
-    let offset="$DEVICEWIDTH"*"$2"+"$1"+3
+readRGB() {
+    offset="$DEVICEWIDTH"*"$2"+"$1"+3
     RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
     RGB=${RGB:9:9}
     RGB="${RGB// /}"
@@ -77,16 +77,16 @@ function readRGB() {
 }
 
 # Sets RGB. Params: X, Y
-function getColor() {
+getColor() {
     takeScreenshot
     readRGB "$1" "$2"
 }
 
 # Verifies if X and Y have specific RGB. Params: X, Y, RGB, MessageSuccess, MessageFailure
-function verifyRGB() {
+verifyRGB() {
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
-        echo "[ERROR] VerifyRGB: Failure! Expected "$3", but got "$RGB" instead."
+        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead."
         echo
         echo "[ERROR] $5"
         exit
@@ -96,7 +96,7 @@ function verifyRGB() {
 }
 
 # Switches to another tab. Params: Tab name
-function switchTab() {
+switchTab() {
     case "$1" in
     "Campaign")
         input tap 550 1850
@@ -122,41 +122,40 @@ function switchTab() {
 }
 
 # Loops until RGB is not equal. Params: Seconds, X, Y, RGB
-function loopUntilRGB() {
+loopUntilRGB() {
     sleep "$1"
-    getColor $2 $3
+    getColor "$2" "$3"
     while [ "$RGB" != "$4" ]; do
         sleep 1
-        getColor $2 $3
+        getColor "$2" "$3"
     done
 }
 
 # Loops until RGB is equal. Params: Seconds, X, Y, RGB
-function loopUntilNotRGB() {
+loopUntilNotRGB() {
     sleep "$1"
-    getColor $2 $3
-    while [ "$RGB" == "$4" ]; do
+    getColor "$2" "$3"
+    while [ "$RGB" = "$4" ]; do
         sleep 1
-        getColor $2 $3
+        getColor "$2" "$3"
     done
 }
 
 # Waits until a battle has ended. Params: Seconds
-function waitBattleFinish() {
+waitBattleFinish() {
     sleep "$1"
-    local finished=false
-    while [ $finished == false ]; do
+    finished=false
+    while [ $finished = false ]; do
         getColor 560 350
-        if [ "$RGB" == "b8894d" ] || [ "$RGB" == "b7894c" ]; then # First RGB local device, second bluestacks
-            # Victory
+        # First RGB local device, second bluestacks
+        if [ "$RGB" = "b8894d" ] || [ "$RGB" = "b7894c" ]; then                 # Victory
             battleFailed=false
             finished=true
-        elif [ "$RGB" == "171932" ]; then
-            # Failed
+        elif [ "$RGB" = "171932" ]; then                                        # Failed
             battleFailed=true
             finished=true
-        elif [ "$RGB" == "45331d" ] || [ "$RGB" == "44331c" ]; then # First RGB local device, second bluestacks
-            # Victory with reward
+        # First RGB local device, second bluestacks
+        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
             battleFailed=false
             finished=true
         fi
@@ -165,8 +164,8 @@ function waitBattleFinish() {
 }
 
 # Buys an item from the Store. Params: X, Y
-function buyStoreItem() {
-    input tap $1 $2
+buyStoreItem() {
+    input tap "$1" "$2"
     sleep 1
     input tap 550 1540
     sleep 1
@@ -174,57 +173,55 @@ function buyStoreItem() {
 }
 
 # Searches for a "good" present in oak Inn
-function oakSearchPresent() {
-    # Swipe all the way down
-    input swipe 400 1600 400 310 50
+oakSearchPresent() {
+    input swipe 400 1600 400 310 50             # Swipe all the way down
     sleep 1
 
-    getColor 540 990 # 1 red 833f0e blue 903da0
-    if [ "$RGB" == "833f0e" ]; then
-        input tap 540 990 # Tap present
+    getColor 540 990                            # 1 red 833f0e blue 903da0
+    if [ "$RGB" = "833f0e" ]; then
+        input tap 540 990                       # Tap present
         sleep 3
-        input tap 540 1650 # Ok
+        input tap 540 1650                      # Ok
         sleep 1
-        input tap 540 1650 # Collect reward
+        input tap 540 1650                      # Collect reward
         oakRes=1
     else
-        getColor 540 800 # 2 red a21a1a blue 9a48ab
-        if [ "$RGB" == "a21a1a" ]; then
+        getColor 540 800                        # 2 red a21a1a blue 9a48ab
+        if [ "$RGB" = "a21a1a" ]; then
             input tap 540 800
             sleep 3
-            input tap 540 1650 # Ok
+            input tap 540 1650                  # Ok
             sleep 1
-            input tap 540 1650 # Collect reward
+            input tap 540 1650                  # Collect reward
             oakRes=1
         else
-            getColor 540 610 # 3 red aa2b27 blue b260aa
-            if [ "$RGB" == "aa2b27" ]; then
+            getColor 540 610                    # 3 red aa2b27 blue b260aa
+            if [ "$RGB" = "aa2b27" ]; then
                 input tap 540 610
                 sleep 3
-                input tap 540 1650 # Ok
+                input tap 540 1650              # Ok
                 sleep 1
-                input tap 540 1650 # Collect reward
+                input tap 540 1650              # Collect reward
                 oakRes=1
             else
-                getColor 540 420 # 4 red bc3f36 blue c58c7b
-                if [ "$RGB" == "bc3f36" ]; then
+                getColor 540 420                # 4 red bc3f36 blue c58c7b
+                if [ "$RGB" = "bc3f36" ]; then
                     input tap 540 420
                     sleep 3
-                    input tap 540 1650 # Ok
+                    input tap 540 1650          # Ok
                     sleep 1
-                    input tap 540 1650 # Collect reward
+                    input tap 540 1650          # Collect reward
                     oakRes=1
                 else
-                    getColor 540 220 # 5 red bb3734 blue 9442a5
-                    if [ "$RGB" == "bb3734" ]; then
+                    getColor 540 220            # 5 red bb3734 blue 9442a5
+                    if [ "$RGB" = "bb3734" ]; then
                         input tap 540 220
                         sleep 3
-                        input tap 540 1650 # Ok
+                        input tap 540 1650      # Ok
                         sleep 1
-                        input tap 540 1650 # Collect reward
+                        input tap 540 1650      # Collect reward
                         oakRes=1
-                    else
-                        # If no present found, search for other tabs
+                    else                        # If no present found, search for other tabs
                         oakRes=0
                     fi
                 fi
@@ -234,33 +231,31 @@ function oakSearchPresent() {
 }
 
 # Search available present tabs in Oak Inn
-function oakPresentTab() {
+oakPresentTab() {
     oakPresentTabs=0
-    getColor 270 1800 # 1 gift c79663
-    if [ "$RGB" == "c79663" ]; then
-        ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
+    getColor 270 1800                           # 1 gift c79663
+    if [ "$RGB" = "c79663" ]; then
+        oakPresentTabs=$((oakPresentTabs + 1000)) # Increment
     fi
-    getColor 410 1800 # 2 gift bb824f
-    if [ "$RGB" == "bb824f" ]; then
-        ((oakPresentTabs = oakPresentTabs + 200)) # Increment
+    getColor 410 1800                           # 2 gift bb824f
+    if [ "$RGB" = "bb824f" ]; then
+        oakPresentTabs=$((oakPresentTabs + 200)) # Increment
     fi
-    getColor 550 1800 # 3 gift af6e3b
-    if [ "$RGB" == "af6e3b" ]; then
-        ((oakPresentTabs = oakPresentTabs + 30)) # Increment
+    getColor 550 1800                           # 3 gift af6e3b
+    if [ "$RGB" = "af6e3b" ]; then
+        oakPresentTabs=$((oakPresentTabs + 30)) # Increment
     fi
-    getColor 690 1800 # 4 gift b57b45
-    if [ "$RGB" == "b57b45" ]; then
-        ((oakPresentTabs = oakPresentTabs + 4)) # Increment
+    getColor 690 1800                           # 4 gift b57b45
+    if [ "$RGB" = "b57b45" ]; then
+        oakPresentTabs=$((oakPresentTabs + 4))  # Increment
     fi
 }
 
 # Tries to collect a present from one Oak Inn friend
-function oakTryCollectPresent() {
-    # Search for a "good" present
-    oakSearchPresent
-    if [ $oakRes == 0 ]; then
-        # If no present found, search for other tabs
-        oakPresentTab
+oakTryCollectPresent() {
+    oakSearchPresent                            # Search for a "good" present
+    if [ $oakRes = 0 ]; then
+        oakPresentTab                           # If no present found, search for other tabs
         case $oakPresentTabs in
         0)
             oakRes=0
@@ -279,7 +274,7 @@ function oakTryCollectPresent() {
             input tap 550 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 690 1800
                 sleep 3
                 oakSearchPresent
@@ -294,7 +289,7 @@ function oakTryCollectPresent() {
             input tap 410 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 690 1800
                 sleep 3
                 oakSearchPresent
@@ -304,7 +299,7 @@ function oakTryCollectPresent() {
             input tap 410 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 550 1800
                 sleep 3
                 oakSearchPresent
@@ -314,11 +309,11 @@ function oakTryCollectPresent() {
             input tap 410 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 550 1800
                 sleep 3
                 oakSearchPresent
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then
                     input tap 690 1800
                     sleep 3
                     oakSearchPresent
@@ -334,7 +329,7 @@ function oakTryCollectPresent() {
             input tap 270
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 690
                 sleep 3
                 oakSearchPresent
@@ -344,7 +339,7 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 550 1800
                 sleep 3
                 oakSearchPresent
@@ -354,11 +349,11 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 550 1800
                 sleep 3
                 oakSearchPresent
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then
                     input tap 690 1800
                     sleep 3
                     oakSearchPresent
@@ -369,7 +364,7 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 410 1800
                 sleep 3
                 oakSearchPresent
@@ -379,11 +374,11 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 410 1800
                 sleep 3
                 oakSearchPresent
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then
                     input tap 690 1800
                     sleep 3
                     oakSearchPresent
@@ -394,11 +389,11 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 410 1800
                 sleep 3
                 oakSearchPresent
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then
                     input tap 550 1800
                     sleep 3
                     oakSearchPresent
@@ -409,15 +404,15 @@ function oakTryCollectPresent() {
             input tap 270 1800
             sleep 3
             oakSearchPresent
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then
                 input tap 410 1800
                 sleep 3
                 oakSearchPresent
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then
                     input tap 550 1800
                     sleep 3
                     oakSearchPresent
-                    if [ $oakRes == 0 ]; then
+                    if [ $oakRes = 0 ]; then
                         input tap 690 1800
                         sleep 3
                         oakSearchPresent
@@ -430,7 +425,7 @@ function oakTryCollectPresent() {
 }
 
 # Checks where to end the script
-function checkWhereToEnd() {
+checkWhereToEnd() {
     case "$endAt" in
     "oak")
         switchTab "Ranhorn"
@@ -464,7 +459,7 @@ function checkWhereToEnd() {
         switchTab "Dark Forest"
         input tap 740 1050
         sleep 2
-        if [ "$pvpEvent" == false ]; then
+        if [ "$pvpEvent" = false ]; then
             input tap 550 1370
         else
             input tap 550 1680
@@ -477,8 +472,8 @@ function checkWhereToEnd() {
 }
 
 # Repeat a battle for as long as totalAmountArenaTries
-function quickBattleGuildBosses() {
-    local COUNT=0
+quickBattleGuildBosses() {
+    COUNT=0
     until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
         input tap 710 1840
         wait
@@ -487,19 +482,18 @@ function quickBattleGuildBosses() {
         input tap 550 800
         input tap 550 800
         sleep 1
-        ((COUNT = COUNT + 1)) # Increment
+        COUNT=$((COUNT + 1))                    # Increment
     done
 }
 
 # Loots afk chest
-function lootAfkChest() {
+lootAfkChest() {
     input tap 550 1500
     sleep 1
     input tap 750 1350
     sleep 3
 
-    # Tap campaign in case of level up
-    input tap 550 1850
+    input tap 550 1850                          # Tap campaign in case of level up
     sleep 1
 
     wait
@@ -507,35 +501,31 @@ function lootAfkChest() {
 }
 
 # Challenges a boss in the campaign
-function challengeBoss() {
+challengeBoss() {
     input tap 550 1650
     sleep 1
 
-    # Check if boss
-    getColor 550 740
-    if [ "$RGB" == "f2d79f" ]; then
+    getColor 550 740                            # Check if boss
+    if [ "$RGB" = "f2d79f" ]; then
         input tap 550 1450
     fi
     sleep 2
 
-    # Fight battle or not
-    if [ "$forceFightCampaign" == "true" ]; then
+    if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
         echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
-        local COUNT=0
+        COUNT=0
 
-        # Check for battle screen
-        getColor 20 1200
-        while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
-            input tap 550 1850  # Battle
-            waitBattleFinish 10 # Wait until battle is over
+        getColor 20 1200                        # Check for battle screen
+        while [ "$RGB" = "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+            input tap 550 1850                  # Battle
+            waitBattleFinish 10                 # Wait until battle is over
 
             # Check battle result
-            if [ "$battleFailed" == false ]; then # Win
-                # Check for next stage
-                getColor 550 1670
-                if [ "$RGB" == "e2dddc" ]; then
-                    input tap 550 1670 # Next Stage
+            if [ "$battleFailed" = false ]; then # Win
+                getColor 550 1670               # Check for next stage
+                if [ "$RGB" = "e2dddc" ]; then
+                    input tap 550 1670          # Next Stage
                     sleep 6
 
                     # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
@@ -543,49 +533,45 @@ function challengeBoss() {
                     # input tap 550 75
                     # sleep 2
 
-                    # Check if boss
-                    getColor 550 740
-                    if [ "$RGB" == "f2d79f" ]; then
+                    getColor 550 740            # Check if boss
+                    if [ "$RGB" = "f2d79f" ]; then
                         input tap 550 1450
                         sleep 5
                     fi
                 else
-                    input tap 550 1150 # Continue to next battle
+                    input tap 550 1150          # Continue to next battle
                     sleep 3
                 fi
-            else # Loose
+            else                                # Loose
                 # Try again
                 input tap 550 1720
                 sleep 5
 
-                ((COUNT = COUNT + 1)) # Increment
+                COUNT=$((COUNT + 1))            # Increment
             fi
 
-            # Check for battle screen
-            getColor 20 1200
+            getColor 20 1200                    # Check for battle screen
         done
 
         # Return to campaign
-        input tap 60 1850 # Return
+        input tap 60 1850                       # Return
         wait
 
-        # Check for confirm to exit button
-        getColor 715 1260
-        if [ "$RGB" == "feffff" ]; then
-            input tap 715 1260 # Confirm
+        getColor 715 1260                       # Check for confirm to exit button
+        if [ "$RGB" = "feffff" ]; then
+            input tap 715 1260                  # Confirm
             wait
         fi
     else
         # Quick exit battle
-        input tap 550 1850 # Battle
+        input tap 550 1850                      # Battle
         sleep 1
-        input tap 80 1460 # Pause
+        input tap 80 1460                       # Pause
         wait
-        input tap 230 960 # Exit
+        input tap 230 960                       # Exit
         sleep 1
 
-        # Check for multi-battle
-        getColor 450 1775
+        getColor 450 1775                       # Check for multi-battle
         if [ "$RGB" != "cc9261" ]; then
             input tap 70 1810
         fi
@@ -596,7 +582,7 @@ function challengeBoss() {
 }
 
 # Collects fast rewards
-function fastRewards() {
+fastRewards() {
     input tap 950 1660
     sleep 1
     input tap 710 1260
@@ -610,7 +596,7 @@ function fastRewards() {
 }
 
 # Collects and sends companion points, as well as auto lending mercenaries
-function collectFriendsAndMercenaries() {
+collectFriendsAndMercenaries() {
     input tap 970 810
     sleep 1
     input tap 930 1600
@@ -633,62 +619,17 @@ function collectFriendsAndMercenaries() {
 }
 
 # Starts Solo bounties
-function soloBounties() {
+soloBounties() {
     input tap 600 1320
     sleep 1
 
-    # Check if there are bounties to collect
-    # getColor 660 520
-    # until [ "$RGB" != "7af7ee" ]; do
-    #     input tap 915 470
-    #     sleep 1
-    #     getColor 660 520
-    # done
-
-    # TODO: Before doing all this, check if there are bounties to send heroes on
-    # input tap 915 470
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 680
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 890
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 1100
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 1310
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input swipe 550 1100 550 800 500
-    # wait
-    # input tap 915 960
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 1170
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # input tap 915 1380
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-
-    input tap 780 1550 # Collect all
-    sleep 1            # Fix: Sometimes goes too fast
-    input tap 350 1550 # Dispatch all
+    input tap 780 1550                          # Collect all
+    sleep 1
+    input tap 350 1550                          # Dispatch all
     wait
-    input tap 550 1500 # Confirm
+    input tap 550 1500                          # Confirm
 
-    # Return to Tab if $doTeamBounties == false
-    if [ "$doTeamBounties" == false ]; then
+    if [ "$doTeamBounties" = false ]; then      # Return to Tab if $doTeamBounties = false
         wait
         input tap 70 1810
         wait
@@ -700,9 +641,8 @@ function soloBounties() {
 }
 
 # Starts Team Bounties. Params: startFromTab
-function teamBounties() {
-    # Check if starting from tab or already inside activity
-    if [ "$1" == true ]; then
+teamBounties() {
+    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         input tap 600 1320
         sleep 1
     fi
@@ -712,30 +652,11 @@ function teamBounties() {
     ## End of testing ##
     input tap 910 1770
     wait
-
-    # Check if there are bounties to collect
-    # getColor 650 570
-    # until [ "$RGB" != "84fff8" ]; do
-    #     input tap 930 550
-    #     sleep 1
-    #     getColor 650 570
-    # done
-
-    # input tap 930 550
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-    # wait
-    # input tap 930 770
-    # wait
-    # input tap 350 1160
-    # input tap 750 1160
-
-    input tap 780 1550 # Collect all
-    sleep 1            # Fix: Sometimes goes too fast
-    input tap 350 1550 # Dispatch all
+    input tap 780 1550                          # Collect all
+    sleep 1
+    input tap 350 1550                          # Dispatch all
     wait
-    input tap 550 1500 # Confirm
+    input tap 550 1500                          # Confirm
 
     wait
     input tap 70 1810
@@ -745,10 +666,10 @@ function teamBounties() {
 }
 
 # Does the daily arena of heroes battles
-function arenaOfHeroes() {
+arenaOfHeroes() {
     input tap 740 1050
     sleep 2
-    if [ "$pvpEvent" == false ]; then
+    if [ "$pvpEvent" = false ]; then
         input tap 550 450
     else
         input tap 550 900
@@ -761,12 +682,10 @@ function arenaOfHeroes() {
     input tap 540 1800
     sleep 2
 
-    # Check for new season
-    getColor 200 1800
+    getColor 200 1800                           # Check for new season
     if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
-        # Repeat a battle for as long as totalAmountArenaTries
-        local COUNT=0
-        until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do
+        COUNT=0
+        until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # input tap 815 540
             # wait
@@ -791,13 +710,13 @@ function arenaOfHeroes() {
             sleep 2
             input tap 550 1850
             waitBattleFinish 2
-            if [ "$battleFailed" == false ]; then
-                input tap 550 1550 # Collect
+            if [ "$battleFailed" = false ]; then
+                input tap 550 1550              # Collect
                 sleep 2
             fi
-            input tap 550 1550 # Finish battle
+            input tap 550 1550                  # Finish battle
             sleep 3
-            ((COUNT = COUNT + 1)) # Increment
+            COUNT=$((COUNT + 1))                # Increment
         done
 
         input tap 1000 380
@@ -806,8 +725,7 @@ function arenaOfHeroes() {
         echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
     fi
 
-    # Return to Tab if $doLegendsTournament == false
-    if [ "$doLegendsTournament" == false ]; then
+    if [ "$doLegendsTournament" = false ]; then # Return to Tab if $doLegendsTournament = false
         input tap 70 1810
         sleep 2
         input tap 70 1810
@@ -821,9 +739,8 @@ function arenaOfHeroes() {
 }
 
 # Does the daily Legends tournament battles. Params: startFromTab
-function legendsTournament() {
-    # Check if starting from tab or already inside activity
-    if [ "$1" == true ]; then
+legendsTournament() {
+    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         input tap 740 1050
         sleep 2
     fi
@@ -831,7 +748,7 @@ function legendsTournament() {
     # input tap 740 1050
     # sleep 1
     ## End of testing ##
-    if [ "$pvpEvent" == false ]; then
+    if [ "$pvpEvent" = false ]; then
         input tap 550 900
     else
         input tap 550 1450
@@ -846,9 +763,8 @@ function legendsTournament() {
     input tap 990 380
     wait
 
-    # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=0
-    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
+    COUNT=0
+    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do                       # Repeat a battle for as long as totalAmountArenaTries
         input tap 550 1840
         sleep 4
         input tap 800 1140
@@ -859,7 +775,7 @@ function legendsTournament() {
         sleep 4
         input tap 550 800
         sleep 4
-        ((COUNT = COUNT + 1)) # Increment
+        COUNT=$((COUNT + 1))                    # Increment
     done
 
     input tap 70 1810
@@ -871,7 +787,7 @@ function legendsTournament() {
 }
 
 # Battles once in the kings tower
-function kingsTower() {
+kingsTower() {
     input tap 500 870
     sleep 2
     input tap 550 900
@@ -893,13 +809,12 @@ function kingsTower() {
 }
 
 # Battles against Guild boss Wrizz
-function guildHunts() {
+guildHunts() {
     input tap 380 360
     sleep 10
 
-    # Check for fortune chest
-    getColor 380 500
-    if [ "$RGB" == "793929" ]; then
+    getColor 380 500                            # Check for fortune chest
+    if [ "$RGB" = "793929" ]; then
         input tap 560 1300
         sleep 2
         input tap 540 1830
@@ -921,7 +836,7 @@ function guildHunts() {
     # Wrizz
     # TODO: Check if possible to fight wrizz
     # Repeat a battle for as long as totalAmountArenaTries
-    local COUNT=0
+    COUNT=0
     until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
         # Check if its possible to fight wrizz
         # getColor 710 1840
@@ -938,24 +853,18 @@ function guildHunts() {
         input tap 550 800
         input tap 550 800
         sleep 1
-        ((COUNT = COUNT + 1)) # Increment
+        COUNT=$((COUNT + 1))                    # Increment
     done
 
-    # Soren
-    input tap 970 890
+    input tap 970 890                           # Soren
     sleep 1
 
     getColor 715 1815
-    # If Soren is open
-    if [ "$RGB" == "8ae5c4" ]; then
+    if [ "$RGB" = "8ae5c4" ]; then              # If Soren is open
         quickBattleGuildBosses
-
-    # If Soren is closed
-    elif [ "$canOpenSoren" == true ]; then
+    elif [ "$canOpenSoren" = true ]; then       # If Soren is closed
         getColor 580 1753
-
-        # If soren is "openable"
-        if [ "$RGB" == "fae0ac" ]; then
+        if [ "$RGB" = "fae0ac" ]; then          # If soren is "openable"
             input tap 550 1850
             wait
             input tap 700 1250
@@ -964,8 +873,7 @@ function guildHunts() {
         fi
     fi
 
-    # Return to Tab if $doGuildHunts == false
-    if [ "$doGuildHunts" == false ]; then
+    if [ "$doGuildHunts" = false ]; then        # Return to Tab if $doGuildHunts = false
         input tap 70 1810
         wait
         input tap 70 1810
@@ -979,11 +887,10 @@ function guildHunts() {
 }
 
 # Battles against the Twisted Realm Boss. Params: startFromTab
-function twistedRealmBoss() {
+twistedRealmBoss() {
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
-    # Check if starting from tab or already inside activity
-    if [ "$1" == true ]; then
+    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         input tap 380 360
         sleep 10
     fi
@@ -995,17 +902,15 @@ function twistedRealmBoss() {
     input tap 820 820
     sleep 2
 
-    # Check if TR is being calculated
-    getColor 540 1220
-    if [ "$RGB" == "9aedc1" ]; then
+    getColor 540 1220                           # Check if TR is being calculated
+    if [ "$RGB" = "9aedc1" ]; then
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         input tap 550 1850
         sleep 2
         input tap 550 1850
 
-        # Start checking for a finished Battle after 40 seconds
-        loopUntilRGB 30 420 380 ca9c5d
+        loopUntilRGB 30 420 380 ca9c5d          # Start checking for a finished Battle after 40 seconds
 
         sleep 1
         input tap 550 800
@@ -1023,22 +928,19 @@ function twistedRealmBoss() {
 }
 
 # Buy items from store
-function buyFromStore() {
+buyFromStore() {
     input tap 330 1650
     sleep 3
 
-    # Dust
-    if [ "$buyStoreDust" == true ]; then
+    if [ "$buyStoreDust" = true ]; then         # Dust
         buyStoreItem 180 840
         wait
     fi
-    # Poe Coins
-    if [ "$buyStorePoeCoins" == true ]; then
+    if [ "$buyStorePoeCoins" = true ]; then     # Poe Coins
         buyStoreItem 670 1430
         wait
     fi
-    # Emblems
-    if [ "$buyStoreEmblems" == true ]; then
+    if [ "$buyStoreEmblems" = true ]; then      # Emblems
         buyStoreItem 180 1430
         wait
     fi
@@ -1049,14 +951,13 @@ function buyFromStore() {
 }
 
 # Collects
-function collectQuestChests() {
+collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     input tap 960 250
     wait
 
-    # Collect Quests
-    getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    getColor 700 670                            # Collect Quests
+    while [ "$RGB" = "82fdf5" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1100,47 +1001,44 @@ collectMail() {
 }
 
 # Collects Daily/Weekly/Monthly from the merchants page
-function collectMerchants() {
-    input tap 120 300 # Merchants
+collectMerchants() {
+    input tap 120 300                           # Merchants
     sleep 3
-    input tap 510 1820 # Merchant Ship
+    input tap 510 1820                          # Merchant Ship
     sleep 2
 
-    getColor 375 940
-    # Checks for Special Daily Bundles
+    getColor 375 940                            # Checks for Special Daily Bundles
     if [ "$RGB" != "0b080a" ]; then
         input tap 200 1200
     else
         input tap 200 750
     fi
     sleep 1
-    input tap 550 300 # Collect rewards
+    input tap 550 300                           # Collect rewards
     sleep 1
-    input tap 280 1620 # Weekly Deals
+    input tap 280 1620                          # Weekly Deals
     sleep 1
 
-    getColor 375 940
-    # Checks for Special Weekly Bundles
+    getColor 375 940                            # Checks for Special Weekly Bundles
     if [ "$RGB" != "050a0f" ]; then
         input tap 200 1200
     else
         input tap 200 750
     fi
     sleep 1
-    input tap 550 300 # Collect rewards
+    input tap 550 300                           # Collect rewards
     sleep 1
-    input tap 460 1620 # Monthly Deals
+    input tap 460 1620                          # Monthly Deals
     sleep 1
 
-    getColor 375 940
-    # Checks for Special Monthly Bundles
+    getColor 375 940                            # Checks for Special Monthly Bundles
     if [ "$RGB" != "0b080a" ]; then
         input tap 200 1200
     else
         input tap 200 750
     fi
     sleep 1
-    input tap 550 300 # Collect rewards
+    input tap 550 300                           # Collect rewards
     sleep 1
     input tap 70 1810
 
@@ -1149,15 +1047,15 @@ function collectMerchants() {
 }
 
 # If red square, strenghen Crystal
-function strenghenCrystal() {
-    input tap 760 1030 # Crystal
+strenghenCrystal() {
+    input tap 760 1030                          # Crystal
     sleep 3
 
     # TODO: Detect if free slot, and take it.
 
-    input tap 550 1850 # Strenghen Crystal
+    input tap 550 1850                          # Strenghen Crystal
     sleep 2
-    input tap 200 1850 # Close level up window
+    input tap 200 1850                          # Close level up window
     sleep 2
 
     input tap 70 1810
@@ -1166,28 +1064,27 @@ function strenghenCrystal() {
 }
 
 # Let's do a "free" summon
-function nobleTavern() {
-    input tap 280 1370 # The Noble Tavern
+nobleTavern() {
+    input tap 280 1370                          # The Noble Tavern
     sleep 3
 
-    input tap 600 1820 # The noble tavern again
+    input tap 600 1820                          # The noble tavern again
     sleep 1
 
-    # Looking for heart
-    getColor 875 835
-    until [ "$RGB" == "f38d67" ]; do
-        input tap 870 1630 # Next pannel
+    getColor 875 835                            # Looking for heart
+    until [ "$RGB" = "f38d67" ]; do
+        input tap 870 1630                      # Next pannel
         sleep 1
         getColor 875 835
     done
 
-    input tap 320 1450 # Summon
+    input tap 320 1450                          # Summon
     sleep 3
-    input tap 540 900 # Click on the card
+    input tap 540 900                           # Click on the card
     sleep 3
-    input tap 70 1810 # close
+    input tap 70 1810                           # close
     sleep 2
-    input tap 550 1820 # Collect rewards
+    input tap 550 1820                          # Collect rewards
     sleep 1
 
     input tap 70 1810
@@ -1196,38 +1093,35 @@ function nobleTavern() {
 }
 
 # Collect Oak Inn
-function oakInn() {
-    input tap 780 270 # Oak Inn
+oakInn() {
+    input tap 780 270                           # Oak Inn
     sleep 5
 
-    local COUNT=0
+    COUNT=0
     until [ "$COUNT" -ge "$totalAmountOakRewards" ]; do
-        input tap 1050 950 # Friends
+        input tap 1050 950                      # Friends
         wait
-        input tap 1025 400 # Top Friend
+        input tap 1025 400                      # Top Friend
         sleep 5
 
         oakTryCollectPresent
-        # If return value is still 0, no presents were found at first friend
-        if [ $oakRes == 0 ]; then
+        if [ $oakRes = 0 ]; then                # If return value is still 0, no presents were found at first friend
             # Switch friend and search again
-            input tap 1050 950 # Friends
+            input tap 1050 950                  # Friends
             wait
-            input tap 1025 530 # Second friend
+            input tap 1025 530                  # Second friend
             sleep 5
 
             oakTryCollectPresent
-            # If return value is again 0, no presents were found at second friend
-            if [ $oakRes == 0 ]; then
+            if [ $oakRes = 0 ]; then            # If return value is again 0, no presents were found at second friend
                 # Switch friend and search again
-                input tap 1050 950 # Friends
+                input tap 1050 950              # Friends
                 wait
-                input tap 1025 650 # Third friend
+                input tap 1025 650              # Third friend
                 sleep 5
 
                 oakTryCollectPresent
-                # If return value is still freaking 0, I give up
-                if [ $oakRes == 0 ]; then
+                if [ $oakRes = 0 ]; then        # If return value is still freaking 0, I give up
                     echo "[WARN] Couldn't collect Oak Inn presents, sowy."
                     break
                 fi
@@ -1235,7 +1129,7 @@ function oakInn() {
         fi
 
         sleep 2
-        ((COUNT = COUNT + 1)) # Increment
+        COUNT=$((COUNT + 1))                    # Increment
     done
 
     input tap 70 1810
@@ -1246,7 +1140,7 @@ function oakInn() {
     verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
 }
 
-# Test function (X, Y, amountTimes, waitTime)
+# Test (X, Y, amountTimes, waitTime)
 # test 560 350 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
@@ -1267,15 +1161,14 @@ sleep 0.5
 startApp
 sleep 10
 
-# Loops until the game has launched
-getColor 450 1775
+getColor 450 1775                               # Loops until the game has launched
 while [ "$RGB" != "cc9261" ]; do
     sleep 1
     getColor 450 1775
 done
 sleep 1
 
-input tap 970 380 # Open menu for friends, etc
+input tap 970 380                               # Open menu for friends, etc
 
 switchTab "Campaign"
 sleep 3
@@ -1285,11 +1178,10 @@ switchTab "Ranhorn"
 sleep 1
 switchTab "Campaign"
 
-# Check if game is being updated
-getColor 740 205
-if [ "$RGB" == "ffc15b" ]; then
+getColor 740 205                                # Check if game is being updated
+if [ "$RGB" = "ffc15b" ]; then
     echo "[WARN] Game is being updated!"
-    if [ "$waitForUpdate" == true ]; then
+    if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
         loopUntilNotRGB 5 740 205 ffc15b
         echo "[OK]: Game finished updating."
@@ -1300,39 +1192,39 @@ fi
 
 # CAMPAIGN TAB
 switchTab "Campaign"
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
-if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
-if [ "$doFastRewards" == true ]; then fastRewards; fi
-if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi
+if [ "$doChallengeBoss" = true ]; then challengeBoss; fi
+if [ "$doFastRewards" = true ]; then fastRewards; fi
+if [ "$doCollectFriendsAndMercenaries" = true ]; then collectFriendsAndMercenaries; fi
+if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi
 
 # DARK FOREST TAB
 switchTab "Dark Forest"
-if [ "$doSoloBounties" == true ]; then soloBounties; fi
-if [ "$doTeamBounties" == true ]; then
-    if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
+if [ "$doSoloBounties" = true ]; then soloBounties; fi
+if [ "$doTeamBounties" = true ]; then
+    if [ "$doSoloBounties" = true ]; then teamBounties; else teamBounties true; fi
 fi
-if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
-if [ "$doLegendsTournament" == true ]; then
-    if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
+if [ "$doArenaOfHeroes" = true ]; then arenaOfHeroes; fi
+if [ "$doLegendsTournament" = true ]; then
+    if [ "$doArenaOfHeroes" = true ]; then legendsTournament; else legendsTournament true; fi
 fi
-if [ "$doKingsTower" == true ]; then kingsTower; fi
+if [ "$doKingsTower" = true ]; then kingsTower; fi
 
 # RANHORN TAB
 switchTab "Ranhorn"
-if [ "$doGuildHunts" == true ]; then guildHunts; fi
-if [ "$doTwistedRealmBoss" == true ]; then
-    if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
+if [ "$doGuildHunts" = true ]; then guildHunts; fi
+if [ "$doTwistedRealmBoss" = true ]; then
+    if [ "$doGuildHunts" = true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
 fi
-if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
-if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
-if [ "$doCollectOakPresents" == true ]; then oakInn; fi
+if [ "$doBuyFromStore" = true ]; then buyFromStore; fi
+if [ "$doStrenghenCrystal" = true ]; then strenghenCrystal; fi
+if [ "$doCompanionPointsSummon" = true ]; then nobleTavern; fi
+if [ "$doCollectOakPresents" = true ]; then oakInn; fi
 
 # END
-if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
-if [ "$doCollectMail" == true ]; then collectMail; fi
-if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
+if [ "$doCollectQuestChests" = true ]; then collectQuestChests; fi
+if [ "$doCollectMail" = true ]; then collectMail; fi
+if [ "$doCollectMerchantFreebies" = true ]; then collectMerchants; fi
 
 # Ends at given location
 sleep 1
