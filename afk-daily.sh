@@ -1042,6 +1042,24 @@ function buyFromStore() {
         buyStoreItem 180 1430
         wait
     fi
+     # Elite Hero Soulstones
+    if [ "$buyStoreEliteStones" == true ]; then
+        getColor 410 850 # check top row, 2nd tile
+        if [ "$RGB" == "9787c9" ]; then # tested twice, worked twice.
+            buyStoreItem 410 850
+            wait
+        fi
+        getColor 650 850 # check top row, 3rd tile
+        if [ "$RGB" == "544077" ]; then
+            buyStoreItem 650 850
+            wait
+        fi
+        getColor 910 850 # check top row, 4th tile
+        if [ "$RGB" == "a569d7" ]; then # tested once, worked once.
+            buyStoreItem 910 850
+            wait
+        fi
+    fi
     input tap 70 1810
 
     wait
