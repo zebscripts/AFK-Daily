@@ -872,21 +872,40 @@ function legendsTournament() {
 
 # Battles once in the kings tower
 function kingsTower() {
-    input tap 500 870
+    input tap 500 870 # tap King's Tower
     sleep 2
-    input tap 550 900
+    input tap 550 900 # tap main tower
     sleep 2
-    input tap 540 1350
+    input tap 540 1350 # tap "Challenge"
     sleep 2
-    input tap 550 1850
+    input tap 550 1850 # tap "Battle"
     sleep 2
-    input tap 80 1460
+    input tap 80 1460 # tap pause
     sleep 1
-    input tap 230 960
+    input tap 230 960 # tap "Exit Battle"
     wait
-    input tap 70 1810
+    input tap 70 1810 # exit main tower
     wait
-    input tap 70 1810
+
+    # Tower of Light
+    input tap 250 500 # tap Tower of Light
+    sleep 2
+    getColor 100 100
+    if [ "$RGB" == "1" ]; then # closed, do nothing
+    else
+        input tap 540 1350 # tap "Challenge"
+        sleep 2
+        input tap 550 1850 # tap "Battle"
+        sleep 2
+        waitBattleFinish 2
+        # input tap 550 1720 # tap "Try Again" / "Tap to Continue"
+        input tap 550 1850 # "Click to Continue" / avoids "Try Again" button
+        sleep 2
+        input tap 70 1810 # exit Tower of Light
+        wait
+    fi
+
+    input tap 70 1810 # exit King's Tower
 
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
@@ -1247,7 +1266,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+test 550 900 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
