@@ -95,6 +95,33 @@ function verifyRGB() {
     fi
 }
 
+# Click on auto if not already on
+function doAuto() {
+    # looking for button
+    getColor 750 1450
+    if [ "$RGB" == "332b2b" ]; then # button found but not clicked
+        input tap 750 1450
+    fi
+}
+
+# Click on skip if avaible
+function doSkip() {
+    # looking for button
+    getColor 750 1450
+    if [ "$RGB" == "ccab6d" ]; then # button found
+        input tap 750 1450
+    fi
+}
+
+# Click on x4 if not already on.
+function doSpeed() {
+    # looking for button
+    getColor 1000 1450
+    if [ "$RGB" == "282018" ]; then # button found but not clicked
+        input tap 1000 1450
+    fi
+}
+
 # Switches to another tab. Params: Tab name
 function switchTab() {
     case "$1" in
@@ -528,6 +555,9 @@ function challengeBoss() {
         getColor 20 1200
         while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
             input tap 550 1850  # Battle
+            sleep 2
+            doAuto
+            doSpeed
             waitBattleFinish 10 # Wait until battle is over
 
             # Check battle result
@@ -790,6 +820,8 @@ function arenaOfHeroes() {
             esac
             sleep 2
             input tap 550 1850
+            sleep 2
+            doSkip
             waitBattleFinish 2
             if [ "$battleFailed" == false ]; then
                 input tap 550 1550 # Collect
@@ -837,7 +869,7 @@ function legendsTournament() {
         input tap 550 1450
     fi
     sleep 2
-    input tap 550 280
+    doSkip
     sleep 3
     input tap 550 1550
     sleep 3
@@ -1003,6 +1035,10 @@ function twistedRealmBoss() {
         input tap 550 1850
         sleep 2
         input tap 550 1850
+
+        sleep 2
+        doAuto
+        doSpeed
 
         # Start checking for a finished Battle after 40 seconds
         loopUntilRGB 30 420 380 ca9c5d
