@@ -312,7 +312,7 @@ function deploy() {
 clear
 
 checkAdb
-checkForUpdate
+#checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
