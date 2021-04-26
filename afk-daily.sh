@@ -1078,7 +1078,6 @@ function collectQuestChests() {
     input tap 990 430 # tap 100 chest
     wait
     input tap 580 600
-    wait
 
     # collect weekly chests
     input tap 650 1650 # tap "Weeklies"
@@ -1098,7 +1097,6 @@ function collectQuestChests() {
     input tap 990 430 # tap 100 chest
     wait
     input tap 580 600
-    wait
 
     input tap 70 1650 # tap exit arrow
 
@@ -1320,45 +1318,45 @@ if [ "$RGB" == "ffc15b" ]; then
     fi
 fi
 
-# CAMPAIGN TAB
-switchTab "Campaign"
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
-if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
-if [ "$doFastRewards" == true ]; then fastRewards; fi
-if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
-if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+# # CAMPAIGN TAB
+# switchTab "Campaign"
+# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+# if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
+# if [ "$doFastRewards" == true ]; then fastRewards; fi
+# if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
+# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 
-# DARK FOREST TAB
-switchTab "Dark Forest"
-if [ "$doSoloBounties" == true ]; then soloBounties; fi
-if [ "$doTeamBounties" == true ]; then
-    if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
-fi
-if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
-if [ "$doLegendsTournament" == true ]; then
-    if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
-fi
-if [ "$doKingsTower" == true ]; then kingsTower; fi
+# # DARK FOREST TAB
+# switchTab "Dark Forest"
+# if [ "$doSoloBounties" == true ]; then soloBounties; fi
+# if [ "$doTeamBounties" == true ]; then
+#     if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
+# fi
+# if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
+# if [ "$doLegendsTournament" == true ]; then
+#     if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
+# fi
+# if [ "$doKingsTower" == true ]; then kingsTower; fi
 
-# RANHORN TAB
+# # RANHORN TAB
 switchTab "Ranhorn"
-if [ "$doGuildHunts" == true ]; then guildHunts; fi
-if [ "$doTwistedRealmBoss" == true ]; then
-    if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
-fi
-if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
-if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
-if [ "$doCollectOakPresents" == true ]; then oakInn; fi
+# if [ "$doGuildHunts" == true ]; then guildHunts; fi
+# if [ "$doTwistedRealmBoss" == true ]; then
+#     if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
+# fi
+# if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
+# if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+# if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
+# if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
-# END
+# # END
 if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
-if [ "$doCollectMail" == true ]; then collectMail; fi
-if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
+# if [ "$doCollectMail" == true ]; then collectMail; fi
+# if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
 
-# Ends at given location
-sleep 1
-checkWhereToEnd
+# # Ends at given location
+# sleep 1
+# checkWhereToEnd
 
 echo
 echo "[INFO] End of script! ($(date)) "
