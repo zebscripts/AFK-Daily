@@ -15,7 +15,7 @@ forceFightCampaign=false
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
-    source /$1/scripts/afk-arena/config.sh
+    source "/$1/scripts/afk-arena/config.sh"
     forceFightCampaign=$2
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
@@ -127,7 +127,7 @@ testColor2() {
 # SLEEP default value is DEFAULT_SLEEP
 # if true, tap, else do nothing
 testColorTapSleep() {
-    if testColor "$1" "$2" "$3" > /dev/null; then                               # if color found
+    if testColor "$1" "$2" "$3" >/dev/null; then                                # if color found
         inputTapSleep  "$1" "$2" "${4:-DEFAULT_SLEEP}"                          # tap & sleep
     fi
 }
@@ -179,9 +179,8 @@ waitBattleFinish() {
     sleep "$1"
     finished=false
     while [ $finished = false ]; do
-        getColor 560 350
         # First RGB local device, second bluestacks
-        if [ "$RGB" = "b8894d" ] || [ "$RGB" = "b7894c" ]; then                 # Victory
+        if testColor2 560 350 "b8894d" "b7894c" >/dev/null; then                # Victory
             battleFailed=false
             finished=true
         elif [ "$RGB" = "171932" ]; then                                        # Failed
@@ -208,41 +207,36 @@ oakSearchPresent() {
     input swipe 400 1600 400 310 50             # Swipe all the way down
     sleep 1
 
-    getColor 540 990                            # 1 red 833f0e blue 903da0
-    if [ "$RGB" = "833f0e" ]; then
+    if testColor 540 990 "833f0e" >/dev/null; then                              # 1 red 833f0e blue 903da0
         inputTapSleep 540 990 3                 # Tap present
         inputTapSleep 540 1650 1                # Ok
         inputTapSleep 540 1650 0                # Collect reward
         oakRes=1
     else
-        getColor 540 800                        # 2 red a21a1a blue 9a48ab
-        if [ "$RGB" = "a21a1a" ]; then
+        if testColor 540 800 "a21a1a" >/dev/null; then                          # 2 red a21a1a blue 9a48ab
             inputTapSleep 540 800 3
             inputTapSleep 540 1650 1            # Ok
             inputTapSleep 540 1650 0            # Collect reward
             oakRes=1
         else
-            getColor 540 610                    # 3 red aa2b27 blue b260aa
-            if [ "$RGB" = "aa2b27" ]; then
+            if testColor 540 610 "aa2b27" >/dev/null; then                      # 3 red aa2b27 blue b260aa
                 inputTapSleep 540 610 3
                 inputTapSleep 540 1650 1        # Ok
                 inputTapSleep 540 1650 0        # Collect reward
                 oakRes=1
             else
-                getColor 540 420                # 4 red bc3f36 blue c58c7b
-                if [ "$RGB" = "bc3f36" ]; then
+                if testColor 540 420 "bc3f36" >/dev/null; then                  # 4 red bc3f36 blue c58c7b
                     inputTapSleep 540 420 3
-                    inputTapSleep 540 1650 1    # Ok$
-                    inputTapSleep 540 1650 0    # Collect reward
+                    inputTapSleep 540 1650 1                                    # Ok$
+                    inputTapSleep 540 1650 0                                    # Collect reward
                     oakRes=1
                 else
-                    getColor 540 220            # 5 red bb3734 blue 9442a5
-                    if [ "$RGB" = "bb3734" ]; then
+                    if testColor 540 220 "bb3734" >/dev/null; then              # 5 red bb3734 blue 9442a5
                         inputTapSleep 540 220 3
-                        inputTapSleep 540 1650 1 # Ok
-                        inputTapSleep 540 1650 0 # Collect reward
+                        inputTapSleep 540 1650 1                                # Ok
+                        inputTapSleep 540 1650 0                                # Collect reward
                         oakRes=1
-                    else                        # If no present found, search for other tabs
+                    else                                                        # If no present found, search for other tabs
                         oakRes=0
                     fi
                 fi
@@ -254,21 +248,17 @@ oakSearchPresent() {
 # Search available present tabs in Oak Inn
 oakPresentTab() {
     oakPresentTabs=0
-    getColor 270 1800                           # 1 gift c79663
-    if [ "$RGB" = "c79663" ]; then
-        oakPresentTabs=$((oakPresentTabs + 1000)) # Increment
+    if testColor 270 1800 "c79663" >/dev/null; then                             # 1 gift c79663
+        oakPresentTabs=$((oakPresentTabs + 1000))                               # Increment
     fi
-    getColor 410 1800                           # 2 gift bb824f
-    if [ "$RGB" = "bb824f" ]; then
-        oakPresentTabs=$((oakPresentTabs + 200)) # Increment
+    if testColor 410 1800 "bb824f" >/dev/null; then                             # 2 gift bb824f
+        oakPresentTabs=$((oakPresentTabs + 200))                                # Increment
     fi
-    getColor 550 1800                           # 3 gift af6e3b
-    if [ "$RGB" = "af6e3b" ]; then
-        oakPresentTabs=$((oakPresentTabs + 30)) # Increment
+    if testColor 550 1800 "af6e3b" >/dev/null; then                             # 3 gift af6e3b
+        oakPresentTabs=$((oakPresentTabs + 30))                                 # Increment
     fi
-    getColor 690 1800                           # 4 gift b57b45
-    if [ "$RGB" = "b57b45" ]; then
-        oakPresentTabs=$((oakPresentTabs + 4))  # Increment
+    if testColor 690 1800 "b57b45" >/dev/null; then                             # 4 gift b57b45
+        oakPresentTabs=$((oakPresentTabs + 4))                                  # Increment
     fi
 }
 
@@ -496,8 +486,7 @@ challengeBoss() {
 
             # Check battle result
             if [ "$battleFailed" = false ]; then # Win
-                getColor 550 1670               # Check for next stage
-                if [ "$RGB" = "e2dddc" ]; then
+                if testColor 550 1670 "e2dddc" >/dev/null; then                 # Check for next stage
                     inputTapSleep 550 1670 6    # Next Stage
                     sleep 6
 
@@ -711,8 +700,7 @@ kingsTower() {
 guildHunts() {
     inputTapSleep 380 360 10
 
-    getColor 380 500                            # Check for fortune chest
-    if [ "$RGB" = "793929" ]; then
+    if testColor 380 500 "793929" >/dev/null; then                              # Check for fortune chest
         inputTapSleep 560 1300
         inputTapSleep 540 1830
     fi
@@ -752,12 +740,10 @@ guildHunts() {
 
     inputTapSleep 970 890 1                     # Soren
 
-    getColor 715 1815
-    if [ "$RGB" = "8ae5c4" ]; then              # If Soren is open
+    if testColor 715 1815 "8ae5c4" >/dev/null; then                             # If Soren is open
         quickBattleGuildBosses
-    elif [ "$canOpenSoren" = true ]; then       # If Soren is closed
-        getColor 580 1753
-        if [ "$RGB" = "fae0ac" ]; then          # If soren is "openable"
+    elif [ "$canOpenSoren" = true ]; then                                       # If Soren is closed
+        if testColor 580 1753 "fae0ac" >/dev/null; then                         # If soren is "openable"
             inputTapSleep 550 1850
             inputTapSleep 700 1250 1
             quickBattleGuildBosses
@@ -788,8 +774,7 @@ twistedRealmBoss() {
 
     inputTapSleep 820 820
 
-    getColor 540 1220                           # Check if TR is being calculated
-    if [ "$RGB" = "9aedc1" ]; then
+    if testColor 540 1220 "9aedc1" >/dev/null; then                             # Check if TR is being calculated
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         inputTapSleep 550 1850
@@ -1008,8 +993,7 @@ switchTab "Ranhorn"
 sleep 1
 switchTab "Campaign"
 
-getColor 740 205                                # Check if game is being updated
-if [ "$RGB" = "ffc15b" ]; then
+if testColor 740 205 "ffc15b" >/dev/null; then  # Check if game is being updated
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
