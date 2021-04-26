@@ -1051,7 +1051,7 @@ function buyFromStore() {
 # Collects
 function collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    input tap 960 250
+    input tap 960 250 # tap "Quests"
     wait
 
     # Collect Quests
@@ -1062,23 +1062,43 @@ function collectQuestChests() {
         getColor 700 670
     done
 
-    input tap 330 430
+    # collect daily chests
+    input tap 330 430 # tap 20 chest
     wait
     input tap 580 600
-    input tap 500 430
+    input tap 500 430 # tap 40 chest
     wait
     input tap 580 600
-    input tap 660 430
+    input tap 660 430 # tap 60 chest
     wait
     input tap 580 600
-    input tap 830 430
+    input tap 830 430 # tap 80 chest
     wait
     input tap 580 600
-    input tap 990 430
+    input tap 990 430 # tap 100 chest
     wait
     input tap 580 600
     wait
-    input tap 70 1650
+
+    # collect weekly chests
+    input tap 330 430 # tap 20 chest
+    wait
+    input tap 580 600
+    input tap 500 430 # tap 40 chest
+    wait
+    input tap 580 600
+    input tap 660 430 # tap 60 chest
+    wait
+    input tap 580 600
+    input tap 830 430 # tap 80 chest
+    wait
+    input tap 580 600
+    input tap 990 430 # tap 100 chest
+    wait
+    input tap 580 600
+    wait
+
+    input tap 70 1650 # tap exit arrow
 
     sleep 1
     verifyRGB 20 1775 d49a61 "Collected daily quest chests." "Failed to collect daily quest chests."
