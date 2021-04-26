@@ -337,16 +337,16 @@ do
             tempFile="$OPTARG.afkscript.tmp"
             ;;
         d)
-            if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ] || [ "$OPTARG" == "-bluestacks" ] || [ "$OPTARG" == "-bs" ]; then
+            if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
                 device="Bluestacks"
-            elif [ "$OPTARG" == "nox" ] || [ "$OPTARG" == "n" ] || [ "$OPTARG" == "-nox" ] || [ "$OPTARG" == "-n" ]; then
-                device="Bluestacks"
+            elif [ "$OPTARG" == "nox" ] || [ "$OPTARG" == "n" ]; then
+                device="Nox"
             elif [ "$OPTARG" == "dev" ]; then
                 device="dev"
             fi
             ;;
         h)
-            printInfo "Usage: ./deoploy.sh [-a <ACCOUNT>] [-d <DEVICE>]"
+            printInfo "Usage: ./deploy.sh [-a <ACCOUNT>] [-d <DEVICE>]"
             ;;
         :)
             printWarn "Argument required by this option: $OPTARG"
