@@ -1081,6 +1081,8 @@ function collectQuestChests() {
     wait
 
     # collect weekly chests
+    input tap 650 1650 # tap "Weeklies"
+    wait
     input tap 330 430 # tap 20 chest
     wait
     input tap 580 600
