@@ -111,6 +111,7 @@ totalAmountGuildBossTries=2+0
 buyStoreDust=true
 buyStorePoeCoins=true
 buyStoreEmblems=false
+buyStoreEliteStones=false
 
 # --- Actions --- #
 # Campaign
@@ -163,6 +164,7 @@ function validateConfig() {
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
         $buyStoreEmblems || -z \
+        $buyStoreEliteStones || -z \
         $doLootAfkChest || -z \
         $doChallengeBoss || -z \
         $doFastRewards || -z \
