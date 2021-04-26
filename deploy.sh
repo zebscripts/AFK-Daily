@@ -12,6 +12,7 @@ bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
 configFile="config.sh"
 tempFile=".afkscript.tmp"
+device="default"
 
 # Do not modify
 adb=adb
@@ -267,26 +268,26 @@ function checkForDevice() {
 # Check date to decide whether to beat campaign or not.
 function checkDate() {
     printTask "Checking last time script was run..."
-	if [ -f $tempFile ]; then
-		value=$(< $tempFile) # Time of last beat campaign
-		now=$(date +"%s") # Current time
-		let "difference = $now - $value" # Time since last beat campaign
-		
-		# If been longer than 3 days, set forceFightCampaign=true
-		if [ $difference -gt 255600 ]; then
-			forceFightCampaign=true
-		fi
-	fi
+    if [ -f $tempFile ]; then
+        value=$(< $tempFile) # Time of last beat campaign
+        now=$(date +"%s") # Current time
+        let "difference = $now - $value" # Time since last beat campaign
+
+        # If been longer than 3 days, set forceFightCampaign=true
+        if [ $difference -gt 255600 ]; then
+            forceFightCampaign=true
+        fi
+    fi
 }
 
 # Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 function saveDate(){
-	if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
-		echo $(date +"%s") > .afkscript.tmp # Write date to file
+    if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
+        echo $(date +"%s") > "$tempFile" # Write date to file
 
         # Make file invisible if on windows
         if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi
-	fi
+    fi
 }
 
 # Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
@@ -318,25 +319,57 @@ checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
 checkDate
 
+# Transform long options to short ones
+for arg in "$@"; do
+    shift
+    case "$arg" in
+        "--account") set -- "$@" "-a" ;;
+        "--device") set -- "$@" "-d" ;;
+        "--help") set -- "$@" "-h" ;;
+        *)        set -- "$@" "$arg"
+    esac
+done
+
+while getopts ":a:d:h" option ;
+do
+    case $option in
+        a)
+            tempFile="$OPTARG.afkscript.tmp"
+            ;;
+        d)
+            if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ] || [ "$OPTARG" == "-bluestacks" ] || [ "$OPTARG" == "-bs" ]; then
+                device="Bluestacks"
+            elif [ "$OPTARG" == "nox" ] || [ "$OPTARG" == "n" ] || [ "$OPTARG" == "-nox" ] || [ "$OPTARG" == "-n" ]; then
+                device="Bluestacks"
+            elif [ "$OPTARG" == "dev" ]; then
+                device="dev"
+            fi
+            ;;
+        h)
+            printInfo "Usage: ./deoploy.sh [-a <ACCOUNT>] [-d <DEVICE>]"
+            ;;
+        :)
+            printWarn "Argument required by this option: $OPTARG"
+            exit 1
+            ;;
+        \?)
+            printError "$OPTARG : Invalid option"
+            exit 1
+            ;;
+    esac
+done
+
 # Check where to deploy
-if [ "$1" ]; then
-    # BlueStacks
-    if [ "$1" == "bluestacks" ] || [ "$1" == "bs" ] || [ "$1" == "-bluestacks" ] || [ "$1" == "-bs" ]; then
-        restartAdb
-        checkForDevice "Bluestacks"
-        deploy "Bluestacks" "$bluestacksDirectory"
-
-    # Nox
-    elif [ "$1" == "nox" ] || [ "$1" == "n" ] || [ "$1" == "-nox" ] || [ "$1" == "-n" ]; then
-        restartAdb
-        checkForDevice "Nox"
-        deploy "Nox" "$noxDirectory"
-
-    # Interactive Options
-    elif [ "$1" == "dev" ]; then
-        deploy "Personal" "$personalDirectory"
-    fi
-# Try to recognize device automatically
+if [ "$device" == "Bluestacks" ]; then
+    restartAdb
+    checkForDevice "Bluestacks"
+    deploy "Bluestacks" "$bluestacksDirectory"
+elif [ "$device" == "Nox" ]; then
+    restartAdb
+    checkForDevice "Nox"
+    deploy "Nox" "$noxDirectory"
+elif [ "$device" == "dev" ]; then
+    deploy "Personal" "$personalDirectory"
 else
     restartAdb
     checkForDevice
