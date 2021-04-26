@@ -256,11 +256,12 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ### Store
 
-| Variable           |   Type    | Description                                        | Default |
-| :----------------- | :-------: | :------------------------------------------------- | :-----: |
-| `buyStoreDust`     | `Boolean` | If `true`, buys Dust from the store for Gold.      | `true`  |
-| `buyStorePoeCoins` | `Boolean` | If `true`, buys Poe Coins from the store for Gold. | `true`  |
-| `buyStoreEmblems`  | `Boolean` | If `true`, buys Emblems from the store for Gold.   | `false` |
+| Variable               |   Type    | Description                                                         | Default |
+| :-----------------     | :-------: | :------------------------------------------------------------------ | :-----: |
+| `buyStoreDust`         | `Boolean` | If `true`, buys Dust from the store for Gold.                       | `true`  |
+| `buyStorePoeCoins`     | `Boolean` | If `true`, buys Poe Coins from the store for Gold.                  | `true`  |
+| `buyStoreEmblems`      | `Boolean` | If `true`, buys Emblems from the store for Gold.                    | `false` |
+| `buyStoreEliteStones`  | `Boolean` | If `true`, buys Elite Hero Soulstones from the store for 90 Gems.   | `false` |
 
 ### Campaign
 
