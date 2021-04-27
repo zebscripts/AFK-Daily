@@ -145,7 +145,7 @@ testColorORTapSleep() {
 switchTab() {
     case "$1" in
         "Campaign")
-            if [ "$2" = true ] || \
+            if [ "${2:-false}" = true ] || \
                [ "$doLootAfkChest" = true ] || \
                [ "$doChallengeBoss" = true ] || \
                [ "$doFastRewards" = true ] || \
@@ -157,7 +157,7 @@ switchTab() {
             fi
             ;;
         "Dark Forest")
-            if [ "$2" = true ] || \
+            if [ "${2:-false}" = true ] || \
                [ "$doSoloBounties" = true ] || \
                [ "$doTeamBounties" = true ] || \
                [ "$doArenaOfHeroes" = true ] || \
@@ -169,7 +169,7 @@ switchTab() {
             fi
             ;;
         "Ranhorn")
-            if [ "$2" = true ] || \
+            if [ "${2:-false}" = true ] || \
                [ "$doGuildHunts" = true ] || \
                [ "$doTwistedRealmBoss" = true ] || \
                [ "$doGuildHunts" = true ] || \
