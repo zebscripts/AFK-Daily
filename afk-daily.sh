@@ -105,22 +105,18 @@ inputTapSleep() {
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
 
-# testColor <X> <Y> <COLOR>
+# testColor <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 1, else 0
 testColor() {
     getColor "$1" "$2"                          # looking for color
     if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $1 $2 > RGB: $RGB"; fi
-    test "$([ "$RGB" = "$3" ])"                 # color found?
-    echo "$?"                                   # print result of previous command
-}
-
-# testColor2 <X> <Y> <COLOR> <COLOR>
-# if true, return 1, else 0
-testColor2() {
-    getColor "$1" "$2"                                                          # looking for color
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $1 $2 > RGB: $RGB"; fi
-    test "$([ "$RGB" = "$3" ] || [ "$RGB" = "$4" ])"                            # color found?
-    echo "$?"                                                                   # print result of previous command
+    for ((i = 3; i <= $#; i++ )); do            # loop in colors
+        if [ "$RGB" = "${!i}" ]; then          # color found?
+            result=1
+            break
+        fi
+    done
+    echo "${result:-0}"                         # print result
 }
 
 # testColorTapSleep <X> <Y> <COLOR> <SLEEP>
@@ -180,7 +176,7 @@ waitBattleFinish() {
     finished=false
     while [ $finished = false ]; do
         # First RGB local device, second bluestacks
-        if testColor2 560 350 "b8894d" "b7894c" >/dev/null; then                # Victory
+        if testColor 560 350 "b8894d" "b7894c" >/dev/null; then                # Victory
             battleFailed=false
             finished=true
         elif [ "$RGB" = "171932" ]; then                                        # Failed
