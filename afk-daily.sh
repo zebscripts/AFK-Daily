@@ -299,125 +299,46 @@ oakTryCollectPresent() {
     if [ $oakRes = 0 ]; then
         oakPresentTab                           # If no present found, search for other tabs
         case $oakPresentTabs in
-        0)
-            oakRes=0
-            ;;
-        4)
-            inputTapSleep 690 1800 3
-            oakSearchPresent
-            ;;
-        30)
-            inputTapSleep 550 1800 3
-            oakSearchPresent
-            ;;
-        34)
-            inputTapSleep 550 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+            0)
+                oakRes=0
+                ;;
+            4)
                 inputTapSleep 690 1800 3
                 oakSearchPresent
-            fi
-            ;;
-        200)
-            inputTapSleep 410 1800 3
-            oakSearchPresent
-            ;;
-        204)
-            inputTapSleep 410 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
-                inputTapSleep 690 1800 3
-                oakSearchPresent
-            fi
-            ;;
-        230)
-            inputTapSleep 410 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            30)
                 inputTapSleep 550 1800 3
                 oakSearchPresent
-            fi
-            ;;
-        234)
-            inputTapSleep 410 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            34)
                 inputTapSleep 550 1800 3
                 oakSearchPresent
                 if [ $oakRes = 0 ]; then
                     inputTapSleep 690 1800 3
                     oakSearchPresent
                 fi
-            fi
-            ;;
-        1000)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            ;;
-        1004)
-            inputTapSleep 270 "y" 3             # TODO: MISSING Y
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
-                inputTapSleep 690 "y" 3
-                oakSearchPresent
-            fi
-            ;;
-        1030)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
-                inputTapSleep 550 1800 3
-                oakSearchPresent
-            fi
-            ;;
-        1034)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
-                inputTapSleep 550 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 690 1800 3
-                    oakSearchPresent
-                fi
-            fi
-            ;;
-        1200)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            200)
                 inputTapSleep 410 1800 3
                 oakSearchPresent
-            fi
-            ;;
-        1204)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            204)
                 inputTapSleep 410 1800 3
                 oakSearchPresent
                 if [ $oakRes = 0 ]; then
                     inputTapSleep 690 1800 3
                     oakSearchPresent
                 fi
-            fi
-            ;;
-        1230)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            230)
                 inputTapSleep 410 1800 3
                 oakSearchPresent
                 if [ $oakRes = 0 ]; then
                     inputTapSleep 550 1800 3
                     oakSearchPresent
                 fi
-            fi
-            ;;
-        1234)
-            inputTapSleep 270 1800 3
-            oakSearchPresent
-            if [ $oakRes = 0 ]; then
+                ;;
+            234)
                 inputTapSleep 410 1800 3
                 oakSearchPresent
                 if [ $oakRes = 0 ]; then
@@ -428,8 +349,87 @@ oakTryCollectPresent() {
                         oakSearchPresent
                     fi
                 fi
-            fi
-            ;;
+                ;;
+            1000)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                ;;
+            1004)
+                inputTapSleep 270 1800 3        # TODO: MISSING Y
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakSearchPresent
+                fi
+                ;;
+            1030)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakSearchPresent
+                fi
+                ;;
+            1034)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakSearchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakSearchPresent
+                    fi
+                fi
+                ;;
+            1200)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakSearchPresent
+                fi
+                ;;
+            1204)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakSearchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakSearchPresent
+                    fi
+                fi
+                ;;
+            1230)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakSearchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 550 1800 3
+                        oakSearchPresent
+                    fi
+                fi
+                ;;
+            1234)
+                inputTapSleep 270 1800 3
+                oakSearchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakSearchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 550 1800 3
+                        oakSearchPresent
+                        if [ $oakRes = 0 ]; then
+                            inputTapSleep 690 1800 3
+                            oakSearchPresent
+                        fi
+                    fi
+                fi
+                ;;
         esac
     fi
 }
@@ -437,44 +437,44 @@ oakTryCollectPresent() {
 # Checks where to end the script
 checkWhereToEnd() {
     case "$endAt" in
-    "oak")
-        switchTab "Ranhorn"
-        inputTapSleep 780 280 0
-        ;;
-    "soren")
-        switchTab "Ranhorn"
-        inputTapSleep 380 360 3
-        inputTapSleep 290 860 1
-        inputTapSleep 970 890 0
-        ;;
-    "mail")
-        inputTapSleep 960 630 0
-        ;;
-    "chat")
-        switchTab "Chat"
-        ;;
-    "tavern")
-        switchTab "Ranhorn"
-        inputTapSleep 300 1400 0
-        ;;
-    "merchants")
-        inputTapSleep 120 290 0
-        ;;
-    "campaign")
-        inputTapSleep 550 1850 0
-        ;;
-    "championship")
-        switchTab "Dark Forest"
-        inputTapSleep 740 1050
-        if [ "$pvpEvent" = false ]; then
-            inputTapSleep 550 1370 0
-        else
-            inputTapSleep 550 1680 0
-        fi
-        ;;
-    *)
-        echo "[WARN] Unknown location to end script on. Ignoring..."
-        ;;
+        "oak")
+            switchTab "Ranhorn"
+            inputTapSleep 780 280 0
+            ;;
+        "soren")
+            switchTab "Ranhorn"
+            inputTapSleep 380 360 3
+            inputTapSleep 290 860 1
+            inputTapSleep 970 890 0
+            ;;
+        "mail")
+            inputTapSleep 960 630 0
+            ;;
+        "chat")
+            switchTab "Chat"
+            ;;
+        "tavern")
+            switchTab "Ranhorn"
+            inputTapSleep 300 1400 0
+            ;;
+        "merchants")
+            inputTapSleep 120 290 0
+            ;;
+        "campaign")
+            inputTapSleep 550 1850 0
+            ;;
+        "championship")
+            switchTab "Dark Forest"
+            inputTapSleep 740 1050
+            if [ "$pvpEvent" = false ]; then
+                inputTapSleep 550 1370 0
+            else
+                inputTapSleep 550 1680 0
+            fi
+            ;;
+        *)
+            echo "[WARN] Unknown location to end script on. Ignoring..."
+            ;;
     esac
 }
 
@@ -637,21 +637,21 @@ arenaOfHeroes() {
             # wait
             # Fight specific opponent
             case $arenaHeroesOpponent in
-            1)
-                inputTapSleep 820 700 0
-                ;;
-            2)
-                inputTapSleep 820 870 0
-                ;;
-            3)
-                inputTapSleep 820 1050 0
-                ;;
-            4)
-                inputTapSleep 820 1220 0
-                ;;
-            5)
-                inputTapSleep 820 1400 0
-                ;;
+                1)
+                    inputTapSleep 820 700 0
+                    ;;
+                2)
+                    inputTapSleep 820 870 0
+                    ;;
+                3)
+                    inputTapSleep 820 1050 0
+                    ;;
+                4)
+                    inputTapSleep 820 1220 0
+                    ;;
+                5)
+                    inputTapSleep 820 1400 0
+                    ;;
             esac
             wait
             inputTapSleep 550 1850 0
