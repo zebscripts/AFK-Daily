@@ -923,18 +923,6 @@ function battleKingsTower() {
 function kingsTower() {
     input tap 500 870 # tap King's Tower
     sleep 2
-    # input tap 550 900 # tap main tower
-    # sleep 2
-    # input tap 540 1350 # tap "Challenge"
-    # sleep 2
-    # input tap 550 1850 # tap "Battle"
-    # sleep 2
-    # input tap 80 1460 # tap pause
-    # sleep 1
-    # input tap 230 960 # tap "Exit Battle"
-    # wait
-    # input tap 70 1810 # exit main tower
-    # wait
 
     # Towers
     battleKingsTower 550 900  # Main Tower
