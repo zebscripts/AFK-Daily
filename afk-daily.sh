@@ -1150,15 +1150,25 @@ function collectMerchants() {
 
 # If red square, strenghen Crystal
 function strenghenCrystal() {
-    input tap 760 1030 # Crystal
+    input tap 760 1030                          # Crystal
     sleep 3
 
     # TODO: Detect if free slot, and take it.
 
-    input tap 550 1850 # Strenghen Crystal
+    input tap 550 1850                          # Strenghen Crystal
     sleep 2
-    input tap 200 1850 # Close level up window
-    sleep 2
+    getColor 700 1250
+    if [ "$RGB" == "9aedc4" ]; then
+        input tap 700 1250                      # Confirm level up window
+        sleep 2
+        input tap 200 1850                      # Close level up window
+        sleep .5
+        input tap 200 1850                      # Close gift window
+        sleep 2
+    fi
+
+    input tap 200 1850                          # Better safe than sorry
+    sleep .5
 
     input tap 70 1810
     wait
