@@ -846,9 +846,9 @@ function legendsTournament() {
     input tap 990 380
     wait
 
-    # Repeat a battle for as long as totalAmountArenaTries
+    # Repeat a battle for as long as totalAmountTournamentTries
     local COUNT=0
-    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
+    until [ "$COUNT" -ge "$totalAmountTournamentTries" ]; do
         input tap 550 1840
         sleep 4
         input tap 800 1140

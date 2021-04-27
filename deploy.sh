@@ -104,6 +104,7 @@ endAt="championship"
 # Repetitions
 maxCampaignFights=10
 totalAmountArenaTries=2+0
+totalAmountTournamentTries=$((totalAmountArenaTries - 2))
 totalAmountGuildBossTries=2+0
 
 # Store
@@ -157,6 +158,7 @@ function validateConfig() {
         $endAt || -z \
         $maxCampaignFights || -z \
         $totalAmountArenaTries || -z \
+        $totalAmountTournamentTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
