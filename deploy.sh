@@ -334,7 +334,7 @@ while getopts ":a:d:h" option ;
 do
     case $option in
         a)
-            tempFile="$OPTARG.afkscript.tmp"
+            tempFile=".${OPTARG}afkscript.tmp"
             ;;
         d)
             if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
