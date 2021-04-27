@@ -102,7 +102,7 @@ verifyRGB() {
 inputTapSleep() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] inputTapSleep $1 $2 $3"; fi
     input tap "$1" "$2"                         # tap
-    sleep "${3:-DEFAULT_SLEEP}"                 # sleep
+    sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
 
 # testColor <X> <Y> <COLOR>
@@ -128,7 +128,7 @@ testColor2() {
 # if true, tap, else do nothing
 testColorTapSleep() {
     if testColor "$1" "$2" "$3" >/dev/null; then                                # if color found
-        inputTapSleep  "$1" "$2" "${4:-DEFAULT_SLEEP}"                          # tap & sleep
+        inputTapSleep  "$1" "$2" "${4:-$DEFAULT_SLEEP}"                         # tap & sleep
     fi
 }
 
