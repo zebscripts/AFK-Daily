@@ -141,45 +141,67 @@ testColorORTapSleep() {
     fi
 }
 
-# Switches to another tab. Params: Tab name
+# Switches to another tab. Params: <Tab name> <force>
 switchTab() {
     case "$1" in
-    "Campaign")
-        inputTapSleep 550 1850
-        verifyRGB 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
-        ;;
-    "Dark Forest")
-        inputTapSleep 300 1850
-        verifyRGB 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
-        ;;
-    "Ranhorn")
-        inputTapSleep 110 1850
-        verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
-        ;;
-    "Chat")
-        inputTapSleep 970 1850
-        verifyRGB 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
-        ;;
+        "Campaign")
+            if [ "$2" = true ] || \
+               [ "$doLootAfkChest" = true ] || \
+               [ "$doChallengeBoss" = true ] || \
+               [ "$doFastRewards" = true ] || \
+               [ "$doCollectFriendsAndMercenaries" = true ] || \
+               [ "$doLootAfkChest" = true ]
+            then
+                inputTapSleep 550 1850
+                verifyRGB 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
+            fi
+            ;;
+        "Dark Forest")
+            if [ "$2" = true ] || \
+               [ "$doSoloBounties" = true ] || \
+               [ "$doTeamBounties" = true ] || \
+               [ "$doArenaOfHeroes" = true ] || \
+               [ "$doLegendsTournament" = true ] || \
+               [ "$doKingsTower" = true ]
+            then
+                inputTapSleep 300 1850
+                verifyRGB 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
+            fi
+            ;;
+        "Ranhorn")
+            if [ "$2" = true ] || \
+               [ "$doGuildHunts" = true ] || \
+               [ "$doTwistedRealmBoss" = true ] || \
+               [ "$doGuildHunts" = true ] || \
+               [ "$doBuyFromStore" = true ] || \
+               [ "$doStrenghenCrystal" = true ] || \
+               [ "$doCompanionPointsSummon" = true ] || \
+               [ "$doCollectOakPresents" = true ]
+            then
+                inputTapSleep 110 1850
+                verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
+            fi
+            ;;
+        "Chat")
+            inputTapSleep 970 1850
+            verifyRGB 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
+            ;;
     esac
 }
 
 # Loops until RGB is not equal. Params: Seconds, X, Y, RGB
 loopUntilRGB() {
     sleep "$1"
-    getColor "$2" "$3"
-    while [ "$RGB" != "$4" ]; do
+    while testColorNAND "$2" "$3" "$4" >/dev/null; do
         sleep 1
-        getColor "$2" "$3"
     done
 }
 
 # Loops until RGB is equal. Params: Seconds, X, Y, RGB
 loopUntilNotRGB() {
     sleep "$1"
-    getColor "$2" "$3"
-    while [ "$RGB" = "$4" ]; do
+    while testColorOR "$2" "$3" "$4" >/dev/null; do
         sleep 1
-        getColor "$2" "$3"
     done
 }
 
@@ -607,8 +629,7 @@ arenaOfHeroes() {
     inputTapSleep 980 410
     inputTapSleep 540 1800
 
-    getColor 200 1800                           # Check for new season
-    if [ "$RGB" != "382314" ] && [ "$RGB" != "382214" ]; then
+    if testColorNAND 200 1800 "382314" "382214" >/dev/null; then                # Check for new season
         COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
@@ -827,10 +848,8 @@ collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 250
 
-    getColor 700 670                            # Collect Quests
-    while [ "$RGB" = "82fdf5" ]; do
+    while testColorOR 700 670 "82fdf5" >/dev/null; do                           # Collect Quests
         inputTapSleep 930 680
-        getColor 700 670
     done
 
     inputTapSleep 330 430
@@ -862,8 +881,7 @@ collectMerchants() {
     inputTapSleep 120 300 3                     # Merchants
     inputTapSleep 510 1820                      # Merchant Ship
 
-    getColor 375 940                            # Checks for Special Daily Bundles
-    if [ "$RGB" != "0b080a" ]; then
+    if testColorNAND 375 940 "0b080a" >/dev/null; then                          # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -871,8 +889,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 280 1620 1                    # Weekly Deals
 
-    getColor 375 940                            # Checks for Special Weekly Bundles
-    if [ "$RGB" != "050a0f" ]; then
+    if testColorNAND 375 940 "050a0f" >/dev/null; then                          # Checks for Special Weekly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -880,8 +897,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 460 1620 1                    # Monthly Deals
 
-    getColor 375 940                            # Checks for Special Monthly Bundles
-    if [ "$RGB" != "0b080a" ]; then
+    if testColorNAND 375 940 "0b080a" >/dev/null; then                          # Checks for Special Monthly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750
@@ -908,10 +924,8 @@ nobleTavern() {
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    getColor 875 835                            # Looking for heart
-    until [ "$RGB" = "f38d67" ]; do
+    until testColorOR 875 835 "f38d67" >/dev/null; do                           # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
-        getColor 875 835
     done
 
     inputTapSleep 320 1450 3                    # Summon
@@ -985,12 +999,7 @@ sleep 0.5
 startApp
 sleep 10
 
-getColor 450 1775                               # Loops until the game has launched
-while [ "$RGB" != "cc9261" ]; do
-    sleep 1
-    getColor 450 1775
-done
-sleep 1
+loopUntilNotRGB 450 1775 "cc9261"               # Loops until the game has launched
 
 inputTapSleep 970 380 0                         # Open menu for friends, etc
 
@@ -1000,7 +1009,7 @@ switchTab "Dark Forest"
 sleep 1
 switchTab "Ranhorn"
 sleep 1
-switchTab "Campaign"
+switchTab "Campaign" true
 
 if testColorOR 740 205 "ffc15b" >/dev/null; then  # Check if game is being updated
     echo "[WARN] Game is being updated!"
