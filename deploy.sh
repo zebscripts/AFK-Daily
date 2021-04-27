@@ -103,6 +103,7 @@ endAt="championship"
 
 # Repetitions
 maxCampaignFights=10
+maxKingsTowerFights=10
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 
@@ -156,6 +157,7 @@ function validateConfig() {
         $waitForUpdate || -z \
         $endAt || -z \
         $maxCampaignFights || -z \
+        $maxKingsTowerFights || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
