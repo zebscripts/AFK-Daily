@@ -491,25 +491,6 @@ function quickBattleGuildBosses() {
     done
 }
 
-# Battles in King's Towers. Params: X, Y
-function battleKingsTower() {
-    input tap $1 $2 # tap chosen tower
-    sleep 2
-    getColor 550 150 # upper ui turns dark brown if in a tower
-    if [ "$RGB" == "1a1212" ]; then # tower open
-        input tap 540 1350 # tap "Challenge"
-        sleep 2
-        input tap 550 1850 # tap "Battle"
-        sleep 2
-        waitBattleFinish 2
-        # input tap 550 1720 # tap "Try Again" / "Tap to Continue"
-        input tap 550 1850 # "Click to Continue" / avoids "Try Again" button
-        sleep 2
-        input tap 70 1810 # exit chosen tower
-        wait
-    fi
-}
-
 # Loots afk chest
 function lootAfkChest() {
     input tap 550 1500
@@ -887,6 +868,52 @@ function legendsTournament() {
 
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
+}
+
+# Battles in King's Towers. Params: X, Y
+function battleKingsTower() {
+    _battleKingsTower_COUNTER=0
+    input tap $1 $2 # tap chosen faction tower
+    sleep 2
+    getColor 550 150 # upper ui turns dark brown if in a tower
+        if [ "$RGB" == "1a1212" ]; then # tower open
+            input tap 540 1350 # tap "Challenge"
+            wait
+        
+        getColor 550 150 # change $RGB from previous getColor call
+        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
+        while [ "$_battleKingsTower_COUNTER" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
+            # need to test more
+            # check for Limited Offer
+            # getColor 630 1520
+            # if [ "$RGB" != "e4c48e" ]; then # not on battle screen
+            #     input tap 550 75 # Tap top of the screen to close Limited Offer
+            #     wait
+            # fi
+
+            input tap 550 1850 # tap "Battle"
+            waitBattleFinish 2
+            if [ "$battleFailed" == false ]; then # Win
+                input tap 550 1850 # "Click to Continue"
+                wait
+                input tap 540 1350 # tap "Challenge"
+                wait
+            elif [ "$battleFailed" == true ]; then # Lose
+                input tap 550 1720 # tap "Try Again"
+                (( _battleKingsTower_COUNTER = _battleKingsTower_COUNTER + 1 )) # Increment
+                wait
+            fi
+            getColor 550 150 # Check if reached daily limit
+        done
+        
+        input tap 70 1810 # exit faction tower / battle
+        wait
+        getColor 550 150
+        if [ "$RGB" = "1a1212" ]; then # still in faction tower
+            input tap 70 1810 # exit faction tower
+        fi
+        wait
+    fi
 }
 
 # Battles once in the kings tower
@@ -1273,7 +1300,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 550 150 3 0.5
+# test 630 1520 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1324,45 +1351,45 @@ if [ "$RGB" == "ffc15b" ]; then
     fi
 fi
 
-# # CAMPAIGN TAB
-# switchTab "Campaign"
-# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
-# if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
-# if [ "$doFastRewards" == true ]; then fastRewards; fi
-# if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
-# if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+# CAMPAIGN TAB
+switchTab "Campaign"
+if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
+if [ "$doChallengeBoss" == true ]; then challengeBoss; fi
+if [ "$doFastRewards" == true ]; then fastRewards; fi
+if [ "$doCollectFriendsAndMercenaries" == true ]; then collectFriendsAndMercenaries; fi
+if [ "$doLootAfkChest" == true ]; then lootAfkChest; fi
 
-# # DARK FOREST TAB
+# DARK FOREST TAB
 switchTab "Dark Forest"
-# if [ "$doSoloBounties" == true ]; then soloBounties; fi
-# if [ "$doTeamBounties" == true ]; then
-#     if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
-# fi
-# if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
-# if [ "$doLegendsTournament" == true ]; then
-#     if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
-# fi
+if [ "$doSoloBounties" == true ]; then soloBounties; fi
+if [ "$doTeamBounties" == true ]; then
+    if [ "$doSoloBounties" == true ]; then teamBounties; else teamBounties true; fi
+fi
+if [ "$doArenaOfHeroes" == true ]; then arenaOfHeroes; fi
+if [ "$doLegendsTournament" == true ]; then
+    if [ "$doArenaOfHeroes" == true ]; then legendsTournament; else legendsTournament true; fi
+fi
 if [ "$doKingsTower" == true ]; then kingsTower; fi
 
-# # RANHORN TAB
-# switchTab "Ranhorn"
-# if [ "$doGuildHunts" == true ]; then guildHunts; fi
-# if [ "$doTwistedRealmBoss" == true ]; then
-#     if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
-# fi
-# if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-# if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
-# if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
-# if [ "$doCollectOakPresents" == true ]; then oakInn; fi
+# RANHORN TAB
+switchTab "Ranhorn"
+if [ "$doGuildHunts" == true ]; then guildHunts; fi
+if [ "$doTwistedRealmBoss" == true ]; then
+    if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
+fi
+if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
+if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
+if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
-# # END
-# if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
-# if [ "$doCollectMail" == true ]; then collectMail; fi
-# if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
+# END
+if [ "$doCollectQuestChests" == true ]; then collectQuestChests; fi
+if [ "$doCollectMail" == true ]; then collectMail; fi
+if [ "$doCollectMerchantFreebies" == true ]; then collectMerchants; fi
 
-# # Ends at given location
-# sleep 1
-# checkWhereToEnd
+# Ends at given location
+sleep 1
+checkWhereToEnd
 
 echo
 echo "[INFO] End of script! ($(date)) "
