@@ -873,44 +873,47 @@ function legendsTournament() {
 # Battles in King's Towers. Params: X, Y
 function battleKingsTower() {
     _battleKingsTower_COUNTER=0
-    input tap $1 $2 # tap chosen faction tower
+    input tap $1 $2 # tap chosen tower
     sleep 2
-    getColor 550 150 # upper ui turns dark brown if in a tower
-        if [ "$RGB" == "1a1212" ]; then # tower open
-            input tap 540 1350 # tap "Challenge"
-            wait
-        
+    getColor 550 150                # upper ui turns dark brown if in a tower
+    if [ "$RGB" == "1a1212" ]; then # tower open
+        input tap 540 1350          # tap "Challenge"
+        wait
         getColor 550 150 # change $RGB from previous getColor call
+
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
         while [ "$_battleKingsTower_COUNTER" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
-            # need to test more
-            # check for Limited Offer
-            # getColor 630 1520
-            # if [ "$RGB" != "e4c48e" ]; then # not on battle screen
-            #     input tap 550 75 # Tap top of the screen to close Limited Offer
-            #     wait
-            # fi
-
             input tap 550 1850 # tap "Battle"
             waitBattleFinish 2
             if [ "$battleFailed" == false ]; then # Win
-                input tap 550 1850 # "Click to Continue"
+                input tap 550 1850                # "Click to Continue"
                 wait
+                # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
+                # Tap top of the screen to close any possible Limited Offers
+                # getColor 550 150
+                # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
+                #     input tap 550 75 # Tap top of the screen to close Limited Offer
+                #     wait
+                #     getColor 550 150
+                #     if [ "$RGB" != "1a1212" ]; then # think i remember it needs two taps to close offer
+                #         input tap 550 75 # Tap top of the screen to close Limited Offer
+                #         wait
+                # fi
                 input tap 540 1350 # tap "Challenge"
                 wait
-            elif [ "$battleFailed" == true ]; then # Lose
-                input tap 550 1720 # tap "Try Again"
-                (( _battleKingsTower_COUNTER = _battleKingsTower_COUNTER + 1 )) # Increment
+            elif [ "$battleFailed" == true ]; then                            # Lose
+                input tap 550 1720                                            # tap "Try Again"
+                ((_battleKingsTower_COUNTER = _battleKingsTower_COUNTER + 1)) # Increment
                 wait
             fi
-            getColor 550 150 # Check if reached daily limit
+            getColor 550 150 # Check if reached daily limit / kicked us out of battle screen
         done
-        
-        input tap 70 1810 # exit faction tower / battle
+
+        input tap 70 1810 # exit chosen tower / battle
         wait
         getColor 550 150
-        if [ "$RGB" = "1a1212" ]; then # still in faction tower
-            input tap 70 1810 # exit faction tower
+        if [ "$RGB" = "1a1212" ]; then # still in chosen tower
+            input tap 70 1810          # exit chosen tower
         fi
         wait
     fi
@@ -920,22 +923,23 @@ function battleKingsTower() {
 function kingsTower() {
     input tap 500 870 # tap King's Tower
     sleep 2
-    input tap 550 900 # tap main tower
-    sleep 2
-    input tap 540 1350 # tap "Challenge"
-    sleep 2
-    input tap 550 1850 # tap "Battle"
-    sleep 2
-    input tap 80 1460 # tap pause
-    sleep 1
-    input tap 230 960 # tap "Exit Battle"
-    wait
-    input tap 70 1810 # exit main tower
-    wait
+    # input tap 550 900 # tap main tower
+    # sleep 2
+    # input tap 540 1350 # tap "Challenge"
+    # sleep 2
+    # input tap 550 1850 # tap "Battle"
+    # sleep 2
+    # input tap 80 1460 # tap pause
+    # sleep 1
+    # input tap 230 960 # tap "Exit Battle"
+    # wait
+    # input tap 70 1810 # exit main tower
+    # wait
 
     # Towers
-    battleKingsTower 250 500 # Tower of Light
-    battleKingsTower 800 500 # The Brutal Citadel
+    battleKingsTower 550 900  # Main Tower
+    battleKingsTower 250 500  # Tower of Light
+    battleKingsTower 800 500  # The Brutal Citadel
     battleKingsTower 250 1400 # The World Tree
     battleKingsTower 800 1400 # The Forsaken Necropolis
 
