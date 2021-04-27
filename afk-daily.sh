@@ -936,9 +936,9 @@ function legendsTournament() {
     input tap 990 380
     wait
 
-    # Repeat a battle for as long as totalAmountTournamentTries
+    # Repeat a battle for as long as totalAmountArenaTries
     local COUNT=0
-    until [ "$COUNT" -ge "$totalAmountTournamentTries" ]; do
+    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do
         input tap 550 1840
         sleep 4
         input tap 800 1140
@@ -1247,23 +1247,8 @@ function strenghenCrystal() {
 
     input tap 550 1850 # Strenghen Crystal
     sleep 2
-    getColor 700 1250
-    if [ "$RGB" == "9aedc4" ]; then
-        if [ $allowCrystalLevelUp == true ]; then
-            input tap 700 1250 # Confirm level up window
-            sleep 2
-            input tap 200 1850 # Close level up window
-            sleep .5
-            input tap 200 1850 # Close gift window
-            sleep 2
-        else
-            input tap 200 1850
-            sleep 1
-        fi
-    fi
-
-    input tap 200 1850 # Better safe than sorry
-    sleep .5
+    input tap 200 1850 # Close level up window
+    sleep 2
 
     input tap 70 1810
     wait
