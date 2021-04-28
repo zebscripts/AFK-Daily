@@ -1051,10 +1051,10 @@ function buyFromStore() {
 # Collects
 function collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    input tap 960 250 # tap "Quests"
+    input tap 960 250 # Quests
     wait
 
-    # Collect Quests
+    # Collect daily Quests
     getColor 700 670
     while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
@@ -1062,46 +1062,58 @@ function collectQuestChests() {
         getColor 700 670
     done
 
-    # collect daily chests
-    input tap 330 430 # tap 20 chest
+    # Collect daily Chests
+    input tap 330 430 # Chest 20
     wait
-    input tap 580 600
-    input tap 500 430 # tap 40 chest
+    input tap 580 600 # Collect
+    input tap 500 430 # Chest 40
     wait
-    input tap 580 600
-    input tap 660 430 # tap 60 chest
+    input tap 580 600 # Collect
+    input tap 660 430 # Chest 60
     wait
-    input tap 580 600
-    input tap 830 430 # tap 80 chest
+    input tap 580 600 # Collect
+    input tap 830 430 # Chest 80
     wait
-    input tap 580 600
-    input tap 990 430 # tap 100 chest
+    input tap 580 600 # Collect
+    input tap 990 430 # Chest 100
     wait
-    input tap 580 600
+    input tap 580 600 # Collect
+    wait
 
-    # collect weekly chests
-    input tap 650 1650 # tap "Weeklies"
+    # Weekly quests
+    input tap 650 1650 # Weeklies
     wait
-    input tap 330 430 # tap 20 chest
-    wait
-    input tap 580 600
-    input tap 500 430 # tap 40 chest
-    wait
-    input tap 580 600
-    input tap 660 430 # tap 60 chest
-    wait
-    input tap 580 600
-    input tap 830 430 # tap 80 chest
-    wait
-    input tap 580 600
-    input tap 990 430 # tap 100 chest
-    wait
-    input tap 580 600
 
-    input tap 70 1650 # tap exit arrow
+    # Collect weekly Quests
+    getColor 700 670
+    while [ "$RGB" == "82fdf5" ]; do
+        input tap 930 680
+        wait
+        getColor 700 670
+    done
 
+    # Collect weekly Chests
+    input tap 330 430 # Chest 20
+    wait
+    input tap 580 600 # Collect
+    input tap 500 430 # Chest 40
+    wait
+    input tap 580 600 # Collect
+    input tap 660 430 # Chest 60
+    wait
+    input tap 580 600 # Collect
+    input tap 830 430 # Chest 80
+    wait
+    input tap 580 600 # Collect
+    input tap 990 430 # Chest 100
+    wait
+    input tap 580 600 # Collect
+    wait
+
+    # Return
+    input tap 70 1650
     sleep 1
-    verifyRGB 20 1775 d49a61 "Collected daily quest chests." "Failed to collect daily quest chests."
+    verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
 # Collects mail
