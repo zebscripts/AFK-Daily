@@ -1295,14 +1295,14 @@ function strengthenCrystal() {
     # TODO: Detect if free slot, and take it.
 
     input tap 550 1850                          # Strenghen Crystal
-    sleep 2
+    sleep 3
     getColor 700 1250
     if [ "$RGB" == "9aedc4" ]; then
         if [ $allowCrystalLevelUp == true ]; then
             input tap 700 1250                  # Confirm level up window
-            sleep 2
+            sleep 3
             input tap 200 1850                  # Close level up window
-            sleep .5
+            sleep 1
             input tap 200 1850                  # Close gift window
             sleep 2
         else
