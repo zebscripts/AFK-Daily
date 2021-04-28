@@ -111,6 +111,7 @@ inputTapSleep() {
 # testColorOR <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 1, else 0
 testColorOR() {
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
@@ -126,6 +127,7 @@ testColorOR() {
 # testColorNAND <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 1, else 0
 testColorNAND() {
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
@@ -142,6 +144,7 @@ testColorNAND() {
 # SLEEP default value is DEFAULT_SLEEP
 # if true, tap, else do nothing
 testColorORTapSleep() {
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
     if [ "$(testColorOR "$1" "$2" "$3")" = "1" ];then                           # if color found
         inputTapSleep  "$1" "$2" "${4:-$DEFAULT_SLEEP}"                         # tap & sleep
     fi
@@ -180,7 +183,7 @@ switchTab() {
                [ "$doTwistedRealmBoss" = true ] || \
                [ "$doGuildHunts" = true ] || \
                [ "$doBuyFromStore" = true ] || \
-               [ "$doStrenghenCrystal" = true ] || \
+               [ "$doStrengthenCrystal" = true ] || \
                [ "$doCompanionPointsSummon" = true ] || \
                [ "$doCollectOakPresents" = true ]
             then
@@ -444,11 +447,11 @@ oakTryCollectPresent() {
 checkWhereToEnd() {
     case "$endAt" in
         "oak")
-            switchTab "Ranhorn"
+            switchTab "Ranhorn" true
             inputTapSleep 780 280 0
             ;;
         "soren")
-            switchTab "Ranhorn"
+            switchTab "Ranhorn" true
             inputTapSleep 380 360 3
             inputTapSleep 290 860 1
             inputTapSleep 970 890 0
@@ -457,10 +460,10 @@ checkWhereToEnd() {
             inputTapSleep 960 630 0
             ;;
         "chat")
-            switchTab "Chat"
+            switchTab "Chat" true
             ;;
         "tavern")
-            switchTab "Ranhorn"
+            switchTab "Ranhorn" true
             inputTapSleep 300 1400 0
             ;;
         "merchants")
@@ -470,7 +473,7 @@ checkWhereToEnd() {
             inputTapSleep 550 1850 0
             ;;
         "championship")
-            switchTab "Dark Forest"
+            switchTab "Dark Forest" true
             inputTapSleep 740 1050
             if [ "$pvpEvent" = false ]; then
                 inputTapSleep 550 1370 0
@@ -914,7 +917,7 @@ collectMerchants() {
 }
 
 # If red square, strenghen Crystal
-strenghenCrystal() {
+strengthenCrystal() {
     inputTapSleep 760 1030 3                    # Crystal
 
     # TODO: Detect if free slot, and take it.
@@ -1005,7 +1008,7 @@ sleep 0.5
 startApp
 sleep 10
 
-loopUntilNotRGB 450 1775 cc9261                 # Loops until the game has launched
+loopUntilNotRGB 1 450 1775 cc9261               # Loops until the game has launched
 
 inputTapSleep 970 380 0                         # Open menu for friends, etc
 
@@ -1055,7 +1058,7 @@ if [ "$doTwistedRealmBoss" = true ]; then
     if [ "$doGuildHunts" = true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
 fi
 if [ "$doBuyFromStore" = true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" = true ]; then strenghenCrystal; fi
+if [ "$doStrengthenCrystal" = true ]; then strengthenCrystal; fi
 if [ "$doCompanionPointsSummon" = true ]; then nobleTavern; fi
 if [ "$doCollectOakPresents" = true ]; then oakInn; fi
 

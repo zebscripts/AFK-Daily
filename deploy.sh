@@ -91,7 +91,8 @@ checkConfig() {
     else
         printWarn "Not found!"
         printTask "Creating new config.sh file..."
-        printf '# --- CONFIG: Modify accordingly to your game! --- #
+        printf '#!/bin/bash
+# --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
 # Player
 canOpenSoren=false
@@ -129,7 +130,7 @@ doKingsTower=true
 doGuildHunts=true
 doTwistedRealmBoss=true
 doBuyFromStore=true
-doStrenghenCrystal=true
+doStrengthenCrystal=true
 doCompanionPointsSummon=false
 doCollectOakPresents=false                      # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 
@@ -172,7 +173,7 @@ validateConfig() {
         $doGuildHunts || -z \
         $doTwistedRealmBoss || -z \
         $doBuyFromStore || -z \
-        $doStrenghenCrystal || -z \
+        $doStrengthenCrystal || -z \
         $doCompanionPointsSummon || -z \
         $doCollectOakPresents || -z \
         $doCollectQuestChests || -z \
