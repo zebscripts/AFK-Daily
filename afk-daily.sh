@@ -744,65 +744,104 @@ function teamBounties() {
     verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
-# Fix: Script waits forever in the Arena of Heroes #33
 # Attempts to tap the closest Arena of Heroes opponent. Params: opponent
 function tapClosestOpponent() {
-  # Depending on the opponent number sent as a parameter ($1), this function
-  # would attempt to check if there's an opponent above the one sent.
-  # If there isn't, check the one above that one and so on until one is found.
-  # When found, tap on the opponent and exit function.
+    # Depending on the opponent number sent as a parameter ($1), this function
+    # would attempt to check if there's an opponent above the one sent.
+    # If there isn't, check the one above that one and so on until one is found.
+    # When found, tap on the opponent and exit function.
     case $1 in
+    1)
+        # Refresh
+        input tap 815 540
+        sleep 2
+
+        # Attempt to fight $arenaHeroesOpponent opponent, and if not present, skip battle
+        case $arenaHeroesOpponent in
         1)
-            # Refresh
-            input tap 815 540
-            wait
-            tapClosestOpponent 5
+            # Check if opponent 1 exists and fight if true
+            getColor 820 700
+            if [ "$RGB" == "a7f1b7" ]; then input tap 820 700; else return 1; fi
             ;;
         2)
-            getColor 820 700 # Opponent 1
-            if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
-                input tap 820 700
-            else
-                tapClosestOpponent 1
-            fi
+            # Check if opponent 2 exists and fight if true
+            getColor 820 870
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 870; else return 1; fi
             ;;
         3)
-            getColor 820 870 # Opponent 2
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
-                input tap 820 870
-            else
-                tapClosestOpponent 2
-            fi
+            # Check if opponent 3 exists and fight if true
+            getColor 820 1050
+            if [ "$RGB" == "a7f1b7" ]; then input tap 820 1050; else return 1; fi
             ;;
         4)
-            getColor 820 1050 # Opponent 3
-            if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
-                input tap 820 1050
-            else
-                tapClosestOpponent 3
-            fi
+            # Check if opponent 4 exists and fight if true
+            getColor 820 1220
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 1220; else return 1; fi
             ;;
         5)
-            getColor 820 1220 # Opponent 4
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
-                input tap 820 1220
-            else
-                tapClosestOpponent 4
-            fi
+            # Check if opponent 5 exists and fight if true
+            getColor 820 1400
+            if [ "$RGB" == "aaf2bb" ]; then input tap 820 1400; else return 1; fi
             ;;
+        esac
+        ;;
+    2)
+        # Check if opponent 1 exists
+        getColor 820 700
+        if [ "$RGB" == "a7f1b7" ]; then
+            # Fight opponent
+            input tap 820 700
+        else
+            # Try to fight the closest opponent to 2
+            tapClosestOpponent 1
+        fi
+        ;;
+    3)
+        # Check if opponent 2 exists
+        getColor 820 870
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+            # Fight opponent
+            input tap 820 870
+        else
+            # Try to fight the closest opponent to 3
+            tapClosestOpponent 2
+        fi
+        ;;
+    4)
+        # Check if opponent 3 exists
+        getColor 820 1050
+        if [ "$RGB" == "a7f1b7" ]; then
+            # Fight opponent
+            input tap 820 1050
+        else
+            # Try to fight the closest opponent to 4
+            tapClosestOpponent 3
+        fi
+        ;;
+    5)
+        # Check if opponent 4 exists
+        getColor 820 1220
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+            # Fight opponent
+            input tap 820 1220
+        else
+            # Try to fight the closest opponent to 5
+            tapClosestOpponent 4
+        fi
+        ;;
     esac
 }
 
 # Does the daily arena of heroes battles
 function arenaOfHeroes() {
     input tap 740 1050
-    sleep 2
+    sleep 3
     if [ "$pvpEvent" == false ]; then
         input tap 550 450
     else
         input tap 550 900
     fi
-    sleep 2
+    sleep 3
     input tap 1000 1800
     wait
     input tap 980 410
@@ -830,63 +869,73 @@ function arenaOfHeroes() {
             case $arenaHeroesOpponent in
             1)
                 # Check if opponent exists
-                # If yes, input tap 820 700
-                # If no, tapClosestOpponent 1
-
-                # input tap 820 700
-                getColor 820 700 # Opponent 1
-                if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
+                getColor 820 700
+                if [ "$RGB" == "a7f1b7" ]; then
+                    # Fight opponent
                     input tap 820 700
                 else
+                    # Refresh opponents and try to fight opponent $arenaHeroesOpponent
                     tapClosestOpponent 1
                 fi
                 ;;
             2)
-                # input tap 820 870
-                getColor 820 870 # Opponent 2
-                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                # Check if opponent exists
+                getColor 820 870
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    # Fight opponent
                     input tap 820 870
                 else
+                    # Try to fight the closest opponent to 2
                     tapClosestOpponent 2
                 fi
                 ;;
             3)
-                # input tap 820 1050
-                getColor 820 1050 # Opponent 3
-                if [ "$RGB" == "a7f1b7" ]; then # Looking for the button
+                # Check if opponent exists
+                getColor 820 1050
+                if [ "$RGB" == "a7f1b7" ]; then
+                    # Fight opponent
                     input tap 820 1050
                 else
+                    # Try to fight the closest opponent to 3
                     tapClosestOpponent 3
                 fi
                 ;;
             4)
-                # input tap 820 1220
-                getColor 820 1220 # Opponent 4
-                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then # Looking for the button
+                # Check if opponent exists
+                getColor 820 1220
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    # Fight opponent
                     input tap 820 1220
                 else
+                    # Try to fight the closest opponent to 4
                     tapClosestOpponent 4
                 fi
                 ;;
             5)
-                # input tap 820 1400
-                getColor 820 1400 # Opponent 5
-                if [ "$RGB" == "aaf2bb" ]; then # Looking for the button
+                # Check if opponent exists
+                getColor 820 1400
+                if [ "$RGB" == "aaf2bb" ]; then
+                    # Fight opponent
                     input tap 820 1400
                 else
+                    # Try to fight the closest opponent to 5
                     tapClosestOpponent 5
                 fi
                 ;;
             esac
-            sleep 2
-            input tap 550 1850
-            waitBattleFinish 2
-            if [ "$battleFailed" == false ]; then
-                input tap 550 1550 # Collect
+
+            # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
+            if [ $? == 0 ]; then
                 sleep 2
+                input tap 550 1850 # Battle
+                waitBattleFinish 2
+                if [ "$battleFailed" == false ]; then
+                    input tap 550 1550 # Collect
+                    sleep 2
+                fi
+                input tap 550 1550 # Finish battle
+                sleep 3
             fi
-            input tap 550 1550 # Finish battle
-            sleep 3
             ((COUNT = COUNT + 1)) # Increment
         done
 
@@ -1239,7 +1288,7 @@ function collectMerchants() {
 }
 
 # If red square, strenghen Crystal
-function strenghenCrystal() {
+function strengthenCrystal() {
     input tap 760 1030 # Crystal
     sleep 3
 
@@ -1415,7 +1464,7 @@ if [ "$doTwistedRealmBoss" == true ]; then
     if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
 fi
 if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+if [ "$doStrengthenCrystal" == true ]; then strengthenCrystal; fi
 if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
 if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
