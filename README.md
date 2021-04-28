@@ -249,7 +249,8 @@ The script acts depending on a set of variables. In order to change these, open 
 
 | Variable                    |   Type   | Description                                                                                                              | Default |
 | :-------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `maxCampaignFights`         | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `10`   |
+| `maxCampaignFights`         | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `5`   |
+| `maxKingsTowerFights`       | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |  `5`   |
 | `totalAmountArenaTries`     | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountGuildBossTries` | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 

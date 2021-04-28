@@ -1009,24 +1009,76 @@ function legendsTournament() {
     verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
 }
 
+# Battles in King's Towers. Params: X, Y
+function battleKingsTower() {
+    local COUNT=0
+    input tap $1 $2 # Tap chosen tower
+    sleep 2
+
+    # Check if inside tower
+    getColor 550 150
+    if [ "$RGB" == "1a1212" ]; then
+        input tap 540 1350 # Challenge
+        wait
+
+        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
+        getColor 550 150
+        while [ "$COUNT" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
+            input tap 550 1850 # Battle
+            waitBattleFinish 2
+
+            # Check if win or lose battle
+            if [ "$battleFailed" == false ]; then
+                input tap 550 1850 # Collect
+                sleep 4
+
+                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
+                # Tap top of the screen to close any possible Limited Offers
+                # getColor 550 150
+                # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
+                #     input tap 550 75 # Tap top of the screen to close Limited Offer
+                #     wait
+                #     getColor 550 150
+                #     if [ "$RGB" != "1a1212" ]; then # think i remember it needs two taps to close offer
+                #         input tap 550 75 # Tap top of the screen to close Limited Offer
+                #         wait
+                # fi
+
+                input tap 540 1350 # Challenge
+                sleep 2
+            elif [ "$battleFailed" == true ]; then
+                input tap 550 1720    # Try again
+                ((COUNT = COUNT + 1)) # Increment
+                wait
+            fi
+
+            # Check if reached daily limit / kicked us out of battle screen
+            getColor 550 150
+        done
+
+        # Return from chosen tower / battle
+        input tap 70 1810
+        sleep 3
+        getColor 550 150
+        if [ "$RGB" = "1a1212" ]; then input tap 70 1810; fi # In case still in tower, exit once more
+        sleep 2
+    fi
+}
+
 # Battles once in the kings tower
 function kingsTower() {
-    input tap 500 870
+    input tap 500 870 # King's Tower
     sleep 2
-    input tap 550 900
-    sleep 2
-    input tap 540 1350
-    sleep 2
-    input tap 550 1850
-    sleep 2
-    input tap 80 1460
-    sleep 1
-    input tap 230 960
-    wait
-    input tap 70 1810
-    wait
-    input tap 70 1810
 
+    # Towers
+    battleKingsTower 550 900  # Main Tower
+    battleKingsTower 250 500  # Tower of Light
+    battleKingsTower 800 500  # The Brutal Citadel
+    battleKingsTower 250 1400 # The World Tree
+    battleKingsTower 800 1400 # The Forsaken Necropolis
+
+    # Exit
+    input tap 70 1810
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
@@ -1386,7 +1438,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+# test 630 1520 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
