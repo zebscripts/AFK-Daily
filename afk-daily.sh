@@ -519,8 +519,8 @@ challengeBoss() {
         echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
         COUNT=0
 
-        getColor 20 1200                        # Check for battle screen
-        while [ "$RGB" = "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+        # Check for battle screen
+        while [ "$(testColorOR 20 1200 eaca95)" = "1" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 10                 # Wait until battle is over
 
@@ -532,8 +532,7 @@ challengeBoss() {
 
                     # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
                     # Tap top of the screen to close any possible Limited Offers
-                    # input tap 550 75
-                    # sleep 2
+                    # inputTapSleep 550 75
 
                     testColorORTapSleep 550 740 f2d79f 5                        # Check if boss
                 else
@@ -545,8 +544,6 @@ challengeBoss() {
 
                 COUNT=$((COUNT + 1))            # Increment
             fi
-
-            getColor 20 1200                    # Check for battle screen
         done
 
         # Return to campaign
@@ -615,8 +612,7 @@ teamBounties() {
         inputTapSleep 600 1320 1
     fi
     ## For testing only! Keep as comment ##
-    # input tap 600 1320
-    # sleep 1
+    # inputTapSleep 600 1320 1
     ## End of testing ##
     inputTapSleep 910 1770
     inputTapSleep 780 1550 1                    # Collect all
@@ -627,7 +623,7 @@ teamBounties() {
 }
 
 # Attempts to tap the closest Arena of Heroes opponent. Params: opponent
-function tapClosestOpponent() {
+tapClosestOpponent() {
     # Depending on the opponent number sent as a parameter ($1), this function
     # would attempt to check if there's an opponent above the one sent.
     # If there isn't, check the one above that one and so on until one is found.
@@ -635,44 +631,37 @@ function tapClosestOpponent() {
     case $1 in
     1)
         # Refresh
-        input tap 815 540
-        sleep 2
+        inputTapSleep 815 540
 
         # Attempt to fight $arenaHeroesOpponent opponent, and if not present, skip battle
         case $arenaHeroesOpponent in
         1)
             # Check if opponent 1 exists and fight if true
-            getColor 820 700
-            if [ "$RGB" == "a7f1b7" ]; then input tap 820 700; else return 1; fi
+            if [ "$(testColorOR 820 700 a7f1b7)" = "1" ];then inputTapSleep 820 700 0; else return 1; fi
             ;;
         2)
             # Check if opponent 2 exists and fight if true
-            getColor 820 870
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 870; else return 1; fi
+            if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then inputTapSleep 820 870 0; else return 1; fi
             ;;
         3)
             # Check if opponent 3 exists and fight if true
-            getColor 820 1050
-            if [ "$RGB" == "a7f1b7" ]; then input tap 820 1050; else return 1; fi
+            if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then inputTapSleep 820 1050 0; else return 1; fi
             ;;
         4)
             # Check if opponent 4 exists and fight if true
-            getColor 820 1220
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 1220; else return 1; fi
+            if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then inputTapSleep 820 1220 0; else return 1; fi
             ;;
         5)
             # Check if opponent 5 exists and fight if true
-            getColor 820 1400
-            if [ "$RGB" == "aaf2bb" ]; then input tap 820 1400; else return 1; fi
+            if [ "$(testColorOR 820 1400 aaf2bb)" = "1" ]; then inputTapSleep 820 1400 0; else return 1; fi
             ;;
         esac
         ;;
     2)
         # Check if opponent 1 exists
-        getColor 820 700
-        if [ "$RGB" == "a7f1b7" ]; then
+        if [ "$(testColorOR 820 700 a7f1b7)" = "1" ]; then
             # Fight opponent
-            input tap 820 700
+            inputTapSleep 820 700 0
         else
             # Try to fight the closest opponent to 2
             tapClosestOpponent 1
@@ -680,10 +669,9 @@ function tapClosestOpponent() {
         ;;
     3)
         # Check if opponent 2 exists
-        getColor 820 870
-        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+        if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then
             # Fight opponent
-            input tap 820 870
+            inputTapSleep 820 870 0
         else
             # Try to fight the closest opponent to 3
             tapClosestOpponent 2
@@ -691,10 +679,9 @@ function tapClosestOpponent() {
         ;;
     4)
         # Check if opponent 3 exists
-        getColor 820 1050
-        if [ "$RGB" == "a7f1b7" ]; then
+        if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then
             # Fight opponent
-            input tap 820 1050
+            inputTapSleep 820 1050 0
         else
             # Try to fight the closest opponent to 4
             tapClosestOpponent 3
@@ -702,10 +689,9 @@ function tapClosestOpponent() {
         ;;
     5)
         # Check if opponent 4 exists
-        getColor 820 1220
-        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+        if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then
             # Fight opponent
-            input tap 820 1220
+            inputTapSleep 820 1220 0
         else
             # Try to fight the closest opponent to 5
             tapClosestOpponent 4
@@ -730,8 +716,7 @@ arenaOfHeroes() {
         COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
-            # input tap 815 540
-            # wait
+            # inputTapSleep 815 540
 
             # Fight specific opponent
             #                                Free         x1
@@ -743,8 +728,7 @@ arenaOfHeroes() {
             case $arenaHeroesOpponent in
                 1)
                     # Check if opponent exists
-                    getColor 820 700
-                    if [ "$RGB" == "a7f1b7" ]; then
+                     if [ "$(testColorOR 820 700 a7f1b7)" = "1" ]; then
                         # Fight opponent
                         inputTapSleep 820 700 0
                     else
@@ -754,8 +738,7 @@ arenaOfHeroes() {
                     ;;
                 2)
                     # Check if opponent exists
-                    getColor 820 870
-                    if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then
                         # Fight opponent
                         inputTapSleep 820 870 0
                     else
@@ -765,8 +748,7 @@ arenaOfHeroes() {
                     ;;
                 3)
                     # Check if opponent exists
-                    getColor 820 1050
-                    if [ "$RGB" == "a7f1b7" ]; then
+                    if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then
                         # Fight opponent
                         inputTapSleep 820 1050 0
                     else
@@ -776,8 +758,7 @@ arenaOfHeroes() {
                     ;;
                 4)
                     # Check if opponent exists
-                    getColor 820 1220
-                    if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then
                         # Fight opponent
                         inputTapSleep 820 1220 0
                     else
@@ -787,8 +768,7 @@ arenaOfHeroes() {
                     ;;
                 5)
                     # Check if opponent exists
-                    getColor 820 1400
-                    if [ "$RGB" == "aaf2bb" ]; then
+                    if [ "$(testColorOR 820 1400 aaf2bb)" = "1" ]; then
                         # Fight opponent
                         inputTapSleep 820 1400 0
                     else
@@ -799,17 +779,7 @@ arenaOfHeroes() {
             esac
 
             # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
-            if [ $? == 0 ]; then
-                wait
-                input tap 550 1850 # Battle
-                waitBattleFinish 2
-                if [ "$battleFailed" == false ]; then
-                    input tap 550 1550 # Collect
-                    sleep 2
-                fi
-                input tap 550 1550 # Finish battle
-                sleep 3
-                
+            if [ $? = 0 ]; then
                 wait
                 inputTapSleep 550 1850 0        # Battle
                 waitBattleFinish 2
@@ -843,8 +813,7 @@ legendsTournament() {
         inputTapSleep 740 1050
     fi
     ## For testing only! Keep as comment ##
-    # input tap 740 1050
-    # sleep 1
+    # inputTapSleep 740 1050 1
     ## End of testing ##
     if [ "$pvpEvent" = false ]; then
         inputTapSleep 550 900
@@ -901,8 +870,8 @@ guildHunts() {
     # Start checking for a finished Battle after 40 seconds
     # loopUntilRGB 85 420 380 ca9c5d
     # wait
-    # input tap 550 800
-    # input tap 550 800
+    # inputTapSleep 550 800 0
+    # inputTapSleep 550 800 0
     #wait
 
     # Wrizz
@@ -911,8 +880,7 @@ guildHunts() {
     COUNT=0
     until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
         # Check if its possible to fight wrizz
-        # getColor 710 1840
-        # if [ "$RGB" != "9de7bd" ]; then
+        # if [ "$(testColorOR 710 1840 9de7bd)" = "1" ]; then
         #     echo "Enough of wrizz! Going out."
         #     break
         # fi
@@ -956,8 +924,7 @@ twistedRealmBoss() {
         inputTapSleep 380 360 10
     fi
     ## For testing only! Keep as comment ##
-    # input tap 380 360
-    # sleep 10
+    # inputTapSleep 380 360 10
     ## End of testing ##
 
     inputTapSleep 820 820
