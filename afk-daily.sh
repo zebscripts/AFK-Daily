@@ -114,7 +114,7 @@ testColorOR() {
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
-        if [ "$RGB" = "${i}" ]; then            # color found?
+        if [ "$RGB" = "${!i}" ]; then           # color found?
             result=1                            # At the first color found OR is break, result 1
             break
         fi
@@ -129,7 +129,7 @@ testColorNAND() {
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
-        if [ "$RGB" = "${i}" ]; then            # color found?
+        if [ "$RGB" = "${!i}" ]; then           # color found?
             result=0                            # At the first color found NAND is break, result 0
             break
         fi
