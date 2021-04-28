@@ -75,7 +75,7 @@ As of now, the script is capable of completing the following inside the game:
 - Strengthen the Resonating Crystal
 - Summon one Hero with Companion Points
 - Collect Oak Inn presents (necessary to enable "Hide Inn Heroes" in the game settings)
-- Collect daily Quest Chests
+- Collect daily and weekly quest chests
 - Collect Mail
 - Collect Daily/Weekly/Monthly rewards from Merchants
 
@@ -322,7 +322,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 - [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
 - [x] Fight the twisted realm as well
 - [ ] Collect Soulstones
-- [ ] Collect weekly quests
+- [x] Collect weekly quests
 - [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
 - [x] Make script output pretty
 - [ ] Test for screen size with `adb shell wm size`
