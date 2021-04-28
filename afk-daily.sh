@@ -1294,7 +1294,7 @@ function strengthenCrystal() {
 
     # TODO: Detect if free slot, and take it.
 
-    input tap 550 1850                          # Strenghen Crystal
+    input tap 550 1850                          # Strengthen Crystal
     sleep 3
     getColor 700 1250
     if [ "$RGB" == "9aedc4" ]; then
@@ -1316,7 +1316,7 @@ function strengthenCrystal() {
 
     input tap 70 1810
     wait
-    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
+    verifyRGB 20 1775 d49a61 "Strengthened resonating Crystal." "Failed to Strengthen Resonating Crystal."
 }
 
 # Let's do a "free" summon
