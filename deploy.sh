@@ -317,7 +317,6 @@ checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
-checkDate
 
 # Transform long options to short ones
 for arg in "$@"; do
@@ -359,6 +358,8 @@ do
             ;;
     esac
 done
+
+checkDate
 
 # Check where to deploy
 if [ "$device" == "Bluestacks" ]; then
