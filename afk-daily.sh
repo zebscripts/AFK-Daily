@@ -555,7 +555,7 @@ function challengeBoss() {
         getColor 20 1200
         while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
             input tap 550 1850  # Battle
-            sleep 2
+            sleep 2.5
             doAuto
             doSpeed
             waitBattleFinish 10 # Wait until battle is over
@@ -953,12 +953,12 @@ function arenaOfHeroes() {
                 fi
                 ;;
             esac
-            
+
             # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
             if [ $? == 0 ]; then
                 sleep 2
                 input tap 550 1850 # Battle
-                sleep 2
+                sleep 2.5
                 doSkip
                 waitBattleFinish 2
                 if [ "$battleFailed" == false ]; then
@@ -1007,7 +1007,7 @@ function legendsTournament() {
     else
         input tap 550 1450
     fi
-    sleep 2
+    sleep 2.5
     doSkip
     sleep 3
     input tap 550 1550
@@ -1175,7 +1175,7 @@ function twistedRealmBoss() {
         sleep 2
         input tap 550 1850
 
-        sleep 2
+        sleep 2.5
         doAuto
         doSpeed
 
