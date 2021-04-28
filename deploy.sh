@@ -130,7 +130,7 @@ doKingsTower=true
 doGuildHunts=true
 doTwistedRealmBoss=true
 doBuyFromStore=true
-doStrenghenCrystal=true
+doStrengthenCrystal=true
 doCompanionPointsSummon=false
 doCollectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 
@@ -174,7 +174,7 @@ function validateConfig() {
         $doGuildHunts || -z \
         $doTwistedRealmBoss || -z \
         $doBuyFromStore || -z \
-        $doStrenghenCrystal || -z \
+        $doStrengthenCrystal || -z \
         $doCompanionPointsSummon || -z \
         $doCollectOakPresents || -z \
         $doCollectQuestChests || -z \
