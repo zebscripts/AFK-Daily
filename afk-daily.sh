@@ -84,7 +84,7 @@ readRGB() {
 getColor() {
     takeScreenshot
     readRGB "$1" "$2"
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $1 $2 > RGB: $RGB"; fi
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $1 $2 > RGB: $RGB" >&2; fi
 }
 
 # Verifies if X and Y have specific RGB. Params: X, Y, RGB, MessageSuccess, MessageFailure
@@ -103,7 +103,7 @@ verifyRGB() {
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] inputTapSleep $1 $2 $3"; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] inputTapSleep $1 $2 $3" >&2; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
@@ -142,7 +142,7 @@ testColorNAND() {
 # SLEEP default value is DEFAULT_SLEEP
 # if true, tap, else do nothing
 testColorORTapSleep() {
-    if testColorOR "$1" "$2" "$3" >/dev/null; then                              # if color found
+    if [ "$(testColorOR "$1" "$2" "$3")" = "1" ];then                           # if color found
         inputTapSleep  "$1" "$2" "${4:-$DEFAULT_SLEEP}"                         # tap & sleep
     fi
 }
@@ -198,7 +198,7 @@ switchTab() {
 # Loops until RGB is not equal. Params: Seconds, X, Y, RGB
 loopUntilRGB() {
     sleep "$1"
-    while testColorNAND "$2" "$3" "$4" >/dev/null; do
+    while [ "$(testColorNAND "$2" "$3" "$4")" = "1" ];do
         sleep 1
     done
 }
@@ -206,7 +206,7 @@ loopUntilRGB() {
 # Loops until RGB is equal. Params: Seconds, X, Y, RGB
 loopUntilNotRGB() {
     sleep "$1"
-    while testColorOR "$2" "$3" "$4" >/dev/null; do
+    while [ "$(testColorOR "$2" "$3" "$4")" = "1" ];do
         sleep 1
     done
 }
@@ -217,7 +217,7 @@ waitBattleFinish() {
     finished=false
     while [ $finished = false ]; do
         # First RGB local device, second bluestacks
-        if testColorOR 560 350 "b8894d" "b7894c" >/dev/null; then               # Victory
+        if [ "$(testColorOR 560 350 "b8894d" "b7894c")" = "1" ];then            # Victory
             battleFailed=false
             finished=true
         elif [ "$RGB" = "171932" ]; then                                        # Failed
@@ -244,31 +244,31 @@ oakSearchPresent() {
     input swipe 400 1600 400 310 50             # Swipe all the way down
     sleep 1
 
-    if testColorOR 540 990 "833f0e" >/dev/null; then                            # 1 red 833f0e blue 903da0
+    if [ "$(testColorOR 540 990 "833f0e")" = "1" ];then                         # 1 red 833f0e blue 903da0
         inputTapSleep 540 990 3                 # Tap present
         inputTapSleep 540 1650 1                # Ok
         inputTapSleep 540 1650 0                # Collect reward
         oakRes=1
     else
-        if testColorOR 540 800 "a21a1a" >/dev/null; then                        # 2 red a21a1a blue 9a48ab
+        if [ "$(testColorOR 540 800 "a21a1a")" = "1" ];then                     # 2 red a21a1a blue 9a48ab
             inputTapSleep 540 800 3
             inputTapSleep 540 1650 1            # Ok
             inputTapSleep 540 1650 0            # Collect reward
             oakRes=1
         else
-            if testColorOR 540 610 "aa2b27" >/dev/null; then                    # 3 red aa2b27 blue b260aa
+            if [ "$(testColorOR 540 610 "aa2b27")" = "1" ];then                 # 3 red aa2b27 blue b260aa
                 inputTapSleep 540 610 3
                 inputTapSleep 540 1650 1        # Ok
                 inputTapSleep 540 1650 0        # Collect reward
                 oakRes=1
             else
-                if testColorOR 540 420 "bc3f36" >/dev/null; then                # 4 red bc3f36 blue c58c7b
+                if [ "$(testColorOR 540 420 "bc3f36")" = "1" ];then             # 4 red bc3f36 blue c58c7b
                     inputTapSleep 540 420 3
                     inputTapSleep 540 1650 1                                    # Ok$
                     inputTapSleep 540 1650 0                                    # Collect reward
                     oakRes=1
                 else
-                    if testColorOR 540 220 "bb3734" >/dev/null; then            # 5 red bb3734 blue 9442a5
+                    if [ "$(testColorOR 540 220 "bb3734")" = "1" ];then         # 5 red bb3734 blue 9442a5
                         inputTapSleep 540 220 3
                         inputTapSleep 540 1650 1                                # Ok
                         inputTapSleep 540 1650 0                                # Collect reward
@@ -285,16 +285,16 @@ oakSearchPresent() {
 # Search available present tabs in Oak Inn
 oakPresentTab() {
     oakPresentTabs=0
-    if testColorOR 270 1800 "c79663" >/dev/null; then                           # 1 gift c79663
+    if [ "$(testColorOR 270 1800 "c79663")" = "1" ];then                        # 1 gift c79663
         oakPresentTabs=$((oakPresentTabs + 1000))                               # Increment
     fi
-    if testColorOR 410 1800 "bb824f" >/dev/null; then                           # 2 gift bb824f
+    if [ "$(testColorOR 410 1800 "bb824f")" = "1" ];then                        # 2 gift bb824f
         oakPresentTabs=$((oakPresentTabs + 200))                                # Increment
     fi
-    if testColorOR 550 1800 "af6e3b" >/dev/null; then                           # 3 gift af6e3b
+    if [ "$(testColorOR 550 1800 "af6e3b")" = "1" ];then                        # 3 gift af6e3b
         oakPresentTabs=$((oakPresentTabs + 30))                                 # Increment
     fi
-    if testColorOR 690 1800 "b57b45" >/dev/null; then                           # 4 gift b57b45
+    if [ "$(testColorOR 690 1800 "b57b45")" = "1" ];then                        # 4 gift b57b45
         oakPresentTabs=$((oakPresentTabs + 4))                                  # Increment
     fi
 }
@@ -508,7 +508,7 @@ lootAfkChest() {
 # Challenges a boss in the campaign
 challengeBoss() {
     inputTapSleep 550 1650 1
-    testColorORTapSleep 550 740 "f2d79f"          # Check if boss
+    testColorORTapSleep 550 740 "f2d79f"        # Check if boss
     wait
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
@@ -523,7 +523,7 @@ challengeBoss() {
 
             # Check battle result
             if [ "$battleFailed" = false ]; then                                # Win
-                if testColorOR 550 1670 "e2dddc" >/dev/null; then               # Check for next stage
+                if [ "$(testColorOR 550 1670 "e2dddc")" = "1" ];then            # Check for next stage
                     inputTapSleep 550 1670 6    # Next Stage
                     sleep 6
 
@@ -635,7 +635,7 @@ arenaOfHeroes() {
     inputTapSleep 980 410
     inputTapSleep 540 1800
 
-    if testColorNAND 200 1800 "382314" "382214" >/dev/null; then                # Check for new season
+    if [ "$(testColorNAND 200 1800 "382314" "382214")" = "1" ];then             # Check for new season
         COUNT=0
         until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
@@ -736,7 +736,7 @@ kingsTower() {
 guildHunts() {
     inputTapSleep 380 360 10
 
-    if testColorOR 380 500 "793929" >/dev/null; then                            # Check for fortune chest
+    if [ "$(testColorOR 380 500 "793929")" = "1" ];then                         # Check for fortune chest
         inputTapSleep 560 1300
         inputTapSleep 540 1830
     fi
@@ -776,10 +776,10 @@ guildHunts() {
 
     inputTapSleep 970 890 1                     # Soren
 
-    if testColorOR 715 1815 "8ae5c4" >/dev/null; then                           # If Soren is open
+    if [ "$(testColorOR 715 1815 "8ae5c4")" = "1" ];then                        # If Soren is open
         quickBattleGuildBosses
     elif [ "$canOpenSoren" = true ]; then                                       # If Soren is closed
-        if testColorOR 580 1753 "fae0ac" >/dev/null; then                       # If soren is "openable"
+        if [ "$(testColorOR 580 1753 "fae0ac")" = "1" ];then                    # If soren is "openable"
             inputTapSleep 550 1850
             inputTapSleep 700 1250 1
             quickBattleGuildBosses
@@ -810,7 +810,7 @@ twistedRealmBoss() {
 
     inputTapSleep 820 820
 
-    if testColorOR 540 1220 "9aedc1" >/dev/null; then                           # Check if TR is being calculated
+    if [ "$(testColorOR 540 1220 "9aedc1")" = "1" ];then                        # Check if TR is being calculated
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         inputTapSleep 550 1850
@@ -854,7 +854,7 @@ collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 250
 
-    while testColorOR 700 670 "82fdf5" >/dev/null; do                           # Collect Quests
+    while [ "$(testColorOR 700 670 "82fdf5")" = "1" ];do                        # Collect Quests
         inputTapSleep 930 680
     done
 
@@ -887,7 +887,7 @@ collectMerchants() {
     inputTapSleep 120 300 3                     # Merchants
     inputTapSleep 510 1820                      # Merchant Ship
 
-    if testColorNAND 375 940 "0b080a" >/dev/null; then                          # Checks for Special Daily Bundles
+    if [ "$(testColorNAND 375 940 "0b080a")" = "1" ];then                       # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -895,7 +895,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 280 1620 1                    # Weekly Deals
 
-    if testColorNAND 375 940 "050a0f" >/dev/null; then                          # Checks for Special Weekly Bundles
+    if [ "$(testColorNAND 375 940 "050a0f")" = "1" ];then                       # Checks for Special Weekly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -903,7 +903,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 460 1620 1                    # Monthly Deals
 
-    if testColorNAND 375 940 "0b080a" >/dev/null; then                          # Checks for Special Monthly Bundles
+    if [ "$(testColorNAND 375 940 "0b080a")" = "1" ];then                       # Checks for Special Monthly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750
@@ -930,7 +930,7 @@ nobleTavern() {
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    until testColorOR 875 835 "f38d67" >/dev/null; do                           # Looking for heart
+    until [ "$(testColorOR 875 835 "f38d67")" = "1" ];do                        # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
     done
 
@@ -1017,7 +1017,7 @@ switchTab "Ranhorn"
 sleep 1
 switchTab "Campaign" true
 
-if testColorOR 740 205 "ffc15b" >/dev/null; then                                # Check if game is being updated
+if [ "$(testColorOR 740 205 "ffc15b")" = "1" ];then                             # Check if game is being updated
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
