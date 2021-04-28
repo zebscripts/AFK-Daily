@@ -1,9 +1,9 @@
 <div align="center">
-	<!-- <img src="Stuff/AppIcon-readme.png" width="200" height="200"> -->
-	<h1>afk-daily.sh</h1>
-	<p>
-		<b>Automate daily activities within the AFK Arena game</b>
-	</p>
+  <!-- <img src="Stuff/AppIcon-readme.png" width="200" height="200"> -->
+  <h1>afk-daily.sh</h1>
+  <p>
+    <b>Automate daily activities within the AFK Arena game</b>
+  </p>
 
   <!-- Badges -->
   <!-- Script status -->
