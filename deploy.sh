@@ -347,6 +347,7 @@ do
             ;;
         h)
             printInfo "Usage: ./deploy.sh [-a <ACCOUNT>] [-d <DEVICE>]"
+            exit 0
             ;;
         :)
             printWarn "Argument required by this option: $OPTARG"
