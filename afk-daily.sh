@@ -872,23 +872,28 @@ function legendsTournament() {
 
 # Battles in King's Towers. Params: X, Y
 function battleKingsTower() {
-    _battleKingsTower_COUNTER=0
-    input tap $1 $2 # tap chosen tower
+    local COUNT=0
+    input tap $1 $2 # Tap chosen tower
     sleep 2
-    getColor 550 150                # upper ui turns dark brown if in a tower
-    if [ "$RGB" == "1a1212" ]; then # tower open
-        input tap 540 1350          # tap "Challenge"
+
+    # Check if inside tower
+    getColor 550 150
+    if [ "$RGB" == "1a1212" ]; then
+        input tap 540 1350 # Challenge
         wait
-        getColor 550 150 # change $RGB from previous getColor call
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_battleKingsTower_COUNTER" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
-            input tap 550 1850 # tap "Battle"
+        getColor 550 150
+        while [ "$COUNT" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
+            input tap 550 1850 # Battle
             waitBattleFinish 2
-            if [ "$battleFailed" == false ]; then # Win
-                input tap 550 1850                # "Click to Continue"
-                wait
-                # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
+
+            # Check if win or lose battle
+            if [ "$battleFailed" == false ]; then
+                input tap 550 1850 # Collect
+                sleep 4
+
+                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
                 # Tap top of the screen to close any possible Limited Offers
                 # getColor 550 150
                 # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
@@ -899,29 +904,31 @@ function battleKingsTower() {
                 #         input tap 550 75 # Tap top of the screen to close Limited Offer
                 #         wait
                 # fi
-                input tap 540 1350 # tap "Challenge"
-                wait
-            elif [ "$battleFailed" == true ]; then                            # Lose
-                input tap 550 1720                                            # tap "Try Again"
-                ((_battleKingsTower_COUNTER = _battleKingsTower_COUNTER + 1)) # Increment
+
+                input tap 540 1350 # Challenge
+                sleep 2
+            elif [ "$battleFailed" == true ]; then
+                input tap 550 1720    # Try again
+                ((COUNT = COUNT + 1)) # Increment
                 wait
             fi
-            getColor 550 150 # Check if reached daily limit / kicked us out of battle screen
+
+            # Check if reached daily limit / kicked us out of battle screen
+            getColor 550 150
         done
 
-        input tap 70 1810 # exit chosen tower / battle
-        wait
+        # Return from chosen tower / battle
+        input tap 70 1810
+        sleep 3
         getColor 550 150
-        if [ "$RGB" = "1a1212" ]; then # still in chosen tower
-            input tap 70 1810          # exit chosen tower
-        fi
-        wait
+        if [ "$RGB" = "1a1212" ]; then input tap 70 1810; fi # In case still in tower, exit once more
+        sleep 2
     fi
 }
 
 # Battles once in the kings tower
 function kingsTower() {
-    input tap 500 870 # tap King's Tower
+    input tap 500 870 # King's Tower
     sleep 2
 
     # Towers
@@ -931,8 +938,8 @@ function kingsTower() {
     battleKingsTower 250 1400 # The World Tree
     battleKingsTower 800 1400 # The Forsaken Necropolis
 
-    input tap 70 1810 # exit King's Tower
-
+    # Exit
+    input tap 70 1810
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }

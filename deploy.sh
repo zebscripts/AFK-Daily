@@ -102,8 +102,8 @@ waitForUpdate=true
 endAt="championship"
 
 # Repetitions
-maxCampaignFights=10
-maxKingsTowerFights=10
+maxCampaignFights=5
+maxKingsTowerFights=5
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 
