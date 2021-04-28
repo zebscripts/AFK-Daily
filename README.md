@@ -68,7 +68,7 @@ As of now, the script is capable of completing the following inside the game:
 - Send Heroes on Solo and Team Bounty Quests
 - Fight in the Arena of Heroes
 - Fight in the Legends Tournament
-- Fight in the Kings Tower
+- Fight in the available King's Towers
 - Fight Wrizz and Soren if available. Can also open Soren for you.
 - Fight in the Twisted Realm (necessary to have at least fought once against each TR boss for the game to save your formation)
 - Buy various items from the Store
@@ -318,7 +318,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 
 - [x] Add some sort of config, ideally a `./deploy.sh config`
 - [x] Check if there are Bounty Quests to collect before sending out heroes on quests
-- [ ] Fight in more than just the main tower
+- [x] Fight in more than just the main tower
 - [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
 - [x] Fight the twisted realm as well
 - [ ] Collect Soulstones
