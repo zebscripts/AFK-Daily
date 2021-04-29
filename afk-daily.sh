@@ -1140,16 +1140,16 @@ function guildHunts() {
         fi
     fi
 
-    # Return to Tab if $doGuildHunts == false
-    if [ "$doGuildHunts" == false ]; then
+    # Return to Tab if $doTwistedRealmBoss == false
+    if [ "$doTwistedRealmBoss" == false ]; then
         input tap 70 1810
-        wait
+        sleep 3
         input tap 70 1810
-        sleep 1
+        sleep 3
         verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     else
         input tap 70 1810
-        sleep 1
+        sleep 2
         verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     fi
 }
