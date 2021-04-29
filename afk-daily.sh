@@ -1246,7 +1246,7 @@ function buyFromStore() {
             wait
         fi
         getColor 910 850 # check top row, 4th tile
-        if [ "$RGB" == "9f63d1" ] || [ "$RGB" == "a569d7" ]; then 
+        if [ "$RGB" == "9f63d1" ] || [ "$RGB" == "a569d7" ] || [ "$RGB" == "a66ad7" ]; then 
             buyStoreItem 910 850
             wait
         fi
