@@ -178,6 +178,38 @@ loopUntilNotRGB() {
     done
 }
 
+# Click on auto if not already enabled
+doAuto() {
+    getColor 760 1440 # On:743b29 Off:332b2b
+    if [ "$RGB" == "332b2b" ]; then input tap 760 1440; fi
+}
+
+# Click on x4 if not already enabled
+doSpeed() {
+    getColor 990 1440 # On:743b2a Off:332b2b
+    if [ "$RGB" == "332b2b" ]; then input tap 990 1440; fi
+}
+
+# Click on skip if avaible
+doSkip() {
+    getColor 760 1440 # Exists: 502e1d
+    if [ "$RGB" == "502e1d" ]; then input tap 760 1440; fi
+}
+
+# Waits until battle starts
+waitBattleStart() {
+    # Check if pause button is present
+    getColor 110 1465 # 482f1f
+    until [ "$RGB" == "482f1f" ]; do
+        # Maybe pause button doesn't exist, so instead check for a skip button
+        getColor 760 1440 # 502e1d
+        if [ "$RGB" == "502e1d" ]; then return; fi
+
+        # In case none were found, try again starting with the pause button
+        getColor 110 1465 # 482f1f
+    done
+}
+
 # Waits until a battle has ended. Params: Seconds
 waitBattleFinish() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
@@ -552,6 +584,9 @@ challengeBoss() {
         # Check for battle screen
         while testColorOR 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0            # Battle
+            waitBattleStart
+            doAuto
+            doSpeed
             waitBattleFinish 10                 # Wait until battle is over
 
             # Check battle result
@@ -819,6 +854,8 @@ arenaOfHeroes() {
             if [ $res = 0 ]; then
                 wait
                 inputTapSleep 550 1850 0        # Battle
+                waitBattleStart
+                doSkip
                 waitBattleFinish 2
                 if [ "$battleFailed" = false ]; then
                     inputTapSleep 550 1550      # Collect
@@ -854,22 +891,25 @@ legendsTournament() {
     # inputTapSleep 740 1050 1
     ## End of testing ##
     if [ "$pvpEvent" = false ]; then
-        inputTapSleep 550 900
+        inputTapSleep 550 900 # Legend's Challenger Tournament
     else
-        inputTapSleep 550 1450
+        inputTapSleep 550 1450 # Legend's Challenger Tournament
     fi
-    inputTapSleep 550 280 3
-    inputTapSleep 550 1550 3
-    inputTapSleep 1000 1800
-    inputTapSleep 990 380
+    inputTapSleep 550 280 3                     # Chest
+    inputTapSleep 550 1550 3                    # Collect
+    inputTapSleep 1000 1800                     # Record
+    inputTapSleep 990 380                       # Close
 
     _legendsTournament_COUNT=0
     until [ "$_legendsTournament_COUNT" -ge "$totalAmountArenaTries-2" ]; do    # Repeat a battle for as long as totalAmountArenaTries
-        inputTapSleep 550 1840 4
-        inputTapSleep 800 1140 4
-        inputTapSleep 550 1850 4
-        inputTapSleep 770 1470 4
-        inputTapSleep 550 800 4
+        inputTapSleep 550 1840 4                # Challenge
+        inputTapSleep 800 1140 4                # Third opponent
+        inputTapSleep 550 1850 4                # Begin Battle
+        # inputTapSleep 770 1470 4
+        waitBattleStart
+        doSkip
+        sleep 4
+        inputTapSleep 550 800 4                 # Tap anywhere to close
         _legendsTournament_COUNT=$((_legendsTournament_COUNT + 1))              # Increment
     done
 
@@ -994,12 +1034,12 @@ guildHunts() {
         fi
     fi
 
-    if [ "$doGuildHunts" = false ]; then        # Return to Tab if $doGuildHunts = false
-        inputTapSleep 70 1810
-        inputTapSleep 70 1810 1
+    if [ "$doTwistedRealmBoss" = false ]; then        # Return to Tab if $doTwistedRealmBoss = false
+        inputTapSleep 70 1810 3
+        inputTapSleep 70 1810 3
         verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     else
-        inputTapSleep 70 1810 1
+        inputTapSleep 70 1810
         verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     fi
 }
@@ -1021,12 +1061,14 @@ twistedRealmBoss() {
     if testColorOR 540 1220 9aedc1;then         # Check if TR is being calculated
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
-        inputTapSleep 550 1850
-        inputTapSleep 550 1850 0
-
+        inputTapSleep 550 1850                  # Twisted Realm
+        inputTapSleep 550 1850 0                # Challenge
+        waitBattleStart
+        doAuto
+        doSpeed
+        
         loopUntilRGB 30 420 380 ca9c5d          # Start checking for a finished Battle after 40 seconds
 
-        sleep 1
         inputTapSleep 550 800 3
         inputTapSleep 550 800
         # TODO: Repeat battle if variable says so
