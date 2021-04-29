@@ -325,9 +325,9 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 - [x] Collect weekly quests
 - [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
 - [x] Make script output pretty
-- [ ] Test for screen size with `adb shell wm size`
+- [x] Test for screen size with `adb shell wm size`
 - [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
-- [ ] Actually try to beat the campaign level every 3 days to maximize farm
+- [x] Actually try to beat the campaign level every 3 days to maximize farm
 - [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
 - [ ] Compatibility for users who aren't as advanced in the game:
   - [ ] Mercenaries
@@ -336,7 +336,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
 - [x] Collect daily rewards from Oak Inn
-- [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+- [x] [Summon one hero with companion points](https://github.com/zebscripts/AFK-Daily/discussions/34)
 
 ## Tips
 
