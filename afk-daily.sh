@@ -13,6 +13,7 @@ DEBUG=4
 DEFAULT_SLEEP=2                                 # equivalent to wait
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
+activeTab=""
 
 # Do not modify
 RGB=00000000
@@ -163,7 +164,7 @@ testColorORTapSleep() {
 loopUntilRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&1; fi
     sleep "$1"
-    while testColorNAND "$2" "$3" "$4";do
+    while testColorNAND "$2" "$3" "$4"; do
         sleep 1
     done
 }
@@ -172,7 +173,7 @@ loopUntilRGB() {
 loopUntilNotRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&1; fi
     sleep "$1"
-    while testColorOR "$2" "$3" "$4";do
+    while testColorOR "$2" "$3" "$4"; do
         sleep 1
     done
 }
@@ -202,6 +203,11 @@ waitBattleFinish() {
 # Switches to another tab. Params: <Tab name> <force>
 switchTab() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $*" >&1; fi
+    if [ "$1" = "$activeTab" ]; then
+        return;
+    else
+        activeTab="$1"
+    fi
     case "$1" in
         "Campaign")
             if [ "${2:-false}" = true ] || \
@@ -1149,7 +1155,7 @@ nobleTavern() {
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    until testColorOR 875 835 f38d67;do         # Looking for heart
+    until testColorOR 875 835 f38d67; do        # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
     done
 
