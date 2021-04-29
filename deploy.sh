@@ -103,7 +103,8 @@ waitForUpdate=true
 endAt="championship"
 
 # Repetitions
-maxCampaignFights=10
+maxCampaignFights=5
+maxKingsTowerFights=5
 totalAmountArenaTries=2+0
 totalAmountGuildBossTries=2+0
 
@@ -156,6 +157,7 @@ validateConfig() {
         $waitForUpdate || -z \
         $endAt || -z \
         $maxCampaignFights || -z \
+        $maxKingsTowerFights || -z \
         $totalAmountArenaTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
@@ -304,7 +306,7 @@ deploy() {
 clear
 
 checkAdb
-checkForUpdate
+#checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
