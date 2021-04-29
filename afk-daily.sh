@@ -1236,7 +1236,7 @@ function buyFromStore() {
     # Elite Hero Soulstones
     if [ "$buyStoreEliteStones" == true ]; then
         getColor 410 850 # check top row, 2nd tile
-        if [ "$RGB" == "9787c9" ]; then
+        if [ "$RGB" == "9787c9" ] || [ "$RGB" == "998aca" ]; then
             buyStoreItem 410 850
             wait
         fi
@@ -1246,7 +1246,7 @@ function buyFromStore() {
             wait
         fi
         getColor 910 850 # check top row, 4th tile
-        if [ "$RGB" == "9f63d1" ] || [ "$RGB" == "a569d7" ] || [ "$RGB" == "a66ad7" ]; then 
+        if [ "$RGB" == "9f63d1" ] || [ "$RGB" == "a569d7" ] || [ "$RGB" == "a66ad7" ] || [ "$RGB" == "a266d4" ] || [ "$RGB" == "a468d5" ]; then 
             buyStoreItem 910 850
             wait
         fi
@@ -1488,7 +1488,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 910 850 3 0.5
+test 910 850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
