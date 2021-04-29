@@ -180,33 +180,27 @@ loopUntilNotRGB() {
 
 # Click on auto if not already enabled
 doAuto() {
-    getColor 760 1440 # On:743b29 Off:332b2b
-    if [ "$RGB" == "332b2b" ]; then input tap 760 1440; fi
+    testColorORTapSleep 760 1440 332b2b 0       # On:743b29 Off:332b2b
 }
 
 # Click on x4 if not already enabled
 doSpeed() {
-    getColor 990 1440 # On:743b2a Off:332b2b
-    if [ "$RGB" == "332b2b" ]; then input tap 990 1440; fi
+    testColorORTapSleep 990 1440 332b2b 0       # On:743b2a Off:332b2b
 }
 
 # Click on skip if avaible
 doSkip() {
-    getColor 760 1440 # Exists: 502e1d
-    if [ "$RGB" == "502e1d" ]; then input tap 760 1440; fi
+    testColorORTapSleep 760 1440 502e1d 0       # Exists: 502e1d
 }
 
 # Waits until battle starts
 waitBattleStart() {
     # Check if pause button is present
-    getColor 110 1465 # 482f1f
-    until [ "$RGB" == "482f1f" ]; do
+    until testColorOR 110 1465 482f1f; do
         # Maybe pause button doesn't exist, so instead check for a skip button
-        getColor 760 1440 # 502e1d
-        if [ "$RGB" == "502e1d" ]; then return; fi
+        if testColorOR 760 1440 502e1d; then return; fi
 
         # In case none were found, try again starting with the pause button
-        getColor 110 1465 # 482f1f
     done
 }
 
@@ -591,7 +585,7 @@ challengeBoss() {
 
             # Check battle result
             if [ "$battleFailed" = false ]; then                                # Win
-                if testColorOR 550 1670 e2dddc;then              # Check for next stage
+                if testColorOR 550 1670 e2dddc;then                             # Check for next stage
                     inputTapSleep 550 1670 6    # Next Stage
                     sleep 6
 
@@ -783,7 +777,7 @@ arenaOfHeroes() {
     inputTapSleep 980 410
     inputTapSleep 540 1800
 
-    if testColorNAND 200 1800 382314 382214;then                 # Check for new season
+    if testColorNAND 200 1800 382314 382214;then                                # Check for new season
         _arenaOfHeroes_COUNT=0
         until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do      # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
@@ -969,11 +963,11 @@ kingsTower() {
     inputTapSleep 500 870                       # King's Tower
 
     # Towers
-    battleKingsTower 550 900  # Main Tower
-    battleKingsTower 250 500  # Tower of Light
-    battleKingsTower 800 500  # The Brutal Citadel
-    battleKingsTower 250 1400 # The World Tree
-    battleKingsTower 800 1400 # The Forsaken Necropolis
+    battleKingsTower 550 900                    # Main Tower
+    battleKingsTower 250 500                    # Tower of Light
+    battleKingsTower 800 500                    # The Brutal Citadel
+    battleKingsTower 250 1400                   # The World Tree
+    battleKingsTower 800 1400                   # The Forsaken Necropolis
 
     # Exit
     inputTapSleep 70 1810
@@ -1034,7 +1028,7 @@ guildHunts() {
         fi
     fi
 
-    if [ "$doTwistedRealmBoss" = false ]; then        # Return to Tab if $doTwistedRealmBoss = false
+    if [ "$doTwistedRealmBoss" = false ]; then  # Return to Tab if $doTwistedRealmBoss = false
         inputTapSleep 70 1810 3
         inputTapSleep 70 1810 3
         verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
@@ -1066,7 +1060,7 @@ twistedRealmBoss() {
         waitBattleStart
         doAuto
         doSpeed
-        
+
         loopUntilRGB 30 420 380 ca9c5d          # Start checking for a finished Battle after 40 seconds
 
         inputTapSleep 550 800 3
