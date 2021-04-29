@@ -113,7 +113,7 @@ verifyRGB() {
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
-    if [ $DEBUG -ge 9 ]; then echo "[DEBUG] inputTapSleep $*" >&1; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&1; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
@@ -123,10 +123,10 @@ inputTapSleep() {
 testColorOR() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&1; fi
     getColor "$1" "$2"                          # looking for color
-    _testColorOR_i=3
+    _testColorOR_i=$((3))
     while [ $_testColorOR_i -le $# ]; do        # loop in colors
-        if [ "$RGB" = "${!_testColorOR_i}" ]; then                              # color found?
-        # alternative: eval "echo \"\$$_testColorOR_i\""
+        _testColorOR_tmp=$(eval "echo \"\$$_testColorOR_i\"")
+        if [ "$RGB" = "$_testColorOR_tmp" ]; then                               # color found?
             return 0                            # At the first color found OR is break, return 1
         fi
         _testColorOR_i=$((_testColorOR_i+1))
@@ -139,10 +139,10 @@ testColorOR() {
 testColorNAND() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&1; fi
     getColor "$1" "$2"                          # looking for color
-    _testColorNAND_i=3
+    _testColorNAND_i=$((3))
     while [ $_testColorNAND_i -le $# ]; do      # loop in colors
-        if [ "$RGB" = "${!_testColorNAND_i}" ]; then                            # color found?
-        # alternative: eval "echo \"\$$_testColorNAND_i\""
+        _testColorNAND_tmp=$(eval "echo \"\$$_testColorNAND_i\"")
+        if [ "$RGB" = "${_testColorNAND_tmp}" ]; then                           # color found?
             return 1                            # At the first color found NAND is break, return 1
         fi
         _testColorNAND_i=$((_testColorNAND_i+1))
@@ -202,7 +202,7 @@ waitBattleFinish() {
 
 # Switches to another tab. Params: <Tab name> <force>
 switchTab() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $*" >&1; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $* [activeTab=$activeTab]" >&1; fi
     if [ "$1" = "$activeTab" ]; then
         return;
     else
@@ -815,7 +815,8 @@ arenaOfHeroes() {
             esac
 
             # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
-            if [ $? = 0 ]; then
+            res=$?
+            if [ $res = 0 ]; then
                 wait
                 inputTapSleep 550 1850 0        # Battle
                 waitBattleFinish 2
@@ -1155,7 +1156,7 @@ nobleTavern() {
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    until testColorOR 875 835 f38d67; do        # Looking for heart
+    until testColorOR 890 850 f4e38e; do        # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
     done
 
@@ -1211,7 +1212,7 @@ oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 630 1520 3 0.5
+# test 890 850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
