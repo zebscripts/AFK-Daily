@@ -46,7 +46,7 @@ test() {
 
 # Default wait time for actions
 wait() {
-    sleep 2
+    sleep $DEFAULT_SLEEP
 }
 
 # Starts the app
@@ -74,6 +74,7 @@ disableOrientation() {
 
 # Takes a screenshot and saves it
 takeScreenshot() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot" >&1; fi
     screencap "$SCREENSHOTLOCATION"
 }
 
@@ -88,13 +89,15 @@ readRGB() {
 
 # Sets RGB. Params: X, Y
 getColor() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&1; fi
     takeScreenshot
     readRGB "$1" "$2"
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&2; fi
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&1; fi
 }
 
 # Verifies if X and Y have specific RGB. Params: X, Y, RGB, MessageSuccess, MessageFailure
 verifyRGB() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $1 $2 $3" >&1; fi
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
         echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead."
@@ -109,56 +112,96 @@ verifyRGB() {
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
-    if [ $DEBUG -ge 9 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
+    if [ $DEBUG -ge 9 ]; then echo "[DEBUG] inputTapSleep $*" >&1; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
 
 # testColorOR <X> <Y> <COLOR> [<COLOR> ...]
-# if true, return 1, else 0
+# if true, return 0, else 1
 testColorOR() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&1; fi
     getColor "$1" "$2"                          # looking for color
-    i=3
-    while [ $i -le $# ]; do                     # loop in colors
-        if [ "$RGB" = "${!i}" ]; then           # color found?                  # alternative: eval "echo \"\$$i\""
-            result=1                            # At the first color found OR is break, result 1
-            break
+    _testColorOR_i=3
+    while [ $_testColorOR_i -le $# ]; do        # loop in colors
+        if [ "$RGB" = "${!_testColorOR_i}" ]; then                              # color found?
+        # alternative: eval "echo \"\$$_testColorOR_i\""
+            return 0                            # At the first color found OR is break, return 1
         fi
-        i=$((i+1))
+        _testColorOR_i=$((_testColorOR_i+1))
     done
-    echo "${result:-0}"                         # print result, if no result > result 0
+    return 1                                    # if no result > return 0
 }
 
 # testColorNAND <X> <Y> <COLOR> [<COLOR> ...]
-# if true, return 1, else 0
+# if true, return 0, else 1
 testColorNAND() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&1; fi
     getColor "$1" "$2"                          # looking for color
-    i=3
-    while [ $i -le $# ]; do                     # loop in colors
-        if [ "$RGB" = "${!i}" ]; then           # color found?                  # alternative: eval "echo \"\$$i\""
-            result=0                            # At the first color found NAND is break, result 0
-            break
+    _testColorNAND_i=3
+    while [ $_testColorNAND_i -le $# ]; do      # loop in colors
+        if [ "$RGB" = "${!_testColorNAND_i}" ]; then                            # color found?
+        # alternative: eval "echo \"\$$_testColorNAND_i\""
+            return 1                            # At the first color found NAND is break, return 1
         fi
-        i=$((i+1))
+        _testColorNAND_i=$((_testColorNAND_i+1))
     done
-    echo "${result:-1}"                         # print result, if no result > result 1
+    return 0                                    # If no result > return 0
 }
 
 # testColorORTapSleep <X> <Y> <COLOR> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 # if true, tap, else do nothing
 testColorORTapSleep() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
-    if [ "$(testColorOR "$1" "$2" "$3")" = "1" ];then                           # if color found
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&1; fi
+    if testColorOR "$1" "$2" "$3";then          # if color found
         inputTapSleep  "$1" "$2" "${4:-$DEFAULT_SLEEP}"                         # tap & sleep
     fi
 }
 
+# Loops until RGB is not equal. Params: Seconds, X, Y, RGB
+loopUntilRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&1; fi
+    sleep "$1"
+    while testColorNAND "$2" "$3" "$4";do
+        sleep 1
+    done
+}
+
+# Loops until RGB is equal. Params: Seconds, X, Y, RGB
+loopUntilNotRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&1; fi
+    sleep "$1"
+    while testColorOR "$2" "$3" "$4";do
+        sleep 1
+    done
+}
+
+# Waits until a battle has ended. Params: Seconds
+waitBattleFinish() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
+    sleep "$1"
+    finished=false
+    while [ $finished = false ]; do
+        # First RGB local device, second bluestacks
+        if testColorOR 560 350 b8894d b7894c;then                               # Victory
+            battleFailed=false
+            finished=true
+        elif [ "$RGB" = '171932' ]; then                                        # Failed
+            battleFailed=true
+            finished=true
+        # First RGB local device, second bluestacks
+        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
+            battleFailed=false
+            finished=true
+        fi
+        sleep 1
+    done
+}
+
 # Switches to another tab. Params: <Tab name> <force>
 switchTab() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $*" >&2; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $*" >&1; fi
     case "$1" in
         "Campaign")
             if [ "${2:-false}" = true ] || \
@@ -192,7 +235,10 @@ switchTab() {
                [ "$doBuyFromStore" = true ] || \
                [ "$doStrengthenCrystal" = true ] || \
                [ "$doCompanionPointsSummon" = true ] || \
-               [ "$doCollectOakPresents" = true ]
+               [ "$doCollectOakPresents" = true ] || \
+               [ "$doCollectQuestChests" = true ] || \
+               [ "$doCollectMail" = true ] || \
+               [ "$doCollectMerchantFreebies" = true ]
             then
                 inputTapSleep 110 1850
                 verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
@@ -205,49 +251,9 @@ switchTab() {
     esac
 }
 
-# Loops until RGB is not equal. Params: Seconds, X, Y, RGB
-loopUntilRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
-    sleep "$1"
-    while [ "$(testColorNAND "$2" "$3" "$4")" = "1" ];do
-        sleep 1
-    done
-}
-
-# Loops until RGB is equal. Params: Seconds, X, Y, RGB
-loopUntilNotRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
-    sleep "$1"
-    while [ "$(testColorOR "$2" "$3" "$4")" = "1" ];do
-        sleep 1
-    done
-}
-
-# Waits until a battle has ended. Params: Seconds
-waitBattleFinish() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
-    sleep "$1"
-    finished=false
-    while [ $finished = false ]; do
-        # First RGB local device, second bluestacks
-        if [ "$(testColorOR 560 350 b8894d b7894c)" = "1" ];then                # Victory
-            battleFailed=false
-            finished=true
-        elif [ "$RGB" = '171932' ]; then                                        # Failed
-            battleFailed=true
-            finished=true
-        # First RGB local device, second bluestacks
-        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
-            battleFailed=false
-            finished=true
-        fi
-        sleep 1
-    done
-}
-
 # Buys an item from the Store. Params: X, Y
 buyStoreItem() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyStoreItem $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyStoreItem $*" >&1; fi
     inputTapSleep "$1" "$2" 1
     inputTapSleep 550 1540 1
     inputTapSleep 550 1700 0
@@ -255,35 +261,35 @@ buyStoreItem() {
 
 # Searches for a "good" present in oak Inn
 oakSearchPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&1; fi
     input swipe 400 1600 400 310 50             # Swipe all the way down
     sleep 1
 
-    if [ "$(testColorOR 540 990 833f0e)" = "1" ];then                           # 1 red 833f0e blue 903da0
-        inputTapSleep 540 990 3                 # Tap present
-        inputTapSleep 540 1650 1                # Ok
-        inputTapSleep 540 1650 0                # Collect reward
+    if testColorOR 540 990 833f0e;then                                          # 1 red 833f0e blue 903da0
+        inputTapSleep 540 990 3                                                 # Tap present
+        inputTapSleep 540 1650 1                                                # Ok
+        inputTapSleep 540 1650 0                                                # Collect reward
         oakRes=1
     else
-        if [ "$(testColorOR 540 800 a21a1a)" = "1" ];then                       # 2 red a21a1a blue 9a48ab
+        if testColorOR 540 800 a21a1a;then                                      # 2 red a21a1a blue 9a48ab
             inputTapSleep 540 800 3
-            inputTapSleep 540 1650 1            # Ok
-            inputTapSleep 540 1650 0            # Collect reward
+            inputTapSleep 540 1650 1                                            # Ok
+            inputTapSleep 540 1650 0                                            # Collect reward
             oakRes=1
         else
-            if [ "$(testColorOR 540 610 aa2b27)" = "1" ];then                   # 3 red aa2b27 blue b260aa
+            if testColorOR 540 610 aa2b27;then                                  # 3 red aa2b27 blue b260aa
                 inputTapSleep 540 610 3
-                inputTapSleep 540 1650 1        # Ok
-                inputTapSleep 540 1650 0        # Collect reward
+                inputTapSleep 540 1650 1                                        # Ok
+                inputTapSleep 540 1650 0                                        # Collect reward
                 oakRes=1
             else
-                if [ "$(testColorOR 540 420 bc3f36)" = "1" ];then               # 4 red bc3f36 blue c58c7b
+                if testColorOR 540 420 bc3f36;then                              # 4 red bc3f36 blue c58c7b
                     inputTapSleep 540 420 3
-                    inputTapSleep 540 1650 1                                    # Ok$
+                    inputTapSleep 540 1650 1                                    # Ok
                     inputTapSleep 540 1650 0                                    # Collect reward
                     oakRes=1
                 else
-                    if [ "$(testColorOR 540 220 bb3734)" = "1" ];then           # 5 red bb3734 blue 9442a5
+                    if testColorOR 540 220 bb3734;then                          # 5 red bb3734 blue 9442a5
                         inputTapSleep 540 220 3
                         inputTapSleep 540 1650 1                                # Ok
                         inputTapSleep 540 1650 0                                # Collect reward
@@ -299,25 +305,25 @@ oakSearchPresent() {
 
 # Search available present tabs in Oak Inn
 oakPresentTab() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakPresentTab" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakPresentTab" >&1; fi
     oakPresentTabs=0
-    if [ "$(testColorOR 270 1800 c79663)" = "1" ];then                          # 1 gift c79663
-        oakPresentTabs=$((oakPresentTabs + 1000))                               # Increment
+    if testColorOR 270 1800 c79663;then         # 1 gift c79663
+        oakPresentTabs=$((oakPresentTabs + 1000)) # Increment
     fi
-    if [ "$(testColorOR 410 1800 bb824f)" = "1" ];then                          # 2 gift bb824f
-        oakPresentTabs=$((oakPresentTabs + 200))                                # Increment
+    if testColorOR 410 1800 bb824f;then         # 2 gift bb824f
+        oakPresentTabs=$((oakPresentTabs + 200)) # Increment
     fi
-    if [ "$(testColorOR 550 1800 af6e3b)" = "1" ];then                          # 3 gift af6e3b
-        oakPresentTabs=$((oakPresentTabs + 30))                                 # Increment
+    if testColorOR 550 1800 af6e3b;then         # 3 gift af6e3b
+        oakPresentTabs=$((oakPresentTabs + 30)) # Increment
     fi
-    if [ "$(testColorOR 690 1800 b57b45)" = "1" ];then                          # 4 gift b57b45
-        oakPresentTabs=$((oakPresentTabs + 4))                                  # Increment
+    if testColorOR 690 1800 b57b45;then         # 4 gift b57b45
+        oakPresentTabs=$((oakPresentTabs + 4))  # Increment
     fi
 }
 
 # Tries to collect a present from one Oak Inn friend
 oakTryCollectPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakTryCollectPresent" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakTryCollectPresent" >&1; fi
     oakSearchPresent                            # Search for a "good" present
     if [ $oakRes = 0 ]; then
         oakPresentTab                           # If no present found, search for other tabs
@@ -459,7 +465,7 @@ oakTryCollectPresent() {
 
 # Checks where to end the script
 checkWhereToEnd() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&1; fi
     case "$endAt" in
         "oak")
             switchTab "Ranhorn" true
@@ -504,7 +510,7 @@ checkWhereToEnd() {
 
 # Repeat a battle for as long as totalAmountArenaTries
 quickBattleGuildBosses() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&1; fi
     _quickBattleGuildBosses_COUNT=0
     until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         inputTapSleep 710 1840
@@ -517,7 +523,7 @@ quickBattleGuildBosses() {
 
 # Loots afk chest
 lootAfkChest() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&1; fi
     inputTapSleep 550 1500 1
     inputTapSleep 750 1350 3
     inputTapSleep 550 1850 1                    # Tap campaign in case of level up
@@ -527,7 +533,7 @@ lootAfkChest() {
 
 # Challenges a boss in the campaign
 challengeBoss() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&1; fi
     inputTapSleep 550 1650 1
     testColorORTapSleep 550 740 f2d79f          # Check if boss
     wait
@@ -538,13 +544,13 @@ challengeBoss() {
         _challengeBoss_COUNT=0
 
         # Check for battle screen
-        while [ "$(testColorOR 20 1200 eaca95)" = "1" ] && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
+        while testColorOR 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 10                 # Wait until battle is over
 
             # Check battle result
             if [ "$battleFailed" = false ]; then                                # Win
-                if [ "$(testColorOR 550 1670 e2dddc)" = "1" ];then              # Check for next stage
+                if testColorOR 550 1670 e2dddc;then              # Check for next stage
                     inputTapSleep 550 1670 6    # Next Stage
                     sleep 6
 
@@ -567,14 +573,14 @@ challengeBoss() {
         # Return to campaign
         inputTapSleep 60 1850                   # Return
 
-        testColorORTapSleep 715 1260 feffff 2                                   # Check for confirm to exit button
+        testColorORTapSleep 715 1260 feffff 2   # Check for confirm to exit button
     else
         # Quick exit battle
         inputTapSleep 550 1850 1                # Battle
         inputTapSleep 80 1460                   # Pause
         inputTapSleep 230 960 1                 # Exit
 
-        testColorORTapSleep 450 1775 cc9261 0                                   # Check for multi-battle
+        testColorORTapSleep 450 1775 cc9261 0   # Check for multi-battle
     fi
 
     wait
@@ -583,7 +589,7 @@ challengeBoss() {
 
 # Collects fast rewards
 fastRewards() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&1; fi
     inputTapSleep 950 1660 1
     inputTapSleep 710 1260
     inputTapSleep 560 1800 1
@@ -593,7 +599,7 @@ fastRewards() {
 
 # Collects and sends companion points, as well as auto lending mercenaries
 collectFriendsAndMercenaries() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&1; fi
     inputTapSleep 970 810 1
     inputTapSleep 930 1600
     inputTapSleep 720 1760
@@ -611,7 +617,7 @@ collectFriendsAndMercenaries() {
 
 # Starts Solo bounties
 soloBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&1; fi
     inputTapSleep 600 1320 1
     inputTapSleep 780 1550 1                    # Collect all
     inputTapSleep 350 1550                      # Dispatch all
@@ -629,7 +635,7 @@ soloBounties() {
 
 # Starts Team Bounties. Params: startFromTab
 teamBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 600 1320 1
     fi
@@ -646,7 +652,7 @@ teamBounties() {
 
 # Attempts to tap the closest Arena of Heroes opponent. Params: opponent
 tapClosestOpponent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
     # Depending on the opponent number sent as a parameter ($1), this function
     # would attempt to check if there's an opponent above the one sent.
     # If there isn't, check the one above that one and so on until one is found.
@@ -660,29 +666,29 @@ tapClosestOpponent() {
         case $arenaHeroesOpponent in
         1)
             # Check if opponent 1 exists and fight if true
-            if [ "$(testColorOR 820 700 a7f1b7)" = "1" ];then inputTapSleep 820 700 0; else return 1; fi
+            if testColorOR 820 700 a7f1b7;then inputTapSleep 820 700 0; else return 1; fi
             ;;
         2)
             # Check if opponent 2 exists and fight if true
-            if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then inputTapSleep 820 870 0; else return 1; fi
+            if testColorOR 820 870 2daab4 aff3c0; then inputTapSleep 820 870 0; else return 1; fi
             ;;
         3)
             # Check if opponent 3 exists and fight if true
-            if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then inputTapSleep 820 1050 0; else return 1; fi
+            if testColorOR 820 1050 a7f1b7; then inputTapSleep 820 1050 0; else return 1; fi
             ;;
         4)
             # Check if opponent 4 exists and fight if true
-            if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then inputTapSleep 820 1220 0; else return 1; fi
+            if testColorOR 820 1220 2daab4 aff3c0; then inputTapSleep 820 1220 0; else return 1; fi
             ;;
         5)
             # Check if opponent 5 exists and fight if true
-            if [ "$(testColorOR 820 1400 aaf2bb)" = "1" ]; then inputTapSleep 820 1400 0; else return 1; fi
+            if testColorOR 820 1400 aaf2bb; then inputTapSleep 820 1400 0; else return 1; fi
             ;;
         esac
         ;;
     2)
         # Check if opponent 1 exists
-        if [ "$(testColorOR 820 700 a7f1b7)" = "1" ]; then
+        if testColorOR 820 700 a7f1b7; then
             # Fight opponent
             inputTapSleep 820 700 0
         else
@@ -692,7 +698,7 @@ tapClosestOpponent() {
         ;;
     3)
         # Check if opponent 2 exists
-        if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then
+        if testColorOR 820 870 2daab4 aff3c0; then
             # Fight opponent
             inputTapSleep 820 870 0
         else
@@ -702,7 +708,7 @@ tapClosestOpponent() {
         ;;
     4)
         # Check if opponent 3 exists
-        if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then
+        if testColorOR 820 1050 a7f1b7; then
             # Fight opponent
             inputTapSleep 820 1050 0
         else
@@ -712,7 +718,7 @@ tapClosestOpponent() {
         ;;
     5)
         # Check if opponent 4 exists
-        if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then
+        if testColorOR 820 1220 2daab4 aff3c0; then
             # Fight opponent
             inputTapSleep 820 1220 0
         else
@@ -725,7 +731,7 @@ tapClosestOpponent() {
 
 # Does the daily arena of heroes battles
 arenaOfHeroes() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&1; fi
     inputTapSleep 740 1050 3
     if [ "$pvpEvent" = false ]; then
         inputTapSleep 550 450 3
@@ -736,9 +742,9 @@ arenaOfHeroes() {
     inputTapSleep 980 410
     inputTapSleep 540 1800
 
-    if [ "$(testColorNAND 200 1800 382314 382214)" = "1" ];then                 # Check for new season
+    if testColorNAND 200 1800 382314 382214;then                 # Check for new season
         _arenaOfHeroes_COUNT=0
-        until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
+        until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do      # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # inputTapSleep 815 540
 
@@ -752,7 +758,7 @@ arenaOfHeroes() {
             case $arenaHeroesOpponent in
                 1)
                     # Check if opponent exists
-                     if [ "$(testColorOR 820 700 a7f1b7)" = "1" ]; then
+                     if testColorOR 820 700 a7f1b7; then
                         # Fight opponent
                         inputTapSleep 820 700 0
                     else
@@ -762,7 +768,7 @@ arenaOfHeroes() {
                     ;;
                 2)
                     # Check if opponent exists
-                    if [ "$(testColorOR 820 870 2daab4 aff3c0)" = "1" ]; then
+                    if testColorOR 820 870 2daab4 aff3c0; then
                         # Fight opponent
                         inputTapSleep 820 870 0
                     else
@@ -772,7 +778,7 @@ arenaOfHeroes() {
                     ;;
                 3)
                     # Check if opponent exists
-                    if [ "$(testColorOR 820 1050 a7f1b7)" = "1" ]; then
+                    if testColorOR 820 1050 a7f1b7; then
                         # Fight opponent
                         inputTapSleep 820 1050 0
                     else
@@ -782,7 +788,7 @@ arenaOfHeroes() {
                     ;;
                 4)
                     # Check if opponent exists
-                    if [ "$(testColorOR 820 1220 2daab4 aff3c0)" = "1" ]; then
+                    if testColorOR 820 1220 2daab4 aff3c0; then
                         # Fight opponent
                         inputTapSleep 820 1220 0
                     else
@@ -792,7 +798,7 @@ arenaOfHeroes() {
                     ;;
                 5)
                     # Check if opponent exists
-                    if [ "$(testColorOR 820 1400 aaf2bb)" = "1" ]; then
+                    if testColorOR 820 1400 aaf2bb; then
                         # Fight opponent
                         inputTapSleep 820 1400 0
                     else
@@ -833,7 +839,7 @@ arenaOfHeroes() {
 
 # Does the daily Legends tournament battles. Params: startFromTab
 legendsTournament() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&1; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 740 1050
     fi
@@ -867,16 +873,16 @@ legendsTournament() {
 
 # Battles in King's Towers. Params: X, Y
 battleKingsTower() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] battleKingsTower $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] battleKingsTower $*" >&1; fi
     _battleKingsTower_COUNT=0
     inputTapSleep "$1" "$2" 2                   # Tap chosen tower
 
     # Check if inside tower
-    if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then
+    if testColorOR 550 150 1a1212; then
         inputTapSleep 540 1350                  # Challenge
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && [ "$(testColorOR 550 150 1a1212)" = "1" ]; do
+        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorOR 550 150 1a1212; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 2
 
@@ -886,9 +892,9 @@ battleKingsTower() {
 
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
                 # Tap top of the screen to close any possible Limited Offers
-                # if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then # not on screen with Challenge button
+                # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
                 #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
-                #     if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then # think i remember it needs two taps to close offer
+                #     if testColorOR 550 150 1a1212; then # think i remember it needs two taps to close offer
                 #         inputTapSleep 550 75    # Tap top of the screen to close Limited Offer
                 # fi
 
@@ -903,7 +909,7 @@ battleKingsTower() {
 
         # Return from chosen tower / battle
         inputTapSleep 70 1810 3
-        if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then                      # In case still in tower, exit once more
+        if testColorOR 550 150 1a1212; then     # In case still in tower, exit once more
             inputTapSleep 70 1810 0;
         fi
         sleep 2
@@ -912,7 +918,7 @@ battleKingsTower() {
 
 # Battles once in the kings tower
 kingsTower() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&1; fi
     inputTapSleep 500 870                       # King's Tower
 
     # Towers
@@ -929,10 +935,10 @@ kingsTower() {
 
 # Battles against Guild boss Wrizz
 guildHunts() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts" >&1; fi
     inputTapSleep 380 360 10
 
-    if [ "$(testColorOR 380 500 793929)" = "1" ];then                           # Check for fortune chest
+    if testColorOR 380 500 793929;then          # Check for fortune chest
         inputTapSleep 560 1300
         inputTapSleep 540 1830
     fi
@@ -955,7 +961,7 @@ guildHunts() {
     _guildHunts_COUNT=0
     until [ "$_guildHunts_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         # Check if its possible to fight wrizz
-        # if [ "$(testColorOR 710 1840 9de7bd)" = "1" ]; then
+        # if testColorOR 710 1840 9de7bd; then
         #     echo "Enough of wrizz! Going out."
         #     break
         # fi
@@ -971,10 +977,10 @@ guildHunts() {
 
     inputTapSleep 970 890 1                     # Soren
 
-    if [ "$(testColorOR 715 1815 8ae5c4)" = "1" ];then                          # If Soren is open
+    if testColorOR 715 1815 8ae5c4;then         # If Soren is open
         quickBattleGuildBosses
-    elif [ "$canOpenSoren" = true ]; then                                       # If Soren is closed
-        if [ "$(testColorOR 580 1753 fae0ac)" = "1" ];then                      # If soren is "openable"
+    elif [ "$canOpenSoren" = true ]; then       # If Soren is closed
+        if testColorOR 580 1753 fae0ac;then     # If soren is "openable"
             inputTapSleep 550 1850
             inputTapSleep 700 1250 1
             quickBattleGuildBosses
@@ -993,7 +999,7 @@ guildHunts() {
 
 # Battles against the Twisted Realm Boss. Params: startFromTab
 twistedRealmBoss() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
@@ -1005,7 +1011,7 @@ twistedRealmBoss() {
 
     inputTapSleep 820 820
 
-    if [ "$(testColorOR 540 1220 9aedc1)" = "1" ];then                          # Check if TR is being calculated
+    if testColorOR 540 1220 9aedc1;then         # Check if TR is being calculated
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
         inputTapSleep 550 1850
@@ -1026,7 +1032,7 @@ twistedRealmBoss() {
 
 # Buy items from store
 buyFromStore() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&1; fi
     inputTapSleep 330 1650 3
 
     if [ "$buyStoreDust" = true ]; then         # Dust
@@ -1046,9 +1052,9 @@ buyFromStore() {
 }
 
 quickCollectQuestChests() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickCollectQuestChests" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickCollectQuestChests" >&1; fi
     # Collect Quests
-    while [ "$(testColorOR 700 670 82fdf5)" = "1" ]; do
+    while testColorOR 700 670 82fdf5; do
         inputTapSleep 930 680
     done
 
@@ -1067,7 +1073,7 @@ quickCollectQuestChests() {
 
 # Collects
 collectQuestChests() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&1; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 250                       # Quests
     quickCollectQuestChests
@@ -1083,7 +1089,7 @@ collectQuestChests() {
 
 # Collects mail
 collectMail() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&1; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 630
     inputTapSleep 790 1470
@@ -1094,11 +1100,11 @@ collectMail() {
 
 # Collects Daily/Weekly/Monthly from the merchants page
 collectMerchants() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMerchants" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMerchants" >&1; fi
     inputTapSleep 120 300 3                     # Merchants
     inputTapSleep 510 1820                      # Merchant Ship
 
-    if [ "$(testColorNAND 375 940 0b080a)" = "1" ];then                         # Checks for Special Daily Bundles
+    if testColorNAND 375 940 0b080a;then        # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -1106,7 +1112,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 280 1620 1                    # Weekly Deals
 
-    if [ "$(testColorNAND 375 940 050a0f)" = "1" ];then                         # Checks for Special Weekly Bundles
+    if testColorNAND 375 940 050a0f;then        # Checks for Special Weekly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
@@ -1114,7 +1120,7 @@ collectMerchants() {
     inputTapSleep 550 300 1                     # Collect rewards
     inputTapSleep 460 1620 1                    # Monthly Deals
 
-    if [ "$(testColorNAND 375 940 0b080a)" = "1" ];then                         # Checks for Special Monthly Bundles
+    if testColorNAND 375 940 0b080a;then        # Checks for Special Monthly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750
@@ -1126,7 +1132,7 @@ collectMerchants() {
 
 # If red square, strenghen Crystal
 strengthenCrystal() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&1; fi
     inputTapSleep 760 1030 3                    # Crystal
 
     # TODO: Detect if free slot, and take it.
@@ -1139,11 +1145,11 @@ strengthenCrystal() {
 
 # Let's do a "free" summon
 nobleTavern() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&1; fi
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    until [ "$(testColorOR 875 835 f38d67)" = "1" ];do                          # Looking for heart
+    until testColorOR 875 835 f38d67;do         # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
     done
 
@@ -1158,7 +1164,7 @@ nobleTavern() {
 
 # Collect Oak Inn
 oakInn() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&1; fi
     inputTapSleep 780 270 5                     # Oak Inn
 
     _oakInn_COUNT=0
@@ -1231,7 +1237,7 @@ switchTab "Ranhorn"
 sleep 1
 switchTab "Campaign" true
 
-if [ "$(testColorOR 740 205 ffc15b)" = "1" ];then                               # Check if game is being updated
+if testColorOR 740 205 ffc15b;then              # Check if game is being updated
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
