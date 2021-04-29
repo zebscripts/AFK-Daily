@@ -3,11 +3,13 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-DEBUG=0
+DEBUG=4
 # DEBUG  = 0    Show no debug
 # DEBUG >= 1    Show getColor calls > $RGB value
 # DEBUG >= 2    Show test calls
-# DEBUG >= 3    Show tap calls
+# DEBUG >= 3    Show all core functions calls
+# DEBUG >= 4    Show all functions calls
+# DEBUG >= 9    Show tap calls
 DEFAULT_SLEEP=2                                 # equivalent to wait
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
@@ -107,7 +109,7 @@ verifyRGB() {
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
+    if [ $DEBUG -ge 9 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
@@ -156,6 +158,7 @@ testColorORTapSleep() {
 
 # Switches to another tab. Params: <Tab name> <force>
 switchTab() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $*" >&2; fi
     case "$1" in
         "Campaign")
             if [ "${2:-false}" = true ] || \
@@ -204,6 +207,7 @@ switchTab() {
 
 # Loops until RGB is not equal. Params: Seconds, X, Y, RGB
 loopUntilRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
     sleep "$1"
     while [ "$(testColorNAND "$2" "$3" "$4")" = "1" ];do
         sleep 1
@@ -212,6 +216,7 @@ loopUntilRGB() {
 
 # Loops until RGB is equal. Params: Seconds, X, Y, RGB
 loopUntilNotRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
     sleep "$1"
     while [ "$(testColorOR "$2" "$3" "$4")" = "1" ];do
         sleep 1
@@ -220,6 +225,7 @@ loopUntilNotRGB() {
 
 # Waits until a battle has ended. Params: Seconds
 waitBattleFinish() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
     sleep "$1"
     finished=false
     while [ $finished = false ]; do
@@ -241,6 +247,7 @@ waitBattleFinish() {
 
 # Buys an item from the Store. Params: X, Y
 buyStoreItem() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyStoreItem $*" >&2; fi
     inputTapSleep "$1" "$2" 1
     inputTapSleep 550 1540 1
     inputTapSleep 550 1700 0
@@ -248,6 +255,7 @@ buyStoreItem() {
 
 # Searches for a "good" present in oak Inn
 oakSearchPresent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&2; fi
     input swipe 400 1600 400 310 50             # Swipe all the way down
     sleep 1
 
@@ -291,6 +299,7 @@ oakSearchPresent() {
 
 # Search available present tabs in Oak Inn
 oakPresentTab() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakPresentTab" >&2; fi
     oakPresentTabs=0
     if [ "$(testColorOR 270 1800 c79663)" = "1" ];then                          # 1 gift c79663
         oakPresentTabs=$((oakPresentTabs + 1000))                               # Increment
@@ -308,6 +317,7 @@ oakPresentTab() {
 
 # Tries to collect a present from one Oak Inn friend
 oakTryCollectPresent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakTryCollectPresent" >&2; fi
     oakSearchPresent                            # Search for a "good" present
     if [ $oakRes = 0 ]; then
         oakPresentTab                           # If no present found, search for other tabs
@@ -449,6 +459,7 @@ oakTryCollectPresent() {
 
 # Checks where to end the script
 checkWhereToEnd() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
     case "$endAt" in
         "oak")
             switchTab "Ranhorn" true
@@ -493,6 +504,7 @@ checkWhereToEnd() {
 
 # Repeat a battle for as long as totalAmountArenaTries
 quickBattleGuildBosses() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&2; fi
     _quickBattleGuildBosses_COUNT=0
     until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         inputTapSleep 710 1840
@@ -505,6 +517,7 @@ quickBattleGuildBosses() {
 
 # Loots afk chest
 lootAfkChest() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
     inputTapSleep 550 1500 1
     inputTapSleep 750 1350 3
     inputTapSleep 550 1850 1                    # Tap campaign in case of level up
@@ -514,6 +527,7 @@ lootAfkChest() {
 
 # Challenges a boss in the campaign
 challengeBoss() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
     inputTapSleep 550 1650 1
     testColorORTapSleep 550 740 f2d79f          # Check if boss
     wait
@@ -569,6 +583,7 @@ challengeBoss() {
 
 # Collects fast rewards
 fastRewards() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
     inputTapSleep 950 1660 1
     inputTapSleep 710 1260
     inputTapSleep 560 1800 1
@@ -578,6 +593,7 @@ fastRewards() {
 
 # Collects and sends companion points, as well as auto lending mercenaries
 collectFriendsAndMercenaries() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
     inputTapSleep 970 810 1
     inputTapSleep 930 1600
     inputTapSleep 720 1760
@@ -595,6 +611,7 @@ collectFriendsAndMercenaries() {
 
 # Starts Solo bounties
 soloBounties() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
     inputTapSleep 600 1320 1
     inputTapSleep 780 1550 1                    # Collect all
     inputTapSleep 350 1550                      # Dispatch all
@@ -612,6 +629,7 @@ soloBounties() {
 
 # Starts Team Bounties. Params: startFromTab
 teamBounties() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 600 1320 1
     fi
@@ -628,6 +646,7 @@ teamBounties() {
 
 # Attempts to tap the closest Arena of Heroes opponent. Params: opponent
 tapClosestOpponent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
     # Depending on the opponent number sent as a parameter ($1), this function
     # would attempt to check if there's an opponent above the one sent.
     # If there isn't, check the one above that one and so on until one is found.
@@ -706,6 +725,7 @@ tapClosestOpponent() {
 
 # Does the daily arena of heroes battles
 arenaOfHeroes() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&2; fi
     inputTapSleep 740 1050 3
     if [ "$pvpEvent" = false ]; then
         inputTapSleep 550 450 3
@@ -813,6 +833,7 @@ arenaOfHeroes() {
 
 # Does the daily Legends tournament battles. Params: startFromTab
 legendsTournament() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 740 1050
     fi
@@ -846,6 +867,7 @@ legendsTournament() {
 
 # Battles in King's Towers. Params: X, Y
 battleKingsTower() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] battleKingsTower $*" >&2; fi
     _battleKingsTower_COUNT=0
     inputTapSleep "$1" "$2" 2                   # Tap chosen tower
 
@@ -890,6 +912,7 @@ battleKingsTower() {
 
 # Battles once in the kings tower
 kingsTower() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
     inputTapSleep 500 870                       # King's Tower
 
     # Towers
@@ -906,6 +929,7 @@ kingsTower() {
 
 # Battles against Guild boss Wrizz
 guildHunts() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts" >&2; fi
     inputTapSleep 380 360 10
 
     if [ "$(testColorOR 380 500 793929)" = "1" ];then                           # Check for fortune chest
@@ -969,6 +993,7 @@ guildHunts() {
 
 # Battles against the Twisted Realm Boss. Params: startFromTab
 twistedRealmBoss() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
@@ -1001,6 +1026,7 @@ twistedRealmBoss() {
 
 # Buy items from store
 buyFromStore() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
     inputTapSleep 330 1650 3
 
     if [ "$buyStoreDust" = true ]; then         # Dust
@@ -1020,6 +1046,7 @@ buyFromStore() {
 }
 
 quickCollectQuestChests() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickCollectQuestChests" >&2; fi
     # Collect Quests
     while [ "$(testColorOR 700 670 82fdf5)" = "1" ]; do
         inputTapSleep 930 680
@@ -1040,6 +1067,7 @@ quickCollectQuestChests() {
 
 # Collects
 collectQuestChests() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 250                       # Quests
     quickCollectQuestChests
@@ -1055,6 +1083,7 @@ collectQuestChests() {
 
 # Collects mail
 collectMail() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 630
     inputTapSleep 790 1470
@@ -1065,6 +1094,7 @@ collectMail() {
 
 # Collects Daily/Weekly/Monthly from the merchants page
 collectMerchants() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMerchants" >&2; fi
     inputTapSleep 120 300 3                     # Merchants
     inputTapSleep 510 1820                      # Merchant Ship
 
@@ -1096,6 +1126,7 @@ collectMerchants() {
 
 # If red square, strenghen Crystal
 strengthenCrystal() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
     inputTapSleep 760 1030 3                    # Crystal
 
     # TODO: Detect if free slot, and take it.
@@ -1108,6 +1139,7 @@ strengthenCrystal() {
 
 # Let's do a "free" summon
 nobleTavern() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
@@ -1126,6 +1158,7 @@ nobleTavern() {
 
 # Collect Oak Inn
 oakInn() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
     inputTapSleep 780 270 5                     # Oak Inn
 
     _oakInn_COUNT=0
