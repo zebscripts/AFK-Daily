@@ -3,7 +3,11 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-DEBUG=0                                         # 0 no debug, 1 show getColor value, 2 show tap position
+DEBUG=0
+# DEBUG  = 0    Show no debug
+# DEBUG >= 1    Show getColor calls > $RGB value
+# DEBUG >= 2    Show test calls
+# DEBUG >= 3    Show tap calls
 DEFAULT_SLEEP=2                                 # equivalent to wait
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
@@ -28,12 +32,12 @@ fi
 # --- Functions --- #
 # Test function: take screenshot, get rgb, exit. Params: X, Y, amountTimes, waitTime
 test() {
-    COUNT=0
-    until [ "$COUNT" -ge "$3" ]; do
+    _test_COUNT=0
+    until [ "$_test_COUNT" -ge "$3" ]; do
         sleep "$4"
         getColor "$1" "$2"
         echo "RGB: $RGB"
-        COUNT=$((COUNT + 1))                    # Increment
+        _test_COUNT=$((_test_COUNT + 1))        # Increment
     done
     exit
 }
@@ -103,7 +107,7 @@ verifyRGB() {
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
 }
@@ -111,7 +115,7 @@ inputTapSleep() {
 # testColorOR <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 1, else 0
 testColorOR() {
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
@@ -127,7 +131,7 @@ testColorOR() {
 # testColorNAND <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 1, else 0
 testColorNAND() {
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
     getColor "$1" "$2"                          # looking for color
     i=3
     while [ $i -le $# ]; do                     # loop in colors
@@ -144,7 +148,7 @@ testColorNAND() {
 # SLEEP default value is DEFAULT_SLEEP
 # if true, tap, else do nothing
 testColorORTapSleep() {
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
     if [ "$(testColorOR "$1" "$2" "$3")" = "1" ];then                           # if color found
         inputTapSleep  "$1" "$2" "${4:-$DEFAULT_SLEEP}"                         # tap & sleep
     fi
@@ -489,13 +493,13 @@ checkWhereToEnd() {
 
 # Repeat a battle for as long as totalAmountArenaTries
 quickBattleGuildBosses() {
-    COUNT=0
-    until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
+    _quickBattleGuildBosses_COUNT=0
+    until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         inputTapSleep 710 1840
         inputTapSleep 720 1300 1
         inputTapSleep 550 800 0
         inputTapSleep 550 800 1
-        COUNT=$((COUNT + 1))                    # Increment
+        _quickBattleGuildBosses_COUNT=$((_quickBattleGuildBosses_COUNT + 1))    # Increment
     done
 }
 
@@ -517,10 +521,10 @@ challengeBoss() {
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
         echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
-        COUNT=0
+        _challengeBoss_COUNT=0
 
         # Check for battle screen
-        while [ "$(testColorOR 20 1200 eaca95)" = "1" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+        while [ "$(testColorOR 20 1200 eaca95)" = "1" ] && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 10                 # Wait until battle is over
 
@@ -542,7 +546,7 @@ challengeBoss() {
                 # Try again
                 inputTapSleep 550 1720 5
 
-                COUNT=$((COUNT + 1))            # Increment
+                _challengeBoss_COUNT=$((_challengeBoss_COUNT + 1))              # Increment
             fi
         done
 
@@ -713,8 +717,8 @@ arenaOfHeroes() {
     inputTapSleep 540 1800
 
     if [ "$(testColorNAND 200 1800 382314 382214)" = "1" ];then                 # Check for new season
-        COUNT=0
-        until [ "$COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
+        _arenaOfHeroes_COUNT=0
+        until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do                     # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # inputTapSleep 815 540
 
@@ -788,7 +792,7 @@ arenaOfHeroes() {
                 fi
                 inputTapSleep 550 1550 3        # Finish battle
             fi
-            COUNT=$((COUNT + 1))                # Increment
+            _arenaOfHeroes_COUNT=$((_arenaOfHeroes_COUNT + 1))                  # Increment
         done
 
         inputTapSleep 1000 380
@@ -825,14 +829,14 @@ legendsTournament() {
     inputTapSleep 1000 1800
     inputTapSleep 990 380
 
-    COUNT=0
-    until [ "$COUNT" -ge "$totalAmountArenaTries-2" ]; do                       # Repeat a battle for as long as totalAmountArenaTries
+    _legendsTournament_COUNT=0
+    until [ "$_legendsTournament_COUNT" -ge "$totalAmountArenaTries-2" ]; do    # Repeat a battle for as long as totalAmountArenaTries
         inputTapSleep 550 1840 4
         inputTapSleep 800 1140 4
         inputTapSleep 550 1850 4
         inputTapSleep 770 1470 4
         inputTapSleep 550 800 4
-        COUNT=$((COUNT + 1))                    # Increment
+        _legendsTournament_COUNT=$((_legendsTournament_COUNT + 1))              # Increment
     done
 
     inputTapSleep 70 1810
@@ -841,65 +845,52 @@ legendsTournament() {
 }
 
 # Battles in King's Towers. Params: X, Y
-function battleKingsTower() {
-    local COUNT=0
-    input tap $1 $2 # Tap chosen tower
-    sleep 2
+battleKingsTower() {
+    _battleKingsTower_COUNT=0
+    inputTapSleep "$1" "$2" 2                   # Tap chosen tower
 
     # Check if inside tower
-    getColor 550 150
-    if [ "$RGB" == "1a1212" ]; then
-        input tap 540 1350 # Challenge
-        wait
+    if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then
+        inputTapSleep 540 1350                  # Challenge
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        getColor 550 150
-        while [ "$COUNT" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
-            input tap 550 1850 # Battle
+        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && [ "$(testColorOR 550 150 1a1212)" = "1" ]; do
+            inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 2
 
             # Check if win or lose battle
-            if [ "$battleFailed" == false ]; then
-                input tap 550 1850 # Collect
-                sleep 4
+            if [ "$battleFailed" = false ]; then
+                inputTapSleep 550 1850 4        # Collect
 
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
                 # Tap top of the screen to close any possible Limited Offers
-                # getColor 550 150
-                # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
-                #     input tap 550 75 # Tap top of the screen to close Limited Offer
-                #     wait
-                #     getColor 550 150
-                #     if [ "$RGB" != "1a1212" ]; then # think i remember it needs two taps to close offer
-                #         input tap 550 75 # Tap top of the screen to close Limited Offer
-                #         wait
+                # if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then # not on screen with Challenge button
+                #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
+                #     if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then # think i remember it needs two taps to close offer
+                #         inputTapSleep 550 75    # Tap top of the screen to close Limited Offer
                 # fi
 
-                input tap 540 1350 # Challenge
-                sleep 2
-            elif [ "$battleFailed" == true ]; then
-                input tap 550 1720    # Try again
-                ((COUNT = COUNT + 1)) # Increment
-                wait
+                inputTapSleep 540 1350          # Challenge
+            elif [ "$battleFailed" = true ]; then
+                inputTapSleep 550 1720          # Try again
+                _battleKingsTower_COUNT=$((_battleKingsTower_COUNT + 1))        # Increment
             fi
 
             # Check if reached daily limit / kicked us out of battle screen
-            getColor 550 150
         done
 
         # Return from chosen tower / battle
-        input tap 70 1810
-        sleep 3
-        getColor 550 150
-        if [ "$RGB" = "1a1212" ]; then input tap 70 1810; fi # In case still in tower, exit once more
+        inputTapSleep 70 1810 3
+        if [ "$(testColorOR 550 150 1a1212)" = "1" ]; then                      # In case still in tower, exit once more
+            inputTapSleep 70 1810 0;
+        fi
         sleep 2
     fi
 }
 
 # Battles once in the kings tower
 kingsTower() {
-    input tap 500 870 # King's Tower
-    sleep 2
+    inputTapSleep 500 870                       # King's Tower
 
     # Towers
     battleKingsTower 550 900  # Main Tower
@@ -909,8 +900,7 @@ kingsTower() {
     battleKingsTower 800 1400 # The Forsaken Necropolis
 
     # Exit
-    input tap 70 1810
-    wait
+    inputTapSleep 70 1810
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
 
@@ -938,8 +928,8 @@ guildHunts() {
     # Wrizz
     # TODO: Check if possible to fight wrizz
     # Repeat a battle for as long as totalAmountArenaTries
-    COUNT=0
-    until [ "$COUNT" -ge "$totalAmountGuildBossTries" ]; do
+    _guildHunts_COUNT=0
+    until [ "$_guildHunts_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         # Check if its possible to fight wrizz
         # if [ "$(testColorOR 710 1840 9de7bd)" = "1" ]; then
         #     echo "Enough of wrizz! Going out."
@@ -952,7 +942,7 @@ guildHunts() {
         inputTapSleep 720 1300 1
         inputTapSleep 550 800 0
         inputTapSleep 550 800 1
-        COUNT=$((COUNT + 1))                    # Increment
+        _guildHunts_COUNT=$((_guildHunts_COUNT + 1))                            # Increment
     done
 
     inputTapSleep 970 890 1                     # Soren
@@ -1029,71 +1019,37 @@ buyFromStore() {
     verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
 }
 
+quickCollectQuestChests() {
+    # Collect Quests
+    while [ "$(testColorOR 700 670 82fdf5)" = "1" ]; do
+        inputTapSleep 930 680
+    done
+
+    # Collect Chests
+    inputTapSleep 330 430                       # Chest 20
+    inputTapSleep 580 600 0                     # Collect
+    inputTapSleep 500 430                       # Chest 40
+    inputTapSleep 580 600 0                     # Collect
+    inputTapSleep 660 430                       # Chest 60
+    inputTapSleep 580 600 0                     # Collect
+    inputTapSleep 830 430                       # Chest 80
+    inputTapSleep 580 600 0                     # Collect
+    inputTapSleep 990 430                       # Chest 100
+    inputTapSleep 580 600                       # Collect
+}
+
 # Collects
 collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    input tap 960 250 # Quests
-    wait
-
-    # Collect daily Quests
-    getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
-        input tap 930 680
-        wait
-        getColor 700 670
-    done
-
-    # Collect daily Chests
-    input tap 330 430 # Chest 20
-    wait
-    input tap 580 600 # Collect
-    input tap 500 430 # Chest 40
-    wait
-    input tap 580 600 # Collect
-    input tap 660 430 # Chest 60
-    wait
-    input tap 580 600 # Collect
-    input tap 830 430 # Chest 80
-    wait
-    input tap 580 600 # Collect
-    input tap 990 430 # Chest 100
-    wait
-    input tap 580 600 # Collect
-    wait
+    inputTapSleep 960 250                       # Quests
+    quickCollectQuestChests
 
     # Weekly quests
-    input tap 650 1650 # Weeklies
-    wait
-
-    # Collect weekly Quests
-    getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
-        input tap 930 680
-        wait
-        getColor 700 670
-    done
-
-    # Collect weekly Chests
-    input tap 330 430 # Chest 20
-    wait
-    input tap 580 600 # Collect
-    input tap 500 430 # Chest 40
-    wait
-    input tap 580 600 # Collect
-    input tap 660 430 # Chest 60
-    wait
-    input tap 580 600 # Collect
-    input tap 830 430 # Chest 80
-    wait
-    input tap 580 600 # Collect
-    input tap 990 430 # Chest 100
-    wait
-    input tap 580 600 # Collect
-    wait
+    inputTapSleep 650 1650                      # Weeklies
+    quickCollectQuestChests
 
     # Return
-    input tap 70 1650
-    sleep 1
+    inputTapSleep 70 1650 1
     verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
@@ -1172,8 +1128,8 @@ nobleTavern() {
 oakInn() {
     inputTapSleep 780 270 5                     # Oak Inn
 
-    COUNT=0
-    until [ "$COUNT" -ge "$totalAmountOakRewards" ]; do
+    _oakInn_COUNT=0
+    until [ "$_oakInn_COUNT" -ge "$totalAmountOakRewards" ]; do
         inputTapSleep 1050 950                  # Friends
         inputTapSleep 1025 400 5                # Top Friend
         sleep 5
@@ -1199,7 +1155,7 @@ oakInn() {
         fi
 
         sleep 2
-        COUNT=$((COUNT + 1))                    # Increment
+        _oakInn_COUNT=$((_oakInn_COUNT + 1))    # Increment
     done
 
     inputTapSleep 70 1810 3
