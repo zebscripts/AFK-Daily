@@ -54,11 +54,11 @@ test() {
 # 0 means same colors, 100 means opposite colors
 sRGBColorDelta() {
     if [ "$#" -ne 2 ] ; then
-        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
-        echo " 0 means same colors, 100 means opposite colors" >&2
+        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&1
+        echo " 0 means same colors, 100 means opposite colors" >&1
         return
     fi
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] sRGBColorDelta $*" >&1; fi
     r=$((0x${1:0:2} - 0x${2:0:2}))
     g=$((0x${1:2:2} - 0x${2:2:2}))
     b=$((0x${1:4:2} - 0x${2:4:2}))
@@ -132,9 +132,9 @@ verifyRGB() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&1; fi
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
-        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]"
-        echo
-        echo "[ERROR] $5"
+        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]" >&2
+        echo >&2
+        echo "[ERROR] $5" >&2
         exit
     else
         echo "[OK] $4"
