@@ -10,25 +10,29 @@ DEBUG=4
 # DEBUG >= 3    Show all core functions calls
 # DEBUG >= 4    Show all functions calls
 # DEBUG >= 9    Show tap calls
-DEFAULT_SLEEP=2                                 # equivalent to wait
+SHOW_DELTA=1
+# SHOW_DELTA = 0                    Show no debug
+# DEBUG >= 2 && SHOW_DELTA = 1      Show delta if color is not found
+DEFAULT_SLEEP=2                                 # equivalent to wait (default 2)
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
-activeTab=""
 
 # Do not modify
 RGB=00000000
 oakRes=0
 forceFightCampaign=false
+activeTab="Start"
+screenshotRequired=true
+# TODO: Only take usefull screenshots
+#   ATM, just print in takeScreenshot to check all > [DEBUG] takeScreenshot (screenshotRequired=false)
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
-    # source "/$1/scripts/afk-arena/config.sh"
     . "/$1/scripts/afk-arena/config.sh"
     forceFightCampaign=$2
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
-    # source "/storage/emulated/0/scripts/afk-arena/config.sh"
     . "/storage/emulated/0/scripts/afk-arena/config.sh"
 fi
 
@@ -43,6 +47,23 @@ test() {
         _test_COUNT=$((_test_COUNT + 1))        # Increment
     done
     exit
+}
+
+# sRGBColorDelta <COLOR1> <COLOR2>
+# https://stackoverflow.com/a/22692625/7295428
+# 0 means same colors, 100 means opposit colors
+sRGBColorDelta() {
+    if [ "$#" -ne 2 ] ; then
+        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
+        echo " 0 means opposit colors, 100 means same colors" >&2
+        return
+    fi
+    r=$((0x${1:0:2} - 0x${2:0:2}))
+    g=$((0x${1:2:2} - 0x${2:2:2}))
+    b=$((0x${1:4:2} - 0x${2:4:2}))
+    d=$((((765 - (${r#-} + ${g#-} + ${b#-})) * 100) / 765))                     # 765 = 3 * 255
+    d=$((100-d))                                # Delta is a distance... 0=same, 100=opposite need to reverse it
+    echo $d
 }
 
 # Default wait time for actions
@@ -75,8 +96,10 @@ disableOrientation() {
 
 # Takes a screenshot and saves it
 takeScreenshot() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot" >&1; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&1; fi
+    # TODO: if [ $screenshotRequired = true ]; then screencap "$SCREENSHOTLOCATION"; fi
     screencap "$SCREENSHOTLOCATION"
+    screenshotRequired=false
 }
 
 # Gets pixel color. Params: X, Y
@@ -88,8 +111,15 @@ readRGB() {
     # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
 }
 
-# Sets RGB. Params: X, Y
+# Sets RGB. Params: [-f] X, Y
 getColor() {
+    for arg in "$@"; do
+        shift
+        case "$arg" in
+            -f) screenshotRequired=true;;
+            *) set -- "$@" "$arg";;
+        esac
+    done
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&1; fi
     takeScreenshot
     readRGB "$1" "$2"
@@ -101,7 +131,7 @@ verifyRGB() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $1 $2 $3" >&1; fi
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
-        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead."
+        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]"
         echo
         echo "[ERROR] $5"
         exit
@@ -110,40 +140,88 @@ verifyRGB() {
     fi
 }
 
+# inputSwipe <X> <Y> <XEND> <YEND> <TIME>
+inputSwipe() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputSwipe $*" >&1; fi
+    input swipe "$1" "$2" "$3" "$4" "$5"
+    screenshotRequired=true
+}
+
 # inputTapSleep <X> <Y> <SLEEP>
 # SLEEP default value is DEFAULT_SLEEP
 inputTapSleep() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&1; fi
     input tap "$1" "$2"                         # tap
     sleep "${3:-$DEFAULT_SLEEP}"                # sleep
+    screenshotRequired=true
 }
 
-# testColorOR <X> <Y> <COLOR> [<COLOR> ...]
+# testColorOR [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 0, else 1
 testColorOR() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&1; fi
+    _testColorOR_max_delta=100
+    for arg in "$@"; do
+        shift
+        case "$arg" in
+            -d) shift; _testColorOR_max_delta=$1;;
+            -f) screenshotRequired=true;;
+            *) set -- "$@" "$arg";;
+        esac
+    done
     getColor "$1" "$2"                          # looking for color
     _testColorOR_i=$((3))
     while [ $_testColorOR_i -le $# ]; do        # loop in colors
         _testColorOR_tmp=$(eval "echo \"\$$_testColorOR_i\"")
         if [ "$RGB" = "$_testColorOR_tmp" ]; then                               # color found?
             return 0                            # At the first color found OR is break, return 1
+        else
+            _testColorOR_delta=100
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -lt "100" ]; then
+                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$_testColorOR_tmp")
+                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
+                    echo "[DEBUG] testColorOR $RGB != $_testColorOR_tmp [Δ $_testColorOR_delta%]" >&1;
+                fi
+                if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
+                    return 1
+                fi
+            fi
         fi
         _testColorOR_i=$((_testColorOR_i+1))
     done
     return 1                                    # if no result > return 0
 }
 
-# testColorNAND <X> <Y> <COLOR> [<COLOR> ...]
+# testColorNAND [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # if true, return 0, else 1
 testColorNAND() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&1; fi
+    _testColorNAND_max_delta=100
+    for arg in "$@"; do
+        shift
+        case "$arg" in
+            -d) shift; _testColorNAND_max_delta=$1;;
+            -f) screenshotRequired=true;;
+            *) set -- "$@" "$arg";;
+        esac
+    done
     getColor "$1" "$2"                          # looking for color
     _testColorNAND_i=$((3))
     while [ $_testColorNAND_i -le $# ]; do      # loop in colors
         _testColorNAND_tmp=$(eval "echo \"\$$_testColorNAND_i\"")
         if [ "$RGB" = "${_testColorNAND_tmp}" ]; then                           # color found?
             return 1                            # At the first color found NAND is break, return 1
+        else
+            _testColorNAND_delta=100
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_max_delta" -lt "100" ]; then
+                _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$_testColorNAND_tmp")
+                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
+                    echo "[DEBUG] testColorNAND $RGB != $_testColorNAND_tmp [Δ $_testColorNAND_delta%]" >&1;
+                fi
+                if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
+                    return 1
+                fi
+            fi
         fi
         _testColorNAND_i=$((_testColorNAND_i+1))
     done
@@ -164,7 +242,7 @@ testColorORTapSleep() {
 loopUntilRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&1; fi
     sleep "$1"
-    while testColorNAND "$2" "$3" "$4"; do
+    while testColorNAND -f "$2" "$3" "$4"; do
         sleep 1
     done
 }
@@ -173,7 +251,7 @@ loopUntilRGB() {
 loopUntilNotRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&1; fi
     sleep "$1"
-    while testColorOR "$2" "$3" "$4"; do
+    while testColorOR -f "$2" "$3" "$4"; do
         sleep 1
     done
 }
@@ -196,7 +274,7 @@ doSkip() {
 # Waits until battle starts
 waitBattleStart() {
     # Check if pause button is present
-    until testColorOR 110 1465 482f1f; do
+    until testColorOR -f 110 1465 482f1f; do
         # Maybe pause button doesn't exist, so instead check for a skip button
         if testColorOR 760 1440 502e1d; then return; fi
 
@@ -211,7 +289,7 @@ waitBattleFinish() {
     finished=false
     while [ $finished = false ]; do
         # First RGB local device, second bluestacks
-        if testColorOR 560 350 b8894d b7894c;then                               # Victory
+        if testColorOR -f 560 350 b8894d b7894c;then                            # Victory
             battleFailed=false
             finished=true
         elif [ "$RGB" = '171932' ]; then                                        # Failed
@@ -294,7 +372,7 @@ buyStoreItem() {
 # Searches for a "good" present in oak Inn
 oakSearchPresent() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&1; fi
-    input swipe 400 1600 400 310 50             # Swipe all the way down
+    inputSwipe 400 1600 400 310 50              # Swipe all the way down
     sleep 1
 
     if testColorOR 540 990 833f0e;then                                          # 1 red 833f0e blue 903da0
@@ -670,7 +748,7 @@ soloBounties() {
 
 # Starts Team Bounties. Params: startFromTab
 teamBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&1; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 600 1320 1
     fi
@@ -687,7 +765,7 @@ teamBounties() {
 
 # Attempts to tap the closest Arena of Heroes opponent. Params: opponent
 tapClosestOpponent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] tapClosestOpponent $*" >&1; fi
     # Depending on the opponent number sent as a parameter ($1), this function
     # would attempt to check if there's an opponent above the one sent.
     # If there isn't, check the one above that one and so on until one is found.
@@ -923,7 +1001,7 @@ battleKingsTower() {
         inputTapSleep 540 1350                  # Challenge
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorOR 550 150 1a1212; do
+        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorOR -f 550 150 1a1212; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 2
 
@@ -1248,7 +1326,7 @@ oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 890 850 3 0.5
+# test 910 850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1270,6 +1348,7 @@ sleep 10
 
 loopUntilNotRGB 1 450 1775 cc9261               # Loops until the game has launched
 
+wait
 inputTapSleep 970 380 0                         # Open menu for friends, etc
 
 switchTab "Campaign"
@@ -1280,7 +1359,7 @@ switchTab "Ranhorn"
 sleep 1
 switchTab "Campaign" true
 
-if testColorOR 740 205 ffc15b;then              # Check if game is being updated
+if testColorOR -f 740 205 ffc15b;then           # Check if game is being updated
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
