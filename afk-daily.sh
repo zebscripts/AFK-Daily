@@ -58,6 +58,7 @@ sRGBColorDelta() {
         echo " 0 means opposit colors, 100 means same colors" >&2
         return
     fi
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
     r=$((0x${1:0:2} - 0x${2:0:2}))
     g=$((0x${1:2:2} - 0x${2:2:2}))
     b=$((0x${1:4:2} - 0x${2:4:2}))
@@ -113,6 +114,7 @@ readRGB() {
 
 # Sets RGB. Params: [-f] X, Y
 getColor() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&1; fi
     for arg in "$@"; do
         shift
         case "$arg" in
@@ -120,7 +122,6 @@ getColor() {
             *) set -- "$@" "$arg";;
         esac
     done
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&1; fi
     takeScreenshot
     readRGB "$1" "$2"
     if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&1; fi
@@ -128,7 +129,7 @@ getColor() {
 
 # Verifies if X and Y have specific RGB. Params: X, Y, RGB, MessageSuccess, MessageFailure
 verifyRGB() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $1 $2 $3" >&1; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&1; fi
     getColor "$1" "$2"
     if [ "$RGB" != "$3" ]; then
         echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]"
@@ -258,21 +259,25 @@ loopUntilNotRGB() {
 
 # Click on auto if not already enabled
 doAuto() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doAuto" >&1; fi
     testColorORTapSleep 760 1440 332b2b 0       # On:743b29 Off:332b2b
 }
 
 # Click on x4 if not already enabled
 doSpeed() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSpeed" >&1; fi
     testColorORTapSleep 990 1440 332b2b 0       # On:743b2a Off:332b2b
 }
 
 # Click on skip if avaible
 doSkip() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSkip" >&1; fi
     testColorORTapSleep 760 1440 502e1d 0       # Exists: 502e1d
 }
 
 # Waits until battle starts
 waitBattleStart() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&1; fi
     # Check if pause button is present
     until testColorOR -f 110 1465 482f1f; do
         # Maybe pause button doesn't exist, so instead check for a skip button
@@ -1118,7 +1123,7 @@ guildHunts() {
 
 # Battles against the Twisted Realm Boss. Params: startFromTab
 twistedRealmBoss() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&1; fi
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
