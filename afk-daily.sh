@@ -1069,7 +1069,12 @@ function battleKingsTower() {
                 input tap 550 1850 # Collect
                 sleep 4
 
+                # Tap on the top to close possible limited offer
+                input tap 550 170
+                sleep 2
+
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
+                # Tapping 550 170 might close an offer 
                 # Tap top of the screen to close any possible Limited Offers
                 # getColor 550 150
                 # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
@@ -1432,13 +1437,12 @@ function strengthenCrystal() {
 function nobleTavern() {
     input tap 280 1370 # The Noble Tavern
     sleep 3
-
     input tap 600 1820 # The noble tavern again
     sleep 1
 
     # Looking for heart
     getColor 875 835
-    until [ "$RGB" == "f38d67" ]; do
+    until [ "$RGB" == "fc9473" ]; do
         input tap 870 1630 # Next pannel
         sleep 1
         getColor 875 835
