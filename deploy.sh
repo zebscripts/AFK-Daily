@@ -10,7 +10,7 @@ source ./lib/print.sh
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
-configFile="config.sh"
+configFile="config.ini"
 tempFile=".afkscript.tmp"
 
 # Do not modify
@@ -86,12 +86,12 @@ function checkAdb() {
 
 # Creates a config.sh file if not found
 function checkConfig() {
-    printTask "Searching for config.sh file..."
+    printTask "Searching for $configFile file..."
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
     else
         printWarn "Not found!"
-        printTask "Creating new config.sh file..."
+        printTask "Creating new $configFile file..."
         printf '# --- CONFIG: Modify accordingly to your game! Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
 # Player
 canOpenSoren=false
@@ -138,9 +138,9 @@ doCollectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "S
 doCollectQuestChests=true
 doCollectMail=true
 doCollectMerchantFreebies=false
-' >config.sh
+' > "$configFile"
         printSuccess "Created!\n"
-        printInfo "Please edit config.sh if necessary and run this script again."
+        printInfo "Please edit $configFile if necessary and run this script again."
         exit
     fi
 
@@ -148,10 +148,10 @@ doCollectMerchantFreebies=false
     validateConfig
 }
 
-# Checks for every necessary variable that needs to be defined in config.sh
+# Checks for every necessary variable that needs to be defined in config.ini
 function validateConfig() {
-    source config.sh
-    printTask "Validating config.sh..."
+    source $configFile
+    printTask "Validating $configFile..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
@@ -181,8 +181,8 @@ function validateConfig() {
         $doCollectQuestChests || -z \
         $doCollectMail || -z \
         $doCollectMerchantFreebies ]]; then
-        printError "config.sh has missing/wrong entries."
-        printInfo "Please either delete config.sh and run the script again to generate a new one, or check the following link for help:"
+        printError "$configFile has missing/wrong entries."
+        printInfo "Please either delete $configFile and run the script again to generate a new one, or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
         exit
     fi
@@ -306,7 +306,7 @@ function deploy() {
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
-    $adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
+    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
     $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" && saveDate # Run script. Comment line if you don't want to run the script after pushing to device
 }
 
@@ -316,7 +316,7 @@ clear
 checkAdb
 #checkForUpdate
 checkConfig
-checkLineEndings "config.sh"
+checkLineEndings $configFile
 checkLineEndings "afk-daily.sh"
 checkDate
 
