@@ -1,6 +1,10 @@
 #!/system/bin/sh
 
-# --- Variables --- #
+# TODO: Group Game function by tab
+
+# ##############################################################################
+# Section       : Variables
+# ##############################################################################
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
 DEBUG=4
@@ -25,6 +29,7 @@ activeTab="Start"
 screenshotRequired=true
 # TODO: Only take usefull screenshots
 #   ATM, just print in takeScreenshot to check all > [DEBUG] takeScreenshot (screenshotRequired=false)
+
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
@@ -36,8 +41,16 @@ else
     . "/storage/emulated/0/scripts/afk-arena/config.sh"
 fi
 
-# --- Functions --- #
-# Test function: take screenshot, get rgb, exit. Params: X, Y, amountTimes, waitTime
+# ##############################################################################
+# Section       : Core Functions
+# ##############################################################################
+
+# ##############################################################################
+# Function Name : Test
+# Description   : Print RGB then exit
+# Args          : <X> <Y> <REPEAT> <SLEEP>
+# Output        : stdout [0 means same colors, 100 means opposite colors]
+# ##############################################################################
 test() {
     _test_COUNT=0
     until [ "$_test_COUNT" -ge "$3" ]; do
@@ -49,9 +62,12 @@ test() {
     exit
 }
 
-# sRGBColorDelta <COLOR1> <COLOR2>
-# https://stackoverflow.com/a/22692625/7295428
-# 0 means same colors, 100 means opposite colors
+# ##############################################################################
+# Function Name : sRGBColorDelta
+# Args          : <COLOR1> <COLOR2>
+# Output        : stdout [0 means same colors, 100 means opposite colors]
+# Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
+# ##############################################################################
 sRGBColorDelta() {
     if [ "$#" -ne 2 ] ; then
         echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&1
@@ -67,35 +83,55 @@ sRGBColorDelta() {
     echo $d
 }
 
-# Default wait time for actions
+# ##############################################################################
+# Function Name : wait
+# Descripton    : Default wait time for actions
+# ##############################################################################
 wait() {
     sleep $DEFAULT_SLEEP
 }
 
-# Starts the app
+# ##############################################################################
+# Function Name : startApp
+# Descripton    : Starts AFK Arena
+# ##############################################################################
 startApp() {
     monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
     sleep 1
     disableOrientation
 }
 
-# Closes the app
+# ##############################################################################
+# Function Name : closeApp
+# Descripton    : Closes AFK Arena
+# ##############################################################################
 closeApp() {
     am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
 }
 
-# Switches between last app
+# ##############################################################################
+# Function Name : switchApp
+# Descripton    : Switches between last app
+# ##############################################################################
 switchApp() {
     input keyevent KEYCODE_APP_SWITCH
     input keyevent KEYCODE_APP_SWITCH
 }
 
-# Disables automatic orientation
+# ##############################################################################
+# Function Name : disableOrientation
+# Descripton    : Disables automatic orientation
+# ##############################################################################
 disableOrientation() {
     content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
 }
 
-# Takes a screenshot and saves it
+# ##############################################################################
+# Function Name : takeScreenshot
+# Descripton    : Takes a screenshot and saves it
+# TODO          : Takes a screenshot and save it IF $screenshotRequired = true
+# Output        : $SCREENSHOTLOCATION
+# ##############################################################################
 takeScreenshot() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&1; fi
     # TODO: if [ $screenshotRequired = true ]; then screencap "$SCREENSHOTLOCATION"; fi
@@ -103,7 +139,12 @@ takeScreenshot() {
     screenshotRequired=false
 }
 
-# Gets pixel color. Params: X, Y
+# ##############################################################################
+# Function Name : readRGB
+# Descripton    : Gets pixel color
+# Args          : <X> <Y>
+# Output        : $RGB
+# ##############################################################################
 readRGB() {
     offset=$((DEVICEWIDTH*$2+$1+3))
     RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
@@ -112,7 +153,11 @@ readRGB() {
     # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
 }
 
-# Sets RGB. Params: [-f] X, Y
+# ##############################################################################
+# Function Name : getColor
+# Descripton    : Sets $RGB, <-f> to force the screenshot
+# Args          : [<-f>] <X> <Y>
+# ##############################################################################
 getColor() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&1; fi
     for arg in "$@"; do
@@ -127,7 +172,12 @@ getColor() {
     if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&1; fi
 }
 
-# Verifies if X and Y have specific RGB. Params: X, Y, RGB, MessageSuccess, MessageFailure
+# ##############################################################################
+# Function Name : getColor
+# Descripton    : Verifies if <X> and <Y> have specific RGB then print <MESSAGE_*>
+# Args          : <X> <Y> <RGB> <MESSAGE_SUCCESS> <MESSAGE_FAILURE>
+# Output        : stdout MessageSuccess, stderr MessageFailure
+# ##############################################################################
 verifyRGB() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&1; fi
     getColor "$1" "$2"
@@ -141,15 +191,22 @@ verifyRGB() {
     fi
 }
 
-# inputSwipe <X> <Y> <XEND> <YEND> <TIME>
+# ##############################################################################
+# Function Name : inputSwipe
+# Descripton    : Swipe
+# Args          : <X> <Y> <XEND> <YEND> <TIME>
+# ##############################################################################
 inputSwipe() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputSwipe $*" >&1; fi
     input swipe "$1" "$2" "$3" "$4" "$5"
     screenshotRequired=true
 }
 
-# inputTapSleep <X> <Y> <SLEEP>
-# SLEEP default value is DEFAULT_SLEEP
+# ##############################################################################
+# Function Name : inputTapSleep
+# Descripton    : input tap <X> <Y>, then SLEEP with default value DEFAULT_SLEEP
+# Args          : <X> <Y> [<SLEEP>]
+# ##############################################################################
 inputTapSleep() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&1; fi
     input tap "$1" "$2"                         # tap
@@ -157,8 +214,14 @@ inputTapSleep() {
     screenshotRequired=true
 }
 
-# testColorOR [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
-# if true, return 0, else 1
+# ##############################################################################
+# Function Name : testColorOR
+# Descripton    : Equivalent to:
+#                   getColor <X> <Y>
+#                   if [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; then
+# Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
+# Output        : if true, return 0, else 1
+# ##############################################################################
 testColorOR() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&1; fi
     _testColorOR_max_delta=100
@@ -193,8 +256,14 @@ testColorOR() {
     return 1                                    # if no result > return 0
 }
 
-# testColorNAND [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
-# if true, return 0, else 1
+# ##############################################################################
+# Function Name : testColorNAND
+# Descripton    : Equivalent to:
+#                   getColor <X> <Y>
+#                   if [ "$RGB" != <COLOR> ] && [ "$RGB" != <COLOR> ]; then
+# Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
+# Output        : if true, return 0, else 1
+# ##############################################################################
 testColorNAND() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&1; fi
     _testColorNAND_max_delta=100
@@ -229,9 +298,14 @@ testColorNAND() {
     return 0                                    # If no result > return 0
 }
 
-# testColorORTapSleep <X> <Y> <COLOR> <SLEEP>
-# SLEEP default value is DEFAULT_SLEEP
-# if true, tap, else do nothing
+# ##############################################################################
+# Function Name : testColorORTapSleep
+# Descripton    : Equivalent to:
+#                   if testColorOR <X> <Y> <COLOR>; then
+#                       inputTapSleep <X> <Y> <SLEEP>
+#                   fi
+# Args          : <X> <Y> <COLOR> <SLEEP>
+# ##############################################################################
 testColorORTapSleep() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&1; fi
     if testColorOR "$1" "$2" "$3";then          # if color found
@@ -239,7 +313,11 @@ testColorORTapSleep() {
     fi
 }
 
-# Loops until RGB is not equal. Params: Seconds, X, Y, RGB
+# ##############################################################################
+# Function Name : loopUntilRGB
+# Descripton    : Loops until RGB is not equal
+# Args          : <SLEEP> <X> <Y> <COLOR>
+# ##############################################################################
 loopUntilRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&1; fi
     sleep "$1"
@@ -248,7 +326,11 @@ loopUntilRGB() {
     done
 }
 
-# Loops until RGB is equal. Params: Seconds, X, Y, RGB
+# ##############################################################################
+# Function Name : loopUntilNotRGB
+# Descripton    : Loops until RGB is equal
+# Args          : <SLEEP> <X> <Y> <COLOR>
+# ##############################################################################
 loopUntilNotRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&1; fi
     sleep "$1"
@@ -257,25 +339,41 @@ loopUntilNotRGB() {
     done
 }
 
-# Click on auto if not already enabled
+# ##############################################################################
+# Section       : Game SubFunctions
+# ##############################################################################
+
+# ##############################################################################
+# Function Name : doAuto
+# Descripton    : Click on auto if not already enabled
+# ##############################################################################
 doAuto() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doAuto" >&1; fi
     testColorORTapSleep 760 1440 332b2b 0       # On:743b29 Off:332b2b
 }
 
-# Click on x4 if not already enabled
+# ##############################################################################
+# Function Name : doSpeed
+# Descripton    : Click on x4 if not already enabled
+# ##############################################################################
 doSpeed() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSpeed" >&1; fi
     testColorORTapSleep 990 1440 332b2b 0       # On:743b2a Off:332b2b
 }
 
-# Click on skip if avaible
+# ##############################################################################
+# Function Name : doSkip
+# Descripton    : Click on skip if avaible
+# ##############################################################################
 doSkip() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSkip" >&1; fi
     testColorORTapSleep 760 1440 502e1d 0       # Exists: 502e1d
 }
 
-# Waits until battle starts
+# ##############################################################################
+# Function Name : waitBattleStart
+# Descripton    : Waits until battle starts
+# ##############################################################################
 waitBattleStart() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&1; fi
     # Check if pause button is present
@@ -287,7 +385,11 @@ waitBattleStart() {
     done
 }
 
-# Waits until a battle has ended. Params: Seconds
+# ##############################################################################
+# Function Name : waitBattleFinish
+# Descripton    : Waits until a battle has ended after <SECONDS>
+# Args          : <SECONDS>
+# ##############################################################################
 waitBattleFinish() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&1; fi
     sleep "$1"
@@ -309,7 +411,13 @@ waitBattleFinish() {
     done
 }
 
-# Switches to another tab. Params: <Tab name> <force>
+# ##############################################################################
+# Function Name : waitBattleFinish
+# Descripton    : Switches to another tab if required by config.
+# Args          : <TAB_NAME> [<FORCE>]
+#                   <TAB_NAME>: Campaign / Dark Forest / Ranhorn / Chat
+#                   <FORCE>: true / false, default false
+# ##############################################################################
 switchTab() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $* [activeTab=$activeTab]" >&1; fi
     if [ "$1" = "$activeTab" ]; then
@@ -366,7 +474,11 @@ switchTab() {
     esac
 }
 
-# Buys an item from the Store. Params: X, Y
+# ##############################################################################
+# Function Name : buyStoreItem
+# Descripton    : Buys an item from the Store
+# Args          : <X> <Y>
+# ##############################################################################
 buyStoreItem() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyStoreItem $*" >&1; fi
     inputTapSleep "$1" "$2" 1
@@ -374,7 +486,10 @@ buyStoreItem() {
     inputTapSleep 550 1700 0
 }
 
-# Searches for a "good" present in oak Inn
+# ##############################################################################
+# Function Name : oakSearchPresent
+# Descripton    : Searches for a "good" present in oak Inn
+# ##############################################################################
 oakSearchPresent() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&1; fi
     inputSwipe 400 1600 400 310 50              # Swipe all the way down
@@ -418,7 +533,10 @@ oakSearchPresent() {
     fi
 }
 
-# Search available present tabs in Oak Inn
+# ##############################################################################
+# Function Name : oakPresentTab
+# Descripton    : Search available present tabs in Oak Inn
+# ##############################################################################
 oakPresentTab() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakPresentTab" >&1; fi
     oakPresentTabs=0
@@ -436,7 +554,10 @@ oakPresentTab() {
     fi
 }
 
-# Tries to collect a present from one Oak Inn friend
+# ##############################################################################
+# Function Name : oakTryCollectPresent
+# Descripton    : Tries to collect a present from one Oak Inn friend
+# ##############################################################################
 oakTryCollectPresent() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakTryCollectPresent" >&1; fi
     oakSearchPresent                            # Search for a "good" present
@@ -578,7 +699,10 @@ oakTryCollectPresent() {
     fi
 }
 
-# Checks where to end the script
+# ##############################################################################
+# Function Name : checkWhereToEnd
+# Descripton    : Checks where to end the script
+# ##############################################################################
 checkWhereToEnd() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&1; fi
     case "$endAt" in
@@ -623,7 +747,10 @@ checkWhereToEnd() {
     esac
 }
 
-# Repeat a battle for as long as totalAmountArenaTries
+# ##############################################################################
+# Function Name : quickBattleGuildBosses
+# Descripton    : Repeat a battle for as long as totalAmountArenaTries
+# ##############################################################################
 quickBattleGuildBosses() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&1; fi
     _quickBattleGuildBosses_COUNT=0
@@ -636,7 +763,10 @@ quickBattleGuildBosses() {
     done
 }
 
-# Loots afk chest
+# ##############################################################################
+# Function Name : lootAfkChest
+# Descripton    : Loots afk chest
+# ##############################################################################
 lootAfkChest() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&1; fi
     inputTapSleep 550 1500 1
@@ -646,7 +776,10 @@ lootAfkChest() {
     verifyRGB 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
 }
 
-# Challenges a boss in the campaign
+# ##############################################################################
+# Function Name : challengeBoss
+# Descripton    : Challenges a boss in the campaign
+# ##############################################################################
 challengeBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&1; fi
     inputTapSleep 550 1650 1
@@ -709,7 +842,10 @@ challengeBoss() {
     verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
 }
 
-# Collects fast rewards
+# ##############################################################################
+# Function Name : fastRewards
+# Descripton    : Collects fast rewards
+# ##############################################################################
 fastRewards() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&1; fi
     inputTapSleep 950 1660 1
@@ -719,7 +855,10 @@ fastRewards() {
     verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
 
-# Collects and sends companion points, as well as auto lending mercenaries
+# ##############################################################################
+# Function Name : collectFriendsAndMercenaries
+# Descripton    : Collects and sends companion points, as well as auto lending mercenaries
+# ##############################################################################
 collectFriendsAndMercenaries() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&1; fi
     inputTapSleep 970 810 1
@@ -737,7 +876,10 @@ collectFriendsAndMercenaries() {
     verifyRGB 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries." "Failed to collect/send companion points or failed to auto lend mercenaries."
 }
 
-# Starts Solo bounties
+# ##############################################################################
+# Function Name : soloBounties
+# Descripton    : Starts Solo bounties
+# ##############################################################################
 soloBounties() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&1; fi
     inputTapSleep 600 1320 1
@@ -755,7 +897,11 @@ soloBounties() {
     fi
 }
 
-# Starts Team Bounties. Params: startFromTab
+# ##############################################################################
+# Function Name : teamBounties
+# Descripton    : Starts Team bounties
+# Args          : <START_FROM_TAB>: true / false
+# ##############################################################################
 teamBounties() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&1; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
@@ -772,7 +918,12 @@ teamBounties() {
     verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
-# Attempts to tap the closest Arena of Heroes opponent. Params: opponent
+# ##############################################################################
+# Function Name : tapClosestOpponent
+# Descripton    : Attempts to tap the closest Arena of Heroes opponent
+# Args          : <OPPONENT>: 1/2/3/4/5
+# Output        : If failed, return 1
+# ##############################################################################
 tapClosestOpponent() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] tapClosestOpponent $*" >&1; fi
     # Depending on the opponent number sent as a parameter ($1), this function
@@ -851,7 +1002,10 @@ tapClosestOpponent() {
     esac
 }
 
-# Does the daily arena of heroes battles
+# ##############################################################################
+# Function Name : arenaOfHeroes
+# Descripton    : Does the daily arena of heroes battles
+# ##############################################################################
 arenaOfHeroes() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&1; fi
     inputTapSleep 740 1050 3
@@ -963,7 +1117,11 @@ arenaOfHeroes() {
     fi
 }
 
-# Does the daily Legends tournament battles. Params: startFromTab
+# ##############################################################################
+# Function Name : legendsTournament
+# Descripton    : Does the daily Legends tournament battles
+# Args          : <START_FROM_TAB>: true / false
+# ##############################################################################
 legendsTournament() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&1; fi
     if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
@@ -1000,7 +1158,11 @@ legendsTournament() {
     verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
 }
 
-# Battles in King's Towers. Params: X, Y
+# ##############################################################################
+# Function Name : battleKingsTower
+# Descripton    : Battles in King's Towers
+# Args          : <X> <Y>
+# ##############################################################################
 battleKingsTower() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] battleKingsTower $*" >&1; fi
     _battleKingsTower_COUNT=0
@@ -1046,7 +1208,10 @@ battleKingsTower() {
     fi
 }
 
-# Battles once in the kings tower
+# ##############################################################################
+# Function Name : kingsTower
+# Descripton    : Try to battle in every Kings Tower
+# ##############################################################################
 kingsTower() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&1; fi
     inputTapSleep 500 870                       # King's Tower
@@ -1063,7 +1228,10 @@ kingsTower() {
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
 
-# Battles against Guild boss Wrizz
+# ##############################################################################
+# Function Name : guildHunts
+# Descripton    : Battles against Guild boss Wrizz
+# ##############################################################################
 guildHunts() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts" >&1; fi
     inputTapSleep 380 360 10
@@ -1127,7 +1295,11 @@ guildHunts() {
     fi
 }
 
-# Battles against the Twisted Realm Boss. Params: startFromTab
+# ##############################################################################
+# Function Name : twistedRealmBoss
+# Descripton    : Battles against the Twisted Realm Boss
+# Args          : <START_FROM_TAB>: true / false
+# ##############################################################################
 twistedRealmBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&1; fi
     # TODO: Choose if 2x or not
@@ -1162,7 +1334,10 @@ twistedRealmBoss() {
     verifyRGB 20 1775 d49a61 "Checked Twisted Realm Boss out." "Failed to check the Twisted Realm out."
 }
 
-# Buy items from store
+# ##############################################################################
+# Function Name : buyFromStore
+# Descripton    : Buy items from store
+# ##############################################################################
 buyFromStore() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&1; fi
     inputTapSleep 330 1650 3
@@ -1183,6 +1358,10 @@ buyFromStore() {
     verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
 }
 
+# ##############################################################################
+# Function Name : quickCollectQuestChests
+# Descripton    : Collects quest chests
+# ##############################################################################
 quickCollectQuestChests() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickCollectQuestChests" >&1; fi
     # Collect Quests
@@ -1203,7 +1382,10 @@ quickCollectQuestChests() {
     inputTapSleep 580 600                       # Collect
 }
 
-# Collects
+# ##############################################################################
+# Function Name : collectQuestChests
+# Descripton    : Collects quest chests (well, switch tab then call quickCollectQuestChests)
+# ##############################################################################
 collectQuestChests() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&1; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
@@ -1219,7 +1401,10 @@ collectQuestChests() {
     verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
-# Collects mail
+# ##############################################################################
+# Function Name : collectMail
+# Descripton    : Collects mail
+# ##############################################################################
 collectMail() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&1; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
@@ -1230,7 +1415,10 @@ collectMail() {
     verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
 
-# Collects Daily/Weekly/Monthly from the merchants page
+# ##############################################################################
+# Function Name : collectMerchants
+# Descripton    : Collects Daily/Weekly/Monthly from the merchants page
+# ##############################################################################
 collectMerchants() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMerchants" >&1; fi
     inputTapSleep 120 300 3                     # Merchants
@@ -1262,7 +1450,10 @@ collectMerchants() {
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
-# If red square, strenghen Crystal
+# ##############################################################################
+# Function Name : strengthenCrystal
+# Descripton    : Strenghen Crystal
+# ##############################################################################
 strengthenCrystal() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&1; fi
     inputTapSleep 760 1030 3                    # Crystal
@@ -1275,7 +1466,10 @@ strengthenCrystal() {
     verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
 
-# Let's do a "free" summon
+# ##############################################################################
+# Function Name : nobleTavern
+# Descripton    : Let's do a "free" summon
+# ##############################################################################
 nobleTavern() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&1; fi
     inputTapSleep 280 1370 3                    # The Noble Tavern
@@ -1294,7 +1488,10 @@ nobleTavern() {
     verifyRGB 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
 }
 
-# Collect Oak Inn
+# ##############################################################################
+# Function Name : oakInn
+# Descripton    : Collect Oak Inn
+# ##############################################################################
 oakInn() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&1; fi
     inputTapSleep 780 270 5                     # Oak Inn
@@ -1336,6 +1533,10 @@ oakInn() {
     verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
 }
 
+# ##############################################################################
+# Section       : Test
+# ##############################################################################
+
 # Test function (X, Y, amountTimes, waitTime)
 # test 910 850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
@@ -1349,7 +1550,10 @@ oakInn() {
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
-# --- Script Start --- #
+# ##############################################################################
+# Section       : Script Start
+# ##############################################################################
+
 echo "[INFO] Starting script... ($(date)) "
 echo
 closeApp
