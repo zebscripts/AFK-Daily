@@ -618,7 +618,7 @@ checkWhereToEnd() {
             fi
             ;;
         *)
-            echo "[WARN] Unknown location to end script on. Ignoring..."
+            echo "[WARN] Unknown location to end script on. Ignoring..." >&2
             ;;
     esac
 }
@@ -676,7 +676,9 @@ challengeBoss() {
                     # Tap top of the screen to close any possible Limited Offers
                     # inputTapSleep 550 75
 
-                    testColorORTapSleep 550 740 f2d79f 5                        # Check if boss
+                    if testColorOR 550 740 f2d79f; then                         # Check if boss
+                        inputTap 550 1450 5
+                    fi
                 else
                     inputTapSleep 550 1150 3    # Continue to next battle
                 fi
@@ -691,14 +693,16 @@ challengeBoss() {
         # Return to campaign
         inputTapSleep 60 1850                   # Return
 
-        testColorORTapSleep 715 1260 feffff 2   # Check for confirm to exit button
+        testColorORTapSleep 715 1260 feffff     # Check for confirm to exit button
     else
         # Quick exit battle
         inputTapSleep 550 1850 1                # Battle
         inputTapSleep 80 1460                   # Pause
         inputTapSleep 230 960 1                 # Exit
 
-        testColorORTapSleep 450 1775 cc9261 0   # Check for multi-battle
+        if testColorOR 450 1775 cc9261; then   # Check for multi-battle
+            inputTAp 70 1810
+        fi
     fi
 
     wait
@@ -860,6 +864,7 @@ arenaOfHeroes() {
     inputTapSleep 980 410
     inputTapSleep 540 1800
 
+    # TODO: I think I broke this condition
     if testColorNAND 200 1800 382314 382214;then                                # Check for new season
         _arenaOfHeroes_COUNT=0
         until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do      # Repeat a battle for as long as totalAmountArenaTries
@@ -1006,13 +1011,14 @@ battleKingsTower() {
         inputTapSleep 540 1350                  # Challenge
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorOR -f 550 150 1a1212; do
+        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleFinish 2
 
             # Check if win or lose battle
             if [ "$battleFailed" = false ]; then
                 inputTapSleep 550 1850 4        # Collect
+                inputTapSleep 550 170           # Tap on the top to close possible limited offer
 
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
                 # Tap top of the screen to close any possible Limited Offers
@@ -1085,7 +1091,7 @@ guildHunts() {
     _guildHunts_COUNT=0
     until [ "$_guildHunts_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         # Check if its possible to fight wrizz
-        # if testColorOR 710 1840 9de7bd; then
+        # if testColorNAND 710 1840 9de7bd; then
         #     echo "Enough of wrizz! Going out."
         #     break
         # fi
@@ -1136,7 +1142,7 @@ twistedRealmBoss() {
     inputTapSleep 820 820
 
     if testColorOR 540 1220 9aedc1;then         # Check if TR is being calculated
-        echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
+        echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
         inputTapSleep 550 1850                  # Twisted Realm
         inputTapSleep 550 1850 0                # Challenge
@@ -1145,7 +1151,7 @@ twistedRealmBoss() {
         doSpeed
 
         loopUntilRGB 30 420 380 ca9c5d          # Start checking for a finished Battle after 40 seconds
-
+        wait
         inputTapSleep 550 800 3
         inputTapSleep 550 800
         # TODO: Repeat battle if variable says so
@@ -1365,13 +1371,13 @@ sleep 1
 switchTab "Campaign" true
 
 if testColorOR -f 740 205 ffc15b;then           # Check if game is being updated
-    echo "[WARN] Game is being updated!"
+    echo "[WARN] Game is being updated!" >&2
     if [ "$waitForUpdate" = true ]; then
         echo "[INFO]: Waiting for game to finish update..."
         loopUntilNotRGB 5 740 205 ffc15b
         echo "[OK]: Game finished updating."
     else
-        echo "[WARN]: Not waiting for update to finish."
+        echo "[WARN]: Not waiting for update to finish." >&2
     fi
 fi
 

@@ -222,7 +222,7 @@ restartAdb() {
 # Params: Platform
 checkForDevice() {
     if [ "$#" -gt "0" ]; then                   # If parameters are sent
-        if [ "$1" == "Nox" ]; then              # Nox
+        if [ "$1" = "Nox" ]; then               # Nox
             printTask "Searching for Nox through ADB..."
             $adb connect localhost:62001 1>/dev/null
             if ! $adb get-state 1>/dev/null; then
@@ -231,7 +231,7 @@ checkForDevice() {
             else
                 printSuccess "Found Nox!"
             fi
-        elif [ "$1" == "Bluestacks" ]; then     # Bluestacks
+        elif [ "$1" = "Bluestacks" ]; then      # Bluestacks
             printTask "Searching for Bluestacks through ADB... "
             if ! $adb get-state 1>/dev/null; then
                 printError "Not found!"
@@ -276,10 +276,10 @@ checkDate() {
 
 # Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 saveDate(){
-    if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
+    if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
         date +%s > .afkscript.tmp               # Write date to file
 
-        if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi                # Make file invisible if on windows
+        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
     fi
 }
 
@@ -315,18 +315,18 @@ checkDate
 # Check where to deploy
 if [ "$1" ]; then
     # BlueStacks
-    if [ "$1" == "bluestacks" ] || [ "$1" == "bs" ] || [ "$1" == "-bluestacks" ] || [ "$1" == "-bs" ]; then
+    if [ "$1" = "bluestacks" ] || [ "$1" = "bs" ] || [ "$1" = "-bluestacks" ] || [ "$1" = "-bs" ]; then
         restartAdb
         checkForDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
 
     # Nox
-    elif [ "$1" == "nox" ] || [ "$1" == "n" ] || [ "$1" == "-nox" ] || [ "$1" == "-n" ]; then
+    elif [ "$1" = "nox" ] || [ "$1" = "n" ] || [ "$1" = "-nox" ] || [ "$1" = "-n" ]; then
         restartAdb
         checkForDevice "Nox"
         deploy "Nox" "$noxDirectory"
 
-    elif [ "$1" == "dev" ]; then                # Interactive Options
+    elif [ "$1" = "dev" ]; then                 # Interactive Options
         deploy "Personal" "$personalDirectory"
     fi
 else                                            # Try to recognize device automatically
