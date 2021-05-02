@@ -6,6 +6,8 @@
 .markdownlint.json
 
 # Project specific
+.wiki/
 adb/
 config*.sh
 .*afkscript.tmp
+*.bak
