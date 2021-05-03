@@ -102,7 +102,8 @@ waitForUpdate=true
 endAt="championship"
 
 # Repetitions
-maxCampaignFights=10
+maxCampaignFights=5
+maxKingsTowerFights=5
 totalAmountArenaTries=2+0
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=2+0
@@ -130,7 +131,7 @@ doKingsTower=true
 doGuildHunts=true
 doTwistedRealmBoss=true
 doBuyFromStore=true
-doStrenghenCrystal=true
+doStrengthenCrystal=true
 doCompanionPointsSummon=false
 doCollectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 
@@ -157,6 +158,7 @@ function validateConfig() {
         $waitForUpdate || -z \
         $endAt || -z \
         $maxCampaignFights || -z \
+        $maxKingsTowerFights || -z \
         $totalAmountArenaTries || -z \
         $totalAmountTournamentTries || -z \
         $totalAmountGuildBossTries || -z \
@@ -175,7 +177,7 @@ function validateConfig() {
         $doGuildHunts || -z \
         $doTwistedRealmBoss || -z \
         $doBuyFromStore || -z \
-        $doStrenghenCrystal || -z \
+        $doStrengthenCrystal || -z \
         $doCompanionPointsSummon || -z \
         $doCollectOakPresents || -z \
         $doCollectQuestChests || -z \
@@ -269,26 +271,26 @@ function checkForDevice() {
 # Check date to decide whether to beat campaign or not.
 function checkDate() {
     printTask "Checking last time script was run..."
-	if [ -f $tempFile ]; then
-		value=$(< $tempFile) # Time of last beat campaign
-		now=$(date +"%s") # Current time
-		let "difference = $now - $value" # Time since last beat campaign
-		
-		# If been longer than 3 days, set forceFightCampaign=true
-		if [ $difference -gt 255600 ]; then
-			forceFightCampaign=true
-		fi
-	fi
+    if [ -f $tempFile ]; then
+        value=$(< $tempFile) # Time of last beat campaign
+        now=$(date +"%s") # Current time
+        let "difference = $now - $value" # Time since last beat campaign
+
+        # If been longer than 3 days, set forceFightCampaign=true
+        if [ $difference -gt 255600 ]; then
+            forceFightCampaign=true
+        fi
+    fi
 }
 
 # Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 function saveDate(){
-	if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
-		echo $(date +"%s") > .afkscript.tmp # Write date to file
+    if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
+        echo $(date +"%s") > .afkscript.tmp # Write date to file
 
         # Make file invisible if on windows
         if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi
-	fi
+    fi
 }
 
 # Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
@@ -314,7 +316,7 @@ function deploy() {
 clear
 
 checkAdb
-checkForUpdate
+#checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"

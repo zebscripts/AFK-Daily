@@ -12,7 +12,7 @@
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.61.04-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.62.04-blue.svg"></img></a>
   </p>
 </div>
 
@@ -68,14 +68,14 @@ As of now, the script is capable of completing the following inside the game:
 - Send Heroes on Solo and Team Bounty Quests
 - Fight in the Arena of Heroes
 - Fight in the Legends Tournament
-- Fight in the Kings Tower
+- Fight in the available King's Towers
 - Fight Wrizz and Soren if available. Can also open Soren for you.
 - Fight in the Twisted Realm (necessary to have at least fought once against each TR boss for the game to save your formation)
 - Buy various items from the Store
 - Strengthen the Resonating Crystal
 - Summon one Hero with Companion Points
 - Collect Oak Inn presents (necessary to enable "Hide Inn Heroes" in the game settings)
-- Collect daily Quest Chests
+- Collect daily and weekly quest chests
 - Collect Mail
 - Collect Daily/Weekly/Monthly rewards from Merchants
 
@@ -249,7 +249,8 @@ The script acts depending on a set of variables. In order to change these, open 
 
 | Variable                     |   Type   | Description                                                                                                              | Default |
 | :--------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `maxCampaignFights`          | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `10`   |
+| `maxCampaignFights`          | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |   `5`   |
+| `maxKingsTowerFights`        | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |   `5`   |
 | `totalAmountArenaTries`      | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 | `totalAmountTournamentTries` | `Number` | The total amount of tries the player may fight in the Tournament.                                                        |   `0`   |
 | `totalAmountGuildBossTries`  | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
@@ -288,7 +289,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doGuildHunts`            | `Boolean` | If `true`, fights Wrizz and possibly Soren.                                                                          | `true`  |
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
-| `doStrenghenCrystal`      | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
+| `doStrengthenCrystal`     | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
 | `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |
 
@@ -318,16 +319,16 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 
 - [x] Add some sort of config, ideally a `./deploy.sh config`
 - [x] Check if there are Bounty Quests to collect before sending out heroes on quests
-- [ ] Fight in more than just the main tower
+- [x] Fight in more than just the main tower
 - [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
 - [x] Fight the twisted realm as well
 - [ ] Collect Soulstones
-- [ ] Collect weekly quests
+- [x] Collect weekly quests
 - [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
 - [x] Make script output pretty
-- [ ] Test for screen size with `adb shell wm size`
+- [x] Test for screen size with `adb shell wm size`
 - [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
-- [ ] Actually try to beat the campaign level every 3 days to maximize farm
+- [x] Actually try to beat the campaign level every 3 days to maximize farm
 - [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
 - [ ] Compatibility for users who aren't as advanced in the game:
   - [ ] Mercenaries
@@ -336,7 +337,7 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
   - [ ] Kings Tower without factional towers
   - [ ] Guild Hunts without quick battle
 - [x] Collect daily rewards from Oak Inn
-- [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+- [x] [Summon one hero with companion points](https://github.com/zebscripts/AFK-Daily/discussions/34)
 
 ## Tips
 

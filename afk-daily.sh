@@ -95,6 +95,38 @@ function verifyRGB() {
     fi
 }
 
+# Click on auto if not already enabled
+function doAuto() {
+    getColor 760 1440 # On:743b29 Off:332b2b
+    if [ "$RGB" == "332b2b" ]; then input tap 760 1440; fi
+}
+
+# Click on x4 if not already enabled
+function doSpeed() {
+    getColor 990 1440 # On:743b2a Off:332b2b
+    if [ "$RGB" == "332b2b" ]; then input tap 990 1440; fi
+}
+
+# Click on skip if avaible
+function doSkip() {
+    getColor 760 1440 # Exists: 502e1d
+    if [ "$RGB" == "502e1d" ]; then input tap 760 1440; fi
+}
+
+# Waits until battle starts
+function waitBattleStart() {
+    # Check if pause button is present
+    getColor 110 1465 # 482f1f
+    until [ "$RGB" == "482f1f" ]; do
+        # Maybe pause button doesn't exist, so instead check for a skip button
+        getColor 760 1440 # 502e1d
+        if [ "$RGB" == "502e1d" ]; then return; fi
+
+        # In case none were found, try again starting with the pause button
+        getColor 110 1465 # 482f1f
+    done
+}
+
 # Switches to another tab. Params: Tab name
 function switchTab() {
     case "$1" in
@@ -527,7 +559,10 @@ function challengeBoss() {
         # Check for battle screen
         getColor 20 1200
         while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
-            input tap 550 1850  # Battle
+            input tap 550 1850 # Battle
+            waitBattleStart
+            doAuto
+            doSpeed
             waitBattleFinish 10 # Wait until battle is over
 
             # Check battle result
@@ -744,16 +779,104 @@ function teamBounties() {
     verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
+# Attempts to tap the closest Arena of Heroes opponent. Params: opponent
+function tapClosestOpponent() {
+    # Depending on the opponent number sent as a parameter ($1), this function
+    # would attempt to check if there's an opponent above the one sent.
+    # If there isn't, check the one above that one and so on until one is found.
+    # When found, tap on the opponent and exit function.
+    case $1 in
+    1)
+        # Refresh
+        input tap 815 540
+        sleep 2
+
+        # Attempt to fight $arenaHeroesOpponent opponent, and if not present, skip battle
+        case $arenaHeroesOpponent in
+        1)
+            # Check if opponent 1 exists and fight if true
+            getColor 820 700
+            if [ "$RGB" == "a7f1b7" ]; then input tap 820 700; else return 1; fi
+            ;;
+        2)
+            # Check if opponent 2 exists and fight if true
+            getColor 820 870
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 870; else return 1; fi
+            ;;
+        3)
+            # Check if opponent 3 exists and fight if true
+            getColor 820 1050
+            if [ "$RGB" == "a7f1b7" ]; then input tap 820 1050; else return 1; fi
+            ;;
+        4)
+            # Check if opponent 4 exists and fight if true
+            getColor 820 1220
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 1220; else return 1; fi
+            ;;
+        5)
+            # Check if opponent 5 exists and fight if true
+            getColor 820 1400
+            if [ "$RGB" == "aaf2bb" ]; then input tap 820 1400; else return 1; fi
+            ;;
+        esac
+        ;;
+    2)
+        # Check if opponent 1 exists
+        getColor 820 700
+        if [ "$RGB" == "a7f1b7" ]; then
+            # Fight opponent
+            input tap 820 700
+        else
+            # Try to fight the closest opponent to 2
+            tapClosestOpponent 1
+        fi
+        ;;
+    3)
+        # Check if opponent 2 exists
+        getColor 820 870
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+            # Fight opponent
+            input tap 820 870
+        else
+            # Try to fight the closest opponent to 3
+            tapClosestOpponent 2
+        fi
+        ;;
+    4)
+        # Check if opponent 3 exists
+        getColor 820 1050
+        if [ "$RGB" == "a7f1b7" ]; then
+            # Fight opponent
+            input tap 820 1050
+        else
+            # Try to fight the closest opponent to 4
+            tapClosestOpponent 3
+        fi
+        ;;
+    5)
+        # Check if opponent 4 exists
+        getColor 820 1220
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+            # Fight opponent
+            input tap 820 1220
+        else
+            # Try to fight the closest opponent to 5
+            tapClosestOpponent 4
+        fi
+        ;;
+    esac
+}
+
 # Does the daily arena of heroes battles
 function arenaOfHeroes() {
     input tap 740 1050
-    sleep 2
+    sleep 3
     if [ "$pvpEvent" == false ]; then
         input tap 550 450
     else
         input tap 550 900
     fi
-    sleep 2
+    sleep 3
     input tap 1000 1800
     wait
     input tap 980 410
@@ -770,33 +893,86 @@ function arenaOfHeroes() {
             # Refresh
             # input tap 815 540
             # wait
+
             # Fight specific opponent
+            #                                Free         x1
+            #  Opponent 1: 820 700      ->        a7f1b7
+            #  Opponent 2: 820 870      ->  2eaab4      aff3c0
+            #  Opponent 3: 820 1050     ->        a7f1b7
+            #  Opponent 4: 820 1220     ->  2daab4      aff3c0
+            #  Opponent 5: 820 1400     ->        aaf2bb
             case $arenaHeroesOpponent in
             1)
-                input tap 820 700
+                # Check if opponent exists
+                getColor 820 700
+                if [ "$RGB" == "a7f1b7" ]; then
+                    # Fight opponent
+                    input tap 820 700
+                else
+                    # Refresh opponents and try to fight opponent $arenaHeroesOpponent
+                    tapClosestOpponent 1
+                fi
                 ;;
             2)
-                input tap 820 870
+                # Check if opponent exists
+                getColor 820 870
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    # Fight opponent
+                    input tap 820 870
+                else
+                    # Try to fight the closest opponent to 2
+                    tapClosestOpponent 2
+                fi
                 ;;
             3)
-                input tap 820 1050
+                # Check if opponent exists
+                getColor 820 1050
+                if [ "$RGB" == "a7f1b7" ]; then
+                    # Fight opponent
+                    input tap 820 1050
+                else
+                    # Try to fight the closest opponent to 3
+                    tapClosestOpponent 3
+                fi
                 ;;
             4)
-                input tap 820 1220
+                # Check if opponent exists
+                getColor 820 1220
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                    # Fight opponent
+                    input tap 820 1220
+                else
+                    # Try to fight the closest opponent to 4
+                    tapClosestOpponent 4
+                fi
                 ;;
             5)
-                input tap 820 1400
+                # Check if opponent exists
+                getColor 820 1400
+                if [ "$RGB" == "aaf2bb" ]; then
+                    # Fight opponent
+                    input tap 820 1400
+                else
+                    # Try to fight the closest opponent to 5
+                    tapClosestOpponent 5
+                fi
                 ;;
             esac
-            sleep 2
-            input tap 550 1850
-            waitBattleFinish 2
-            if [ "$battleFailed" == false ]; then
-                input tap 550 1550 # Collect
+
+            # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
+            if [ $? == 0 ]; then
                 sleep 2
+                input tap 550 1850 # Battle
+                waitBattleStart
+                doSkip
+                waitBattleFinish 2
+                if [ "$battleFailed" == false ]; then
+                    input tap 550 1550 # Collect
+                    sleep 2
+                fi
+                input tap 550 1550 # Finish battle
+                sleep 3
             fi
-            input tap 550 1550 # Finish battle
-            sleep 3
             ((COUNT = COUNT + 1)) # Increment
         done
 
@@ -832,32 +1008,33 @@ function legendsTournament() {
     # sleep 1
     ## End of testing ##
     if [ "$pvpEvent" == false ]; then
-        input tap 550 900
+        input tap 550 900 # Legend's Challenger Tournament
     else
-        input tap 550 1450
+        input tap 550 1450 # Legend's Challenger Tournament
     fi
     sleep 2
-    input tap 550 280
+    input tap 550 280 # Chest
     sleep 3
-    input tap 550 1550
+    input tap 550 1550 # Collect
     sleep 3
-    input tap 1000 1800
+    input tap 1000 1800 # Record
     wait
-    input tap 990 380
+    input tap 990 380 # Close
     wait
 
     # Repeat a battle for as long as totalAmountTournamentTries
     local COUNT=0
     until [ "$COUNT" -ge "$totalAmountTournamentTries" ]; do
-        input tap 550 1840
+        input tap 550 1840 # Challenge
         sleep 4
-        input tap 800 1140
+        input tap 800 1140 # Third opponent
         sleep 4
-        input tap 550 1850
+        input tap 550 1850 # Begin Battle
         sleep 4
-        input tap 770 1470
+        waitBattleStart
+        doSkip
         sleep 4
-        input tap 550 800
+        input tap 550 800 # Tap anywhere to close
         sleep 4
         ((COUNT = COUNT + 1)) # Increment
     done
@@ -865,29 +1042,85 @@ function legendsTournament() {
     input tap 70 1810
     sleep 2
     input tap 70 1810
-
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
 }
 
+# Battles in King's Towers. Params: X, Y
+function battleKingsTower() {
+    local COUNT=0
+    input tap $1 $2 # Tap chosen tower
+    sleep 2
+
+    # Check if inside tower
+    getColor 550 150
+    if [ "$RGB" == "1a1212" ]; then
+        input tap 540 1350 # Challenge
+        wait
+
+        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
+        getColor 550 150
+        while [ "$COUNT" -lt "$maxKingsTowerFights" ] && [ "$RGB" != "1a1212" ]; do
+            input tap 550 1850 # Battle
+            waitBattleFinish 2
+
+            # Check if win or lose battle
+            if [ "$battleFailed" == false ]; then
+                input tap 550 1850 # Collect
+                sleep 4
+
+                # Tap on the top to close possible limited offer
+                input tap 550 170
+                sleep 2
+
+                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
+                # Tapping 550 170 might close an offer 
+                # Tap top of the screen to close any possible Limited Offers
+                # getColor 550 150
+                # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
+                #     input tap 550 75 # Tap top of the screen to close Limited Offer
+                #     wait
+                #     getColor 550 150
+                #     if [ "$RGB" != "1a1212" ]; then # think i remember it needs two taps to close offer
+                #         input tap 550 75 # Tap top of the screen to close Limited Offer
+                #         wait
+                # fi
+
+                input tap 540 1350 # Challenge
+                sleep 2
+            elif [ "$battleFailed" == true ]; then
+                input tap 550 1720    # Try again
+                ((COUNT = COUNT + 1)) # Increment
+                wait
+            fi
+
+            # Check if reached daily limit / kicked us out of battle screen
+            getColor 550 150
+        done
+
+        # Return from chosen tower / battle
+        input tap 70 1810
+        sleep 3
+        getColor 550 150
+        if [ "$RGB" = "1a1212" ]; then input tap 70 1810; fi # In case still in tower, exit once more
+        sleep 2
+    fi
+}
+
 # Battles once in the kings tower
 function kingsTower() {
-    input tap 500 870
+    input tap 500 870 # King's Tower
     sleep 2
-    input tap 550 900
-    sleep 2
-    input tap 540 1350
-    sleep 2
-    input tap 550 1850
-    sleep 2
-    input tap 80 1460
-    sleep 1
-    input tap 230 960
-    wait
-    input tap 70 1810
-    wait
-    input tap 70 1810
 
+    # Towers
+    battleKingsTower 550 900  # Main Tower
+    battleKingsTower 250 500  # Tower of Light
+    battleKingsTower 800 500  # The Brutal Citadel
+    battleKingsTower 250 1400 # The World Tree
+    battleKingsTower 800 1400 # The Forsaken Necropolis
+
+    # Exit
+    input tap 70 1810
     wait
     verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
@@ -964,16 +1197,16 @@ function guildHunts() {
         fi
     fi
 
-    # Return to Tab if $doGuildHunts == false
-    if [ "$doGuildHunts" == false ]; then
+    # Return to Tab if $doTwistedRealmBoss == false
+    if [ "$doTwistedRealmBoss" == false ]; then
         input tap 70 1810
-        wait
+        sleep 3
         input tap 70 1810
-        sleep 1
+        sleep 3
         verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     else
         input tap 70 1810
-        sleep 1
+        sleep 2
         verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     fi
 }
@@ -1000,9 +1233,12 @@ function twistedRealmBoss() {
     if [ "$RGB" == "9aedc1" ]; then
         echo "[WARN] Unable to fight in the Twisted Realm because it's being calculated."
     else
-        input tap 550 1850
+        input tap 550 1850 # Twisted Realm
         sleep 2
-        input tap 550 1850
+        input tap 550 1850 # Challenge
+        waitBattleStart
+        doAuto
+        doSpeed
 
         # Start checking for a finished Battle after 40 seconds
         loopUntilRGB 30 420 380 ca9c5d
@@ -1051,10 +1287,10 @@ function buyFromStore() {
 # Collects
 function collectQuestChests() {
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    input tap 960 250
+    input tap 960 250 # Quests
     wait
 
-    # Collect Quests
+    # Collect daily Quests
     getColor 700 670
     while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
@@ -1062,26 +1298,58 @@ function collectQuestChests() {
         getColor 700 670
     done
 
-    input tap 330 430
+    # Collect daily Chests
+    input tap 330 430 # Chest 20
     wait
-    input tap 580 600
-    input tap 500 430
+    input tap 580 600 # Collect
+    input tap 500 430 # Chest 40
     wait
-    input tap 580 600
-    input tap 660 430
+    input tap 580 600 # Collect
+    input tap 660 430 # Chest 60
     wait
-    input tap 580 600
-    input tap 830 430
+    input tap 580 600 # Collect
+    input tap 830 430 # Chest 80
     wait
-    input tap 580 600
-    input tap 990 430
+    input tap 580 600 # Collect
+    input tap 990 430 # Chest 100
     wait
-    input tap 580 600
+    input tap 580 600 # Collect
     wait
-    input tap 70 1650
 
+    # Weekly quests
+    input tap 650 1650 # Weeklies
+    wait
+
+    # Collect weekly Quests
+    getColor 700 670
+    while [ "$RGB" == "82fdf5" ]; do
+        input tap 930 680
+        wait
+        getColor 700 670
+    done
+
+    # Collect weekly Chests
+    input tap 330 430 # Chest 20
+    wait
+    input tap 580 600 # Collect
+    input tap 500 430 # Chest 40
+    wait
+    input tap 580 600 # Collect
+    input tap 660 430 # Chest 60
+    wait
+    input tap 580 600 # Collect
+    input tap 830 430 # Chest 80
+    wait
+    input tap 580 600 # Collect
+    input tap 990 430 # Chest 100
+    wait
+    input tap 580 600 # Collect
+    wait
+
+    # Return
+    input tap 70 1650
     sleep 1
-    verifyRGB 20 1775 d49a61 "Collected daily quest chests." "Failed to collect daily quest chests."
+    verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
 # Collects mail
@@ -1149,7 +1417,7 @@ function collectMerchants() {
 }
 
 # If red square, strenghen Crystal
-function strenghenCrystal() {
+function strengthenCrystal() {
     input tap 760 1030 # Crystal
     sleep 3
 
@@ -1169,13 +1437,12 @@ function strenghenCrystal() {
 function nobleTavern() {
     input tap 280 1370 # The Noble Tavern
     sleep 3
-
     input tap 600 1820 # The noble tavern again
     sleep 1
 
     # Looking for heart
     getColor 875 835
-    until [ "$RGB" == "f38d67" ]; do
+    until [ "$RGB" == "fc9473" ]; do
         input tap 870 1630 # Next pannel
         sleep 1
         getColor 875 835
@@ -1247,7 +1514,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 560 350 3 0.5
+# test 630 1520 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1325,7 +1592,7 @@ if [ "$doTwistedRealmBoss" == true ]; then
     if [ "$doGuildHunts" == true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
 fi
 if [ "$doBuyFromStore" == true ]; then buyFromStore; fi
-if [ "$doStrenghenCrystal" == true ]; then strenghenCrystal; fi
+if [ "$doStrengthenCrystal" == true ]; then strengthenCrystal; fi
 if [ "$doCompanionPointsSummon" == true ]; then nobleTavern; fi
 if [ "$doCollectOakPresents" == true ]; then oakInn; fi
 
