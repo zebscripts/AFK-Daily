@@ -104,7 +104,7 @@ endAt="championship"
 # Repetitions
 maxCampaignFights=10
 totalAmountArenaTries=2+0
-totalAmountTournamentTries=$((totalAmountArenaTries - 2))
+totalAmountTournamentTries=0
 totalAmountGuildBossTries=2+0
 
 # Store
