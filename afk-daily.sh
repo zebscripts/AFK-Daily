@@ -1182,7 +1182,12 @@ battleKingsTower() {
                 inputTapSleep 550 1850 4        # Collect
                 inputTapSleep 550 170           # Tap on the top to close possible limited offer
 
+                # Tap on the top to close possible limited offer
+                input tap 550 170
+                sleep 2
+
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
+                # Tapping 550 170 might close an offer 
                 # Tap top of the screen to close any possible Limited Offers
                 # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
                 #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
@@ -1475,7 +1480,8 @@ nobleTavern() {
     inputTapSleep 280 1370 3                    # The Noble Tavern
     inputTapSleep 600 1820 1                    # The noble tavern again
 
-    until testColorOR 890 850 f4e38e; do        # Looking for heart
+    #until testColorOR 890 850 f4e38e; do       # Looking for heart
+    until testColorOR 875 835 fc9473; do        # Looking for heart
         inputTapSleep 870 1630 1                # Next pannel
     done
 
