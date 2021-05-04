@@ -3,7 +3,6 @@
 .vscode/*
 #!.vscode/settings.json
 *.code-workspace
-.markdownlint.json
 
 # Project specific
 .wiki/
