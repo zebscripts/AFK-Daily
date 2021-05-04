@@ -5,7 +5,9 @@
 # Source
 source ./lib/print.sh
 
-# --- Variables --- #
+# ##############################################################################
+# Section       : Variables
+# ##############################################################################
 # Probably you don't need to modify this. Do it if you know what you're doing,
 # I won't blame you (unless you blame me).
 personalDirectory="storage/emulated/0"
@@ -18,8 +20,14 @@ tempFile=".afkscript.tmp"
 adb=adb
 forceFightCampaign=false
 
-# --- Functions --- #
-# Checks for script update (with git)
+# ##############################################################################
+# Section       : Functions
+# ##############################################################################
+
+# ##############################################################################
+# Function Name : checkForUpdate
+# Description   : Checks for script update (with git)
+# ##############################################################################
 checkForUpdate() {
     if command -v git &>/dev/null; then
         printTask "Checking for updates..."
@@ -34,7 +42,10 @@ checkForUpdate() {
     fi
 }
 
-# Checks for ADB and installs if not present
+# ##############################################################################
+# Function Name : checkAdb
+# Description   : Checks for ADB and installs if not present
+# ##############################################################################
 checkAdb() {
     printTask "Checking for adb..."
     if [ ! -d "./adb/platform-tools" ]; then    # Check for custom adb directory
@@ -83,14 +94,17 @@ checkAdb() {
     fi
 }
 
-# Creates a config.sh file if not found
+# ##############################################################################
+# Function Name : checkConfig
+# Description   : Creates a $configFile file if not found
+# ##############################################################################
 checkConfig() {
-    printTask "Searching for config.sh file..."
+    printTask "Searching for $configFile file..."
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
     else
         printWarn "Not found!"
-        printTask "Creating new config.sh file..."
+        printTask "Creating new $configFile file..."
         printf '#!/bin/bash
 # --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
@@ -139,19 +153,22 @@ doCollectOakPresents=false                      # Only works if "Hide Inn Heroes
 doCollectQuestChests=true
 doCollectMail=true
 doCollectMerchantFreebies=false
-' >config.sh
+' > $configFile
         printSuccess "Created!\n"
-        printInfo "Please edit config.sh if necessary and run this script again."
+        printInfo "Please edit $configFile if necessary and run this script again."
         exit
     fi
 
     validateConfig                              # Validate config file
 }
 
-# Checks for every necessary variable that needs to be defined in config.sh
+# ##############################################################################
+# Function Name : validateConfig
+# Description   : Checks for every necessary variable that needs to be defined in $configFile
+# ##############################################################################
 validateConfig() {
-    source config.sh
-    printTask "Validating config.sh..."
+    source $configFile
+    printTask "Validating $configFile..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
@@ -181,8 +198,8 @@ validateConfig() {
         $doCollectQuestChests || -z \
         $doCollectMail || -z \
         $doCollectMerchantFreebies ]]; then
-        printError "config.sh has missing/wrong entries."
-        printInfo "Please either delete config.sh and run the script again to generate a new one,"
+        printError "$configFile has missing/wrong entries."
+        printInfo "Please either delete $configFile and run the script again to generate a new one,"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
         exit
@@ -190,8 +207,11 @@ validateConfig() {
     printSuccess "Passed!"
 }
 
-# Check if afk-daily.sh has correct Line endings (LF)
-# Params: file
+# ##############################################################################
+# Function Name : checkLineEndings
+# Description   : Check if afk-daily.sh has correct Line endings (LF)
+# Args          : <FILE>
+# ##############################################################################
 checkLineEndings() {
     printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
     if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
@@ -210,7 +230,10 @@ checkLineEndings() {
     fi
 }
 
-# Restarts ADB server
+# ##############################################################################
+# Function Name : restartAdb
+# Description   : Restarts ADB server
+# ##############################################################################
 restartAdb() {
     printTask "Restarting ADB..."
     $adb kill-server
@@ -218,8 +241,11 @@ restartAdb() {
     printSuccess "Restarted!"
 }
 
-# Check if adb recognizes a device.
-# Params: Platform
+# ##############################################################################
+# Function Name : checkForDevice
+# Description   : Check if adb recognizes a device.
+# Args          : <PLATFORM>
+# ##############################################################################
 checkForDevice() {
     if [ "$#" -gt "0" ]; then                   # If parameters are sent
         if [ "$1" = "Nox" ]; then               # Nox
@@ -260,7 +286,10 @@ checkForDevice() {
     fi
 }
 
-# Check date to decide whether to beat campaign or not.
+# ##############################################################################
+# Function Name : checkDate
+# Description   : Check date to decide whether to beat campaign or not.
+# ##############################################################################
 checkDate() {
     printTask "Checking last time script was run..."
     if [ -f $tempFile ]; then
@@ -274,17 +303,23 @@ checkDate() {
     fi
 }
 
-# Overwrite temp file with date if has been greater than 3 days or it doesn't exist
+# ##############################################################################
+# Function Name : saveDate
+# Description   : Overwrite temp file with date if has been greater than 3 days or it doesn't exist
+# ##############################################################################
 saveDate(){
     if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
-        date +%s > .afkscript.tmp               # Write date to file
+        date +%s > $tempFile                    # Write date to file
 
         if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
     fi
 }
 
-# Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
-# Params: platform, directory
+# ##############################################################################
+# Function Name : deploy
+# Description   : Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
+# Args          : <PLATFORM> <DIRECTORY>
+# ##############################################################################
 deploy() {
     if [[ $($adb shell wm size) != *"1080x1920"* ]]; then                       # Check for resolution
         printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
@@ -297,18 +332,20 @@ deploy() {
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                                  # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
-    $adb push config.sh "$2"/scripts/afk-arena 1>/dev/null                      # Push config to device
+    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null                    # Push config to device
     # Run script. Comment line if you don't want to run the script after pushing to device
     $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" && saveDate
 }
 
-# --- Script Start --- #
+# ##############################################################################
+# Section       : Script Start
+# ##############################################################################
 clear
 
 checkAdb
 #checkForUpdate
 checkConfig
-checkLineEndings "config.sh"
+checkLineEndings $configFile
 checkLineEndings "afk-daily.sh"
 checkDate
 
