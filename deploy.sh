@@ -147,7 +147,8 @@ doTwistedRealmBoss=true
 doBuyFromStore=true
 doStrengthenCrystal=true
 doCompanionPointsSummon=false
-doCollectOakPresents=false                      # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
+# Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
+doCollectOakPresents=false
 
 # End
 doCollectQuestChests=true
