@@ -1,6 +1,9 @@
 #!/system/bin/sh
 
-# TODO: Group Game function by tab
+# WIP: Refacto
+# TODO: Only take usefull screenshots < Wait for everything to work properly without this game breaker
+#   ATM, just print in takeScreenshot to check all > [DEBUG] takeScreenshot (screenshotRequired=false)
+# TODO: Group Game functions by tab < Wait for PR
 
 # ##############################################################################
 # Section       : Variables
@@ -27,8 +30,6 @@ oakRes=0
 forceFightCampaign=false
 activeTab="Start"
 screenshotRequired=true
-# TODO: Only take usefull screenshots
-#   ATM, just print in takeScreenshot to check all > [DEBUG] takeScreenshot (screenshotRequired=false)
 
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
@@ -55,7 +56,7 @@ test() {
     _test_COUNT=0
     until [ "$_test_COUNT" -ge "$3" ]; do
         sleep "$4"
-        getColor "$1" "$2"
+        getColor -f "$1" "$2"
         echo "RGB: $RGB"
         _test_COUNT=$((_test_COUNT + 1))        # Increment
     done
@@ -185,9 +186,12 @@ verifyRGB() {
         echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]" >&2
         echo >&2
         echo "[ERROR] $5" >&2
-        exit
+        #exit
+        echo "[INFO] Restarting" >&1
+        init
+        run
     else
-        echo "[OK] $4"
+        echo "[OK] $4" >&1
     fi
 }
 
@@ -234,26 +238,22 @@ testColorOR() {
         esac
     done
     getColor "$1" "$2"                          # looking for color
-    _testColorOR_i=$((3))
-    while [ $_testColorOR_i -le $# ]; do        # loop in colors
-        _testColorOR_tmp=$(eval "echo \"\$$_testColorOR_i\"")
-        if [ "$RGB" = "$_testColorOR_tmp" ]; then                               # color found?
-            return 0                            # At the first color found OR is break, return 1
+    for i in "${@:3}"; do                       # loop in colors
+        if [ "$RGB" = "$i" ]; then              # color found?
+            return 0                            # At the first color found OR is break, return 0
         else
-            _testColorOR_delta=100
             if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -lt "100" ]; then
-                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$_testColorOR_tmp")
+                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorOR $RGB != $_testColorOR_tmp [Δ $_testColorOR_delta%]" >&1;
+                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&1;
                 fi
                 if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
                     return 1
                 fi
             fi
         fi
-        _testColorOR_i=$((_testColorOR_i+1))
     done
-    return 1                                    # if no result > return 0
+    return 1                                    # if no result > return 1
 }
 
 # ##############################################################################
@@ -276,24 +276,20 @@ testColorNAND() {
         esac
     done
     getColor "$1" "$2"                          # looking for color
-    _testColorNAND_i=$((3))
-    while [ $_testColorNAND_i -le $# ]; do      # loop in colors
-        _testColorNAND_tmp=$(eval "echo \"\$$_testColorNAND_i\"")
-        if [ "$RGB" = "${_testColorNAND_tmp}" ]; then                           # color found?
+    for i in "${@:3}"; do                       # loop in colors
+        if [ "$RGB" = "$i" ]; then              # color found?
             return 1                            # At the first color found NAND is break, return 1
         else
-            _testColorNAND_delta=100
             if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_max_delta" -lt "100" ]; then
-                _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$_testColorNAND_tmp")
+                _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorNAND $RGB != $_testColorNAND_tmp [Δ $_testColorNAND_delta%]" >&1;
+                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorNAND_delta%]" >&1;
                 fi
                 if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
                     return 1
                 fi
             fi
         fi
-        _testColorNAND_i=$((_testColorNAND_i+1))
     done
     return 0                                    # If no result > return 0
 }
@@ -316,12 +312,12 @@ testColorORTapSleep() {
 # ##############################################################################
 # Function Name : loopUntilRGB
 # Descripton    : Loops until RGB is not equal
-# Args          : <SLEEP> <X> <Y> <COLOR>
+# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&1; fi
     sleep "$1"
-    while testColorNAND -f "$2" "$3" "$4"; do
+    while testColorNAND -f "${@:2}"; do
         sleep 1
     done
 }
@@ -329,12 +325,12 @@ loopUntilRGB() {
 # ##############################################################################
 # Function Name : loopUntilNotRGB
 # Descripton    : Loops until RGB is equal
-# Args          : <SLEEP> <X> <Y> <COLOR>
+# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilNotRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&1; fi
     sleep "$1"
-    while testColorOR -f "$2" "$3" "$4"; do
+    while testColorOR -f "${@:2}"; do
         sleep 1
     done
 }
@@ -1104,7 +1100,7 @@ arenaOfHeroes() {
         inputTapSleep 1000 380
         sleep 4
     else
-        echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching."
+        echo "[WARN] Unable to fight in the Arena of Heroes because a new season is soon launching." >&2
     fi
 
     if [ "$doLegendsTournament" = false ]; then # Return to Tab if $doLegendsTournament = false
@@ -1516,7 +1512,7 @@ oakInn() {
 
                 oakTryCollectPresent
                 if [ $oakRes = 0 ]; then        # If return value is still freaking 0, I give up
-                    echo "[WARN] Couldn't collect Oak Inn presents, sowy."
+                    echo "[WARN] Couldn't collect Oak Inn presents, sowy." >&2
                     break
                 fi
             fi
@@ -1554,77 +1550,149 @@ oakInn() {
 # Section       : Script Start
 # ##############################################################################
 
-echo "[INFO] Starting script... ($(date)) "
-echo
-closeApp
-sleep 0.5
-startApp
-sleep 10
+# ##############################################################################
+# Function Name : init
+# Descripton    : Init the script (close/start app, preload, wait for update)
+# ##############################################################################
+init() {
+    closeApp
+    sleep 0.5
+    startApp
+    sleep 10
 
-loopUntilNotRGB 1 450 1775 cc9261               # Loops until the game has launched
+    loopUntilNotRGB 1 450 1775 cc9261               # Loops until the game has launched
 
-wait
-inputTapSleep 970 380 0                         # Open menu for friends, etc
+    wait
+    inputTapSleep 970 380 0                         # Open menu for friends, etc
 
-switchTab "Campaign"
-sleep 3
-switchTab "Dark Forest"
-sleep 1
-switchTab "Ranhorn"
-sleep 1
-switchTab "Campaign" true
+    # Preload graphics
+    switchTab "Campaign"
+    sleep 3
+    switchTab "Dark Forest"
+    sleep 1
+    switchTab "Ranhorn"
+    sleep 1
+    switchTab "Campaign" true
 
-if testColorOR -f 740 205 ffc15b;then           # Check if game is being updated
-    echo "[WARN] Game is being updated!" >&2
-    if [ "$waitForUpdate" = true ]; then
-        echo "[INFO]: Waiting for game to finish update..."
-        loopUntilNotRGB 5 740 205 ffc15b
-        echo "[OK]: Game finished updating."
-    else
-        echo "[WARN]: Not waiting for update to finish." >&2
+    if testColorOR -f 740 205 ffc15b;then           # Check if game is being updated
+        echo "[WARN] Game is being updated!" >&2
+        if [ "$waitForUpdate" = true ]; then
+            echo "[INFO]: Waiting for game to finish update..."
+            loopUntilNotRGB 5 740 205 ffc15b
+            echo "[OK]: Game finished updating."
+        else
+            echo "[WARN]: Not waiting for update to finish." >&2
+        fi
     fi
-fi
+}
 
-# CAMPAIGN TAB
-switchTab "Campaign"
-if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi
-if [ "$doChallengeBoss" = true ]; then challengeBoss; fi
-if [ "$doFastRewards" = true ]; then fastRewards; fi
-if [ "$doCollectFriendsAndMercenaries" = true ]; then collectFriendsAndMercenaries; fi
-if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi
+# ##############################################################################
+# Function Name : run
+# Descripton    : Run the script based on config
+# ##############################################################################
+run() {
+    # CAMPAIGN TAB
+    switchTab "Campaign"
+    if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi                      # Will be false after 2nd uses
+    if [ "$doChallengeBoss" = true ]; then
+        doChallengeBoss=false
+        challengeBoss
+    fi
+    if [ "$doFastRewards" = true ]; then
+        doFastRewards=false
+        fastRewards
+    fi
+    if [ "$doCollectFriendsAndMercenaries" = true ]; then
+        doCollectFriendsAndMercenaries=false
+        collectFriendsAndMercenaries
+    fi
+    if [ "$doLootAfkChest" = true ]; then
+        doLootAfkChest=false
+        lootAfkChest
+    fi
 
-# DARK FOREST TAB
-switchTab "Dark Forest"
-if [ "$doSoloBounties" = true ]; then soloBounties; fi
-if [ "$doTeamBounties" = true ]; then
-    if [ "$doSoloBounties" = true ]; then teamBounties; else teamBounties true; fi
-fi
-if [ "$doArenaOfHeroes" = true ]; then arenaOfHeroes; fi
-if [ "$doLegendsTournament" = true ]; then
-    if [ "$doArenaOfHeroes" = true ]; then legendsTournament; else legendsTournament true; fi
-fi
-if [ "$doKingsTower" = true ]; then kingsTower; fi
+    # DARK FOREST TAB
+    switchTab "Dark Forest"
+    if [ "$doSoloBounties" = true ]; then
+        doSoloBounties=false
+        soloBounties
+        if [ "$doTeamBounties" = true ]; then
+            doTeamBounties=false
+            teamBounties true
+        fi
+    elif [ "$doTeamBounties" = true ]; then
+        doTeamBounties=false
+        teamBounties
+    fi
+    if [ "$doArenaOfHeroes" = true ]; then
+        doArenaOfHeroes=false
+        arenaOfHeroes
+        if [ "$doLegendsTournament" = true ]; then
+            doLegendsTournament=false
+            legendsTournament true
+        fi
+    elif [ "$doLegendsTournament" = true ]; then
+        doLegendsTournament=false
+        legendsTournament
+    fi
+    if [ "$doKingsTower" = true ]; then
+        doKingsTower=false
+        kingsTower
+    fi
 
-# RANHORN TAB
-switchTab "Ranhorn"
-if [ "$doGuildHunts" = true ]; then guildHunts; fi
-if [ "$doTwistedRealmBoss" = true ]; then
-    if [ "$doGuildHunts" = true ]; then twistedRealmBoss; else twistedRealmBoss true; fi
-fi
-if [ "$doBuyFromStore" = true ]; then buyFromStore; fi
-if [ "$doStrengthenCrystal" = true ]; then strengthenCrystal; fi
-if [ "$doCompanionPointsSummon" = true ]; then nobleTavern; fi
-if [ "$doCollectOakPresents" = true ]; then oakInn; fi
+    # RANHORN TAB
+    switchTab "Ranhorn"
+    if [ "$doGuildHunts" = true ]; then
+        doGuildHunts=false
+        guildHunts
+        if [ "$doTwistedRealmBoss" = true ]; then
+            doTwistedRealmBoss=false
+            twistedRealmBoss true
+        fi
+    elif [ "$doTwistedRealmBoss" = true ]; then
+        doTwistedRealmBoss=false
+        twistedRealmBoss
+    fi
+    if [ "$doBuyFromStore" = true ]; then
+        doBuyFromStore=false
+        buyFromStore
+    fi
+    if [ "$doStrengthenCrystal" = true ]; then
+        doStrengthenCrystal=false
+        strengthenCrystal
+    fi
+    if [ "$doCompanionPointsSummon" = true ]; then
+        doCompanionPointsSummon=false
+        nobleTavern
+    fi
+    if [ "$doCollectOakPresents" = true ]; then
+        doCollectOakPresents=false
+        oakInn
+    fi
 
-# END
-if [ "$doCollectQuestChests" = true ]; then collectQuestChests; fi
-if [ "$doCollectMail" = true ]; then collectMail; fi
-if [ "$doCollectMerchantFreebies" = true ]; then collectMerchants; fi
+    # END
+    if [ "$doCollectQuestChests" = true ]; then
+        doCollectQuestChests=false
+        collectQuestChests
+    fi
+    if [ "$doCollectMail" = true ]; then
+        doCollectMail=false
+        collectMail
+    fi
+    if [ "$doCollectMerchantFreebies" = true ]; then
+        doCollectMerchantFreebies=false
+        collectMerchants
+    fi
 
-# Ends at given location
-sleep 1
-checkWhereToEnd
+    # Ends at given location
+    sleep 1
+    checkWhereToEnd
+}
 
-echo
-echo "[INFO] End of script! ($(date)) "
+echo "[INFO] Starting script... ($(date)) "; echo
+
+init
+run
+
+echo; echo "[INFO] End of script! ($(date)) "
 exit
