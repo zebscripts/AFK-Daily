@@ -238,7 +238,7 @@ testColorOR() {
         esac
     done
     getColor "$1" "$2"                          # looking for color
-    shift; shift;                               # ignore the first 2 arguments, not required anymore
+    shift; shift;                               # ignore arg
     for i in "$@"; do                           # loop in colors
         if [ "$RGB" = "$i" ]; then              # color found?
             return 0                            # At the first color found OR is break, return 0
@@ -277,7 +277,7 @@ testColorNAND() {
         esac
     done
     getColor "$1" "$2"                          # looking for color
-    shift; shift;                               # ignore the first 2 arguments, not required anymore
+    shift; shift;                               # ignore arg
     for i in "$@"; do                           # loop in colors
         if [ "$RGB" = "$i" ]; then              # color found?
             return 1                            # At the first color found NAND is break, return 1
@@ -904,7 +904,7 @@ soloBounties() {
 # ##############################################################################
 teamBounties() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&2; fi
-    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
+    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
         inputTapSleep 600 1320 1
     fi
     ## For testing only! Keep as comment ##
@@ -1124,7 +1124,7 @@ arenaOfHeroes() {
 # ##############################################################################
 legendsTournament() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
-    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
+    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
         inputTapSleep 740 1050
     fi
     ## For testing only! Keep as comment ##
@@ -1304,7 +1304,7 @@ twistedRealmBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&2; fi
     # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
-    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
+    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
         inputTapSleep 380 360 10
     fi
     ## For testing only! Keep as comment ##
@@ -1622,22 +1622,22 @@ run() {
         soloBounties
         if [ "$doTeamBounties" = true ]; then
             doTeamBounties=false
-            teamBounties true
+            teamBounties
         fi
     elif [ "$doTeamBounties" = true ]; then
         doTeamBounties=false
-        teamBounties
+        teamBounties true
     fi
     if [ "$doArenaOfHeroes" = true ]; then
         doArenaOfHeroes=false
         arenaOfHeroes
         if [ "$doLegendsTournament" = true ]; then
             doLegendsTournament=false
-            legendsTournament true
+            legendsTournament
         fi
     elif [ "$doLegendsTournament" = true ]; then
         doLegendsTournament=false
-        legendsTournament
+        legendsTournament true
     fi
     if [ "$doKingsTower" = true ]; then
         doKingsTower=false
@@ -1651,11 +1651,11 @@ run() {
         guildHunts
         if [ "$doTwistedRealmBoss" = true ]; then
             doTwistedRealmBoss=false
-            twistedRealmBoss true
+            twistedRealmBoss
         fi
     elif [ "$doTwistedRealmBoss" = true ]; then
         doTwistedRealmBoss=false
-        twistedRealmBoss
+        twistedRealmBoss true
     fi
     if [ "$doBuyFromStore" = true ]; then
         doBuyFromStore=false
