@@ -41,14 +41,22 @@ function wait() {
 
 # Starts the app
 function startApp() {
-    monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
+    if [ "$testServer" = true ]; then
+        monkey -p com.lilithgames.hgame.gp.id 1 1 >/dev/null 2>/dev/null
+    else
+        monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
+    fi
     sleep 1
     disableOrientation
 }
 
 # Closes the app
 function closeApp() {
-    am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
+    if [ "$testServer" = true ]; then
+        am force-stop com.lilithgames.hgame.gp.id >/dev/null 2>/dev/null
+    else
+        am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
+    fi
 }
 
 # Switches between last app
