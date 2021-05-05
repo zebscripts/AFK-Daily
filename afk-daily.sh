@@ -228,11 +228,11 @@ inputTapSleep() {
 # ##############################################################################
 testColorOR() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
-    _testColorOR_max_delta=100
+    _testColorOR_min_delta=100
     for arg in "$@"; do
         shift
         case "$arg" in
-            -d) shift; _testColorOR_max_delta=$1;;
+            -d) shift; _testColorOR_min_delta=$1;;
             -f) screenshotRequired=true;;
             *) set -- "$@" "$arg";;
         esac
@@ -243,12 +243,12 @@ testColorOR() {
         if [ "$RGB" = "$i" ]; then              # color found?
             return 0                            # At the first color found OR is break, return 0
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -lt "100" ]; then
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_min_delta" -lt "100" ]; then
                 _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
                     echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&2;
                 fi
-                if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
+                if [ "$_testColorOR_delta" -ge "$_testColorOR_min_delta" ]; then
                     return 1
                 fi
             fi
@@ -267,11 +267,11 @@ testColorOR() {
 # ##############################################################################
 testColorNAND() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
-    _testColorNAND_max_delta=100
+    _testColorNAND_min_delta=100
     for arg in "$@"; do
         shift
         case "$arg" in
-            -d) shift; _testColorNAND_max_delta=$1;;
+            -d) shift; _testColorNAND_min_delta=$1;;
             -f) screenshotRequired=true;;
             *) set -- "$@" "$arg";;
         esac
@@ -282,12 +282,12 @@ testColorNAND() {
         if [ "$RGB" = "$i" ]; then              # color found?
             return 1                            # At the first color found NAND is break, return 1
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_max_delta" -lt "100" ]; then
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_min_delta" -lt "100" ]; then
                 _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorNAND_delta%]" >&2;
+                    echo "[DEBUG] testColorNAND $RGB != $i [Δ $_testColorNAND_delta%]" >&2;
                 fi
-                if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
+                if [ "$_testColorNAND_delta" -ge "$_testColorNAND_min_delta" ]; then
                     return 1
                 fi
             fi
@@ -320,7 +320,7 @@ loopUntilRGB() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
     sleep "$1"
     shift
-    while testColorOR -f "$@"; do
+    while testColorNAND -f "$@"; do
         sleep 1
     done
 }
@@ -1537,18 +1537,28 @@ oakInn() {
 # Section       : Test
 # ##############################################################################
 
-# Test function (X, Y, amountTimes, waitTime)
-# test 910 850 3 0.5
-# test 550 740 3 0.5 # Check for Boss in Campaign
-# test 660 520 3 0.5 # Check for Solo Bounties RGB
-# test 650 570 3 0.5 # Check for Team Bounties RGB
-# test 700 670 3 0.5 # Check for chest collection RGB
-# test 715 1815 3 0.5 # Check if Soren is open
-# test 740 205 3 0.5 # Check if game is updating
-# test 270 1800 3 0.5 # Oak Inn Present Tab 1
-# test 410 1800 3 0.5 # Oak Inn Present Tab 2
-# test 550 1800 3 0.5 # Oak Inn Present Tab 3
-# test 690 1800 3 0.5 # Oak Inn Present Tab 4
+# ##############################################################################
+# Function Name : init
+# Descripton    : Uncomment tests to run it. Will exit after tests done.
+# Remark        : If you want to run multiple tests you need to comment exit in test()
+# ##############################################################################
+tests() {
+    # Test function (X, Y, amountTimes, waitTime)
+    # test 910 850 3 0.5
+    # test 550 740 3 0.5 # Check for Boss in Campaign
+    # test 660 520 3 0.5 # Check for Solo Bounties RGB
+    # test 650 570 3 0.5 # Check for Team Bounties RGB
+    # test 700 670 3 0.5 # Check for chest collection RGB
+    # test 715 1815 3 0.5 # Check if Soren is open
+    # test 740 205 3 0.5 # Check if game is updating
+    # test 270 1800 3 0.5 # Oak Inn Present Tab 1
+    # test 410 1800 3 0.5 # Oak Inn Present Tab 2
+    # test 550 1800 3 0.5 # Oak Inn Present Tab 3
+    # test 690 1800 3 0.5 # Oak Inn Present Tab 4
+    exit
+}
+
+# tests
 
 # ##############################################################################
 # Section       : Script Start
