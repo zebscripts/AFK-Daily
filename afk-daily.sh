@@ -115,12 +115,16 @@ function doSkip() {
 
 # Waits until battle starts
 function waitBattleStart() {
+    _waitBattleStart_count=0                    # Max loops = 10 (10x.5s=5s max)
     # Check if pause button is present
     getColor 110 1465 # 482f1f
-    until [ "$RGB" == "482f1f" ]; do
+    until [ "$RGB" == "482f1f" ] && [ $_waitBattleStart_count -le 10 ]; do
         # Maybe pause button doesn't exist, so instead check for a skip button
         getColor 760 1440 # 502e1d
         if [ "$RGB" == "502e1d" ]; then return; fi
+
+        _waitBattleStart_count=$((_waitBattleStart_count + 1))                  # Increment
+        sleep .5
 
         # In case none were found, try again starting with the pause button
         getColor 110 1465 # 482f1f
