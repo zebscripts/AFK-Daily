@@ -5,7 +5,7 @@
 *.code-workspace
 
 # Project specific
-.wiki/
+#.wiki/
 adb/
 config*.sh
 .*afkscript.tmp
