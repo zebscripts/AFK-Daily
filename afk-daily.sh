@@ -10,11 +10,13 @@ totalAmountOakRewards=3
 RGB=00000000
 oakRes=0
 forceFightCampaign=false
+testServer=false
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     source /$1/scripts/afk-arena/config.sh
     forceFightCampaign=$2
+    testServer=$3
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"

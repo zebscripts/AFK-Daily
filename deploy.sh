@@ -16,6 +16,7 @@ tempFile=".afkscript.tmp"
 # Do not modify
 adb=adb
 forceFightCampaign=false
+testServer=false
 
 # --- Functions --- #
 # Checks for script update (with git)
@@ -307,7 +308,7 @@ function deploy() {
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push config.sh "$2"/scripts/afk-arena 1>/dev/null    # Push config to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" && saveDate # Run script. Comment line if you don't want to run the script after pushing to device
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$testServer" && saveDate # Run script. Comment line if you don't want to run the script after pushing to device
 }
 
 # --- Script Start --- #
@@ -319,6 +320,11 @@ checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
 checkDate
+
+if [ "$1" ] && [ "$1" = "-t" ]; then
+    shift;
+    testServer=true
+fi
 
 # Check where to deploy
 if [ "$1" ]; then
