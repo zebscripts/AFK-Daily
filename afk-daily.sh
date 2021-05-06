@@ -422,8 +422,6 @@ switchTab() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $* [activeTab=$activeTab]" >&2; fi
     if [ "$1" = "$activeTab" ]; then
         return;
-    else
-        activeTab="$1"
     fi
     case "$1" in
         "Campaign")
@@ -435,6 +433,7 @@ switchTab() {
                [ "$doLootAfkChest" = true ]
             then
                 inputTapSleep 550 1850
+                activeTab="$1"
                 verifyRGB 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
             fi
             ;;
@@ -447,6 +446,7 @@ switchTab() {
                [ "$doKingsTower" = true ]
             then
                 inputTapSleep 300 1850
+                activeTab="$1"
                 verifyRGB 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
             fi
             ;;
@@ -464,11 +464,13 @@ switchTab() {
                [ "$doCollectMerchantFreebies" = true ]
             then
                 inputTapSleep 110 1850
+                activeTab="$1"
                 verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
             fi
             ;;
         "Chat")
             inputTapSleep 970 1850
+            activeTab="$1"
             verifyRGB 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
             ;;
     esac
@@ -783,8 +785,9 @@ lootAfkChest() {
 challengeBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
     inputTapSleep 550 1650 1
-    testColorORTapSleep 550 740 f2d79f          # Check if boss
-    wait
+    if testColorOR 550 740 f2d79f; then         # Check if boss
+        inputTapSleep 550 1450
+    fi
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
@@ -810,7 +813,7 @@ challengeBoss() {
                     # inputTapSleep 550 75
 
                     if testColorOR 550 740 f2d79f; then                         # Check if boss
-                        inputTap 550 1450 5
+                        inputTapSleep 550 1450 5
                     fi
                 else
                     inputTapSleep 550 1150 3    # Continue to next battle
@@ -834,7 +837,7 @@ challengeBoss() {
         inputTapSleep 230 960 1                 # Exit
 
         if testColorOR 450 1775 cc9261; then   # Check for multi-battle
-            inputTAp 70 1810
+            inputTapSleep 70 1810
         fi
     fi
 
