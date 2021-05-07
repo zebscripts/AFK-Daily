@@ -1,9 +1,7 @@
 #!/system/bin/sh
 
 # WIP: Refacto
-# TODO: Only take usefull screenshots < Wait for everything to work properly without this game breaker
-#   ATM, just print in takeScreenshot to check all > [DEBUG] takeScreenshot (screenshotRequired=false)
-# TODO: Group Game functions by tab < Wait for PR
+# TODO: Group Game functions by tab + rename + order by name < Wait for PR
 
 # ##############################################################################
 # Section       : Variables
@@ -44,6 +42,7 @@ fi
 
 # ##############################################################################
 # Section       : Core Functions
+# Description   : It's like a library of usefull functions
 # ##############################################################################
 
 # ##############################################################################
@@ -129,13 +128,12 @@ disableOrientation() {
 
 # ##############################################################################
 # Function Name : takeScreenshot
-# Descripton    : Takes a screenshot and saves it
-# TODO          : Takes a screenshot and save it IF $screenshotRequired = true
+# Descripton    : Takes a screenshot and saves it if screenshotRequired=true
 # Output        : $SCREENSHOTLOCATION
 # ##############################################################################
 takeScreenshot() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&2; fi
-    # TODO: if [ $screenshotRequired = true ]; then screencap "$SCREENSHOTLOCATION"; fi
+    if [ $screenshotRequired = false ]; then return; fi
     screencap "$SCREENSHOTLOCATION"
     screenshotRequired=false
 }
@@ -341,6 +339,7 @@ loopUntilNotRGB() {
 
 # ##############################################################################
 # Section       : Game SubFunctions
+# Description   : It's the extension of the Core for this specific game
 # ##############################################################################
 
 # ##############################################################################
@@ -622,7 +621,7 @@ oakTryCollectPresent() {
                 oakSearchPresent
                 ;;
             1004)
-                inputTapSleep 270 1800 3        # TODO: MISSING Y
+                inputTapSleep 270 1800 3
                 oakSearchPresent
                 if [ $oakRes = 0 ]; then
                     inputTapSleep 690 1800 3
@@ -784,7 +783,7 @@ lootAfkChest() {
 # ##############################################################################
 challengeBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
-    inputTapSleep 550 1650 1
+    inputTapSleep 550 1650
     if testColorOR 550 740 f2d79f; then         # Check if boss
         inputTapSleep 550 1450
     fi
@@ -795,7 +794,7 @@ challengeBoss() {
         _challengeBoss_COUNT=0
 
         # Check for battle screen
-        while testColorOR 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
+        while testColorOR -f 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0            # Battle
             waitBattleStart
             doAuto
@@ -836,7 +835,7 @@ challengeBoss() {
         inputTapSleep 80 1460                   # Pause
         inputTapSleep 230 960 1                 # Exit
 
-        if testColorOR 450 1775 cc9261; then   # Check for multi-battle
+        if testColorOR 450 1775 cc9261; then    # Check for multi-battle
             inputTapSleep 70 1810
         fi
     fi
@@ -864,16 +863,18 @@ fastRewards() {
 # ##############################################################################
 collectFriendsAndMercenaries() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
-    inputTapSleep 970 810 1
-    inputTapSleep 930 1600
-    inputTapSleep 720 1760
-    inputTapSleep 990 190
-    inputTapSleep 630 1590
-    inputTapSleep 750 1410 1
-    inputTapSleep 70 1810 0
-    inputTapSleep 70 1810 0
-
-    # TODO: Check if its necessary to send mercenaries
+    inputTapSleep 970 810 1                     # Friends
+    inputTapSleep 930 1600                      # Send & Recieve
+    if testColorOR 825 1750 ff0000; then        # Check if its necessary to send mercenaries
+        inputTapSleep 720 1760                  # Sort-Term
+        inputTapSleep 990 190                   # Manage
+        inputTapSleep 630 1590                  # Apply
+        inputTapSleep 750 1410 1                # Auto Lend
+        inputTapSleep 70 1810 0                 # Return
+    else
+        echo "[INFO]: No mercenaries to lend..."
+    fi
+    inputTapSleep 70 1810 0                     # Return
 
     wait
     verifyRGB 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries." "Failed to collect/send companion points or failed to auto lend mercenaries."
@@ -1017,11 +1018,12 @@ arenaOfHeroes() {
     else
         inputTapSleep 550 900 3
     fi
-    inputTapSleep 1000 1800
-    inputTapSleep 980 410
-    inputTapSleep 540 1800
+    if testColorOR 1050 1770 e52505; then       # Red mark?
+        inputTapSleep 1000 1800                 # Record
+        inputTapSleep 980 410                   # Close
+    fi
+    inputTapSleep 540 1800                      # Challenge
 
-    # TODO: I think I broke this condition
     if testColorNAND 200 1800 382314 382214;then                                # Check for new season
         _arenaOfHeroes_COUNT=0
         until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do      # Repeat a battle for as long as totalAmountArenaTries
@@ -1127,21 +1129,24 @@ arenaOfHeroes() {
 # ##############################################################################
 legendsTournament() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
-    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
+    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 740 1050
     fi
     ## For testing only! Keep as comment ##
     # inputTapSleep 740 1050 1
     ## End of testing ##
     if [ "$pvpEvent" = false ]; then
-        inputTapSleep 550 900 # Legend's Challenger Tournament
+        inputTapSleep 550 900                   # Legend's Challenger Tournament
     else
-        inputTapSleep 550 1450 # Legend's Challenger Tournament
+        inputTapSleep 550 1450                  # Legend's Challenger Tournament
     fi
     inputTapSleep 550 280 3                     # Chest
     inputTapSleep 550 1550 3                    # Collect
-    inputTapSleep 1000 1800                     # Record
-    inputTapSleep 990 380                       # Close
+
+    if testColorOR 1040 1800 e72007; then       # Red mark?
+        inputTapSleep 1000 1800                 # Record
+        inputTapSleep 990 380                   # Close
+    fi
 
     _legendsTournament_COUNT=0
     until [ "$_legendsTournament_COUNT" -ge "$totalAmountArenaTries-2" ]; do    # Repeat a battle for as long as totalAmountArenaTries
@@ -1248,7 +1253,6 @@ guildHunts() {
 
     inputTapSleep 290 860 3
 
-    # TODO: Make sure 2x and Auto are enabled
     # TODO: Have a variable decide if fight wrizz or not
     # Start checking for a finished Battle after 40 seconds
     # loopUntilRGB 85 420 380 ca9c5d
@@ -1306,7 +1310,6 @@ guildHunts() {
 # ##############################################################################
 twistedRealmBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&2; fi
-    # TODO: Choose if 2x or not
     # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
         inputTapSleep 380 360 10
@@ -1358,7 +1361,7 @@ buyFromStore() {
         buyStoreItem 180 1430
         wait
     fi
-    inputTapSleep 70 1810
+    inputTapSleep 70 1810                       # Return
     verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
 }
 
@@ -1401,7 +1404,7 @@ collectQuestChests() {
     quickCollectQuestChests
 
     # Return
-    inputTapSleep 70 1650 1
+    inputTapSleep 70 1650 1                     # Return
     verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
@@ -1412,10 +1415,14 @@ collectQuestChests() {
 collectMail() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    inputTapSleep 960 630
-    inputTapSleep 790 1470
-    inputTapSleep 110 1850
-    inputTapSleep 110 1850
+    if testColorOR 1020 580 5142ae; then
+        inputTapSleep 960 630                   # Mail
+        inputTapSleep 790 1470                  # Collect all
+        inputTapSleep 110 1850                  # Return
+        inputTapSleep 110 1850                  # Return
+    else
+        echo "[INFO]: No mail to collect..."
+    fi
     verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
 
@@ -1434,22 +1441,25 @@ collectMerchants() {
         inputTapSleep 200 750 1
     fi
     inputTapSleep 550 300 1                     # Collect rewards
-    inputTapSleep 280 1620 1                    # Weekly Deals
 
+    # TODO: Check if red mark - Weekly Deals
+    inputTapSleep 280 1620 1                    # Weekly Deals
     if testColorNAND 375 940 050a0f;then        # Checks for Special Weekly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750 1
     fi
     inputTapSleep 550 300 1                     # Collect rewards
-    inputTapSleep 460 1620 1                    # Monthly Deals
 
+    # TODO: Check if red mark
+    inputTapSleep 460 1620 1                    # Monthly Deals
     if testColorNAND 375 940 0b080a;then        # Checks for Special Monthly Bundles
         inputTapSleep 200 1200 1
     else
         inputTapSleep 200 750
     fi
     inputTapSleep 550 300 1                     # Collect rewards
+
     inputTapSleep 70 1810 1
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
@@ -1548,8 +1558,7 @@ oakInn() {
 # Remark        : If you want to run multiple tests you need to comment exit in test()
 # ##############################################################################
 tests() {
-    # Test function (X, Y, amountTimes, waitTime)
-    # test 910 850 3 0.5
+    # test <X> <Y> <REPEAT> <SLEEP>
     # test 550 740 3 0.5 # Check for Boss in Campaign
     # test 660 520 3 0.5 # Check for Solo Bounties RGB
     # test 650 570 3 0.5 # Check for Team Bounties RGB
@@ -1560,6 +1569,11 @@ tests() {
     # test 410 1800 3 0.5 # Oak Inn Present Tab 2
     # test 550 1800 3 0.5 # Oak Inn Present Tab 3
     # test 690 1800 3 0.5 # Oak Inn Present Tab 4
+
+    # Check if possible to fight wrizz -> If grey button, it's time to leave.
+    # test 710 1840 3 .5 # Grey: a1a1a1 / Blue:
+    # TODO: Check if red mark - Weekly Deals
+    # TODO: Check if red mark - Monthly Deals
     exit
 }
 
@@ -1572,6 +1586,7 @@ tests() {
 # ##############################################################################
 # Function Name : init
 # Descripton    : Init the script (close/start app, preload, wait for update)
+# Remark        : Can be skip if you are already in the game
 # ##############################################################################
 init() {
     closeApp
