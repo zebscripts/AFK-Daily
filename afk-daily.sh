@@ -8,7 +8,7 @@
 # ##############################################################################
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-DEBUG=2
+DEBUG=0
 # DEBUG  = 0    Show no debug
 # DEBUG >= 1    Show getColor calls > $RGB value
 # DEBUG >= 2    Show test calls
@@ -17,7 +17,7 @@ DEBUG=2
 # DEBUG >= 9    Show tap calls
 SHOW_DELTA=1
 # SHOW_DELTA = 0                    Show no debug
-# DEBUG >= 2 && SHOW_DELTA = 1      Show delta if color is not found
+# SHOW_DELTA = 1 && DEBUG >= 2      Show delta if color is not found
 DEFAULT_SLEEP=2                                 # equivalent to wait (default 2)
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
@@ -69,7 +69,7 @@ test() {
 # Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
 # ##############################################################################
 sRGBColorDelta() {
-    if [ "$#" -ne 2 ] ; then
+    if [ "$#" -ne 3 ] ; then
         echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
         echo " 0 means same colors, 100 means opposite colors" >&2
         return
