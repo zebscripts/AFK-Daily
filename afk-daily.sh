@@ -872,7 +872,7 @@ collectFriendsAndMercenaries() {
         inputTapSleep 750 1410 1                # Auto Lend
         inputTapSleep 70 1810 0                 # Return
     else
-        echo "[INFO]: No mercenaries to lend..."
+        echo "[INFO] No mercenaries to lend..."
     fi
     inputTapSleep 70 1810 0                     # Return
 
@@ -1422,7 +1422,7 @@ collectMail() {
         inputTapSleep 110 1850                  # Return
         inputTapSleep 110 1850                  # Return
     else
-        echo "[INFO]: No mail to collect..."
+        echo "[INFO] No mail to collect..."
     fi
     verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
@@ -1612,7 +1612,7 @@ init() {
     if testColorOR -f 740 205 ffc15b;then       # Check if game is being updated
         echo "[WARN] Game is being updated!" >&2
         if [ "$waitForUpdate" = true ]; then
-            echo "[INFO]: Waiting for game to finish update..."
+            echo "[INFO] Waiting for game to finish update..."
             loopUntilNotRGB 5 740 205 ffc15b
             echo "[OK]: Game finished updating."
         else
