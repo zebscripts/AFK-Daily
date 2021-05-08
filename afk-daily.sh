@@ -8,7 +8,7 @@
 # ##############################################################################
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-DEBUG=4
+DEBUG=2
 # DEBUG  = 0    Show no debug
 # DEBUG >= 1    Show getColor calls > $RGB value
 # DEBUG >= 2    Show test calls
@@ -1262,7 +1262,8 @@ guildHunts() {
     #wait
 
     # Wrizz
-    # TODO: Check if possible to fight wrizz
+    # Check if possible to fight wrizz
+    # until testColorOR 710 1840 a1a1a1; do     # Grey: a1a1a1 / Blue: 9de8be
     # Repeat a battle for as long as totalAmountArenaTries
     _guildHunts_COUNT=0
     until [ "$_guildHunts_COUNT" -ge "$totalAmountGuildBossTries" ]; do
@@ -1415,7 +1416,7 @@ collectQuestChests() {
 collectMail() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    if testColorOR 1020 580 5142ae; then
+    if testColorOR 1020 580 5142ae; then        # Red mark
         inputTapSleep 960 630                   # Mail
         inputTapSleep 790 1470                  # Collect all
         inputTapSleep 110 1850                  # Return
@@ -1451,7 +1452,7 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1                     # Collect rewards
 
-    # TODO: Check if red mark
+    # TODO: Check if red mark - Monthly Deals
     inputTapSleep 460 1620 1                    # Monthly Deals
     if testColorNAND 375 940 0b080a;then        # Checks for Special Monthly Bundles
         inputTapSleep 200 1200 1
@@ -1472,7 +1473,8 @@ strengthenCrystal() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
     inputTapSleep 760 1030 3                    # Crystal
 
-    # TODO: Detect if free slot, and take it.
+    # Detect if free slot, and take it.
+    testColorORTapSleep 620 1250 8ae9cf         # Detected: 8ae9cf / Not: e4c38e
 
     inputTapSleep 550 1850                      # Strenghen Crystal
     inputTapSleep 200 1850                      # Close level up window
@@ -1570,10 +1572,9 @@ tests() {
     # test 550 1800 3 0.5 # Oak Inn Present Tab 3
     # test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
-    # Check if possible to fight wrizz -> If grey button, it's time to leave.
-    # test 710 1840 3 .5 # Grey: a1a1a1 / Blue:
-    # TODO: Check if red mark - Weekly Deals
-    # TODO: Check if red mark - Monthly Deals
+    # Check if red mark - Weekly Deals
+
+    # Check if red mark - Monthly Deals
     exit
 }
 
