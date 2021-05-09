@@ -1,4 +1,11 @@
 #!/system/bin/sh
+# ##############################################################################
+# Script Name   : afk-daily.sh
+# Description   : Script automating daily
+# Args          : <SCREENSHOTLOCATION> <forceFightCampaign>
+# GitHub        : https://github.com/zebscripts/AFK-Daily
+# License       : MIT
+# ##############################################################################
 
 # WIP: Refacto
 # TODO: Group Game functions by tab + rename + order by name < Wait for PR
@@ -219,8 +226,7 @@ inputTapSleep() {
 # ##############################################################################
 # Function Name : testColorOR
 # Descripton    : Equivalent to:
-#                   getColor <X> <Y>
-#                   if [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; then
+#                 if getColor <X> <Y> && { [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; }; then
 # Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # Output        : if true, return 0, else 1
 # ##############################################################################
@@ -258,8 +264,7 @@ testColorOR() {
 # ##############################################################################
 # Function Name : testColorNAND
 # Descripton    : Equivalent to:
-#                   getColor <X> <Y>
-#                   if [ "$RGB" != <COLOR> ] && [ "$RGB" != <COLOR> ]; then
+#                 if getColor <X> <Y> && [ "$RGB" != <COLOR> ] && [ "$RGB" != <COLOR> ]; then
 # Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # Output        : if true, return 0, else 1
 # ##############################################################################
@@ -754,9 +759,17 @@ checkWhereToEnd() {
 # ##############################################################################
 quickBattleGuildBosses() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&2; fi
+
+    # TODO: Manual battle
+
+    # TODO: Check if possible to fight wrizz to secure totalAmountGuildBossTries
+    # until testColorOR 710 1840 a1a1a1; do     # Grey: a1a1a1 / Blue: 9de8be
+    # + Need to check color for Soren
+
     _quickBattleGuildBosses_COUNT=0
     until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ]; do
         inputTapSleep 710 1840
+        # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
         inputTapSleep 720 1300 1
         inputTapSleep 550 800 0
         inputTapSleep 550 800 1
@@ -1253,34 +1266,7 @@ guildHunts() {
 
     inputTapSleep 290 860 3
 
-    # TODO: Have a variable decide if fight wrizz or not
-    # Start checking for a finished Battle after 40 seconds
-    # loopUntilRGB 85 420 380 ca9c5d
-    # wait
-    # inputTapSleep 550 800 0
-    # inputTapSleep 550 800 0
-    #wait
-
-    # Wrizz
-    # Check if possible to fight wrizz
-    # until testColorOR 710 1840 a1a1a1; do     # Grey: a1a1a1 / Blue: 9de8be
-    # Repeat a battle for as long as totalAmountArenaTries
-    _guildHunts_COUNT=0
-    until [ "$_guildHunts_COUNT" -ge "$totalAmountGuildBossTries" ]; do
-        # Check if its possible to fight wrizz
-        # if testColorNAND 710 1840 9de7bd; then
-        #     echo "Enough of wrizz! Going out."
-        #     break
-        # fi
-
-        inputTapSleep 710 1840 0
-        # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-        wait
-        inputTapSleep 720 1300 1
-        inputTapSleep 550 800 0
-        inputTapSleep 550 800 1
-        _guildHunts_COUNT=$((_guildHunts_COUNT + 1))                            # Increment
-    done
+    quickBattleGuildBosses
 
     inputTapSleep 970 890 1                     # Soren
 
@@ -1443,23 +1429,25 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1                     # Collect rewards
 
-    # TODO: Check if red mark - Weekly Deals
-    inputTapSleep 280 1620 1                    # Weekly Deals
-    if testColorNAND 375 940 050a0f;then        # Checks for Special Weekly Bundles
-        inputTapSleep 200 1200 1
-    else
-        inputTapSleep 200 750 1
-    fi
-    inputTapSleep 550 300 1                     # Collect rewards
+    #if testColorOR; then                       # TODO: Check if red mark - Weekly Deals
+        inputTapSleep 280 1620 1                # Weekly Deals
+        if testColorNAND 375 940 050a0f;then    # Checks for Special Weekly Bundles
+            inputTapSleep 200 1200 1
+        else
+            inputTapSleep 200 750 1
+        fi
+        inputTapSleep 550 300 1                 # Collect rewards
+    #fi
 
-    # TODO: Check if red mark - Monthly Deals
-    inputTapSleep 460 1620 1                    # Monthly Deals
-    if testColorNAND 375 940 0b080a;then        # Checks for Special Monthly Bundles
-        inputTapSleep 200 1200 1
-    else
-        inputTapSleep 200 750
-    fi
-    inputTapSleep 550 300 1                     # Collect rewards
+    #if testColorOR; then                       # TODO: Check if red mark - Monthly Deals
+        inputTapSleep 460 1620 1                # Monthly Deals
+        if testColorNAND 375 940 0b080a;then    # Checks for Special Monthly Bundles
+            inputTapSleep 200 1200 1
+        else
+            inputTapSleep 200 750
+        fi
+        inputTapSleep 550 300 1                 # Collect rewards
+    #fi
 
     inputTapSleep 70 1810 1
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
