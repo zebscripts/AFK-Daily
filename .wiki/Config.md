@@ -1,5 +1,25 @@
 The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. If you do not have/see a `config.sh` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside `config.sh`.**
 
+## Account
+
+| [VIP Rank](https://afk-arena.fandom.com/wiki/VIP_Rank) | Free Arena of Heroes | Free Legends’ Challenger Tournament | Guild Boss |
+| :--: | :------------------: | :---------------------------------: | :--------: |
+|  0   |          2           |                  5                  |     2      |
+|  1   |        2 + 1         |                  5                  |     2      |
+|  3   |        2 + 2         |                  5                  |     2      |
+|  5   |        2 + 3         |                  5                  |     2      |
+|  6   |        2 + 3         |                  5                  |   2 + 1    |
+|  7   |        2 + 4         |                  5                  |   2 + 1    |
+|  9   |        2 + 5         |                  5                  |   2 + 1    |
+|  11  |        2 + 6         |                  5                  |   2 + 1    |
+|  13  |        2 + 7         |                  5                  |   2 + 1    |
+
+VIP Rank 10 is the maximum for free players (account level 200).
+
+You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/wiki/Quests#Dailies).
+
+## Config File
+
 ### Player
 
 | Variable              |   Type    | Description                                                                                                                                | Default |
