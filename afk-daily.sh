@@ -855,7 +855,7 @@ challengeBoss() {
         inputTapSleep 80 1460                   # Pause
         inputTapSleep 230 960 1                 # Exit
 
-        if testColorOR 450 1775 cc9261; then    # Check for multi-battle
+        if testColorNAND 450 1775 cc9261; then  # Check for multi-battle
             inputTapSleep 70 1810
         fi
     fi
@@ -885,7 +885,7 @@ collectFriendsAndMercenaries() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
     inputTapSleep 970 810 1                     # Friends
     inputTapSleep 930 1600                      # Send & Recieve
-    if testColorOR 825 1750 ff0000; then        # Check if its necessary to send mercenaries
+    if testColorOR 825 1750 df1909; then        # Check if its necessary to send mercenaries
         inputTapSleep 720 1760                  # Sort-Term
         inputTapSleep 990 190                   # Manage
         inputTapSleep 630 1590                  # Apply
@@ -1409,7 +1409,7 @@ collectQuestChests() {
 collectMail() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    if testColorOR 1020 580 5142ae; then        # Red mark
+    if testColorOR 1020 580 e51f06; then        # Red mark
         inputTapSleep 960 630                   # Mail
         inputTapSleep 790 1470                  # Collect all
         inputTapSleep 110 1850                  # Return
