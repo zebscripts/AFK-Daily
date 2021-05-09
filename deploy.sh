@@ -1,4 +1,11 @@
 #!/bin/bash
+# ##############################################################################
+# Script Name   : deploy.sh
+# Description   : Used to run afk-daily on phone
+# Args          : [bs/nox]
+# GitHub        : https://github.com/zebscripts/AFK-Daily
+# License       : MIT
+# ##############################################################################
 
 # Has to be saved with LF line endings!
 
