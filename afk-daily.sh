@@ -76,12 +76,12 @@ test() {
 # Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
 # ##############################################################################
 sRGBColorDelta() {
-    if [ "$#" -ne 3 ] ; then
+    if [ "$#" -ne 2 ] ; then
         echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
         echo " 0 means same colors, 100 means opposite colors" >&2
         return
     fi
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
     r=$((0x${1:0:2} - 0x${2:0:2}))
     g=$((0x${1:2:2} - 0x${2:2:2}))
     b=$((0x${1:4:2} - 0x${2:4:2}))
@@ -759,20 +759,27 @@ checkWhereToEnd() {
 # ##############################################################################
 quickBattleGuildBosses() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&2; fi
-
-    # TODO: Manual battle
-
-    # TODO: Check if possible to fight wrizz to secure totalAmountGuildBossTries
-    # until testColorOR 710 1840 a1a1a1; do     # Grey: a1a1a1 / Blue: 9de8be
-    # + Need to check color for Soren
-
     _quickBattleGuildBosses_COUNT=0
-    until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ]; do
-        inputTapSleep 710 1840
-        # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-        inputTapSleep 720 1300 1
-        inputTapSleep 550 800 0
-        inputTapSleep 550 800 1
+    # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
+    # TODO: Need to check color for Soren
+    until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
+        # TODO: Manual battle (need to be verified)
+        if false; then
+            inputTapSleep 350 1840              # Challenge
+            inputTapSleep 550 1850 0            # Battle
+            waitBattleStart
+            doAuto
+            doSpeed
+            waitBattleFinish 10                 # Wait until battle is over
+            inputTapSleep 550 800 0             # Reward
+            inputTapSleep 550 800 1             # Reward x2
+        else
+            inputTapSleep 710 1840              # Quick Battle
+            # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+            inputTapSleep 720 1300 1            # Begin
+            inputTapSleep 550 800 0             # Reward
+            inputTapSleep 550 800 1             # Reward x2
+        fi
         _quickBattleGuildBosses_COUNT=$((_quickBattleGuildBosses_COUNT + 1))    # Increment
     done
 }
@@ -1429,7 +1436,7 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1                     # Collect rewards
 
-    #if testColorOR; then                       # TODO: Check if red mark - Weekly Deals
+    if testColorOR 325 1530 fc260d; then        # Check if red mark - Weekly Deals
         inputTapSleep 280 1620 1                # Weekly Deals
         if testColorNAND 375 940 050a0f;then    # Checks for Special Weekly Bundles
             inputTapSleep 200 1200 1
@@ -1437,9 +1444,9 @@ collectMerchants() {
             inputTapSleep 200 750 1
         fi
         inputTapSleep 550 300 1                 # Collect rewards
-    #fi
+    fi
 
-    #if testColorOR; then                       # TODO: Check if red mark - Monthly Deals
+    if false; then                              # TODO: Check if red mark - Monthly Deals
         inputTapSleep 460 1620 1                # Monthly Deals
         if testColorNAND 375 940 0b080a;then    # Checks for Special Monthly Bundles
             inputTapSleep 200 1200 1
@@ -1447,7 +1454,7 @@ collectMerchants() {
             inputTapSleep 200 750
         fi
         inputTapSleep 550 300 1                 # Collect rewards
-    #fi
+    fi
 
     inputTapSleep 70 1810 1
     verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
@@ -1560,8 +1567,7 @@ tests() {
     # test 550 1800 3 0.5 # Oak Inn Present Tab 3
     # test 690 1800 3 0.5 # Oak Inn Present Tab 4
 
-    # Check if red mark - Weekly Deals
-
+    # Need to check color for Soren
     # Check if red mark - Monthly Deals
     exit
 }
