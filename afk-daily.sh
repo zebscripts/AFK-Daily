@@ -461,11 +461,14 @@ waitBattleFinish() {
 # ##############################################################################
 waitBattleStart() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&2; fi
-    # Check if pause button is present
-    until testColorOR -f 110 1465 482f1f; do
+    _waitBattleStart_count=0                    # Max loops = 10 (10x.5s=5s max)
+    # Check if pause button is present && less than 10 tries
+    until testColorOR -f 110 1465 482f1f && [ $_waitBattleStart_count -lt 10 ]; do
         # Maybe pause button doesn't exist, so instead check for a skip button
         if testColorOR 760 1440 502e1d; then return; fi
 
+        _waitBattleStart_count=$((_waitBattleStart_count + 1))                  # Increment
+        sleep .5
         # In case none were found, try again starting with the pause button
     done
 }
@@ -866,7 +869,7 @@ legendsTournament() {
     fi
 
     _legendsTournament_COUNT=0
-    until [ "$_legendsTournament_COUNT" -ge "$totalAmountArenaTries-2" ]; do    # Repeat a battle for as long as totalAmountArenaTries
+    until [ "$_legendsTournament_COUNT" -ge "$totalAmountTournamentTries" ]; do    # Repeat a battle for as long as totalAmountTournamentTries
         inputTapSleep 550 1840 4                # Challenge
         inputTapSleep 800 1140 4                # Third opponent
         inputTapSleep 550 1850 4                # Begin Battle
@@ -1007,7 +1010,7 @@ guildHunts() {
 
 # ##############################################################################
 # Function Name : guildHunts_quickBattle
-# Descripton    : Repeat a battle for as long as totalAmountArenaTries
+# Descripton    : Repeat a battle for as long as totalAmountGuildBossTries
 # ##############################################################################
 guildHunts_quickBattle() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts_quickBattle" >&2; fi
@@ -1015,7 +1018,7 @@ guildHunts_quickBattle() {
     # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
     until [ "$_guildHunts_quickBattle_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
         # TODO: Manual battle (need to be verified)
-        if false; then
+        if [ "$doGuildHuntsBattle" = true ]; then
             inputTapSleep 350 1840              # Challenge
             inputTapSleep 550 1850 0            # Battle
             waitBattleStart
@@ -1329,8 +1332,15 @@ strengthenCrystal() {
         testColorORTapSleep 620 1250 8ae9cf     # Detected: 8ae9cf / Not: e4c38e
 
         inputTapSleep 550 1850                  # Strenghen Crystal
-        inputTapSleep 200 1850                  # Close level up window
-
+        if testColorOR 700 1250 9aedc4; then    # If Level up
+            echo "[INFO] Level up..."
+            inputTapSleep 700 1250 3            # Confirm level up window
+            inputTapSleep 200 1850 1            # Close level up window
+            inputTapSleep 200 1850              # Close gift window
+        else
+            inputTapSleep 200 1850              # Close level up window
+        fi
+        inputTapSleep 200 1850 .5               # Better safe than sorry
         inputTapSleep 70 1810                   # Exit
     else
         echo "[INFO] Can't strenghened resonating Crystal..."

@@ -256,12 +256,13 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ### Repetitions
 
-| Variable                    |   Type   | Description                                                                                                              | Default |
-| :-------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `maxCampaignFights`         | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `5`   |
-| `maxKingsTowerFights`       | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |  `5`   |
-| `totalAmountArenaTries`     | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
-| `totalAmountGuildBossTries` | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| Variable                     |   Type   | Description                                                                                                              | Default |
+| :--------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
+| `maxCampaignFights`          | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `5`    |
+| `maxKingsTowerFights`        | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |  `5`    |
+| `totalAmountArenaTries`      | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| `totalAmountTournamentTries` | `Number` | The total amount of tries the player may fight in the Tournament.                                                        |   `0`   |
+| `totalAmountGuildBossTries`  | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 
 ### Store
 
@@ -295,9 +296,11 @@ The script acts depending on a set of variables. In order to change these, open 
 | Variable                  |   Type    | Description                                                                                                          | Default |
 | :------------------------ | :-------: | :------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `doGuildHunts`            | `Boolean` | If `true`, fights Wrizz and possibly Soren.                                                                          | `true`  |
+| `doGuildHuntsBattle`      | `Boolean` | If `true`, do guild hunt with manual challenge, no quick battle                                                      | `false` |
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
 | `doStrengthenCrystal`     | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
+| `allowCrystalLevelUp`     | `Boolean` | If `true`, and `doStrengthenCrystal=true` strengthens the resonating Crystal and level up if possible.               | `false` |
 | `doTempleOfAscension`     | `Boolean` | If `true`, auto ascend heroes.                                                                                       | `false` |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
 | `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |

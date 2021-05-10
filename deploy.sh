@@ -128,6 +128,7 @@ endAt="championship"
 maxCampaignFights=5
 maxKingsTowerFights=5
 totalAmountArenaTries=2+0
+totalAmountTournamentTries=0
 totalAmountGuildBossTries=2+0
 
 # Store
@@ -151,9 +152,11 @@ doKingsTower=true
 
 # Ranhorn
 doGuildHunts=true
+doGuildHuntsBattle=false
 doTwistedRealmBoss=true
 doBuyFromStore=true
 doStrengthenCrystal=true
+allowCrystalLevelUp=false
 doTempleOfAscension=false
 doCompanionPointsSummon=false
 # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
@@ -186,6 +189,7 @@ validateConfig() {
         $maxCampaignFights || -z \
         $maxKingsTowerFights || -z \
         $totalAmountArenaTries || -z \
+        $totalAmountTournamentTries || -z \
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
@@ -200,9 +204,11 @@ validateConfig() {
         $doLegendsTournament || -z \
         $doKingsTower || -z \
         $doGuildHunts || -z \
+        $doGuildHuntsBattle || -z \
         $doTwistedRealmBoss || -z \
         $doBuyFromStore || -z \
         $doStrengthenCrystal || -z \
+        $allowCrystalLevelUp || -z \
         $doTempleOfAscension || -z \
         $doCompanionPointsSummon || -z \
         $doCollectOakPresents || -z \

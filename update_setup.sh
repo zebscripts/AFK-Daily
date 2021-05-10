@@ -126,6 +126,7 @@ endAt=${endAt:-"championship"}\n\
 maxCampaignFights=${maxCampaignFights:-"5"}\n\
 maxKingsTowerFights=${maxKingsTowerFights:-"5"}\n\
 totalAmountArenaTries=${totalAmountArenaTries:-"2+0"}\n\
+totalAmountTournamentTries=${totalAmountTournamentTries:-"0"}\n\
 totalAmountGuildBossTries=${totalAmountGuildBossTries:-"2+0"}\n\
 \n\
 # Store\n\
@@ -149,9 +150,11 @@ doKingsTower=${doKingsTower:-"true"}\n\
 \n\
 # Ranhorn\n\
 doGuildHunts=${doGuildHunts:-"true"}\n\
+doGuildHuntsBattle=${doGuildHuntsBattle:-"false"}\n\
 doTwistedRealmBoss=${doTwistedRealmBoss:-"true"}\n\
 doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
+allowCrystalLevelUp=${allowCrystalLevelUp:-"false"}\n\
 doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
 # Only works if 'Hide Inn Heroes' is enabled under 'Settings -> Memory'\n\
