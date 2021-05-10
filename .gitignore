@@ -7,6 +7,6 @@
 # Project specific
 #.wiki/
 adb/
-config*.sh
-.*afkscript.tmp
+config*.ini
+.*afkscript.ini
 *.bak
