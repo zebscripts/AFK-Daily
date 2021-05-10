@@ -2,13 +2,10 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : <SCREENSHOTLOCATION> <forceFightCampaign>
+# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <testServer>
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
-
-# WIP: Refacto
-# TODO: Group Game functions by tab + rename + order by name < Wait for PR
 
 # ##############################################################################
 # Section       : Variables
@@ -32,6 +29,7 @@ totalAmountOakRewards=3
 # Do not modify
 RGB=00000000
 oakRes=0
+testServer=false
 forceFightCampaign=false
 activeTab="Start"
 screenshotRequired=true
@@ -39,12 +37,13 @@ screenshotRequired=true
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
-    . "/$1/scripts/afk-arena/config.sh"
+    . "/$1/scripts/afk-arena/config.ini"
     forceFightCampaign=$2
+    testServer=$3
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
-    . "/storage/emulated/0/scripts/afk-arena/config.sh"
+    . "/storage/emulated/0/scripts/afk-arena/config.ini"
 fi
 
 # ##############################################################################
@@ -53,76 +52,15 @@ fi
 # ##############################################################################
 
 # ##############################################################################
-# Function Name : Test
-# Description   : Print RGB then exit
-# Args          : <X> <Y> <REPEAT> <SLEEP>
-# Output        : stdout [0 means same colors, 100 means opposite colors]
-# ##############################################################################
-test() {
-    _test_COUNT=0
-    until [ "$_test_COUNT" -ge "$3" ]; do
-        sleep "$4"
-        getColor -f "$1" "$2"
-        echo "RGB: $RGB"
-        _test_COUNT=$((_test_COUNT + 1))        # Increment
-    done
-    exit
-}
-
-# ##############################################################################
-# Function Name : sRGBColorDelta
-# Args          : <COLOR1> <COLOR2>
-# Output        : stdout [0 means same colors, 100 means opposite colors]
-# Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
-# ##############################################################################
-sRGBColorDelta() {
-    if [ "$#" -ne 2 ] ; then
-        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
-        echo " 0 means same colors, 100 means opposite colors" >&2
-        return
-    fi
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
-    r=$((0x${1:0:2} - 0x${2:0:2}))
-    g=$((0x${1:2:2} - 0x${2:2:2}))
-    b=$((0x${1:4:2} - 0x${2:4:2}))
-    d=$((((765 - (${r#-} + ${g#-} + ${b#-})) * 100) / 765))                     # 765 = 3 * 255
-    d=$((100-d))                                # Delta is a distance... 0=same, 100=opposite need to reverse it
-    echo $d
-}
-
-# ##############################################################################
-# Function Name : wait
-# Descripton    : Default wait time for actions
-# ##############################################################################
-wait() {
-    sleep $DEFAULT_SLEEP
-}
-
-# ##############################################################################
-# Function Name : startApp
-# Descripton    : Starts AFK Arena
-# ##############################################################################
-startApp() {
-    monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
-    sleep 1
-    disableOrientation
-}
-
-# ##############################################################################
 # Function Name : closeApp
 # Descripton    : Closes AFK Arena
 # ##############################################################################
 closeApp() {
-    am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
-}
-
-# ##############################################################################
-# Function Name : switchApp
-# Descripton    : Switches between last app
-# ##############################################################################
-switchApp() {
-    input keyevent KEYCODE_APP_SWITCH
-    input keyevent KEYCODE_APP_SWITCH
+    if [ "$testServer" = true ]; then
+        am force-stop com.lilithgames.hgame.gp.id >/dev/null 2>/dev/null
+    else
+        am force-stop com.lilithgame.hgame.gp >/dev/null 2>/dev/null
+    fi
 }
 
 # ##############################################################################
@@ -131,32 +69,6 @@ switchApp() {
 # ##############################################################################
 disableOrientation() {
     content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
-}
-
-# ##############################################################################
-# Function Name : takeScreenshot
-# Descripton    : Takes a screenshot and saves it if screenshotRequired=true
-# Output        : $SCREENSHOTLOCATION
-# ##############################################################################
-takeScreenshot() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&2; fi
-    if [ $screenshotRequired = false ]; then return; fi
-    screencap "$SCREENSHOTLOCATION"
-    screenshotRequired=false
-}
-
-# ##############################################################################
-# Function Name : readRGB
-# Descripton    : Gets pixel color
-# Args          : <X> <Y>
-# Output        : $RGB
-# ##############################################################################
-readRGB() {
-    offset=$((DEVICEWIDTH*$2+$1+3))
-    RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
-    RGB=${RGB:9:9}
-    RGB="${RGB// /}"
-    # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
 }
 
 # ##############################################################################
@@ -176,28 +88,6 @@ getColor() {
     takeScreenshot
     readRGB "$1" "$2"
     if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&2; fi
-}
-
-# ##############################################################################
-# Function Name : getColor
-# Descripton    : Verifies if <X> and <Y> have specific RGB then print <MESSAGE_*>
-# Args          : <X> <Y> <RGB> <MESSAGE_SUCCESS> <MESSAGE_FAILURE>
-# Output        : stdout MessageSuccess, stderr MessageFailure
-# ##############################################################################
-verifyRGB() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&2; fi
-    getColor "$1" "$2"
-    if [ "$RGB" != "$3" ]; then
-        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]" >&2
-        echo >&2
-        echo "[ERROR] $5" >&2
-        #exit
-        echo "[INFO] Restarting"
-        init
-        run
-    else
-        echo "[OK] $4"
-    fi
 }
 
 # ##############################################################################
@@ -224,41 +114,101 @@ inputTapSleep() {
 }
 
 # ##############################################################################
-# Function Name : testColorOR
-# Descripton    : Equivalent to:
-#                 if getColor <X> <Y> && { [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; }; then
-# Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
-# Output        : if true, return 0, else 1
+# Function Name : loopUntilNotRGB
+# Descripton    : Loops until RGB is equal
+# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
-testColorOR() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
-    _testColorOR_min_delta=100
-    for arg in "$@"; do
-        shift
-        case "$arg" in
-            -d) shift; _testColorOR_min_delta=$1;;
-            -f) screenshotRequired=true;;
-            *) set -- "$@" "$arg";;
-        esac
+loopUntilNotRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
+    sleep "$1"
+    shift
+    while testColorOR -f "$@"; do
+        sleep 1
     done
-    getColor "$1" "$2"                          # looking for color
-    shift; shift;                               # ignore arg
-    for i in "$@"; do                           # loop in colors
-        if [ "$RGB" = "$i" ]; then              # color found?
-            return 0                            # At the first color found OR is break, return 0
-        else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_min_delta" -lt "100" ]; then
-                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
-                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&2;
-                fi
-                if [ "$_testColorOR_delta" -ge "$_testColorOR_min_delta" ]; then
-                    return 1
-                fi
-            fi
-        fi
+}
+
+# ##############################################################################
+# Function Name : loopUntilRGB
+# Descripton    : Loops until RGB is not equal
+# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
+# ##############################################################################
+loopUntilRGB() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
+    sleep "$1"
+    shift
+    while testColorNAND -f "$@"; do
+        sleep 1
     done
-    return 1                                    # if no result > return 1
+}
+
+# ##############################################################################
+# Function Name : readRGB
+# Descripton    : Gets pixel color
+# Args          : <X> <Y>
+# Output        : $RGB
+# ##############################################################################
+readRGB() {
+    offset=$((DEVICEWIDTH*$2+$1+3))
+    RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
+    RGB=${RGB:9:9}
+    RGB="${RGB// /}"
+    # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
+}
+
+# ##############################################################################
+# Function Name : sRGBColorDelta
+# Args          : <COLOR1> <COLOR2>
+# Output        : stdout [0 means same colors, 100 means opposite colors]
+# Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
+# ##############################################################################
+sRGBColorDelta() {
+    if [ "$#" -ne 2 ] ; then
+        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
+        echo " 0 means same colors, 100 means opposite colors" >&2
+        return
+    fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
+    r=$((0x${1:0:2} - 0x${2:0:2}))
+    g=$((0x${1:2:2} - 0x${2:2:2}))
+    b=$((0x${1:4:2} - 0x${2:4:2}))
+    d=$((((765 - (${r#-} + ${g#-} + ${b#-})) * 100) / 765))                     # 765 = 3 * 255
+    d=$((100-d))                                # Delta is a distance... 0=same, 100=opposite need to reverse it
+    echo $d
+}
+
+# ##############################################################################
+# Function Name : startApp
+# Descripton    : Starts AFK Arena
+# ##############################################################################
+startApp() {
+    if [ "$testServer" = true ]; then
+        monkey -p com.lilithgames.hgame.gp.id 1 1 >/dev/null 2>/dev/null
+    else
+        monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
+    fi
+    sleep 1
+    disableOrientation
+}
+
+# ##############################################################################
+# Function Name : switchApp
+# Descripton    : Switches between last app
+# ##############################################################################
+switchApp() {
+    input keyevent KEYCODE_APP_SWITCH
+    input keyevent KEYCODE_APP_SWITCH
+}
+
+# ##############################################################################
+# Function Name : takeScreenshot
+# Descripton    : Takes a screenshot and saves it if screenshotRequired=true
+# Output        : $SCREENSHOTLOCATION
+# ##############################################################################
+takeScreenshot() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&2; fi
+    if [ $screenshotRequired = false ]; then return; fi
+    screencap "$SCREENSHOTLOCATION"
+    screenshotRequired=false
 }
 
 # ##############################################################################
@@ -300,6 +250,44 @@ testColorNAND() {
 }
 
 # ##############################################################################
+# Function Name : testColorOR
+# Descripton    : Equivalent to:
+#                 if getColor <X> <Y> && { [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; }; then
+# Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
+# Output        : if true, return 0, else 1
+# ##############################################################################
+testColorOR() {
+    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
+    _testColorOR_min_delta=100
+    for arg in "$@"; do
+        shift
+        case "$arg" in
+            -d) shift; _testColorOR_min_delta=$1;;
+            -f) screenshotRequired=true;;
+            *) set -- "$@" "$arg";;
+        esac
+    done
+    getColor "$1" "$2"                          # looking for color
+    shift; shift;                               # ignore arg
+    for i in "$@"; do                           # loop in colors
+        if [ "$RGB" = "$i" ]; then              # color found?
+            return 0                            # At the first color found OR is break, return 0
+        else
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_min_delta" -lt "100" ]; then
+                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
+                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
+                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&2;
+                fi
+                if [ "$_testColorOR_delta" -ge "$_testColorOR_min_delta" ]; then
+                    return 1
+                fi
+            fi
+        fi
+    done
+    return 1                                    # if no result > return 1
+}
+
+# ##############################################################################
 # Function Name : testColorORTapSleep
 # Descripton    : Equivalent to:
 #                   if testColorOR <X> <Y> <COLOR>; then
@@ -315,31 +303,33 @@ testColorORTapSleep() {
 }
 
 # ##############################################################################
-# Function Name : loopUntilRGB
-# Descripton    : Loops until RGB is not equal
-# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
+# Function Name : getColor
+# Descripton    : Verifies if <X> and <Y> have specific RGB then print <MESSAGE_*>
+# Args          : <X> <Y> <RGB> <MESSAGE_SUCCESS> <MESSAGE_FAILURE>
+# Output        : stdout MessageSuccess, stderr MessageFailure
 # ##############################################################################
-loopUntilRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
-    sleep "$1"
-    shift
-    while testColorNAND -f "$@"; do
-        sleep 1
-    done
+verifyRGB() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&2; fi
+    getColor "$1" "$2"
+    if [ "$RGB" != "$3" ]; then
+        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]" >&2
+        echo >&2
+        echo "[ERROR] $5" >&2
+        #exit
+        echo "[INFO] Restarting"
+        init
+        run
+    else
+        echo "[OK] $4"
+    fi
 }
 
 # ##############################################################################
-# Function Name : loopUntilNotRGB
-# Descripton    : Loops until RGB is equal
-# Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
+# Function Name : wait
+# Descripton    : Default wait time for actions
 # ##############################################################################
-loopUntilNotRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
-    sleep "$1"
-    shift
-    while testColorOR -f "$@"; do
-        sleep 1
-    done
+wait() {
+    sleep $DEFAULT_SLEEP
 }
 
 # ##############################################################################
@@ -372,47 +362,6 @@ doSpeed() {
 doSkip() {
     if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSkip" >&2; fi
     testColorORTapSleep 760 1440 502e1d 0       # Exists: 502e1d
-}
-
-# ##############################################################################
-# Function Name : waitBattleStart
-# Descripton    : Waits until battle starts
-# ##############################################################################
-waitBattleStart() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&2; fi
-    # Check if pause button is present
-    until testColorOR -f 110 1465 482f1f; do
-        # Maybe pause button doesn't exist, so instead check for a skip button
-        if testColorOR 760 1440 502e1d; then return; fi
-
-        # In case none were found, try again starting with the pause button
-    done
-}
-
-# ##############################################################################
-# Function Name : waitBattleFinish
-# Descripton    : Waits until a battle has ended after <SECONDS>
-# Args          : <SECONDS>
-# ##############################################################################
-waitBattleFinish() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
-    sleep "$1"
-    finished=false
-    while [ $finished = false ]; do
-        # First RGB local device, second bluestacks
-        if testColorOR -f 560 350 b8894d b7894c;then                            # Victory
-            battleFailed=false
-            finished=true
-        elif [ "$RGB" = '171932' ]; then                                        # Failed
-            battleFailed=true
-            finished=true
-        # First RGB local device, second bluestacks
-        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
-            battleFailed=false
-            finished=true
-        fi
-        sleep 1
-    done
 }
 
 # ##############################################################################
@@ -481,321 +430,49 @@ switchTab() {
 }
 
 # ##############################################################################
-# Function Name : buyStoreItem
-# Descripton    : Buys an item from the Store
-# Args          : <X> <Y>
+# Function Name : waitBattleFinish
+# Descripton    : Waits until a battle has ended after <SECONDS>
+# Args          : <SECONDS>
 # ##############################################################################
-buyStoreItem() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyStoreItem $*" >&2; fi
-    inputTapSleep "$1" "$2" 1
-    inputTapSleep 550 1540 1
-    inputTapSleep 550 1700 0
-}
-
-# ##############################################################################
-# Function Name : oakSearchPresent
-# Descripton    : Searches for a "good" present in oak Inn
-# ##############################################################################
-oakSearchPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakSearchPresent " >&2; fi
-    inputSwipe 400 1600 400 310 50              # Swipe all the way down
-    sleep 1
-
-    if testColorOR 540 990 833f0e;then                                          # 1 red 833f0e blue 903da0
-        inputTapSleep 540 990 3                                                 # Tap present
-        inputTapSleep 540 1650 1                                                # Ok
-        inputTapSleep 540 1650 0                                                # Collect reward
-        oakRes=1
-    else
-        if testColorOR 540 800 a21a1a;then                                      # 2 red a21a1a blue 9a48ab
-            inputTapSleep 540 800 3
-            inputTapSleep 540 1650 1                                            # Ok
-            inputTapSleep 540 1650 0                                            # Collect reward
-            oakRes=1
-        else
-            if testColorOR 540 610 aa2b27;then                                  # 3 red aa2b27 blue b260aa
-                inputTapSleep 540 610 3
-                inputTapSleep 540 1650 1                                        # Ok
-                inputTapSleep 540 1650 0                                        # Collect reward
-                oakRes=1
-            else
-                if testColorOR 540 420 bc3f36;then                              # 4 red bc3f36 blue c58c7b
-                    inputTapSleep 540 420 3
-                    inputTapSleep 540 1650 1                                    # Ok
-                    inputTapSleep 540 1650 0                                    # Collect reward
-                    oakRes=1
-                else
-                    if testColorOR 540 220 bb3734;then                          # 5 red bb3734 blue 9442a5
-                        inputTapSleep 540 220 3
-                        inputTapSleep 540 1650 1                                # Ok
-                        inputTapSleep 540 1650 0                                # Collect reward
-                        oakRes=1
-                    else                                                        # If no present found, search for other tabs
-                        oakRes=0
-                    fi
-                fi
-            fi
+waitBattleFinish() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
+    sleep "$1"
+    finished=false
+    while [ $finished = false ]; do
+        # First RGB local device, second bluestacks
+        if testColorOR -f 560 350 b8894d b7894c;then                            # Victory
+            battleFailed=false
+            finished=true
+        elif [ "$RGB" = '171932' ]; then                                        # Failed
+            battleFailed=true
+            finished=true
+        # First RGB local device, second bluestacks
+        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
+            battleFailed=false
+            finished=true
         fi
-    fi
-}
-
-# ##############################################################################
-# Function Name : oakPresentTab
-# Descripton    : Search available present tabs in Oak Inn
-# ##############################################################################
-oakPresentTab() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakPresentTab" >&2; fi
-    oakPresentTabs=0
-    if testColorOR 270 1800 c79663;then         # 1 gift c79663
-        oakPresentTabs=$((oakPresentTabs + 1000)) # Increment
-    fi
-    if testColorOR 410 1800 bb824f;then         # 2 gift bb824f
-        oakPresentTabs=$((oakPresentTabs + 200)) # Increment
-    fi
-    if testColorOR 550 1800 af6e3b;then         # 3 gift af6e3b
-        oakPresentTabs=$((oakPresentTabs + 30)) # Increment
-    fi
-    if testColorOR 690 1800 b57b45;then         # 4 gift b57b45
-        oakPresentTabs=$((oakPresentTabs + 4))  # Increment
-    fi
-}
-
-# ##############################################################################
-# Function Name : oakTryCollectPresent
-# Descripton    : Tries to collect a present from one Oak Inn friend
-# ##############################################################################
-oakTryCollectPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakTryCollectPresent" >&2; fi
-    oakSearchPresent                            # Search for a "good" present
-    if [ $oakRes = 0 ]; then
-        oakPresentTab                           # If no present found, search for other tabs
-        case $oakPresentTabs in
-            0)
-                oakRes=0
-                ;;
-            4)
-                inputTapSleep 690 1800 3
-                oakSearchPresent
-                ;;
-            30)
-                inputTapSleep 550 1800 3
-                oakSearchPresent
-                ;;
-            34)
-                inputTapSleep 550 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 690 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            200)
-                inputTapSleep 410 1800 3
-                oakSearchPresent
-                ;;
-            204)
-                inputTapSleep 410 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 690 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            230)
-                inputTapSleep 410 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 550 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            234)
-                inputTapSleep 410 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 550 1800 3
-                    oakSearchPresent
-                    if [ $oakRes = 0 ]; then
-                        inputTapSleep 690 1800 3
-                        oakSearchPresent
-                    fi
-                fi
-                ;;
-            1000)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                ;;
-            1004)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 690 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            1030)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 550 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            1034)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 550 1800 3
-                    oakSearchPresent
-                    if [ $oakRes = 0 ]; then
-                        inputTapSleep 690 1800 3
-                        oakSearchPresent
-                    fi
-                fi
-                ;;
-            1200)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 410 1800 3
-                    oakSearchPresent
-                fi
-                ;;
-            1204)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 410 1800 3
-                    oakSearchPresent
-                    if [ $oakRes = 0 ]; then
-                        inputTapSleep 690 1800 3
-                        oakSearchPresent
-                    fi
-                fi
-                ;;
-            1230)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 410 1800 3
-                    oakSearchPresent
-                    if [ $oakRes = 0 ]; then
-                        inputTapSleep 550 1800 3
-                        oakSearchPresent
-                    fi
-                fi
-                ;;
-            1234)
-                inputTapSleep 270 1800 3
-                oakSearchPresent
-                if [ $oakRes = 0 ]; then
-                    inputTapSleep 410 1800 3
-                    oakSearchPresent
-                    if [ $oakRes = 0 ]; then
-                        inputTapSleep 550 1800 3
-                        oakSearchPresent
-                        if [ $oakRes = 0 ]; then
-                            inputTapSleep 690 1800 3
-                            oakSearchPresent
-                        fi
-                    fi
-                fi
-                ;;
-        esac
-    fi
-}
-
-# ##############################################################################
-# Function Name : checkWhereToEnd
-# Descripton    : Checks where to end the script
-# ##############################################################################
-checkWhereToEnd() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
-    case "$endAt" in
-        "oak")
-            switchTab "Ranhorn" true
-            inputTapSleep 780 280 0
-            ;;
-        "soren")
-            switchTab "Ranhorn" true
-            inputTapSleep 380 360 3
-            inputTapSleep 290 860 1
-            inputTapSleep 970 890 0
-            ;;
-        "mail")
-            inputTapSleep 960 630 0
-            ;;
-        "chat")
-            switchTab "Chat" true
-            ;;
-        "tavern")
-            switchTab "Ranhorn" true
-            inputTapSleep 300 1400 0
-            ;;
-        "merchants")
-            inputTapSleep 120 290 0
-            ;;
-        "campaign")
-            inputTapSleep 550 1850 0
-            ;;
-        "championship")
-            switchTab "Dark Forest" true
-            inputTapSleep 740 1050
-            if [ "$pvpEvent" = false ]; then
-                inputTapSleep 550 1370 0
-            else
-                inputTapSleep 550 1680 0
-            fi
-            ;;
-        *)
-            echo "[WARN] Unknown location to end script on. Ignoring..." >&2
-            ;;
-    esac
-}
-
-# ##############################################################################
-# Function Name : quickBattleGuildBosses
-# Descripton    : Repeat a battle for as long as totalAmountArenaTries
-# ##############################################################################
-quickBattleGuildBosses() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickBattleGuildBosses" >&2; fi
-    _quickBattleGuildBosses_COUNT=0
-    # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
-    # TODO: Need to check color for Soren
-    until [ "$_quickBattleGuildBosses_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
-        # TODO: Manual battle (need to be verified)
-        if false; then
-            inputTapSleep 350 1840              # Challenge
-            inputTapSleep 550 1850 0            # Battle
-            waitBattleStart
-            doAuto
-            doSpeed
-            waitBattleFinish 10                 # Wait until battle is over
-            inputTapSleep 550 800 0             # Reward
-            inputTapSleep 550 800 1             # Reward x2
-        else
-            inputTapSleep 710 1840              # Quick Battle
-            # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-            inputTapSleep 720 1300 1            # Begin
-            inputTapSleep 550 800 0             # Reward
-            inputTapSleep 550 800 1             # Reward x2
-        fi
-        _quickBattleGuildBosses_COUNT=$((_quickBattleGuildBosses_COUNT + 1))    # Increment
+        sleep 1
     done
 }
 
 # ##############################################################################
-# Function Name : lootAfkChest
-# Descripton    : Loots afk chest
+# Function Name : waitBattleStart
+# Descripton    : Waits until battle starts
 # ##############################################################################
-lootAfkChest() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
-    inputTapSleep 550 1500 1
-    inputTapSleep 750 1350 3
-    inputTapSleep 550 1850 1                    # Tap campaign in case of level up
-    wait
-    verifyRGB 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
+waitBattleStart() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&2; fi
+    # Check if pause button is present
+    until testColorOR -f 110 1465 482f1f; do
+        # Maybe pause button doesn't exist, so instead check for a skip button
+        if testColorOR 760 1440 502e1d; then return; fi
+
+        # In case none were found, try again starting with the pause button
+    done
 }
+
+# ##############################################################################
+# Section       : Campaign
+# ##############################################################################
 
 # ##############################################################################
 # Function Name : challengeBoss
@@ -865,19 +542,6 @@ challengeBoss() {
 }
 
 # ##############################################################################
-# Function Name : fastRewards
-# Descripton    : Collects fast rewards
-# ##############################################################################
-fastRewards() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
-    inputTapSleep 950 1660 1
-    inputTapSleep 710 1260
-    inputTapSleep 560 1800 1
-    inputTapSleep 400 1250
-    verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
-}
-
-# ##############################################################################
 # Function Name : collectFriendsAndMercenaries
 # Descripton    : Collects and sends companion points, as well as auto lending mercenaries
 # ##############################################################################
@@ -901,130 +565,34 @@ collectFriendsAndMercenaries() {
 }
 
 # ##############################################################################
-# Function Name : soloBounties
-# Descripton    : Starts Solo bounties
+# Function Name : fastRewards
+# Descripton    : Collects fast rewards
 # ##############################################################################
-soloBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
-    inputTapSleep 600 1320 1
-    inputTapSleep 780 1550 1                    # Collect all
-    inputTapSleep 350 1550                      # Dispatch all
-    inputTapSleep 550 1500 0                    # Confirm
-
-    if [ "$doTeamBounties" = false ]; then      # Return to Tab if $doTeamBounties = false
-        wait
-        inputTapSleep 70 1810
-        verifyRGB 240 1775 d49a61 "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
-    else
-        wait
-        verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
-    fi
+fastRewards() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
+    inputTapSleep 950 1660 1
+    inputTapSleep 710 1260
+    inputTapSleep 560 1800 1
+    inputTapSleep 400 1250
+    verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
 
 # ##############################################################################
-# Function Name : teamBounties
-# Descripton    : Starts Team bounties
-# Args          : <START_FROM_TAB>: true / false
+# Function Name : lootAfkChest
+# Descripton    : Loots afk chest
 # ##############################################################################
-teamBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&2; fi
-    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
-        inputTapSleep 600 1320 1
-    fi
-    ## For testing only! Keep as comment ##
-    # inputTapSleep 600 1320 1
-    ## End of testing ##
-    inputTapSleep 910 1770
-    inputTapSleep 780 1550 1                    # Collect all
-    inputTapSleep 350 1550                      # Dispatch all
-    inputTapSleep 550 1500                      # Confirm
-    inputTapSleep 70 1810
-    verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
+lootAfkChest() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
+    inputTapSleep 550 1500 1
+    inputTapSleep 750 1350 3
+    inputTapSleep 550 1850 1                    # Tap campaign in case of level up
+    wait
+    verifyRGB 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
 }
 
 # ##############################################################################
-# Function Name : tapClosestOpponent
-# Descripton    : Attempts to tap the closest Arena of Heroes opponent
-# Args          : <OPPONENT>: 1/2/3/4/5
-# Output        : If failed, return 1
+# Section       : Dark Forest
 # ##############################################################################
-tapClosestOpponent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] tapClosestOpponent $*" >&2; fi
-    # Depending on the opponent number sent as a parameter ($1), this function
-    # would attempt to check if there's an opponent above the one sent.
-    # If there isn't, check the one above that one and so on until one is found.
-    # When found, tap on the opponent and exit function.
-    case $1 in
-    1)
-        # Refresh
-        inputTapSleep 815 540
-
-        # Attempt to fight $arenaHeroesOpponent opponent, and if not present, skip battle
-        case $arenaHeroesOpponent in
-        1)
-            # Check if opponent 1 exists and fight if true
-            if testColorOR 820 700 a7f1b7;then inputTapSleep 820 700 0; else return 1; fi
-            ;;
-        2)
-            # Check if opponent 2 exists and fight if true
-            if testColorOR 820 870 2daab4 aff3c0; then inputTapSleep 820 870 0; else return 1; fi
-            ;;
-        3)
-            # Check if opponent 3 exists and fight if true
-            if testColorOR 820 1050 a7f1b7; then inputTapSleep 820 1050 0; else return 1; fi
-            ;;
-        4)
-            # Check if opponent 4 exists and fight if true
-            if testColorOR 820 1220 2daab4 aff3c0; then inputTapSleep 820 1220 0; else return 1; fi
-            ;;
-        5)
-            # Check if opponent 5 exists and fight if true
-            if testColorOR 820 1400 aaf2bb; then inputTapSleep 820 1400 0; else return 1; fi
-            ;;
-        esac
-        ;;
-    2)
-        # Check if opponent 1 exists
-        if testColorOR 820 700 a7f1b7; then
-            # Fight opponent
-            inputTapSleep 820 700 0
-        else
-            # Try to fight the closest opponent to 2
-            tapClosestOpponent 1
-        fi
-        ;;
-    3)
-        # Check if opponent 2 exists
-        if testColorOR 820 870 2daab4 aff3c0; then
-            # Fight opponent
-            inputTapSleep 820 870 0
-        else
-            # Try to fight the closest opponent to 3
-            tapClosestOpponent 2
-        fi
-        ;;
-    4)
-        # Check if opponent 3 exists
-        if testColorOR 820 1050 a7f1b7; then
-            # Fight opponent
-            inputTapSleep 820 1050 0
-        else
-            # Try to fight the closest opponent to 4
-            tapClosestOpponent 3
-        fi
-        ;;
-    5)
-        # Check if opponent 4 exists
-        if testColorOR 820 1220 2daab4 aff3c0; then
-            # Fight opponent
-            inputTapSleep 820 1220 0
-        else
-            # Try to fight the closest opponent to 5
-            tapClosestOpponent 4
-        fi
-        ;;
-    esac
-}
 
 # ##############################################################################
 # Function Name : arenaOfHeroes
@@ -1059,53 +627,39 @@ arenaOfHeroes() {
             #  Opponent 5: 820 1400     ->        aaf2bb
             case $arenaHeroesOpponent in
                 1)
-                    # Check if opponent exists
-                     if testColorOR 820 700 a7f1b7; then
-                        # Fight opponent
-                        inputTapSleep 820 700 0
+                    if testColorOR 820 700 a7f1b7; then                         # Check if opponent exists
+                        inputTapSleep 820 700 0                                 # Fight opponent
                     else
                         # Refresh opponents and try to fight opponent $arenaHeroesOpponent
-                        tapClosestOpponent 1
+                        arenaOfHeroes_tapClosestOpponent 1
                     fi
                     ;;
                 2)
-                    # Check if opponent exists
-                    if testColorOR 820 870 2daab4 aff3c0; then
-                        # Fight opponent
-                        inputTapSleep 820 870 0
+                    if testColorOR 820 870 2daab4 aff3c0; then                  # Check if opponent exists
+                        inputTapSleep 820 870 0                                 # Fight opponent
                     else
-                        # Try to fight the closest opponent to 2
-                        tapClosestOpponent 2
+                        arenaOfHeroes_tapClosestOpponent 2                      # Try to fight the closest opponent to 2
                     fi
                     ;;
                 3)
-                    # Check if opponent exists
-                    if testColorOR 820 1050 a7f1b7; then
-                        # Fight opponent
-                        inputTapSleep 820 1050 0
+                    if testColorOR 820 1050 a7f1b7; then                        # Check if opponent exists
+                        inputTapSleep 820 1050 0                                # Fight opponent
                     else
-                        # Try to fight the closest opponent to 3
-                        tapClosestOpponent 3
+                        arenaOfHeroes_tapClosestOpponent 3                      # Try to fight the closest opponent to 3
                     fi
                     ;;
                 4)
-                    # Check if opponent exists
-                    if testColorOR 820 1220 2daab4 aff3c0; then
-                        # Fight opponent
-                        inputTapSleep 820 1220 0
+                    if testColorOR 820 1220 2daab4 aff3c0; then                 # Check if opponent exists
+                        inputTapSleep 820 1220 0                                # Fight opponent
                     else
-                        # Try to fight the closest opponent to 4
-                        tapClosestOpponent 4
+                        arenaOfHeroes_tapClosestOpponent 4                      # Try to fight the closest opponent to 4
                     fi
                     ;;
                 5)
-                    # Check if opponent exists
-                    if testColorOR 820 1400 aaf2bb; then
-                        # Fight opponent
-                        inputTapSleep 820 1400 0
+                    if testColorOR 820 1400 aaf2bb; then                        # Check if opponent exists
+                        inputTapSleep 820 1400 0                                # Fight opponent
                     else
-                        # Try to fight the closest opponent to 5
-                        tapClosestOpponent 5
+                        arenaOfHeroes_tapClosestOpponent 5                      # Try to fight the closest opponent to 5
                     fi
                     ;;
             esac
@@ -1139,6 +693,149 @@ arenaOfHeroes() {
     else
         inputTapSleep 70 1810
         verifyRGB 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+    fi
+}
+
+# ##############################################################################
+# Function Name : arenaOfHeroes_tapClosestOpponent
+# Descripton    : Attempts to tap the closest Arena of Heroes opponent
+# Args          : <OPPONENT>: 1/2/3/4/5
+# Output        : If failed, return 1
+# ##############################################################################
+arenaOfHeroes_tapClosestOpponent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes_tapClosestOpponent $*" >&2; fi
+    # Depending on the opponent number sent as a parameter ($1), this function
+    # would attempt to check if there's an opponent above the one sent.
+    # If there isn't, check the one above that one and so on until one is found.
+    # When found, tap on the opponent and exit function.
+    case $1 in
+    1)
+        # Refresh
+        inputTapSleep 815 540
+
+        # Attempt to fight $arenaHeroesOpponent opponent, and if not present, skip battle
+        case $arenaHeroesOpponent in
+        1)
+            # Check if opponent 1 exists and fight if true
+            if testColorOR 820 700 a7f1b7;then inputTapSleep 820 700 0; else return 1; fi
+            ;;
+        2)
+            # Check if opponent 2 exists and fight if true
+            if testColorOR 820 870 2daab4 aff3c0; then inputTapSleep 820 870 0; else return 1; fi
+            ;;
+        3)
+            # Check if opponent 3 exists and fight if true
+            if testColorOR 820 1050 a7f1b7; then inputTapSleep 820 1050 0; else return 1; fi
+            ;;
+        4)
+            # Check if opponent 4 exists and fight if true
+            if testColorOR 820 1220 2daab4 aff3c0; then inputTapSleep 820 1220 0; else return 1; fi
+            ;;
+        5)
+            # Check if opponent 5 exists and fight if true
+            if testColorOR 820 1400 aaf2bb; then inputTapSleep 820 1400 0; else return 1; fi
+            ;;
+        esac
+        ;;
+    2)
+        if testColorOR 820 700 a7f1b7; then                                     # Check if opponent 1 exists
+            inputTapSleep 820 700 0                                             # Fight opponent
+        else
+            arenaOfHeroes_tapClosestOpponent 1                                  # Try to fight the closest opponent to 2
+        fi
+        ;;
+    3)
+        if testColorOR 820 870 2daab4 aff3c0; then                              # Check if opponent 2 exists
+            inputTapSleep 820 870 0                                             # Fight opponent
+        else
+            arenaOfHeroes_tapClosestOpponent 2                                  # Try to fight the closest opponent to 3
+        fi
+        ;;
+    4)
+        if testColorOR 820 1050 a7f1b7; then                                    # Check if opponent 3 exists
+            inputTapSleep 820 1050 0                                            # Fight opponent
+        else
+            arenaOfHeroes_tapClosestOpponent 3                                  # Try to fight the closest opponent to 4
+        fi
+        ;;
+    5)
+        if testColorOR 820 1220 2daab4 aff3c0; then                             # Check if opponent 4 exists
+            inputTapSleep 820 1220 0                                            # Fight opponent
+        else
+            arenaOfHeroes_tapClosestOpponent 4                                  # Try to fight the closest opponent to 5
+        fi
+        ;;
+    esac
+}
+
+# ##############################################################################
+# Function Name : kingsTower
+# Descripton    : Try to battle in every Kings Tower
+# ##############################################################################
+kingsTower() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
+    inputTapSleep 500 870                       # King's Tower
+
+    # Towers
+    kingsTower_battle 550 900                   # Main Tower
+    kingsTower_battle 250 500                   # Tower of Light
+    kingsTower_battle 800 500                   # The Brutal Citadel
+    kingsTower_battle 250 1400                  # The World Tree
+    kingsTower_battle 800 1400                  # The Forsaken Necropolis
+
+    # Exit
+    inputTapSleep 70 1810
+    verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
+}
+
+# ##############################################################################
+# Function Name : kingsTower_battle
+# Descripton    : Battles in King's Towers
+# Args          : <X> <Y>
+# ##############################################################################
+kingsTower_battle() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower_battle $*" >&2; fi
+    _kingsTower_battle_COUNT=0
+    inputTapSleep "$1" "$2" 2                   # Tap chosen tower
+
+    # Check if inside tower
+    if testColorOR 550 150 1a1212; then
+        inputTapSleep 540 1350                  # Challenge
+
+        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
+        while [ "$_kingsTower_battle_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
+            inputTapSleep 550 1850 0            # Battle
+            waitBattleFinish 2
+
+            # Check if win or lose battle
+            if [ "$battleFailed" = false ]; then
+                inputTapSleep 550 1850 4        # Collect
+                inputTapSleep 550 170           # Tap on the top to close possible limited offer
+
+                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
+                # Tapping 550 170 might close an offer
+                # Tap top of the screen to close any possible Limited Offers
+                # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
+                #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
+                #     if testColorOR 550 150 1a1212; then # think i remember it needs two taps to close offer
+                #         inputTapSleep 550 75    # Tap top of the screen to close Limited Offer
+                # fi
+
+                inputTapSleep 540 1350          # Challenge
+            elif [ "$battleFailed" = true ]; then
+                inputTapSleep 550 1720          # Try again
+                _kingsTower_battle_COUNT=$((_kingsTower_battle_COUNT + 1))        # Increment
+            fi
+
+            # Check if reached daily limit / kicked us out of battle screen
+        done
+
+        # Return from chosen tower / battle
+        inputTapSleep 70 1810 3
+        if testColorOR 550 150 1a1212; then     # In case still in tower, exit once more
+            inputTapSleep 70 1810 0;
+        fi
+        sleep 2
     fi
 }
 
@@ -1187,74 +884,85 @@ legendsTournament() {
 }
 
 # ##############################################################################
-# Function Name : battleKingsTower
-# Descripton    : Battles in King's Towers
-# Args          : <X> <Y>
+# Function Name : soloBounties
+# Descripton    : Starts Solo bounties
 # ##############################################################################
-battleKingsTower() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] battleKingsTower $*" >&2; fi
-    _battleKingsTower_COUNT=0
-    inputTapSleep "$1" "$2" 2                   # Tap chosen tower
+soloBounties() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
+    inputTapSleep 600 1320 1
+    inputTapSleep 780 1550 1                    # Collect all
+    inputTapSleep 350 1550                      # Dispatch all
+    inputTapSleep 550 1500 0                    # Confirm
 
-    # Check if inside tower
-    if testColorOR 550 150 1a1212; then
-        inputTapSleep 540 1350                  # Challenge
-
-        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_battleKingsTower_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
-            inputTapSleep 550 1850 0            # Battle
-            waitBattleFinish 2
-
-            # Check if win or lose battle
-            if [ "$battleFailed" = false ]; then
-                inputTapSleep 550 1850 4        # Collect
-                inputTapSleep 550 170           # Tap on the top to close possible limited offer
-
-                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
-                # Tapping 550 170 might close an offer
-                # Tap top of the screen to close any possible Limited Offers
-                # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
-                #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
-                #     if testColorOR 550 150 1a1212; then # think i remember it needs two taps to close offer
-                #         inputTapSleep 550 75    # Tap top of the screen to close Limited Offer
-                # fi
-
-                inputTapSleep 540 1350          # Challenge
-            elif [ "$battleFailed" = true ]; then
-                inputTapSleep 550 1720          # Try again
-                _battleKingsTower_COUNT=$((_battleKingsTower_COUNT + 1))        # Increment
-            fi
-
-            # Check if reached daily limit / kicked us out of battle screen
-        done
-
-        # Return from chosen tower / battle
-        inputTapSleep 70 1810 3
-        if testColorOR 550 150 1a1212; then     # In case still in tower, exit once more
-            inputTapSleep 70 1810 0;
-        fi
-        sleep 2
+    if [ "$doTeamBounties" = false ]; then      # Return to Tab if $doTeamBounties = false
+        wait
+        inputTapSleep 70 1810
+        verifyRGB 240 1775 d49a61 "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+    else
+        wait
+        verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
     fi
 }
 
 # ##############################################################################
-# Function Name : kingsTower
-# Descripton    : Try to battle in every Kings Tower
+# Function Name : teamBounties
+# Descripton    : Starts Team bounties
+# Args          : <START_FROM_TAB>: true / false
 # ##############################################################################
-kingsTower() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
-    inputTapSleep 500 870                       # King's Tower
-
-    # Towers
-    battleKingsTower 550 900                    # Main Tower
-    battleKingsTower 250 500                    # Tower of Light
-    battleKingsTower 800 500                    # The Brutal Citadel
-    battleKingsTower 250 1400                   # The World Tree
-    battleKingsTower 800 1400                   # The Forsaken Necropolis
-
-    # Exit
+teamBounties() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&2; fi
+    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
+        inputTapSleep 600 1320 1
+    fi
+    ## For testing only! Keep as comment ##
+    # inputTapSleep 600 1320 1
+    ## End of testing ##
+    inputTapSleep 910 1770
+    inputTapSleep 780 1550 1                    # Collect all
+    inputTapSleep 350 1550                      # Dispatch all
+    inputTapSleep 550 1500                      # Confirm
     inputTapSleep 70 1810
-    verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
+    verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
+}
+
+# ##############################################################################
+# Section       : Ranhorn
+# ##############################################################################
+
+# ##############################################################################
+# Function Name : buyFromStore
+# Descripton    : Buy items from store
+# ##############################################################################
+buyFromStore() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
+    inputTapSleep 330 1650 3
+
+    if [ "$buyStoreDust" = true ]; then         # Dust
+        buyFromStore_buyItem 180 840
+        wait
+    fi
+    if [ "$buyStorePoeCoins" = true ]; then     # Poe Coins
+        buyFromStore_buyItem 670 1430
+        wait
+    fi
+    if [ "$buyStoreEmblems" = true ]; then      # Emblems
+        buyFromStore_buyItem 180 1430
+        wait
+    fi
+    inputTapSleep 70 1810                       # Return
+    verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
+}
+
+# ##############################################################################
+# Function Name : buyFromStore_buyItem
+# Descripton    : Buys an item from the Store
+# Args          : <X> <Y>
+# ##############################################################################
+buyFromStore_buyItem() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore_buyItem $*" >&2; fi
+    inputTapSleep "$1" "$2" 1
+    inputTapSleep 550 1540 1
+    inputTapSleep 550 1700 0
 }
 
 # ##############################################################################
@@ -1273,17 +981,17 @@ guildHunts() {
 
     inputTapSleep 290 860 3
 
-    quickBattleGuildBosses
+    guildHunts_quickBattle
 
     inputTapSleep 970 890 1                     # Soren
 
     if testColorOR 715 1815 8ae5c4;then         # If Soren is open
-        quickBattleGuildBosses
+        guildHunts_quickBattle
     elif [ "$canOpenSoren" = true ]; then       # If Soren is closed
         if testColorOR 580 1753 fae0ac;then     # If soren is "openable"
             inputTapSleep 550 1850
             inputTapSleep 700 1250 1
-            quickBattleGuildBosses
+            guildHunts_quickBattle
         fi
     fi
 
@@ -1295,6 +1003,359 @@ guildHunts() {
         inputTapSleep 70 1810
         verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     fi
+}
+
+# ##############################################################################
+# Function Name : guildHunts_quickBattle
+# Descripton    : Repeat a battle for as long as totalAmountArenaTries
+# ##############################################################################
+guildHunts_quickBattle() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts_quickBattle" >&2; fi
+    _guildHunts_quickBattle_COUNT=0
+    # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
+    until [ "$_guildHunts_quickBattle_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
+        # TODO: Manual battle (need to be verified)
+        if false; then
+            inputTapSleep 350 1840              # Challenge
+            inputTapSleep 550 1850 0            # Battle
+            waitBattleStart
+            doAuto
+            doSpeed
+            waitBattleFinish 10                 # Wait until battle is over
+            inputTapSleep 550 800 0             # Reward
+            inputTapSleep 550 800 1             # Reward x2
+        else
+            inputTapSleep 710 1840              # Quick Battle
+            # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+            inputTapSleep 720 1300 1            # Begin
+            inputTapSleep 550 800 0             # Reward
+            inputTapSleep 550 800 1             # Reward x2
+        fi
+        _guildHunts_quickBattle_COUNT=$((_guildHunts_quickBattle_COUNT + 1))    # Increment
+    done
+}
+
+# ##############################################################################
+# Function Name : nobleTavern
+# Descripton    : Let's do a "free" summon
+# ##############################################################################
+nobleTavern() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
+    inputTapSleep 280 1370 3                    # The Noble Tavern
+    inputTapSleep 600 1820 1                    # The noble tavern again
+
+    #until testColorOR 890 850 f4e38e; do       # Looking for heart
+    until testColorOR 875 835 fc9473; do        # Looking for heart
+        inputTapSleep 870 1630 1                # Next pannel
+    done
+
+    inputTapSleep 320 1450 3                    # Summon
+    inputTapSleep 540 900 3                     # Click on the card
+    inputTapSleep 70 1810                       # close
+    inputTapSleep 550 1820 1                    # Collect rewards
+
+    inputTapSleep 70 1810
+    verifyRGB 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
+}
+
+# ##############################################################################
+# Function Name : oakInn
+# Descripton    : Collect Oak Inn
+# ##############################################################################
+oakInn() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
+    inputTapSleep 780 270 5                     # Oak Inn
+
+    _oakInn_COUNT=0
+    until [ "$_oakInn_COUNT" -ge "$totalAmountOakRewards" ]; do
+        inputTapSleep 1050 950                  # Friends
+        inputTapSleep 1025 400 5                # Top Friend
+        sleep 5
+
+        oakInn_tryCollectPresent
+        if [ $oakRes = 0 ]; then                # If return value is still 0, no presents were found at first friend
+            # Switch friend and search again
+            inputTapSleep 1050 950              # Friends
+            inputTapSleep 1025 530 5            # Second friend
+
+            oakInn_tryCollectPresent
+            if [ $oakRes = 0 ]; then            # If return value is again 0, no presents were found at second friend
+                # Switch friend and search again
+                inputTapSleep 1050 950          # Friends
+                inputTapSleep 1025 650 5        # Third friend
+
+                oakInn_tryCollectPresent
+                if [ $oakRes = 0 ]; then        # If return value is still freaking 0, I give up
+                    echo "[WARN] Couldn't collect Oak Inn presents, sowy." >&2
+                    break
+                fi
+            fi
+        fi
+
+        sleep 2
+        _oakInn_COUNT=$((_oakInn_COUNT + 1))    # Increment
+    done
+
+    inputTapSleep 70 1810 3
+    inputTapSleep 70 1810 0
+
+    wait
+    verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
+}
+
+# ##############################################################################
+# Function Name : oakInn_presentTab
+# Descripton    : Search available present tabs in Oak Inn
+# ##############################################################################
+oakInn_presentTab() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_presentTab" >&2; fi
+    oakInn_presentTabs=0
+    if testColorOR 270 1800 c79663;then         # 1 gift c79663
+        oakInn_presentTabs=$((oakInn_presentTabs + 1000))                       # Increment
+    fi
+    if testColorOR 410 1800 bb824f;then         # 2 gift bb824f
+        oakInn_presentTabs=$((oakInn_presentTabs + 200))                        # Increment
+    fi
+    if testColorOR 550 1800 af6e3b;then         # 3 gift af6e3b
+        oakInn_presentTabs=$((oakInn_presentTabs + 30))                         # Increment
+    fi
+    if testColorOR 690 1800 b57b45;then         # 4 gift b57b45
+        oakInn_presentTabs=$((oakInn_presentTabs + 4))                          # Increment
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_searchPresent
+# Descripton    : Searches for a "good" present in oak Inn
+# ##############################################################################
+oakInn_searchPresent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_searchPresent " >&2; fi
+    inputSwipe 400 1600 400 310 50              # Swipe all the way down
+    sleep 1
+
+    if testColorOR 540 990 833f0e;then                                          # 1 red 833f0e blue 903da0
+        inputTapSleep 540 990 3                                                 # Tap present
+        inputTapSleep 540 1650 1                                                # Ok
+        inputTapSleep 540 1650 0                                                # Collect reward
+        oakRes=1
+    else
+        if testColorOR 540 800 a21a1a;then                                      # 2 red a21a1a blue 9a48ab
+            inputTapSleep 540 800 3
+            inputTapSleep 540 1650 1                                            # Ok
+            inputTapSleep 540 1650 0                                            # Collect reward
+            oakRes=1
+        else
+            if testColorOR 540 610 aa2b27;then                                  # 3 red aa2b27 blue b260aa
+                inputTapSleep 540 610 3
+                inputTapSleep 540 1650 1                                        # Ok
+                inputTapSleep 540 1650 0                                        # Collect reward
+                oakRes=1
+            else
+                if testColorOR 540 420 bc3f36;then                              # 4 red bc3f36 blue c58c7b
+                    inputTapSleep 540 420 3
+                    inputTapSleep 540 1650 1                                    # Ok
+                    inputTapSleep 540 1650 0                                    # Collect reward
+                    oakRes=1
+                else
+                    if testColorOR 540 220 bb3734;then                          # 5 red bb3734 blue 9442a5
+                        inputTapSleep 540 220 3
+                        inputTapSleep 540 1650 1                                # Ok
+                        inputTapSleep 540 1650 0                                # Collect reward
+                        oakRes=1
+                    else                                                        # If no present found, search for other tabs
+                        oakRes=0
+                    fi
+                fi
+            fi
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_tryCollectPresent
+# Descripton    : Tries to collect a present from one Oak Inn friend
+# ##############################################################################
+oakInn_tryCollectPresent() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_tryCollectPresent" >&2; fi
+    oakInn_searchPresent                            # Search for a "good" present
+    if [ $oakRes = 0 ]; then
+        oakInn_presentTab                           # If no present found, search for other tabs
+        case $oakInn_presentTabs in
+            0)
+                oakRes=0
+                ;;
+            4)
+                inputTapSleep 690 1800 3
+                oakInn_searchPresent
+                ;;
+            30)
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+                ;;
+            34)
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            200)
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                ;;
+            204)
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            230)
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            234)
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakInn_searchPresent
+                    fi
+                fi
+                ;;
+            1000)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                ;;
+            1004)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            1030)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            1034)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakInn_searchPresent
+                    fi
+                fi
+                ;;
+            1200)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakInn_searchPresent
+                fi
+                ;;
+            1204)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakInn_searchPresent
+                    fi
+                fi
+                ;;
+            1230)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 550 1800 3
+                        oakInn_searchPresent
+                    fi
+                fi
+                ;;
+            1234)
+                inputTapSleep 270 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 410 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 550 1800 3
+                        oakInn_searchPresent
+                        if [ $oakRes = 0 ]; then
+                            inputTapSleep 690 1800 3
+                            oakInn_searchPresent
+                        fi
+                    fi
+                fi
+                ;;
+        esac
+    fi
+}
+
+# ##############################################################################
+# Function Name : strengthenCrystal
+# Descripton    : Strenghen Crystal
+# ##############################################################################
+strengthenCrystal() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
+    if testColorOR 870 1115 f31f06; then        # If red circle
+        inputTapSleep 760 1030 3                # Resonating Crystal
+
+        # Detect if free slot, and take it.
+        testColorORTapSleep 620 1250 8ae9cf     # Detected: 8ae9cf / Not: e4c38e
+
+        inputTapSleep 550 1850                  # Strenghen Crystal
+        inputTapSleep 200 1850                  # Close level up window
+
+        inputTapSleep 70 1810                   # Exit
+    else
+        echo "[INFO] Can't strenghened resonating Crystal..."
+    fi
+    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
+}
+
+# ##############################################################################
+# Function Name : templeOfAscension
+# Descripton    : Auto ascend heroes
+# ##############################################################################
+templeOfAscension() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] templeOfAscension" >&2; fi
+    if testColorOR 450 1050 ef2118; then        # If red circle
+        inputTapSleep 280 960                   # Temple Of Ascension
+        inputTapSleep 900 800                   # Auto Ascend
+        inputTapSleep 550 1460                  # Confirm
+        inputTapSleep 550 1810                  # Close
+        inputTapSleep 70 1810                   # Exit
+    else
+        echo "[INFO] No heroes to ascend..."
+    fi
+
+    wait
+    verifyRGB 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
 }
 
 # ##############################################################################
@@ -1336,35 +1397,82 @@ twistedRealmBoss() {
 }
 
 # ##############################################################################
-# Function Name : buyFromStore
-# Descripton    : Buy items from store
+# Section       : End
 # ##############################################################################
-buyFromStore() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
-    inputTapSleep 330 1650 3
 
-    if [ "$buyStoreDust" = true ]; then         # Dust
-        buyStoreItem 180 840
-        wait
-    fi
-    if [ "$buyStorePoeCoins" = true ]; then     # Poe Coins
-        buyStoreItem 670 1430
-        wait
-    fi
-    if [ "$buyStoreEmblems" = true ]; then      # Emblems
-        buyStoreItem 180 1430
-        wait
-    fi
-    inputTapSleep 70 1810                       # Return
-    verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
+# ##############################################################################
+# Function Name : checkWhereToEnd
+# Descripton    : Checks where to end the script
+# ##############################################################################
+checkWhereToEnd() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
+    case "$endAt" in
+        "oak")
+            switchTab "Ranhorn" true
+            inputTapSleep 780 280 0
+            ;;
+        "soren")
+            switchTab "Ranhorn" true
+            inputTapSleep 380 360 3
+            inputTapSleep 290 860 1
+            inputTapSleep 970 890 0
+            ;;
+        "mail")
+            inputTapSleep 960 630 0
+            ;;
+        "chat")
+            switchTab "Chat" true
+            ;;
+        "tavern")
+            switchTab "Ranhorn" true
+            inputTapSleep 300 1400 0
+            ;;
+        "merchants")
+            inputTapSleep 120 290 0
+            ;;
+        "campaign")
+            inputTapSleep 550 1850 0
+            ;;
+        "championship")
+            switchTab "Dark Forest" true
+            inputTapSleep 740 1050
+            if [ "$pvpEvent" = false ]; then
+                inputTapSleep 550 1370 0
+            else
+                inputTapSleep 550 1680 0
+            fi
+            ;;
+        *)
+            echo "[WARN] Unknown location to end script on. Ignoring..." >&2
+            ;;
+    esac
 }
 
 # ##############################################################################
-# Function Name : quickCollectQuestChests
+# Function Name : collectQuestChests
+# Descripton    : Collects quest chests (well, switch tab then call collectQuestChests_quick)
+# ##############################################################################
+collectQuestChests() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
+    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+    inputTapSleep 960 250                       # Quests
+    collectQuestChests_quick
+
+    # Weekly quests
+    inputTapSleep 650 1650                      # Weeklies
+    collectQuestChests_quick
+
+    # Return
+    inputTapSleep 70 1650 1                     # Return
+    verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
+}
+
+# ##############################################################################
+# Function Name : collectQuestChests_quick
 # Descripton    : Collects quest chests
 # ##############################################################################
-quickCollectQuestChests() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] quickCollectQuestChests" >&2; fi
+collectQuestChests_quick() {
+    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests_quick" >&2; fi
     # Collect Quests
     while testColorOR 700 670 82fdf5; do
         inputTapSleep 930 680
@@ -1381,25 +1489,6 @@ quickCollectQuestChests() {
     inputTapSleep 580 600 0                     # Collect
     inputTapSleep 990 430                       # Chest 100
     inputTapSleep 580 600                       # Collect
-}
-
-# ##############################################################################
-# Function Name : collectQuestChests
-# Descripton    : Collects quest chests (well, switch tab then call quickCollectQuestChests)
-# ##############################################################################
-collectQuestChests() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
-    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    inputTapSleep 960 250                       # Quests
-    quickCollectQuestChests
-
-    # Weekly quests
-    inputTapSleep 650 1650                      # Weeklies
-    quickCollectQuestChests
-
-    # Return
-    inputTapSleep 70 1650 1                     # Return
-    verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
 # ##############################################################################
@@ -1430,30 +1519,34 @@ collectMerchants() {
     inputTapSleep 510 1820                      # Merchant Ship
 
     if testColorNAND 375 940 0b080a;then        # Checks for Special Daily Bundles
-        inputTapSleep 200 1200 1
+        inputTapSleep 200 1200 1                # Free
     else
-        inputTapSleep 200 750 1
+        inputTapSleep 200 750 1                 # Free
     fi
     inputTapSleep 550 300 1                     # Collect rewards
 
     if testColorOR 325 1530 fc260d; then        # Check if red mark - Weekly Deals
         inputTapSleep 280 1620 1                # Weekly Deals
         if testColorNAND 375 940 050a0f;then    # Checks for Special Weekly Bundles
-            inputTapSleep 200 1200 1
+            inputTapSleep 200 1200 1            # Free
         else
-            inputTapSleep 200 750 1
+            inputTapSleep 200 750 1             # Free
         fi
         inputTapSleep 550 300 1                 # Collect rewards
+    else
+        echo "[INFO] No Weekly to collect..."
     fi
 
     if false; then                              # TODO: Check if red mark - Monthly Deals
         inputTapSleep 460 1620 1                # Monthly Deals
         if testColorNAND 375 940 0b080a;then    # Checks for Special Monthly Bundles
-            inputTapSleep 200 1200 1
+            inputTapSleep 200 1200 1            # Free
         else
-            inputTapSleep 200 750
+            inputTapSleep 200 750               # Free
         fi
         inputTapSleep 550 300 1                 # Collect rewards
+    else
+        echo "[INFO] No Monthly to collect..."
     fi
 
     inputTapSleep 70 1810 1
@@ -1461,93 +1554,25 @@ collectMerchants() {
 }
 
 # ##############################################################################
-# Function Name : strengthenCrystal
-# Descripton    : Strenghen Crystal
-# ##############################################################################
-strengthenCrystal() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
-    inputTapSleep 760 1030 3                    # Crystal
-
-    # Detect if free slot, and take it.
-    testColorORTapSleep 620 1250 8ae9cf         # Detected: 8ae9cf / Not: e4c38e
-
-    inputTapSleep 550 1850                      # Strenghen Crystal
-    inputTapSleep 200 1850                      # Close level up window
-    inputTapSleep 70 1810
-    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
-}
-
-# ##############################################################################
-# Function Name : nobleTavern
-# Descripton    : Let's do a "free" summon
-# ##############################################################################
-nobleTavern() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
-    inputTapSleep 280 1370 3                    # The Noble Tavern
-    inputTapSleep 600 1820 1                    # The noble tavern again
-
-    #until testColorOR 890 850 f4e38e; do       # Looking for heart
-    until testColorOR 875 835 fc9473; do        # Looking for heart
-        inputTapSleep 870 1630 1                # Next pannel
-    done
-
-    inputTapSleep 320 1450 3                    # Summon
-    inputTapSleep 540 900 3                     # Click on the card
-    inputTapSleep 70 1810                       # close
-    inputTapSleep 550 1820 1                    # Collect rewards
-
-    inputTapSleep 70 1810
-    verifyRGB 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
-}
-
-# ##############################################################################
-# Function Name : oakInn
-# Descripton    : Collect Oak Inn
-# ##############################################################################
-oakInn() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
-    inputTapSleep 780 270 5                     # Oak Inn
-
-    _oakInn_COUNT=0
-    until [ "$_oakInn_COUNT" -ge "$totalAmountOakRewards" ]; do
-        inputTapSleep 1050 950                  # Friends
-        inputTapSleep 1025 400 5                # Top Friend
-        sleep 5
-
-        oakTryCollectPresent
-        if [ $oakRes = 0 ]; then                # If return value is still 0, no presents were found at first friend
-            # Switch friend and search again
-            inputTapSleep 1050 950              # Friends
-            inputTapSleep 1025 530 5            # Second friend
-
-            oakTryCollectPresent
-            if [ $oakRes = 0 ]; then            # If return value is again 0, no presents were found at second friend
-                # Switch friend and search again
-                inputTapSleep 1050 950          # Friends
-                inputTapSleep 1025 650 5        # Third friend
-
-                oakTryCollectPresent
-                if [ $oakRes = 0 ]; then        # If return value is still freaking 0, I give up
-                    echo "[WARN] Couldn't collect Oak Inn presents, sowy." >&2
-                    break
-                fi
-            fi
-        fi
-
-        sleep 2
-        _oakInn_COUNT=$((_oakInn_COUNT + 1))    # Increment
-    done
-
-    inputTapSleep 70 1810 3
-    inputTapSleep 70 1810 0
-
-    wait
-    verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
-}
-
-# ##############################################################################
 # Section       : Test
 # ##############################################################################
+
+# ##############################################################################
+# Function Name : Test
+# Description   : Print RGB then exit
+# Args          : <X> <Y> [<REPEAT>] [<SLEEP>]
+# Output        : stdout color
+# ##############################################################################
+test() {
+    _test_COUNT=0
+    until [ "$_test_COUNT" -ge "${3:-3}" ]; do
+        sleep "${4:-.5}"
+        getColor -f "$1" "$2"
+        echo "RGB: $RGB"
+        _test_COUNT=$((_test_COUNT + 1))        # Increment
+    done
+    exit
+}
 
 # ##############################################################################
 # Function Name : init
@@ -1555,19 +1580,17 @@ oakInn() {
 # Remark        : If you want to run multiple tests you need to comment exit in test()
 # ##############################################################################
 tests() {
-    # test <X> <Y> <REPEAT> <SLEEP>
-    # test 550 740 3 0.5 # Check for Boss in Campaign
-    # test 660 520 3 0.5 # Check for Solo Bounties RGB
-    # test 650 570 3 0.5 # Check for Team Bounties RGB
-    # test 700 670 3 0.5 # Check for chest collection RGB
-    # test 715 1815 3 0.5 # Check if Soren is open
-    # test 740 205 3 0.5 # Check if game is updating
-    # test 270 1800 3 0.5 # Oak Inn Present Tab 1
-    # test 410 1800 3 0.5 # Oak Inn Present Tab 2
-    # test 550 1800 3 0.5 # Oak Inn Present Tab 3
-    # test 690 1800 3 0.5 # Oak Inn Present Tab 4
+    # test 550 740 # Check for Boss in Campaign
+    # test 660 520 # Check for Solo Bounties RGB
+    # test 650 570 # Check for Team Bounties RGB
+    # test 700 670 # Check for chest collection RGB
+    # test 715 1815 # Check if Soren is open
+    # test 740 205 # Check if game is updating
+    # test 270 1800 # Oak Inn Present Tab 1
+    # test 410 1800 # Oak Inn Present Tab 2
+    # test 550 1800 # Oak Inn Present Tab 3
+    # test 690 1800 # Oak Inn Present Tab 4
 
-    # Need to check color for Soren
     # Check if red mark - Monthly Deals
     exit
 }
@@ -1689,6 +1712,10 @@ run() {
     if [ "$doStrengthenCrystal" = true ]; then
         doStrengthenCrystal=false
         strengthenCrystal
+    fi
+    if [ "$doTempleOfAscension" = true ]; then
+        doTempleOfAscension=false
+        templeOfAscension
     fi
     if [ "$doCompanionPointsSummon" = true ]; then
         doCompanionPointsSummon=false
