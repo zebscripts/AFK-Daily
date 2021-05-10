@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : update_setup.sh
 # Description   : Tools to update ini files
-# Args          : [-h] [-a] [-c]
+# Args          : [-h] [-a] [-c] [-l]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -27,7 +27,14 @@ convertAKFScriptTMPtoINI() {
     for f in .*afkscript.tmp; do
         if [ ! -f "$f" ]; then continue; fi;
         echo "# afk-daily" > "$(basename "$f" .tmp)".ini
-        echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >> "$(basename "$f" .tmp)".ini
+        case "$(uname -s)" in                   # Check OS
+            Darwin|Linux)                       # Mac / Linux
+                echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >> "$(basename "$f" .tmp)".ini
+                ;;
+            CYGWIN*|MINGW32*|MSYS*|MINGW*)      # Windows
+                echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >> "$(basename "$f" .tmp)".ini
+                ;;
+        esac
         echo "$f converted"
     done
 }
@@ -38,17 +45,30 @@ convertAKFScriptTMPtoINI() {
 # ##############################################################################
 updateAFKScript() {
     # Date 3 days ago
-    lastCampaign_default=$(date -v -3d +%Y%m%d)
     # Saturday 2 weeks ago
-    #lastWeekly_default=$(date -dlast-saturday +%Y%m%d)
-    lastWeekly_default=$(date -v -sat -v -7d +%Y%m%d)                           # For Mac
+    case "$(uname -s)" in                       # Check OS
+        Darwin|Linux)                           # Mac / Linux
+            lastCampaign_default=$(date -v -3d +%Y%m%d)
+            lastWeekly_default=$(date -v -sat -v -7d +%Y%m%d)
+            ;;
+        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
+            lastCampaign_default=$(date -d 'now - 3day' +%Y%m%d)
+            lastWeekly_default=$(date -dlast-saturday +%Y%m%d)
+            ;;
+    esac
+
     for f in .*afkscript.ini; do
         if [ ! -f "$f" ]; then continue; fi;
         source "$f"                             # Load the file
         echo -e "# afk-daily\n\
 lastCampaign=${lastCampaign:-$lastCampaign_default}\n\
-lastWeekly=${lastWeekly:-$lastWeekly_default}\n\
-" > "$f"
+lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f"
+
+        case "$(uname -s)" in
+            CYGWIN*|MINGW32*|MSYS*|MINGW*)      # Windows
+                attrib +h "$f"                  # Make file invisible
+                ;;
+        esac
 
         # Unset all values
         while read -r line ; do
@@ -132,6 +152,7 @@ doGuildHunts=${doGuildHunts:-"true"}\n\
 doTwistedRealmBoss=${doTwistedRealmBoss:-"true"}\n\
 doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
+doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
 # Only works if 'Hide Inn Heroes' is enabled under 'Settings -> Memory'\n\
 doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
@@ -139,8 +160,7 @@ doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
 # End\n\
 doCollectQuestChests=${doCollectQuestChests:-"true"}\n\
 doCollectMail=${doCollectMail:-"true"}\n\
-doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}\n\
-" > "$f"
+doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f"
 
         # Unset all values
         while read -r line ; do
@@ -180,7 +200,7 @@ runConfig(){
 # Function Name : show_help
 # ##############################################################################
 show_help() {
-    echo -e "Usage: update_setup.sh [-h] [-a] [-c]\n"
+    echo -e "Usage: update_setup.sh [-h] [-a] [-c] [-l]\n"
     echo -e "Description:"
     echo -e "  - Convert file to new format (.tmp/.sh > .ini)"
     echo -e "  - Clean the folder (remove old .tmp/.sh files)"
@@ -190,6 +210,7 @@ show_help() {
     echo -e "  h\tShow help"
     echo -e "  a\tSetup afkscript files"
     echo -e "  c\tSetup config files"
+    echo -e "  l\tList setup files"
 }
 
 if [ -z "$1" ]; then
@@ -197,7 +218,7 @@ if [ -z "$1" ]; then
     exit 0
 fi
 
-while getopts "hac" opt; do
+while getopts "hacl" opt; do
     case $opt in
         h)
             show_help
@@ -208,6 +229,9 @@ while getopts "hac" opt; do
             ;;
         c)
             runConfig
+            ;;
+        l)
+            ls -al .*afkscript.ini config*.ini
             ;;
         \?)
             echo "$OPTARG : Invalid option"
