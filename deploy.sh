@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : deploy.sh
 # Description   : Used to run afk-daily on phone
-# Args          : [bs/nox]
+# Args          : [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -20,12 +20,14 @@ source ./lib/print.sh
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
-configFile="config.sh"
-tempFile=".afkscript.tmp"
+configFile="config.ini"
+tempFile=".afkscript.ini"
+device="default"
 
 # Do not modify
 adb=adb
 forceFightCampaign=false
+testServer=false
 
 # ##############################################################################
 # Section       : Functions
@@ -112,8 +114,7 @@ checkConfig() {
     else
         printWarn "Not found!"
         printTask "Creating new $configFile file..."
-        printf '#!/bin/bash
-# --- CONFIG: Modify accordingly to your game! --- #
+        printf '# --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
 # Player
 canOpenSoren=false
@@ -153,6 +154,7 @@ doGuildHunts=true
 doTwistedRealmBoss=true
 doBuyFromStore=true
 doStrengthenCrystal=true
+doTempleOfAscension=false
 doCompanionPointsSummon=false
 # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 doCollectOakPresents=false
@@ -201,6 +203,7 @@ validateConfig() {
         $doTwistedRealmBoss || -z \
         $doBuyFromStore || -z \
         $doStrengthenCrystal || -z \
+        $doTempleOfAscension || -z \
         $doCompanionPointsSummon || -z \
         $doCollectOakPresents || -z \
         $doCollectQuestChests || -z \
@@ -295,17 +298,34 @@ checkForDevice() {
 }
 
 # ##############################################################################
+# Function Name : datediff
+# Args          : <DATE1> [<DATE2>]
+# Description   : Quickly calculate date differences
+# Output        : stdout <days>
+# ##############################################################################
+datediff() {
+    case "$(uname -s)" in                       # Check OS
+        Darwin|Linux)                           # Mac / Linux
+            d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
+            d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
+            ;;
+        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
+            d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
+            d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
+            ;;
+    esac
+    echo $(( (d1 - d2) / 86400 ))
+}
+
+# ##############################################################################
 # Function Name : checkDate
 # Description   : Check date to decide whether to beat campaign or not.
 # ##############################################################################
 checkDate() {
     printTask "Checking last time script was run..."
     if [ -f $tempFile ]; then
-        value=$(< $tempFile)                    # Time of last beat campaign
-        now=$(date +%s)                         # Current time
-        difference=$((now - value))             # Time since last beat campaign
-
-        if [ "$difference" -gt 255600 ]; then   # If been longer than 3 days, set forceFightCampaign=true
+        source $tempFile
+        if [ "$(datediff "$lastCampaign")" -le -3 ]; then
             forceFightCampaign=true
         fi
     fi
@@ -317,7 +337,23 @@ checkDate() {
 # ##############################################################################
 saveDate(){
     if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
-        date +%s > $tempFile                    # Write date to file
+        if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
+            newLastCampaign=$(date +%Y%m%d)
+        fi
+        if [ ! -f $tempFile ]; then
+            case "$(uname -s)" in                       # Check OS
+                Darwin|Linux)                           # Mac / Linux
+                    newLastWeekly=$(date -v -sat +%Y%m%d)
+                    ;;
+                CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
+                    newLastWeekly=$(date -dlast-saturday +%Y%m%d)
+                    ;;
+            esac
+        fi
+
+        echo -e "# afk-daily\n\
+lastCampaign=${newLastCampaign:-$lastCampaign}\n\
+lastWeekly=${newLastWeekly:-$lastWeekly}" > "$tempFile"
 
         if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
     fi
@@ -342,12 +378,79 @@ deploy() {
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null                    # Push config to device
     # Run script. Comment line if you don't want to run the script after pushing to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" && saveDate
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$testServer"&& saveDate
 }
 
 # ##############################################################################
 # Section       : Script Start
 # ##############################################################################
+
+# ##############################################################################
+# Function Name : show_help
+# ##############################################################################
+show_help() {
+    echo -e "Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]\n"
+    echo -e "Description:"
+    echo -e "  Automate daily activities within the AFK Arena game."
+    echo -e "  More info: https://github.com/zebscripts/AFK-Daily\n"
+    echo -e "Options:"
+    echo -e "  h\tShow help"
+    echo -e "  d\tSpecify desired device"
+    echo -e "   \tValues for <DEVICE>: bs, nox, dev"
+    echo -e "  a\tUse .afkscript.ini with a tag (multiple accounts)"
+    echo -e "   \tRemark: Please don't use spaces!"
+    echo -e "  f\tForce campaign battle (ignore 3 day optimisation)"
+    echo -e "  t\tLaunch on test server (experimental)"
+}
+
+for arg in "$@"; do
+    shift
+    case "$arg" in
+        "--account") set -- "$@" "-a" ;;
+        "--device") set -- "$@" "-d" ;;
+        "--force") set -- "$@" "-f" ;;
+        "--help") set -- "$@" "-h" ;;
+        "--test") set -- "$@" "-t" ;;
+        *)        set -- "$@" "$arg"
+    esac
+done
+
+while getopts ":a:d:fht" option ;
+do
+    case $option in
+        a)
+            tempFile=".${OPTARG}afkscript.tmp"
+            ;;
+        d)
+            if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
+                device="Bluestacks"
+            elif [ "$OPTARG" == "nox" ] || [ "$OPTARG" == "n" ]; then
+                device="Nox"
+            elif [ "$OPTARG" == "dev" ]; then
+                device="dev"
+            fi
+            ;;
+        f)
+            forceFightCampaign=true
+            ;;
+        h)
+            show_help
+            exit 0
+            ;;
+        t)
+            testServer=true
+            ;;
+        :)
+            printWarn "Argument required by this option: $OPTARG"
+            exit 1
+            ;;
+        \?)
+            printError "$OPTARG : Invalid option"
+            exit 1
+            ;;
+    esac
+done
+
 clear
 
 checkAdb
@@ -357,24 +460,17 @@ checkLineEndings $configFile
 checkLineEndings "afk-daily.sh"
 checkDate
 
-# Check where to deploy
-if [ "$1" ]; then
-    # BlueStacks
-    if [ "$1" = "bluestacks" ] || [ "$1" = "bs" ] || [ "$1" = "-bluestacks" ] || [ "$1" = "-bs" ]; then
-        restartAdb
-        checkForDevice "Bluestacks"
-        deploy "Bluestacks" "$bluestacksDirectory"
-
-    # Nox
-    elif [ "$1" = "nox" ] || [ "$1" = "n" ] || [ "$1" = "-nox" ] || [ "$1" = "-n" ]; then
-        restartAdb
-        checkForDevice "Nox"
-        deploy "Nox" "$noxDirectory"
-
-    elif [ "$1" = "dev" ]; then                 # Interactive Options
-        deploy "Personal" "$personalDirectory"
-    fi
-else                                            # Try to recognize device automatically
+if [ "$device" == "Bluestacks" ]; then
+    restartAdb
+    checkForDevice "Bluestacks"
+    deploy "Bluestacks" "$bluestacksDirectory"
+elif [ "$device" == "Nox" ]; then
+    restartAdb
+    checkForDevice "Nox"
+    deploy "Nox" "$noxDirectory"
+elif [ "$device" == "dev" ]; then
+    deploy "Personal" "$personalDirectory"
+else
     restartAdb
     checkForDevice
 fi
