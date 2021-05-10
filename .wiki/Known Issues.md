@@ -3,7 +3,7 @@
 - [`#33`](https://github.com/zebscripts/AFK-Daily/issues/33) - Script waits forever in the Arena of Heroes
 - The script does not auto-update to the latest version
 
-    You can easily update the script yourself by typing `git pull` in the terminal. If it still doesn't work, then I recommend deleting every file besides `config.sh` and running `git pull https://github.com/zebscripts/AFK-Daily`.
+    You can easily update the script yourself by typing `git pull` in the terminal. If it still doesn't work, then I recommend deleting every file besides `config.ini` and running `git pull https://github.com/zebscripts/AFK-Daily`.
 
 - `hexdump: not found`
 

@@ -8,16 +8,16 @@
 4. Run `cd AFK-Daily` in the terminal.
 5. Connect your device to the computer (or start your emulator of choice).
 6. Type `./deploy.sh` into your terminal.
-7. Configure [`config.sh`](https://github.com/zebscripts/AFK-Daily/wiki/Config) if necessary.
-8. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
+7. Configure [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) if necessary.
+8. Type `./deploy.sh` into your terminal once again to run the script with the `config.ini` variables.
 9. Watch your device magically play for you. It's fun! I promise.
 
 **For advanced users:**
 
 1. Clone this repo and `cd` into it .
 2. Connect your device to the computer (or start your emulator of choice).
-3. Run `./deploy.sh` to generate [`config.sh`](https://github.com/zebscripts/AFK-Daily/wiki/Config) and change its values if necessary.
-4. Run `./deploy.sh` again to run script.
+3. Run `./deploy.sh` to generate [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) and change its values if necessary.
+4. Run `./deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]` again to run script.
 5. Watch your device magically play for you. It's fun! I promise.
 
 **If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error**, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5. Keep in mind automatic updates won't be working then. [Send me a message](#troubleshooting), I'd be happy to help!
@@ -33,14 +33,23 @@ While creating this repository and script, I wanted to make it as easy as possib
 
 You can also execute the script with the following optional parameters:
 
-```sh
-./deploy.sh [platform]
+```text
+$ ./deploy.sh -h
+Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]
 
-  bluestacks|bs|-bluestacks|-bs
-    Deploy to Bluestacks.
+Description:
+  Automate daily activities within the AFK Arena game.
+  More info: https://github.com/zebscripts/AFK-Daily
 
-  nox|n|-nox|-n
-    Deploy to Nox.
+Options:
+  h     Show help
+  d     Specify desired device
+        Values for <DEVICE>: bs, nox, dev
+  a     Use .afkscript.ini with a tag (multiple accounts)
+        Remark: Please don't use spaces!
+  f     Force campaign battle (ignore 3 day optimisation)
+  t     Launch on test server (experimental)
+
 ```
 
 ## Examples
@@ -56,13 +65,13 @@ The most basic way to run the script:
 Running the script on Bluestacks:
 
 ```sh
-./deploy.sh bs
+./deploy.sh -d bs
 ```
 
 Running the script on Nox:
 
 ```sh
-./deploy.sh nox
+./deploy.sh -d nox
 ```
 
 <hr>

@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> **Big changes with the last update! Please delete your `config.sh` file and run the script to generate a new one.** You're now more in control of the script, by choosing which parts of it to run. This also helps in case one feature is broken, just turning it off temporarily works around the issue. Or even if the script fails, just run it again without running the stuff before the error.
+> **Big changes with the last update! Please delete your `config.ini` file and run the script to generate a new one.** You're now more in control of the script, by choosing which parts of it to run. This also helps in case one feature is broken, just turning it off temporarily works around the issue. Or even if the script fails, just run it again without running the stuff before the error.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly. If you like my work, please consider starring this repository as it lets me know people use this script, which motivates me to keep working on it! :)
 
@@ -31,7 +31,7 @@ This is a very fragile script (it relies on pixel accuracy), which means the pro
 
 Since lately I've been adding quite a lot of new features and bug fixes, this README is slowly but surely starting to get a big mess. I'll be working on an organized wiki one day, but for now this will do.
 
-**For those who want to get a quick overview of this project instead of reading it all**: Install an emulator (bluestacks) and the rest of the dependencies, [change some bluestacks settings](#requirements--installation), run the script, update the freshly generated `config.sh` file, run script again and watch how the game gets played.
+**For those who want to get a quick overview of this project instead of reading it all**: Install an emulator (bluestacks) and the rest of the dependencies, [change some bluestacks settings](#requirements--installation), run the script, update the freshly generated `config.ini` file, run script again and watch how the game gets played.
 
 ## Table of Contents<!-- omit in toc -->
 
@@ -164,7 +164,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 
 1. Clone this repo and `cd` into it .
 2. Connect your device to the computer (or start your emulator of choice).
-3. Run `./deploy.sh` to generate [`config.sh`](#configvariables) and change its values if necessary.
+3. Run `./deploy.sh` to generate [`config.ini`](#configvariables) and change its values if necessary.
 4. Run `./deploy.sh` again to run script.
 5. Watch your device magically play for you. It's fun! I promise.
 
@@ -178,8 +178,8 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 4. Run `cd AFK-Daily` in the terminal.
 5. Connect your device to the computer (or start your emulator of choice).
 6. Type `./deploy.sh` into your terminal.
-7. Configure [`config.sh`](#configvariables) if necessary.
-8. Type `./deploy.sh` into your terminal once again to run the script with the `config.sh` variables.
+7. Configure [`config.ini`](#configvariables) if necessary.
+8. Type `./deploy.sh` into your terminal once again to run the script with the `config.ini` variables.
 9. Watch your device magically play for you. It's fun! I promise.
 
 **If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error**, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5. Keep in mind automatic updates won't be working then. [Send me a message](#troubleshooting), I'd be happy to help!
@@ -195,14 +195,23 @@ While creating this repository and script, I wanted to make it as easy as possib
 
 You can also execute the script with the following optional parameters:
 
-```sh
-./deploy.sh [platform]
+```text
+$ ./deploy.sh -h
+Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]
 
-  bluestacks|bs|-bluestacks|-bs
-    Deploy to Bluestacks.
+Description:
+  Automate daily activities within the AFK Arena game.
+  More info: https://github.com/zebscripts/AFK-Daily
 
-  nox|n|-nox|-n
-    Deploy to Nox.
+Options:
+  h     Show help
+  d     Specify desired device
+        Values for <DEVICE>: bs, nox, dev
+  a     Use .afkscript.ini with a tag (multiple accounts)
+        Remark: Please don't use spaces!
+  f     Force campaign battle (ignore 3 day optimisation)
+  t     Launch on test server (experimental)
+
 ```
 
 ## Examples
@@ -218,18 +227,18 @@ The most basic way to run the script:
 Running the script on Bluestacks:
 
 ```sh
-./deploy.sh bs
+./deploy.sh -d bs
 ```
 
 Running the script on Nox:
 
 ```sh
-./deploy.sh nox
+./deploy.sh -d nox
 ```
 
 ## Config/Variables
 
-The script acts depending on a set of variables. In order to change these, open `config.sh` with a text editor of choice, and update them. If you do not have/see a `config.sh` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside `config.sh`.**
+The script acts depending on a set of variables. In order to change these, open `config.ini` with a text editor of choice, and update them. If you do not have/see a `config.ini` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside `config.ini`.**
 
 ### Player
 
@@ -289,6 +298,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
 | `doStrengthenCrystal`     | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
+| `doTempleOfAscension`     | `Boolean` | If `true`, auto ascend heroes.                                                                                       | `false` |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
 | `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |
 
@@ -374,7 +384,7 @@ If you're having trouble running this script, feel free to send me a message on 
 
 **The script does not auto-update to the latest version**
 
-You can easily update the script yourself by typing `git pull` in the terminal. If it still doesn't work, then I recommend deleting every file besides `config.sh` and running `git pull https://github.com/zebscripts/AFK-Daily`.
+You can easily update the script yourself by typing `git pull` in the terminal. If it still doesn't work, then I recommend deleting every file besides `config.ini` and running `git pull https://github.com/zebscripts/AFK-Daily`.
 
 **`hexdump: not found`**
 

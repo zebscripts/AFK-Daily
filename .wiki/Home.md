@@ -12,8 +12,8 @@ Here you can access the list of [features](https://github.com/zebscripts/AFK-Dai
 - It's time to [start](https://github.com/zebscripts/AFK-Daily/wiki/Usage)
   - Download the project
   - Launch Bluestacks / Nox
-  - Execute `./deploy.sh` to generate the [`config.sh`](https://github.com/zebscripts/AFK-Daily/wiki/Config) file.
-  - Execute `./deploy.sh [bs/nox]` to start.
+  - Execute `./deploy.sh` to generate the [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) file.
+  - Execute `./deploy.sh` to start.
 
 ## Tips
 
