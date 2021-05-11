@@ -27,29 +27,12 @@ device="default"
 # Do not modify
 adb=adb
 forceFightCampaign=false
+forceWeekly=false
 testServer=false
 
 # ##############################################################################
 # Section       : Functions
 # ##############################################################################
-
-# ##############################################################################
-# Function Name : checkForUpdate
-# Description   : Checks for script update (with git)
-# ##############################################################################
-checkForUpdate() {
-    if command -v git &>/dev/null; then
-        printTask "Checking for updates..."
-        if git pull &>/dev/null; then
-            printSuccess "Checked/Updated!"
-        elif git fetch --all &>/dev/null && git reset --hard origin/master; then
-            printSuccess "Checked/Updated!"
-        else
-            printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
-        fi
-    fi
-}
 
 # ##############################################################################
 # Function Name : checkAdb
@@ -176,6 +159,211 @@ doCollectMerchantFreebies=false
 }
 
 # ##############################################################################
+# Function Name : checkDate
+# Description   : Check date to decide whether to beat campaign or not.
+# ##############################################################################
+checkDate() {
+    printTask "Checking last time script was run..."
+    if [ -f $tempFile ]; then
+        source $tempFile
+        if [ "$doChallengeBoss" = true ] && [ "$(datediff "$lastCampaign")" -le -3 ]; then
+            forceFightCampaign=true
+        fi
+        if [ "$(datediff "$lastWeekly")" -le -7 ]; then
+            forceWeekly=true
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : checkDevice
+# Description   : Check if adb recognizes a device.
+# Args          : <PLATFORM>
+# ##############################################################################
+checkDevice() {
+    if [ "$#" -gt "0" ]; then                   # If parameters are sent
+        if [ "$1" = "Nox" ]; then               # Nox
+            printTask "Searching for Nox through ADB..."
+            $adb connect localhost:62001 1>/dev/null
+            if ! $adb get-state 1>/dev/null; then
+                printError "Not found!"
+                exit
+            else
+                printSuccess "Found Nox!"
+            fi
+        elif [ "$1" = "Bluestacks" ]; then      # Bluestacks
+            printTask "Searching for Bluestacks through ADB... "
+            if ! $adb get-state 1>/dev/null; then
+                printError "Not found!"
+                exit
+            else
+                printSuccess "Found Bluestacks!"
+            fi
+        fi
+    else                                        # If parameters aren't sent
+        printTask "Searching for device through ADB..."
+
+        if ! $adb get-state 1>/dev/null 2>&1; then                              # Checks if adb finds device
+            printError "No device found!"
+            printInfo "Please make sure it's connected."
+            printTip "If you're trying to use Nox, please run this script with './deploy nox'!"
+            exit
+        else
+            if [[ $($adb devices) =~ emulator ]]; then                          # Bluestacks
+                printSuccess "Found Bluestacks!"
+                deploy "Bluestacks" "$bluestacksDirectory"
+            else                                                                # Personal
+                printSuccess "Found Personal Device!"
+                deploy "Personal" "$personalDirectory"
+            fi
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : checkEOL
+# Description   : Check if afk-daily.sh has correct Line endings (LF)
+# Args          : <FILE>
+# ##############################################################################
+checkEOL() {
+    printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
+    if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
+        printWarn "Found CLRF!"
+        printTask "Converting to LF..."
+        dos2unix "$1" 2>/dev/null
+
+        if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
+            printError "Failed to convert $1 to LF. Please do it yourself."
+            exit
+        else
+            printSuccess "Converted!"
+        fi
+    else
+        printSuccess "Passed!"
+    fi
+}
+
+# ##############################################################################
+# Function Name : checkGitUpdate
+# Description   : Checks for script update (with git)
+# ##############################################################################
+checkGitUpdate() {
+    if command -v git &>/dev/null; then
+        printTask "Checking for updates..."
+        if git pull &>/dev/null; then
+            printSuccess "Checked/Updated!"
+        elif git fetch --all &>/dev/null && git reset --hard origin/master; then
+            printSuccess "Checked/Updated!"
+        else
+            printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
+            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : checkSetupUpdate
+# Description   : Checks for setup update (.*afkscript.temp, config*.sh)
+# ##############################################################################
+checkSetupUpdate(){
+    printTask "Checking for setup updates..."
+    for f in .*afkscript.tmp; do
+        if [ -e "$f" ]; then
+            ./update_setup -a
+        fi
+        break
+    done
+    for f in config*.sh; do
+        if [ -e "$f" ]; then
+            ./update_setup -c
+        fi
+        break
+    done
+    printSuccess "Checked/Updated!"
+}
+
+# ##############################################################################
+# Function Name : datediff
+# Args          : <DATE1> [<DATE2>]
+# Description   : Quickly calculate date differences
+# Output        : stdout <days>
+# ##############################################################################
+datediff() {
+    case "$(uname -s)" in                       # Check OS
+        Darwin|Linux)                           # Mac / Linux
+            d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
+            d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
+            ;;
+        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
+            d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
+            d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
+            ;;
+    esac
+    echo $(( (d1 - d2) / 86400 ))
+}
+
+# ##############################################################################
+# Function Name : deploy
+# Description   : Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
+# Args          : <PLATFORM> <DIRECTORY>
+# ##############################################################################
+deploy() {
+    if [[ $($adb shell wm size) != *"1080x1920"* ]]; then                       # Check for resolution
+        printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
+        exit
+    fi
+
+    printf "\n"
+    printInfo "Platform: ${cBlue}$1${cNc}"
+    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
+
+    $adb shell mkdir -p "$2"/scripts/afk-arena                                  # Create directories if they don't already exist
+    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
+    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null                    # Push config to device
+    # Run script. Comment line if you don't want to run the script after pushing to device
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$forceWeekly" "$testServer" && saveDate
+}
+
+# ##############################################################################
+# Function Name : restartAdb
+# Description   : Restarts ADB server
+# ##############################################################################
+restartAdb() {
+    printTask "Restarting ADB..."
+    $adb kill-server
+    $adb start-server 1>/dev/null 2>&1
+    printSuccess "Restarted!"
+}
+
+# ##############################################################################
+# Function Name : saveDate
+# Description   : Overwrite temp file with date if has been greater than 3 days or it doesn't exist
+# ##############################################################################
+saveDate(){
+    if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
+        if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
+            newLastCampaign=$(date +%Y%m%d)
+        fi
+        if [ $forceWeekly = true ] || [ ! -f $tempFile ]; then
+            case "$(uname -s)" in                       # Check OS
+                Darwin|Linux)                           # Mac / Linux
+                    newLastWeekly=$(date -v -sat +%Y%m%d)
+                    ;;
+                CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
+                    newLastWeekly=$(date -dlast-saturday +%Y%m%d)
+                    ;;
+            esac
+        fi
+
+        echo -e "# afk-daily\n\
+lastCampaign=${newLastCampaign:-$lastCampaign}\n\
+lastWeekly=${newLastWeekly:-$lastWeekly}" > "$tempFile"
+
+        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
+    fi
+}
+
+# ##############################################################################
 # Function Name : validateConfig
 # Description   : Checks for every necessary variable that needs to be defined in $configFile
 # ##############################################################################
@@ -217,174 +405,12 @@ validateConfig() {
         $doCollectMerchantFreebies ]]; then
         printError "$configFile has missing/wrong entries."
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
+        printInfo "or run update_setup.sh -c"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
         exit
     fi
     printSuccess "Passed!"
-}
-
-# ##############################################################################
-# Function Name : checkLineEndings
-# Description   : Check if afk-daily.sh has correct Line endings (LF)
-# Args          : <FILE>
-# ##############################################################################
-checkLineEndings() {
-    printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
-    if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
-        printWarn "Found CLRF!"
-        printTask "Converting to LF..."
-        dos2unix "$1" 2>/dev/null
-
-        if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
-            printError "Failed to convert $1 to LF. Please do it yourself."
-            exit
-        else
-            printSuccess "Converted!"
-        fi
-    else
-        printSuccess "Passed!"
-    fi
-}
-
-# ##############################################################################
-# Function Name : restartAdb
-# Description   : Restarts ADB server
-# ##############################################################################
-restartAdb() {
-    printTask "Restarting ADB..."
-    $adb kill-server
-    $adb start-server 1>/dev/null 2>&1
-    printSuccess "Restarted!"
-}
-
-# ##############################################################################
-# Function Name : checkForDevice
-# Description   : Check if adb recognizes a device.
-# Args          : <PLATFORM>
-# ##############################################################################
-checkForDevice() {
-    if [ "$#" -gt "0" ]; then                   # If parameters are sent
-        if [ "$1" = "Nox" ]; then               # Nox
-            printTask "Searching for Nox through ADB..."
-            $adb connect localhost:62001 1>/dev/null
-            if ! $adb get-state 1>/dev/null; then
-                printError "Not found!"
-                exit
-            else
-                printSuccess "Found Nox!"
-            fi
-        elif [ "$1" = "Bluestacks" ]; then      # Bluestacks
-            printTask "Searching for Bluestacks through ADB... "
-            if ! $adb get-state 1>/dev/null; then
-                printError "Not found!"
-                exit
-            else
-                printSuccess "Found Bluestacks!"
-            fi
-        fi
-    else                                        # If parameters aren't sent
-        printTask "Searching for device through ADB..."
-
-        if ! $adb get-state 1>/dev/null 2>&1; then                              # Checks if adb finds device
-            printError "No device found!"
-            printInfo "Please make sure it's connected."
-            printTip "If you're trying to use Nox, please run this script with './deploy nox'!"
-            exit
-        else
-            if [[ $($adb devices) =~ emulator ]]; then                          # Bluestacks
-                printSuccess "Found Bluestacks!"
-                deploy "Bluestacks" "$bluestacksDirectory"
-            else                                                                # Personal
-                printSuccess "Found Personal Device!"
-                deploy "Personal" "$personalDirectory"
-            fi
-        fi
-    fi
-}
-
-# ##############################################################################
-# Function Name : datediff
-# Args          : <DATE1> [<DATE2>]
-# Description   : Quickly calculate date differences
-# Output        : stdout <days>
-# ##############################################################################
-datediff() {
-    case "$(uname -s)" in                       # Check OS
-        Darwin|Linux)                           # Mac / Linux
-            d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
-            d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
-            ;;
-        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
-            d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
-            d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
-            ;;
-    esac
-    echo $(( (d1 - d2) / 86400 ))
-}
-
-# ##############################################################################
-# Function Name : checkDate
-# Description   : Check date to decide whether to beat campaign or not.
-# ##############################################################################
-checkDate() {
-    printTask "Checking last time script was run..."
-    if [ -f $tempFile ]; then
-        source $tempFile
-        if [ "$(datediff "$lastCampaign")" -le -3 ]; then
-            forceFightCampaign=true
-        fi
-    fi
-}
-
-# ##############################################################################
-# Function Name : saveDate
-# Description   : Overwrite temp file with date if has been greater than 3 days or it doesn't exist
-# ##############################################################################
-saveDate(){
-    if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
-        if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
-            newLastCampaign=$(date +%Y%m%d)
-        fi
-        if [ ! -f $tempFile ]; then
-            case "$(uname -s)" in                       # Check OS
-                Darwin|Linux)                           # Mac / Linux
-                    newLastWeekly=$(date -v -sat +%Y%m%d)
-                    ;;
-                CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
-                    newLastWeekly=$(date -dlast-saturday +%Y%m%d)
-                    ;;
-            esac
-        fi
-
-        echo -e "# afk-daily\n\
-lastCampaign=${newLastCampaign:-$lastCampaign}\n\
-lastWeekly=${newLastWeekly:-$lastWeekly}" > "$tempFile"
-
-        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
-    fi
-}
-
-# ##############################################################################
-# Function Name : deploy
-# Description   : Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
-# Args          : <PLATFORM> <DIRECTORY>
-# ##############################################################################
-deploy() {
-    if [[ $($adb shell wm size) != *"1080x1920"* ]]; then                       # Check for resolution
-        printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
-        exit
-    fi
-
-    printf "\n"
-    printInfo "Platform: ${cBlue}$1${cNc}"
-    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
-
-    $adb shell mkdir -p "$2"/scripts/afk-arena                                  # Create directories if they don't already exist
-    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
-    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null                    # Push config to device
-    # Run script. Comment line if you don't want to run the script after pushing to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$testServer"&& saveDate
 }
 
 # ##############################################################################
@@ -460,23 +486,24 @@ done
 clear
 
 checkAdb
-#checkForUpdate
+#checkGitUpdate
+#checkSetupUpdate
 checkConfig
-checkLineEndings $configFile
-checkLineEndings "afk-daily.sh"
+checkEOL $configFile
+checkEOL "afk-daily.sh"
 checkDate
 
 if [ "$device" == "Bluestacks" ]; then
     restartAdb
-    checkForDevice "Bluestacks"
+    checkDevice "Bluestacks"
     deploy "Bluestacks" "$bluestacksDirectory"
 elif [ "$device" == "Nox" ]; then
     restartAdb
-    checkForDevice "Nox"
+    checkDevice "Nox"
     deploy "Nox" "$noxDirectory"
 elif [ "$device" == "dev" ]; then
     deploy "Personal" "$personalDirectory"
 else
     restartAdb
-    checkForDevice
+    checkDevice
 fi

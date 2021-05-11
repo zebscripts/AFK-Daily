@@ -49,7 +49,7 @@ updateAFKScript() {
     case "$(uname -s)" in                       # Check OS
         Darwin|Linux)                           # Mac / Linux
             lastCampaign_default=$(date -v -3d +%Y%m%d)
-            lastWeekly_default=$(date -v -sat -v -7d +%Y%m%d)
+            lastWeekly_default=$(date -v -sat +%Y%m%d)
             ;;
         CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
             lastCampaign_default=$(date -d 'now - 3day' +%Y%m%d)

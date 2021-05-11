@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <testServer>
+# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer>
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -29,8 +29,9 @@ totalAmountOakRewards=3
 # Do not modify
 RGB=00000000
 oakRes=0
-testServer=false
 forceFightCampaign=false
+forceWeekly=false
+testServer=false
 activeTab="Start"
 screenshotRequired=true
 
@@ -39,7 +40,8 @@ if [ $# -gt 0 ]; then
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
     . "/$1/scripts/afk-arena/config.ini"
     forceFightCampaign=$2
-    testServer=$3
+    forceWeekly=$3
+    testServer=$4
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
@@ -573,6 +575,7 @@ collectFriendsAndMercenaries() {
 # ##############################################################################
 fastRewards() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
+    # TODO: check red dot to see if free fast reward is avaible
     inputTapSleep 950 1660 1
     inputTapSleep 710 1260
     inputTapSleep 560 1800 1
@@ -948,6 +951,9 @@ buyFromStore() {
         buyFromStore_buyItem 670 1430
         wait
     fi
+    # TODO: specify emblems, I have more than 600 primordial emblems...
+    # buyPrimordialEmblem check purple
+    # buyAmplifyingEmblem check yellow
     if [ "$buyStoreEmblems" = true ]; then      # Emblems
         buyFromStore_buyItem 180 1430
         wait
@@ -1017,7 +1023,6 @@ guildHunts_quickBattle() {
     _guildHunts_quickBattle_COUNT=0
     # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
     until [ "$_guildHunts_quickBattle_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
-        # TODO: Manual battle (need to be verified)
         if [ "$doGuildHuntsBattle" = true ]; then
             inputTapSleep 350 1840              # Challenge
             inputTapSleep 550 1850 0            # Battle
@@ -1488,6 +1493,7 @@ collectQuestChests_quick() {
         inputTapSleep 930 680
     done
 
+    # TODO: Check if chest is open
     # Collect Chests
     inputTapSleep 330 430                       # Chest 20
     inputTapSleep 580 600 0                     # Collect
@@ -1602,6 +1608,10 @@ tests() {
     # test 690 1800 # Oak Inn Present Tab 4
 
     # Check if red mark - Monthly Deals
+    # Check if chest is open 20 40 60 80 100
+    # check red dot to see if free fast reward is avaible
+    # buyPrimordialEmblem check purple
+    # buyAmplifyingEmblem check yellow
     exit
 }
 
