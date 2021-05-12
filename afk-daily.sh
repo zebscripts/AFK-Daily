@@ -22,6 +22,7 @@ DEBUG=0
 SHOW_DELTA=1
 # SHOW_DELTA = 0                    Show no debug
 # SHOW_DELTA = 1 && DEBUG >= 2      Show delta if color is not found
+DEFAULT_DELTA=2                                 # Default delta for colors
 DEFAULT_SLEEP=2                                 # equivalent to wait (default 2)
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
@@ -222,11 +223,11 @@ takeScreenshot() {
 # ##############################################################################
 testColorNAND() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
-    _testColorNAND_min_delta=100
+    _testColorNAND_max_delta=0
     for arg in "$@"; do
         shift
         case "$arg" in
-            -d) shift; _testColorNAND_min_delta=$1;;
+            -d) _testColorNAND_max_delta=$1; shift;;
             -f) screenshotRequired=true;;
             *) set -- "$@" "$arg";;
         esac
@@ -237,12 +238,12 @@ testColorNAND() {
         if [ "$RGB" = "$i" ]; then              # color found?
             return 1                            # At the first color found NAND is break, return 1
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_min_delta" -lt "100" ]; then
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_max_delta" -gt "0" ]; then
                 _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
                     echo "[DEBUG] testColorNAND $RGB != $i [Δ $_testColorNAND_delta%]" >&2;
                 fi
-                if [ "$_testColorNAND_delta" -ge "$_testColorNAND_min_delta" ]; then
+                if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
                     return 1
                 fi
             fi
@@ -260,11 +261,11 @@ testColorNAND() {
 # ##############################################################################
 testColorOR() {
     if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
-    _testColorOR_min_delta=100
+    _testColorOR_max_delta=0
     for arg in "$@"; do
         shift
         case "$arg" in
-            -d) shift; _testColorOR_min_delta=$1;;
+            -d) _testColorOR_max_delta=$1; shift;;
             -f) screenshotRequired=true;;
             *) set -- "$@" "$arg";;
         esac
@@ -275,13 +276,13 @@ testColorOR() {
         if [ "$RGB" = "$i" ]; then              # color found?
             return 0                            # At the first color found OR is break, return 0
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_min_delta" -lt "100" ]; then
+            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -gt "0" ]; then
                 _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
                     echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&2;
                 fi
-                if [ "$_testColorOR_delta" -ge "$_testColorOR_min_delta" ]; then
-                    return 1
+                if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
+                    return 0
                 fi
             fi
         fi
@@ -945,18 +946,57 @@ buyFromStore() {
 
     if [ "$buyStoreDust" = true ]; then         # Dust
         buyFromStore_buyItem 180 840
-        wait
     fi
     if [ "$buyStorePoeCoins" = true ]; then     # Poe Coins
         buyFromStore_buyItem 670 1430
-        wait
     fi
-    # TODO: specify emblems, I have more than 600 primordial emblems...
-    # buyPrimordialEmblem check purple
-    # buyAmplifyingEmblem check yellow
-    if [ "$buyStoreEmblems" = true ]; then      # Emblems
+    # Primordial Emblem
+    if [ "$buyStorePrimordialEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 180 1430 9eabbd; then
         buyFromStore_buyItem 180 1430
-        wait
+    fi
+    # Amplifying Emblem
+    # TODO: check yellow
+    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 180 1430 000000; then
+        buyFromStore_buyItem 180 1430
+    fi
+    # TODO: Buy Elite Hero Soulstone
+    if [ "$buyStoreSoulstone" = true ]; then    # Soulstone (widh 90 diamonds)
+        if testColorOR -d "$DEFAULT_DELTA" 900 850 c6a3e6; then                 # row 1, item 4
+             buyFromStore_buyItem 900 850
+        fi
+        if testColorOR -d "$DEFAULT_DELTA" 660 850 a775ae; then                 # row 1, item 3
+             buyFromStore_buyItem 660 850
+        fi
+        if testColorOR -d "$DEFAULT_DELTA" 420 850 000000; then                 # row 1, item 2
+             buyFromStore_buyItem 420 850
+        fi
+    fi
+    if [ "$forceWeekly" = true ]; then
+        # TODO: Weekly - Purchase an item from the Guild Store once
+        if [ "$buyWeeklyGuild" = true ]; then
+            inputTapSleep 530 1810              # Guild Store
+            buyFromStore_buyItem 180 810        # First item
+        fi
+        # TODO: Weekly - Purchase an item or hero from the Labyrinth store once
+        if [ "$buyWeeklyLabyrinth" = true ]; then
+            inputTapSleep 1020 1810             # Labyrinth Store
+            inputSwipe 1050 1600 1050 750 50    # Swipe all the way down
+            if testColorOR -d "$DEFAULT_DELTA" 900 1500 000000; then            # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 900 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1500 000000; then          # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 660 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 420 1500 000000; then          # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 420 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 180 1500 94e3fa; then          # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 180 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 900 1200 88d8ff; then          # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 900 1200
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1200 67d2fc; then          # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 660 1200
+            else
+                echo "[INFO] Can't buy item from Labyrinth store"
+            fi
+        fi
     fi
     inputTapSleep 70 1810                       # Return
     verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
@@ -969,9 +1009,9 @@ buyFromStore() {
 # ##############################################################################
 buyFromStore_buyItem() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore_buyItem $*" >&2; fi
-    inputTapSleep "$1" "$2" 1
-    inputTapSleep 550 1540 1
-    inputTapSleep 550 1700 0
+    inputTapSleep "$1" "$2" 1                   # Item
+    inputTapSleep 550 1540 1                    # Purchase
+    inputTapSleep 550 1700                      # Close popup
 }
 
 # ##############################################################################
@@ -1381,7 +1421,7 @@ templeOfAscension() {
 twistedRealmBoss() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&2; fi
     # TODO: Choose a formation (Would be dope!)
-    if [ "$1" = true ]; then                   # Check if starting from tab or already inside activity
+    if [ "$1" = true ]; then                    # Check if starting from tab or already inside activity
         inputTapSleep 380 360 10
     fi
     ## For testing only! Keep as comment ##
@@ -1493,18 +1533,26 @@ collectQuestChests_quick() {
         inputTapSleep 930 680
     done
 
-    # TODO: Check if chest is open
-    # Collect Chests
-    inputTapSleep 330 430                       # Chest 20
-    inputTapSleep 580 600 0                     # Collect
-    inputTapSleep 500 430                       # Chest 40
-    inputTapSleep 580 600 0                     # Collect
-    inputTapSleep 660 430                       # Chest 60
-    inputTapSleep 580 600 0                     # Collect
-    inputTapSleep 830 430                       # Chest 80
-    inputTapSleep 580 600 0                     # Collect
-    inputTapSleep 990 430                       # Chest 100
-    inputTapSleep 580 600                       # Collect
+    if testColorNAND 350 380 54332b; then
+        inputTapSleep 330 430                   # Chest 20
+        inputTapSleep 580 600 0                 # Collect
+    fi
+    if testColorNAND 510 380 543323; then
+        inputTapSleep 500 430                   # Chest 40
+        inputTapSleep 580 600 0                 # Collect
+    fi
+    if testColorNAND 670 380 54331b; then
+        inputTapSleep 660 430                   # Chest 60
+        inputTapSleep 580 600 0                 # Collect
+    fi
+    if testColorNAND 830 380 533323; then
+        inputTapSleep 830 430                   # Chest 80
+        inputTapSleep 580 600 0                 # Collect
+    fi
+    if testColorNAND 1000 380 543323; then
+        inputTapSleep 990 430                   # Chest 100
+        inputTapSleep 580 600                   # Collect
+    fi
 }
 
 # ##############################################################################
@@ -1553,7 +1601,7 @@ collectMerchants() {
         echo "[INFO] No Weekly to collect..."
     fi
 
-    if false; then                              # TODO: Check if red mark - Monthly Deals
+    if testColorOR 505 1530 000000; then        # TODO: Check if red mark - Monthly Deals
         inputTapSleep 460 1620 1                # Monthly Deals
         if testColorNAND 375 940 0b080a;then    # Checks for Special Monthly Bundles
             inputTapSleep 200 1200 1            # Free
@@ -1584,10 +1632,10 @@ test() {
     until [ "$_test_COUNT" -ge "${3:-3}" ]; do
         sleep "${4:-.5}"
         getColor -f "$1" "$2"
-        echo "RGB: $RGB"
+        echo "[TEST] [$1, $2] > RGB: $RGB"
         _test_COUNT=$((_test_COUNT + 1))        # Increment
     done
-    exit
+    # exit
 }
 
 # ##############################################################################
@@ -1596,22 +1644,32 @@ test() {
 # Remark        : If you want to run multiple tests you need to comment exit in test()
 # ##############################################################################
 tests() {
-    # test 550 740 # Check for Boss in Campaign
-    # test 660 520 # Check for Solo Bounties RGB
-    # test 650 570 # Check for Team Bounties RGB
-    # test 700 670 # Check for chest collection RGB
-    # test 715 1815 # Check if Soren is open
-    # test 740 205 # Check if game is updating
-    # test 270 1800 # Oak Inn Present Tab 1
-    # test 410 1800 # Oak Inn Present Tab 2
-    # test 550 1800 # Oak Inn Present Tab 3
-    # test 690 1800 # Oak Inn Present Tab 4
+    # test 550 740                              # Check for Boss in Campaign
+    # test 660 520                              # Check for Solo Bounties RGB
+    # test 650 570                              # Check for Team Bounties RGB
+    # test 700 670                              # Check for chest collection RGB
+    # test 715 1815                             # Check if Soren is open
+    # test 740 205                              # Check if game is updating
+    # test 270 1800                             # Oak Inn Present Tab 1
+    # test 410 1800                             # Oak Inn Present Tab 2
+    # test 550 1800                             # Oak Inn Present Tab 3
+    # test 690 1800                             # Oak Inn Present Tab 4
 
-    # Check if red mark - Monthly Deals
-    # Check if chest is open 20 40 60 80 100
+    # TODO:
     # check red dot to see if free fast reward is avaible
-    # buyPrimordialEmblem check purple
+    # test 950 1660
     # buyAmplifyingEmblem check yellow
+    # test 180 1430
+    # Buy Elite Hero Soulstone
+    # test 420 850 # Row 1, slot 2
+
+    ## Next month
+    # Check if red mark - Monthly Deals
+    # test 505 1530
+    # Weekly - Purchase an item or hero from the Labyrinth store once
+    # test 900 1500 # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+    # test 660 1500 # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+    # test 420 1500 # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
     exit
 }
 
@@ -1766,6 +1824,12 @@ run() {
 }
 
 echo "[INFO] Starting script... ($(date)) "; echo
+if [ "$forceFightCampaign" = true ]; then
+    echo "[INFO] Fight Campaign is ON"
+fi
+if [ "$forceWeekly" = true ]; then
+    echo "[INFO] Weekly is ON"
+fi
 
 init
 run

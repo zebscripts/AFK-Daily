@@ -48,11 +48,15 @@ You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/w
 
 ### Store
 
-| Variable           |   Type    | Description                                        | Default |
-| :----------------- | :-------: | :------------------------------------------------- | :-----: |
-| `buyStoreDust`     | `Boolean` | If `true`, buys Dust from the store for Gold.      | `true`  |
-| `buyStorePoeCoins` | `Boolean` | If `true`, buys Poe Coins from the store for Gold. | `true`  |
-| `buyStoreEmblems`  | `Boolean` | If `true`, buys Emblems from the store for Gold.   | `false` |
+| Variable                    |   Type    | Description                                                       | Default |
+| :-------------------------- | :-------: | :---------------------------------------------------------------- | :-----: |
+| `buyStoreDust`              | `Boolean` | If `true`, buys Dust from the store for Gold.                     | `true`  |
+| `buyStorePoeCoins`          | `Boolean` | If `true`, buys Poe Coins from the store for Gold.                | `true`  |
+| `buyStoreSoulstone`         | `Boolean` | If `true`, buys Elite Hero Soulstones from the store for 90 Gems. | `false` |
+| `buyStorePrimordialEmblem`  | `Boolean` | If `true`, buys Primordial Emblem from the store for Gold.        | `false` |
+| `buyStoreAmplifyingEmblem`  | `Boolean` | If `true`, buys Amplifying Emblem from the store for Gold.        | `false` |
+| `buyWeeklyGuild`            | `Boolean` | If `true`, buys first item of Guild store.                        | `false` |
+| `buyWeeklyLabyrinth`        | `Boolean` | If `true`, buys Soulstones from the Labyrinth store.              | `false` |
 
 ### Campaign
 

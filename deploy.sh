@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : deploy.sh
 # Description   : Used to run afk-daily on phone
-# Args          : [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]
+# Args          : [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -117,7 +117,11 @@ totalAmountGuildBossTries=2+0
 # Store
 buyStoreDust=true
 buyStorePoeCoins=true
-buyStoreEmblems=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
 
 # --- Actions --- #
 # Campaign
@@ -169,7 +173,7 @@ checkDate() {
         if [ "$doChallengeBoss" = true ] && [ "$(datediff "$lastCampaign")" -le -3 ]; then
             forceFightCampaign=true
         fi
-        if [ "$(datediff "$lastWeekly")" -le -7 ]; then
+        if [ "$(datediff "$lastWeekly")" -lt -7 ]; then
             forceWeekly=true
         fi
     fi
@@ -381,7 +385,11 @@ validateConfig() {
         $totalAmountGuildBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
-        $buyStoreEmblems || -z \
+        $buyStorePrimordialEmblem || -z \
+        $buyStoreAmplifyingEmblem || -z \
+        $buyStoreSoulstone || -z \
+        $buyWeeklyGuild || -z \
+        $buyWeeklyLabyrinth || -z \
         $doLootAfkChest || -z \
         $doChallengeBoss || -z \
         $doFastRewards || -z \
@@ -405,7 +413,7 @@ validateConfig() {
         $doCollectMerchantFreebies ]]; then
         printError "$configFile has missing/wrong entries."
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
-        printInfo "or run update_setup.sh -c"
+        printInfo "or run ./update_setup.sh -c"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
         exit
@@ -421,7 +429,7 @@ validateConfig() {
 # Function Name : show_help
 # ##############################################################################
 show_help() {
-    echo -e "Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]\n"
+    echo -e "Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]\n"
     echo -e "Description:"
     echo -e "  Automate daily activities within the AFK Arena game."
     echo -e "  More info: https://github.com/zebscripts/AFK-Daily\n"
@@ -433,6 +441,7 @@ show_help() {
     echo -e "   \tRemark: Please don't use spaces!"
     echo -e "  f\tForce campaign battle (ignore 3 day optimisation)"
     echo -e "  t\tLaunch on test server (experimental)"
+    echo -e "  w\tForce weekly"
 }
 
 for arg in "$@"; do
@@ -443,11 +452,12 @@ for arg in "$@"; do
         "--force") set -- "$@" "-f" ;;
         "--help") set -- "$@" "-h" ;;
         "--test") set -- "$@" "-t" ;;
+        "--weekly") set -- "$@" "-w" ;;
         *)        set -- "$@" "$arg"
     esac
 done
 
-while getopts ":a:d:fht" option ;
+while getopts ":a:d:fhtw" option ;
 do
     case $option in
         a)
@@ -471,6 +481,9 @@ do
             ;;
         t)
             testServer=true
+            ;;
+        w)
+            forceWeekly=true
             ;;
         :)
             printWarn "Argument required by this option: $OPTARG"

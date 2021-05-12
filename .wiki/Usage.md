@@ -17,7 +17,7 @@
 1. Clone this repo and `cd` into it .
 2. Connect your device to the computer (or start your emulator of choice).
 3. Run `./deploy.sh` to generate [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) and change its values if necessary.
-4. Run `./deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]` again to run script.
+4. Run `./deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]` again to run script.
 5. Watch your device magically play for you. It's fun! I promise.
 
 **If for whatever reason `git clone https://github.com/zebscripts/AFK-Daily.git` (step 3) returns an error**, simply download this repository as a `.zip` file through the *big green "Code" button* at the top of this page, and unzip it into your directory. Then open the "AFK-Daily-master" repository, open a terminal there (step 2) and follow the rest of the steps starting at step 5. Keep in mind automatic updates won't be working then. [Send me a message](#troubleshooting), I'd be happy to help!
@@ -35,7 +35,7 @@ You can also execute the script with the following optional parameters:
 
 ```text
 $ ./deploy.sh -h
-Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t]
+Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]
 
 Description:
   Automate daily activities within the AFK Arena game.
@@ -49,6 +49,7 @@ Options:
         Remark: Please don't use spaces!
   f     Force campaign battle (ignore 3 day optimisation)
   t     Launch on test server (experimental)
+  w     Force weekly
 
 ```
 

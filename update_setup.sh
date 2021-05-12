@@ -132,7 +132,11 @@ totalAmountGuildBossTries=${totalAmountGuildBossTries:-"2+0"}\n\
 # Store\n\
 buyStoreDust=${buyStoreDust:-"true"}\n\
 buyStorePoeCoins=${buyStorePoeCoins:-"true"}\n\
-buyStoreEmblems=${buyStoreEmblems:-"false"}\n\
+buyStorePrimordialEmblem=${buyStorePrimordialEmblem:-"false"}\n\
+buyStoreAmplifyingEmblem=${buyStoreAmplifyingEmblem:-"false"}\n\
+buyStoreSoulstone=${buyStoreSoulstone:-"false"}\n\
+buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
+buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\
 # --- Actions --- #\n\
 # Campaign\n\
