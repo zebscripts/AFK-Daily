@@ -576,11 +576,14 @@ collectFriendsAndMercenaries() {
 # ##############################################################################
 fastRewards() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
-    # TODO: check red dot to see if free fast reward is avaible
-    inputTapSleep 950 1660 1
-    inputTapSleep 710 1260
-    inputTapSleep 560 1800 1
-    inputTapSleep 400 1250
+    if testColorOR 980 1620 ef1e05; then        # check red dot to see if free fast reward is avaible
+        inputTapSleep 950 1660 1
+        inputTapSleep 710 1260
+        inputTapSleep 560 1800 1
+        inputTapSleep 400 1250
+    else
+        echo "[INFO] No free fast reward..."
+    fi
     verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
 
@@ -956,7 +959,7 @@ buyFromStore() {
     fi
     # Amplifying Emblem
     # TODO: check yellow
-    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 180 1430 000000; then
+    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 180 1430 d8995d; then
         buyFromStore_buyItem 180 1430
     fi
     # TODO: Buy Elite Hero Soulstone
@@ -1656,10 +1659,6 @@ tests() {
     # test 690 1800                             # Oak Inn Present Tab 4
 
     # TODO:
-    # check red dot to see if free fast reward is avaible
-    # test 950 1660
-    # buyAmplifyingEmblem check yellow
-    # test 180 1430
     # Buy Elite Hero Soulstone
     # test 420 850 # Row 1, slot 2
 

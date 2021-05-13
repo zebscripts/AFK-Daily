@@ -429,16 +429,16 @@ validateConfig() {
 # Function Name : show_help
 # ##############################################################################
 show_help() {
-    echo -e "Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]\n"
+    echo -e "Usage: deploy.sh [-h] [-a <ACCOUNT>] [-d <DEVICE>] [-f] [-t] [-w]\n"
     echo -e "Description:"
     echo -e "  Automate daily activities within the AFK Arena game."
     echo -e "  More info: https://github.com/zebscripts/AFK-Daily\n"
     echo -e "Options:"
     echo -e "  h\tShow help"
-    echo -e "  d\tSpecify desired device"
-    echo -e "   \tValues for <DEVICE>: bs, nox, dev"
     echo -e "  a\tUse .afkscript.ini with a tag (multiple accounts)"
     echo -e "   \tRemark: Please don't use spaces!"
+    echo -e "  d\tSpecify desired device"
+    echo -e "   \tValues for <DEVICE>: bs, nox, dev"
     echo -e "  f\tForce campaign battle (ignore 3 day optimisation)"
     echo -e "  t\tLaunch on test server (experimental)"
     echo -e "  w\tForce weekly"
