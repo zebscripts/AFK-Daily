@@ -975,10 +975,20 @@ buyFromStore() {
         fi
     fi
     if [ "$forceWeekly" = true ]; then
-        # TODO: Weekly - Purchase an item from the Guild Store once
+        # TODO: Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
         if [ "$buyWeeklyGuild" = true ]; then
             inputTapSleep 530 1810              # Guild Store
-            buyFromStore_buyItem 180 810        # First item
+            if testColorOR 250 740 000000; then                                 # row 1, item 1
+                buyFromStore_buyItem 180 810
+            elif testColorOR 500 740 000000; then                               # row 1, item 2
+                buyFromStore_buyItem 420 810
+            elif testColorOR 740 740 f51f06; then                               # row 1, item 3
+                buyFromStore_buyItem 660 810
+            elif testColorOR 980 740 f12f1e; then                               # row 1, item 4
+                buyFromStore_buyItem 900 810
+            else
+                buyFromStore_buyItem 180 810
+            fi
         fi
         # TODO: Weekly - Purchase an item or hero from the Labyrinth store once
         if [ "$buyWeeklyLabyrinth" = true ]; then
@@ -1661,6 +1671,9 @@ tests() {
     # TODO:
     # Buy Elite Hero Soulstone
     # test 420 850 # Row 1, slot 2
+    # Weekly - Purchase an item from the Guild Store once (check red dot first row)
+    # test 250 740 # row 1, item 1
+    # test 500 740 # row 1, item 2
 
     ## Next month
     # Check if red mark - Monthly Deals
