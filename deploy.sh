@@ -12,12 +12,23 @@ bluestacksDirectory="storage/emulated/0"
 noxDirectory="data"
 configFile="config.sh"
 tempFile=".afkscript.tmp"
+testedPatch="Unknown"
 
 # Do not modify
 adb=adb
 forceFightCampaign=false
 
 # --- Functions --- #
+# Get latest patch script was tested on
+function getLatestPatch() {
+    while IFS= read -r line; do
+        if [[ "$line" == *"badge/Patch-"* ]]; then
+            testedPatch=${line:79:7}
+            break
+        fi
+    done < "README.md"
+}
+
 # Checks for script update (with git)
 function checkForUpdate() {
     if command -v git &>/dev/null; then
@@ -302,7 +313,8 @@ function deploy() {
 
     printf "\n"
     printInfo "Platform: ${cBlue}$1${cNc}"
-    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
+    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}"
+    printInfo "Latest tested patch: ${cBlue}$testedPatch${cNc}\n"
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
@@ -314,11 +326,12 @@ function deploy() {
 clear
 
 checkAdb
-#checkForUpdate
+checkForUpdate
 checkConfig
 checkLineEndings "config.sh"
 checkLineEndings "afk-daily.sh"
 checkDate
+getLatestPatch
 
 # Check where to deploy
 if [ "$1" ]; then

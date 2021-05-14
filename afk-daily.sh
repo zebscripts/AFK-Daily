@@ -1074,7 +1074,7 @@ function battleKingsTower() {
                 sleep 2
 
                 # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
-                # Tapping 550 170 might close an offer 
+                # Tapping 550 170 might close an offer
                 # Tap top of the screen to close any possible Limited Offers
                 # getColor 550 150
                 # if [ "$RGB" != "1a1212" ]; then # not on screen with Challenge button
@@ -1374,8 +1374,8 @@ function collectMerchants() {
     input tap 510 1820 # Merchant Ship
     sleep 2
 
+    # Check for Special Daily Bundles
     getColor 375 940
-    # Checks for Special Daily Bundles
     if [ "$RGB" != "0b080a" ]; then
         input tap 200 1200
     else
@@ -1387,8 +1387,8 @@ function collectMerchants() {
     input tap 280 1620 # Weekly Deals
     sleep 1
 
+    # Check for Special Weekly Bundles
     getColor 375 940
-    # Checks for Special Weekly Bundles
     if [ "$RGB" != "050a0f" ]; then
         input tap 200 1200
     else
@@ -1400,8 +1400,8 @@ function collectMerchants() {
     input tap 460 1620 # Monthly Deals
     sleep 1
 
+    # Check for Special Monthly Bundles
     getColor 375 940
-    # Checks for Special Monthly Bundles
     if [ "$RGB" != "0b080a" ]; then
         input tap 200 1200
     else
@@ -1419,10 +1419,16 @@ function collectMerchants() {
 # If red square, strenghen Crystal
 function strengthenCrystal() {
     input tap 760 1030 # Crystal
-    sleep 3
+    sleep 5
 
-    # TODO: Detect if free slot, and take it.
+    # Check if possible to buy a slot
+    getColor 380 890
+    if [ "$RGB" == "efbd67" ]; then
+        input tap 710 1265
+        sleep 2
+    fi
 
+    # TODO Can have a special bundle window. Only happens if a player actually levels the crystal up by a level. The window is closable by tapping the very top of the screen
     input tap 550 1850 # Strenghen Crystal
     sleep 2
     input tap 200 1850 # Close level up window
