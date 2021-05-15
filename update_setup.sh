@@ -62,7 +62,7 @@ updateAFKScript() {
         source "$f"                             # Load the file
         echo -e "# afk-daily\n\
 lastCampaign=${lastCampaign:-$lastCampaign_default}\n\
-lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f"
+lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f.tmp"
 
         case "$(uname -s)" in
             CYGWIN*|MINGW32*|MSYS*|MINGW*)      # Windows
@@ -76,7 +76,14 @@ lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f"
                 unset "${BASH_REMATCH[1]}"
             fi
         done < "$f"
-        echo "$f updated"
+
+        # Check for differences
+        if cmp --silent -- "$f" "$f.tmp"; then
+            rm -f "$f.tmp"
+        else
+            mv "$f.tmp" "$f"
+            echo "$f updated"
+        fi
     done
 }
 
@@ -167,7 +174,7 @@ doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
 # End\n\
 doCollectQuestChests=${doCollectQuestChests:-"true"}\n\
 doCollectMail=${doCollectMail:-"true"}\n\
-doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f"
+doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f.tmp"
 
         # Unset all values
         while read -r line ; do
@@ -175,7 +182,14 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f"
                 unset "${BASH_REMATCH[1]}"
             fi
         done < "$f"
-        echo "$f updated"
+
+        # Check for differences
+        if cmp --silent -- "$f" "$f.tmp"; then
+            rm -f "$f.tmp"
+        else
+            mv "$f.tmp" "$f"
+            echo "$f updated"
+        fi
     done
 }
 
