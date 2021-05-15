@@ -155,7 +155,6 @@ readRGB() {
     RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
     RGB=${RGB:9:9}
     RGB="${RGB// /}"
-    # echo "[INFO] X: "$1" Y: "$2" RGB: $RGB"
 }
 
 # ##############################################################################
