@@ -197,21 +197,46 @@ You can also execute the script with the following optional parameters:
 
 ```text
 $ ./deploy.sh -h
-Usage: deploy.sh [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]
+USAGE: deploy.sh [OPTIONS]
 
-Description:
-  Automate daily activities within the AFK Arena game.
-  More info: https://github.com/zebscripts/AFK-Daily
+DESCRIPTION
+   Automate daily activities within the AFK Arena game.
+   More info: https://github.com/zebscripts/AFK-Daily
 
-Options:
-  h     Show help
-  d     Specify desired device
-        Values for <DEVICE>: bs, nox, dev
-  a     Use .afkscript.ini with a tag (multiple accounts)
-        Remark: Please don't use spaces!
-  f     Force campaign battle (ignore 3 day optimisation)
-  t     Launch on test server (experimental)
-  w     Force weekly
+OPTIONS
+   -h, --help
+      Show help
+
+   -a, --account [ACCOUNT]
+      Use .afkscript.ini with a tag (multiple accounts)
+      Remark: Please don't use spaces!
+      Example: -a account1
+
+   -c, --check
+      Check if script is ready to be run
+
+   -d, --device [DEVICE]
+      Specify desired device
+      Values for <DEVICE>: bs, dev
+
+   -f, --fight
+      Force campaign battle (ignore 3 day optimisation)
+
+   -t, --test
+      Launch on test server (experimental)
+
+   -w, --weekly
+      Force weekly
+
+EXAMPLES
+   Run script for Bluestacks
+      deploy.sh -d bs
+
+   Run script on test server
+      deploy.sh -t
+
+   Run script forcing fight & weekly
+      deploy.sh -fw
 
 ```
 

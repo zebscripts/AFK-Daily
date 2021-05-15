@@ -19,7 +19,6 @@ source ./lib/print.sh
 # I won't blame you (unless you blame me).
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
-noxDirectory="data"
 configFile="config.ini"
 tempFile=".afkscript.ini"
 device="default"
@@ -210,7 +209,6 @@ checkDevice() {
         if ! $adb get-state 1>/dev/null 2>&1; then                              # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
-            printTip "If you're trying to use Nox, please run this script with './deploy nox'!"
             exit
         else
             if [[ $($adb devices) =~ emulator ]]; then                          # Bluestacks
@@ -267,21 +265,21 @@ checkGitUpdate() {
 
 # ##############################################################################
 # Function Name : checkSetupUpdate
-# Description   : Checks for setup update (.*afkscript.temp, config*.sh)
+# Description   : Checks for setup update (.*afkscript.ini, config*.ini)
 # ##############################################################################
 checkSetupUpdate(){
     printTask "Checking for setup updates..."
     for f in .*afkscript.tmp; do
         if [ -e "$f" ]; then
             ./update_setup -a
+            break
         fi
-        break
     done
     for f in config*.sh; do
         if [ -e "$f" ]; then
             ./update_setup -c
+            break
         fi
-        break
     done
     printSuccess "Checked/Updated!"
 }
@@ -429,27 +427,55 @@ validateConfig() {
 # Function Name : show_help
 # ##############################################################################
 show_help() {
-    echo -e "Usage: deploy.sh [-h] [-a <ACCOUNT>] [-d <DEVICE>] [-f] [-t] [-w]\n"
-    echo -e "Description:"
-    echo -e "  Automate daily activities within the AFK Arena game."
-    echo -e "  More info: https://github.com/zebscripts/AFK-Daily\n"
-    echo -e "Options:"
-    echo -e "  h\tShow help"
-    echo -e "  a\tUse .afkscript.ini with a tag (multiple accounts)"
-    echo -e "   \tRemark: Please don't use spaces!"
-    echo -e "  d\tSpecify desired device"
-    echo -e "   \tValues for <DEVICE>: bs, nox, dev"
-    echo -e "  f\tForce campaign battle (ignore 3 day optimisation)"
-    echo -e "  t\tLaunch on test server (experimental)"
-    echo -e "  w\tForce weekly"
+    echo "USAGE: deploy.sh [OPTIONS]"
+    echo
+    echo "DESCRIPTION"
+    echo "   Automate daily activities within the AFK Arena game."
+    echo "   More info: https://github.com/zebscripts/AFK-Daily"
+    echo
+    echo "OPTIONS"
+    echo "   -h, --help"
+    echo "      Show help"
+    echo
+    echo "   -a, --account [ACCOUNT]"
+    echo "      Use .afkscript.ini with a tag (multiple accounts)"
+    echo "      Remark: Please don't use spaces!"
+    echo "      Example: -a account1"
+    echo
+    echo "   -c, --check"
+    echo "      Check if script is ready to be run"
+    echo
+    echo "   -d, --device [DEVICE]"
+    echo "      Specify desired device"
+    echo "      Values for <DEVICE>: bs, dev"
+    echo
+    echo "   -f, --fight"
+    echo "      Force campaign battle (ignore 3 day optimisation)"
+    echo
+    echo "   -t, --test"
+    echo "      Launch on test server (experimental)"
+    echo
+    echo "   -w, --weekly"
+    echo "      Force weekly"
+    echo
+    echo "EXAMPLES"
+    echo "   Run script for Bluestacks"
+    echo "      deploy.sh -d bs"
+    echo
+    echo "   Run script on test server"
+    echo "      deploy.sh -t"
+    echo
+    echo "   Run script forcing fight & weekly"
+    echo "      deploy.sh -fw"
 }
 
 for arg in "$@"; do
     shift
     case "$arg" in
         "--account") set -- "$@" "-a" ;;
+        "--check") set -- "$@" "-c" ;;
         "--device") set -- "$@" "-d" ;;
-        "--force") set -- "$@" "-f" ;;
+        "--fight") set -- "$@" "-f" ;;
         "--help") set -- "$@" "-h" ;;
         "--test") set -- "$@" "-t" ;;
         "--weekly") set -- "$@" "-w" ;;
@@ -457,17 +483,23 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:d:fhtw" option ;
+while getopts ":a:cd:fhtw" option ;
 do
     case $option in
         a)
             tempFile=".${OPTARG}afkscript.tmp"
             ;;
+        c)
+            checkAdb
+            checkGitUpdate
+            checkSetupUpdate
+            checkConfig
+            checkEOL $configFile
+            checkEOL "afk-daily.sh"
+            ;;
         d)
             if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
                 device="Bluestacks"
-            elif [ "$OPTARG" == "nox" ] || [ "$OPTARG" == "n" ]; then
-                device="Nox"
             elif [ "$OPTARG" == "dev" ]; then
                 device="dev"
             fi
@@ -510,10 +542,6 @@ if [ "$device" == "Bluestacks" ]; then
     restartAdb
     checkDevice "Bluestacks"
     deploy "Bluestacks" "$bluestacksDirectory"
-elif [ "$device" == "Nox" ]; then
-    restartAdb
-    checkDevice "Nox"
-    deploy "Nox" "$noxDirectory"
 elif [ "$device" == "dev" ]; then
     deploy "Personal" "$personalDirectory"
 else

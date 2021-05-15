@@ -14,21 +14,18 @@
 DEVICEWIDTH=1080
 DEBUG=0
 # DEBUG  = 0    Show no debug
-# DEBUG >= 1    Show getColor calls > $RGB value
+# DEBUG >= 1    Show getColor calls > $HEX value
 # DEBUG >= 2    Show test calls
 # DEBUG >= 3    Show all core functions calls
 # DEBUG >= 4    Show all functions calls
 # DEBUG >= 9    Show tap calls
-SHOW_DELTA=1
-# SHOW_DELTA = 0                    Show no debug
-# SHOW_DELTA = 1 && DEBUG >= 2      Show delta if color is not found
 DEFAULT_DELTA=2                                 # Default delta for colors
 DEFAULT_SLEEP=2                                 # equivalent to wait (default 2)
 pvpEvent=false                                  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
-RGB=00000000
+HEX=00000000
 oakRes=0
 forceFightCampaign=false
 forceWeekly=false
@@ -76,7 +73,7 @@ disableOrientation() {
 
 # ##############################################################################
 # Function Name : getColor
-# Descripton    : Sets $RGB, <-f> to force the screenshot
+# Descripton    : Sets $HEX, <-f> to force the screenshot
 # Args          : [<-f>] <X> <Y>
 # ##############################################################################
 getColor() {
@@ -89,8 +86,8 @@ getColor() {
         esac
     done
     takeScreenshot
-    readRGB "$1" "$2"
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > RGB: $RGB" >&2; fi
+    readHEX "$1" "$2"
+    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > HEX: $HEX" >&2; fi
 }
 
 # ##############################################################################
@@ -118,7 +115,7 @@ inputTapSleep() {
 
 # ##############################################################################
 # Function Name : loopUntilNotRGB
-# Descripton    : Loops until RGB is equal
+# Descripton    : Loops until HEX is equal
 # Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilNotRGB() {
@@ -132,7 +129,7 @@ loopUntilNotRGB() {
 
 # ##############################################################################
 # Function Name : loopUntilRGB
-# Descripton    : Loops until RGB is not equal
+# Descripton    : Loops until HEX is not equal
 # Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilRGB() {
@@ -145,31 +142,31 @@ loopUntilRGB() {
 }
 
 # ##############################################################################
-# Function Name : readRGB
+# Function Name : readHEX
 # Descripton    : Gets pixel color
 # Args          : <X> <Y>
-# Output        : $RGB
+# Output        : $HEX
 # ##############################################################################
-readRGB() {
+readHEX() {
     offset=$((DEVICEWIDTH*$2+$1+3))
-    RGB=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
-    RGB=${RGB:9:9}
-    RGB="${RGB// /}"
+    HEX=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
+    HEX=${HEX:9:9}
+    HEX="${HEX// /}"
 }
 
 # ##############################################################################
-# Function Name : sRGBColorDelta
+# Function Name : HEXColorDelta
 # Args          : <COLOR1> <COLOR2>
 # Output        : stdout [0 means same colors, 100 means opposite colors]
 # Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
 # ##############################################################################
-sRGBColorDelta() {
+HEXColorDelta() {
     if [ "$#" -ne 2 ] ; then
-        echo "Usage: sRGBColorDelta <COLOR1> <COLOR2>" >&2
+        echo "Usage: HEXColorDelta <COLOR1> <COLOR2>" >&2
         echo " 0 means same colors, 100 means opposite colors" >&2
         return
     fi
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] sRGBColorDelta $*" >&2; fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] HEXColorDelta $*" >&2; fi
     r=$((0x${1:0:2} - 0x${2:0:2}))
     g=$((0x${1:2:2} - 0x${2:2:2}))
     b=$((0x${1:4:2} - 0x${2:4:2}))
@@ -208,7 +205,7 @@ takeScreenshot() {
 # ##############################################################################
 # Function Name : testColorNAND
 # Descripton    : Equivalent to:
-#                 if getColor <X> <Y> && [ "$RGB" != <COLOR> ] && [ "$RGB" != <COLOR> ]; then
+#                 if getColor <X> <Y> && [ "$HEX" != <COLOR> ] && [ "$HEX" != <COLOR> ]; then
 # Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # Output        : if true, return 0, else 1
 # ##############################################################################
@@ -226,14 +223,12 @@ testColorNAND() {
     getColor "$1" "$2"                          # looking for color
     shift; shift;                               # ignore arg
     for i in "$@"; do                           # loop in colors
-        if [ "$RGB" = "$i" ]; then              # color found?
+        if [ "$HEX" = "$i" ]; then              # color found?
             return 1                            # At the first color found NAND is break, return 1
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorNAND_max_delta" -gt "0" ]; then
-                _testColorNAND_delta=$(sRGBColorDelta "$RGB" "$i")
-                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorNAND $RGB != $i [Δ $_testColorNAND_delta%]" >&2;
-                fi
+            if [ $DEBUG -ge 2 ] || [ "$_testColorNAND_max_delta" -gt "0" ]; then
+                _testColorNAND_delta=$(HEXColorDelta "$HEX" "$i")
+                echo "[DEBUG] testColorNAND $HEX != $i [Δ $_testColorNAND_delta%]" >&2;
                 if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
                     return 1
                 fi
@@ -246,7 +241,7 @@ testColorNAND() {
 # ##############################################################################
 # Function Name : testColorOR
 # Descripton    : Equivalent to:
-#                 if getColor <X> <Y> && { [ "$RGB" = <COLOR> ] || [ "$RGB" = <COLOR> ]; }; then
+#                 if getColor <X> <Y> && { [ "$HEX" = <COLOR> ] || [ "$HEX" = <COLOR> ]; }; then
 # Args          : [-f] [-d <DELTA>] <X> <Y> <COLOR> [<COLOR> ...]
 # Output        : if true, return 0, else 1
 # ##############################################################################
@@ -264,13 +259,13 @@ testColorOR() {
     getColor "$1" "$2"                          # looking for color
     shift; shift;                               # ignore arg
     for i in "$@"; do                           # loop in colors
-        if [ "$RGB" = "$i" ]; then              # color found?
+        if [ "$HEX" = "$i" ]; then              # color found?
             return 0                            # At the first color found OR is break, return 0
         else
             if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -gt "0" ]; then
-                _testColorOR_delta=$(sRGBColorDelta "$RGB" "$i")
+                _testColorOR_delta=$(HEXColorDelta "$HEX" "$i")
                 if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
-                    echo "[DEBUG] testColorOR $RGB != $i [Δ $_testColorOR_delta%]" >&2;
+                    echo "[DEBUG] testColorOR $HEX != $i [Δ $_testColorOR_delta%]" >&2;
                 fi
                 if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
                     return 0
@@ -297,16 +292,16 @@ testColorORTapSleep() {
 }
 
 # ##############################################################################
-# Function Name : getColor
-# Descripton    : Verifies if <X> and <Y> have specific RGB then print <MESSAGE_*>
-# Args          : <X> <Y> <RGB> <MESSAGE_SUCCESS> <MESSAGE_FAILURE>
+# Function Name : verifyHEX
+# Descripton    : Verifies if <X> and <Y> have specific HEX then print <MESSAGE_*>
+# Args          : <X> <Y> <HEX> <MESSAGE_SUCCESS> <MESSAGE_FAILURE>
 # Output        : stdout MessageSuccess, stderr MessageFailure
 # ##############################################################################
-verifyRGB() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyRGB $*" >&2; fi
+verifyHEX() {
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyHEX $*" >&2; fi
     getColor "$1" "$2"
-    if [ "$RGB" != "$3" ]; then
-        echo "[ERROR] VerifyRGB: Failure! Expected $3, but got $RGB instead. [Δ $(sRGBColorDelta "$RGB" "$3")%]" >&2
+    if [ "$HEX" != "$3" ]; then
+        echo "[ERROR] verifyHEX: Failure! Expected $3, but got $HEX instead. [Δ $(HEXColorDelta "$HEX" "$3")%]" >&2
         echo >&2
         echo "[ERROR] $5" >&2
         #exit
@@ -381,7 +376,7 @@ switchTab() {
             then
                 inputTapSleep 550 1850
                 activeTab="$1"
-                verifyRGB 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
+                verifyHEX 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
             fi
             ;;
         "Dark Forest")
@@ -394,7 +389,7 @@ switchTab() {
             then
                 inputTapSleep 300 1850
                 activeTab="$1"
-                verifyRGB 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
+                verifyHEX 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
             fi
             ;;
         "Ranhorn")
@@ -412,13 +407,13 @@ switchTab() {
             then
                 inputTapSleep 110 1850
                 activeTab="$1"
-                verifyRGB 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
+                verifyHEX 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
             fi
             ;;
         "Chat")
             inputTapSleep 970 1850
             activeTab="$1"
-            verifyRGB 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
+            verifyHEX 550 1690 ffffff "Switched to the Chat Tab." "Failed to switch to the Chat Tab."
             ;;
     esac
 }
@@ -433,15 +428,15 @@ waitBattleFinish() {
     sleep "$1"
     finished=false
     while [ $finished = false ]; do
-        # First RGB local device, second bluestacks
+        # First HEX local device, second bluestacks
         if testColorOR -f 560 350 b8894d b7894c;then                            # Victory
             battleFailed=false
             finished=true
-        elif [ "$RGB" = '171932' ]; then                                        # Failed
+        elif [ "$HEX" = '171932' ]; then                                        # Failed
             battleFailed=true
             finished=true
-        # First RGB local device, second bluestacks
-        elif [ "$RGB" = "45331d" ] || [ "$RGB" = "44331c" ]; then               # Victory with reward
+        # First HEX local device, second bluestacks
+        elif [ "$HEX" = "45331d" ] || [ "$HEX" = "44331c" ]; then               # Victory with reward
             battleFailed=false
             finished=true
         fi
@@ -535,7 +530,7 @@ challengeBoss() {
     fi
 
     wait
-    verifyRGB 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
+    verifyHEX 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
 }
 
 # ##############################################################################
@@ -558,7 +553,7 @@ collectFriendsAndMercenaries() {
     inputTapSleep 70 1810 0                     # Return
 
     wait
-    verifyRGB 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries." "Failed to collect/send companion points or failed to auto lend mercenaries."
+    verifyHEX 450 1775 cc9261 "Sent and recieved companion points, as well as auto lending mercenaries." "Failed to collect/send companion points or failed to auto lend mercenaries."
 }
 
 # ##############################################################################
@@ -575,7 +570,7 @@ fastRewards() {
     else
         echo "[INFO] No free fast reward..."
     fi
-    verifyRGB 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
+    verifyHEX 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
 
 # ##############################################################################
@@ -588,7 +583,7 @@ lootAfkChest() {
     inputTapSleep 750 1350 3
     inputTapSleep 550 1850 1                    # Tap campaign in case of level up
     wait
-    verifyRGB 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
+    verifyHEX 450 1775 cc9261 "AFK Chest looted." "Failed to loot AFK Chest."
 }
 
 # ##############################################################################
@@ -690,10 +685,10 @@ arenaOfHeroes() {
     if [ "$doLegendsTournament" = false ]; then # Return to Tab if $doLegendsTournament = false
         inputTapSleep 70 1810
         inputTapSleep 70 1810
-        verifyRGB 240 1775 d49a61 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+        verifyHEX 240 1775 d49a61 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
     else
         inputTapSleep 70 1810
-        verifyRGB 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+        verifyHEX 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
     fi
 }
 
@@ -786,7 +781,7 @@ kingsTower() {
 
     # Exit
     inputTapSleep 70 1810
-    verifyRGB 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
+    verifyHEX 240 1775 d49a61 "Battled at the Kings Tower." "Failed to battle at the Kings Tower."
 }
 
 # ##############################################################################
@@ -880,7 +875,7 @@ legendsTournament() {
 
     inputTapSleep 70 1810
     inputTapSleep 70 1810
-    verifyRGB 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
+    verifyHEX 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
 }
 
 # ##############################################################################
@@ -897,10 +892,10 @@ soloBounties() {
     if [ "$doTeamBounties" = false ]; then      # Return to Tab if $doTeamBounties = false
         wait
         inputTapSleep 70 1810
-        verifyRGB 240 1775 d49a61 "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+        verifyHEX 240 1775 d49a61 "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
     else
         wait
-        verifyRGB 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
+        verifyHEX 650 1740 a7541a "Collected/dispatched solo bounties." "Failed to collect/dispatch solo bounties."
     fi
 }
 
@@ -922,7 +917,7 @@ teamBounties() {
     inputTapSleep 350 1550                      # Dispatch all
     inputTapSleep 550 1500                      # Confirm
     inputTapSleep 70 1810
-    verifyRGB 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
+    verifyHEX 240 1775 d49a61 "Collected/dispatched team bounties." "Failed to collect/dispatch team bounties."
 }
 
 # ##############################################################################
@@ -1002,7 +997,7 @@ buyFromStore() {
         fi
     fi
     inputTapSleep 70 1810                       # Return
-    verifyRGB 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
+    verifyHEX 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
 }
 
 # ##############################################################################
@@ -1047,10 +1042,10 @@ guildHunts() {
     if [ "$doTwistedRealmBoss" = false ]; then  # Return to Tab if $doTwistedRealmBoss = false
         inputTapSleep 70 1810 3
         inputTapSleep 70 1810 3
-        verifyRGB 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
+        verifyHEX 20 1775 d49a61 "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     else
         inputTapSleep 70 1810
-        verifyRGB 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
+        verifyHEX 70 1000 a9a95f "Battled Wrizz and possibly Soren." "Failed to battle Wrizz and possibly Soren."
     fi
 }
 
@@ -1103,7 +1098,7 @@ nobleTavern() {
     inputTapSleep 550 1820 1                    # Collect rewards
 
     inputTapSleep 70 1810
-    verifyRGB 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
+    verifyHEX 20 1775 d49a61 "Summoned one hero with Companion Points." "Failed to summon one hero with Companion Points."
 }
 
 # ##############################################################################
@@ -1148,7 +1143,7 @@ oakInn() {
     inputTapSleep 70 1810 0
 
     wait
-    verifyRGB 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
+    verifyHEX 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
 }
 
 # ##############################################################################
@@ -1390,7 +1385,7 @@ strengthenCrystal() {
     else
         echo "[WARN] Unable to strengthen the resonating Crystal."
     fi
-    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
+    verifyHEX 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
 
 # ##############################################################################
@@ -1410,7 +1405,7 @@ templeOfAscension() {
     fi
 
     wait
-    verifyRGB 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
+    verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
 }
 
 # ##############################################################################
@@ -1448,7 +1443,7 @@ twistedRealmBoss() {
 
     inputTapSleep 70 1810
     inputTapSleep 70 1810 1
-    verifyRGB 20 1775 d49a61 "Checked Twisted Realm Boss out." "Failed to check the Twisted Realm out."
+    verifyHEX 20 1775 d49a61 "Checked Twisted Realm Boss out." "Failed to check the Twisted Realm out."
 }
 
 # ##############################################################################
@@ -1519,7 +1514,7 @@ collectQuestChests() {
 
     # Return
     inputTapSleep 70 1650 1                     # Return
-    verifyRGB 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
+    verifyHEX 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
 
 # ##############################################################################
@@ -1570,7 +1565,7 @@ collectMail() {
     else
         echo "[WARN] No mail to collect."
     fi
-    verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
+    verifyHEX 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
 
 # ##############################################################################
@@ -1614,7 +1609,7 @@ collectMerchants() {
     fi
 
     inputTapSleep 70 1810 1
-    verifyRGB 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
+    verifyHEX 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
 # ##############################################################################
@@ -1623,7 +1618,7 @@ collectMerchants() {
 
 # ##############################################################################
 # Function Name : Test
-# Description   : Print RGB then exit
+# Description   : Print HEX then exit
 # Args          : <X> <Y> [<REPEAT>] [<SLEEP>]
 # Output        : stdout color
 # ##############################################################################
@@ -1632,7 +1627,7 @@ test() {
     until [ "$_test_COUNT" -ge "${3:-3}" ]; do
         sleep "${4:-.5}"
         getColor -f "$1" "$2"
-        echo "[TEST] [$1, $2] > RGB: $RGB"
+        echo "[TEST] [$1, $2] > HEX: $HEX"
         _test_COUNT=$((_test_COUNT + 1))        # Increment
     done
     # exit
@@ -1645,9 +1640,9 @@ test() {
 # ##############################################################################
 tests() {
     # test 550 740                              # Check for Boss in Campaign
-    # test 660 520                              # Check for Solo Bounties RGB
-    # test 650 570                              # Check for Team Bounties RGB
-    # test 700 670                              # Check for chest collection RGB
+    # test 660 520                              # Check for Solo Bounties HEX
+    # test 650 570                              # Check for Team Bounties HEX
+    # test 700 670                              # Check for chest collection HEX
     # test 715 1815                             # Check if Soren is open
     # test 740 205                              # Check if game is updating
     # test 270 1800                             # Oak Inn Present Tab 1

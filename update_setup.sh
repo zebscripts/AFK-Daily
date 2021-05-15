@@ -92,7 +92,7 @@ lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f.tmp"
 # ##############################################################################
 
 # ##############################################################################
-# Function Name : guildHunts
+# Function Name : cleanConfig
 # Descripton    : Remove old file
 # ##############################################################################
 cleanConfig() {
