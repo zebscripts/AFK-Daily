@@ -184,7 +184,7 @@ sRGBColorDelta() {
 # ##############################################################################
 startApp() {
     if [ "$testServer" = true ]; then
-        monkey -p com.lilithgames.hgame.gp.id 1 1 >/dev/null 2>/dev/null
+        monkey -p com.lilithgames.hgame.gp.id 1 >/dev/null 2>/dev/null
     else
         monkey -p com.lilithgame.hgame.gp 1 >/dev/null 2>/dev/null
     fi
@@ -192,14 +192,6 @@ startApp() {
     disableOrientation
 }
 
-# ##############################################################################
-# Function Name : switchApp
-# Descripton    : Switches between last app
-# ##############################################################################
-switchApp() {
-    input keyevent KEYCODE_APP_SWITCH
-    input keyevent KEYCODE_APP_SWITCH
-}
 
 # ##############################################################################
 # Function Name : takeScreenshot
@@ -492,7 +484,7 @@ challengeBoss() {
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
-        echo "[INFO] Figthing in campaign because of Mythic Trick $maxCampaignFights time(s)."
+        echo "[INFO] Fighting in the campaign $maxCampaignFights time(s) because of Mythic Trick."
         _challengeBoss_COUNT=0
 
         # Check for battle screen
@@ -555,7 +547,7 @@ collectFriendsAndMercenaries() {
     inputTapSleep 970 810 1                     # Friends
     inputTapSleep 930 1600                      # Send & Recieve
     if testColorOR 825 1750 df1909; then        # Check if its necessary to send mercenaries
-        inputTapSleep 720 1760                  # Sort-Term
+        inputTapSleep 720 1760                  # Short-Term
         inputTapSleep 990 190                   # Manage
         inputTapSleep 630 1590                  # Apply
         inputTapSleep 750 1410 1                # Auto Lend
@@ -821,8 +813,7 @@ kingsTower_battle() {
                 inputTapSleep 550 1850 4        # Collect
                 inputTapSleep 550 170           # Tap on the top to close possible limited offer
 
-                # TODO: Limited offers might screw this up though I'm not sure they actually spawn in here, maybe only at the main tabs
-                # Tapping 550 170 might close an offer
+                # TODO: Limited offers might screw this up. Tapping 550 170 might close an offer.
                 # Tap top of the screen to close any possible Limited Offers
                 # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
                 #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
@@ -1041,11 +1032,8 @@ guildHunts() {
     wait
 
     inputTapSleep 290 860 3
-
     guildHunts_quickBattle
-
     inputTapSleep 970 890 1                     # Soren
-
     if testColorOR 715 1815 8ae5c4;then         # If Soren is open
         guildHunts_quickBattle
     elif [ "$canOpenSoren" = true ]; then       # If Soren is closed
@@ -1097,7 +1085,7 @@ guildHunts_quickBattle() {
 
 # ##############################################################################
 # Function Name : nobleTavern
-# Descripton    : Let's do a "free" summon
+# Descripton    : Let's do a "free" summon with Companion Points
 # ##############################################################################
 nobleTavern() {
     if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
@@ -1400,7 +1388,7 @@ strengthenCrystal() {
         inputTapSleep 200 1850 .5               # Better safe than sorry
         inputTapSleep 70 1810                   # Exit
     else
-        echo "[INFO] Can't strenghened resonating Crystal..."
+        echo "[WARN] Unable to strengthen the resonating Crystal."
     fi
     verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
@@ -1418,7 +1406,7 @@ templeOfAscension() {
         inputTapSleep 550 1810                  # Close
         inputTapSleep 70 1810                   # Exit
     else
-        echo "[INFO] No heroes to ascend..."
+        echo "[WARN] No heroes to ascend."
     fi
 
     wait
@@ -1580,7 +1568,7 @@ collectMail() {
         inputTapSleep 110 1850                  # Return
         inputTapSleep 110 1850                  # Return
     else
-        echo "[INFO] No mail to collect..."
+        echo "[WARN] No mail to collect."
     fi
     verifyRGB 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
@@ -1610,7 +1598,7 @@ collectMerchants() {
         fi
         inputTapSleep 550 300 1                 # Collect rewards
     else
-        echo "[INFO] No Weekly to collect..."
+        echo "[WARN] No weekly reward to collect."
     fi
 
     if testColorOR 505 1530 000000; then        # TODO: Check if red mark - Monthly Deals
@@ -1622,7 +1610,7 @@ collectMerchants() {
         fi
         inputTapSleep 550 300 1                 # Collect rewards
     else
-        echo "[INFO] No Monthly to collect..."
+        echo "[WARN] No monthly reward to collect."
     fi
 
     inputTapSleep 70 1810 1
@@ -1651,7 +1639,7 @@ test() {
 }
 
 # ##############################################################################
-# Function Name : init
+# Function Name : tests
 # Descripton    : Uncomment tests to run it. Will exit after tests done.
 # Remark        : If you want to run multiple tests you need to comment exit in test()
 # ##############################################################################
@@ -1693,7 +1681,7 @@ tests() {
 # ##############################################################################
 # Function Name : init
 # Descripton    : Init the script (close/start app, preload, wait for update)
-# Remark        : Can be skip if you are already in the game
+# Remark        : Can be skipped if you are already in the game
 # ##############################################################################
 init() {
     closeApp
