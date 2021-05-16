@@ -1652,7 +1652,9 @@ tests() {
 
     # TODO:
     # Buy Elite Hero Soulstone
-    # test 420 850 # Row 1, slot 2
+    # test 410 850 # Row 1, slot 2
+    # test 650 850 # Row 1, slot 3
+    # test 910 850 # Row 1, slot 4
     # Weekly - Purchase an item from the Guild Store once (check red dot first row)
     # test 250 740 # row 1, item 1
     # test 500 740 # row 1, item 2
@@ -1667,6 +1669,7 @@ tests() {
     exit
 }
 
+# Run test functions
 # tests
 
 # ##############################################################################
@@ -1698,11 +1701,11 @@ init() {
     sleep 1
     switchTab "Campaign" true
 
-    if testColorOR -f 740 205 ffc15b;then       # Check if game is being updated
+    if testColorOR -f 740 205 ffc359; then       # Check if game is being updated
         echo "[WARN] Game is being updated!" >&2
         if [ "$waitForUpdate" = true ]; then
             echo "[INFO] Waiting for game to finish update..."
-            loopUntilNotRGB 5 740 205 ffc15b
+            loopUntilNotRGB 5 740 205 ffc359
             echo "[OK]: Game finished updating."
         else
             echo "[WARN]: Not waiting for update to finish." >&2
