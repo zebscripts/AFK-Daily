@@ -25,15 +25,15 @@ cleanAKFScript() {
 # ##############################################################################
 convertAKFScriptTMPtoINI() {
     for f in .*afkscript.tmp; do
-        if [ ! -f "$f" ]; then continue; fi;
-        echo "# afk-daily" > "$(basename "$f" .tmp)".ini
-        case "$(uname -s)" in                   # Check OS
-            Darwin|Linux)                       # Mac / Linux
-                echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >> "$(basename "$f" .tmp)".ini
-                ;;
-            CYGWIN*|MINGW32*|MSYS*|MINGW*)      # Windows
-                echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >> "$(basename "$f" .tmp)".ini
-                ;;
+        if [ ! -f "$f" ]; then continue; fi
+        echo "# afk-daily" >"$(basename "$f" .tmp)".ini
+        case "$(uname -s)" in # Check OS
+        Darwin | Linux)       # Mac / Linux
+            echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
+            ;;
+        CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+            echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
+            ;;
         esac
         echo "$f converted"
     done
@@ -46,36 +46,36 @@ convertAKFScriptTMPtoINI() {
 updateAFKScript() {
     # Date 3 days ago
     # Saturday 2 weeks ago
-    case "$(uname -s)" in                       # Check OS
-        Darwin|Linux)                           # Mac / Linux
-            lastCampaign_default=$(date -v -3d +%Y%m%d)
-            lastWeekly_default=$(date -v -sat +%Y%m%d)
-            ;;
-        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
-            lastCampaign_default=$(date -d 'now - 3day' +%Y%m%d)
-            lastWeekly_default=$(date -dlast-saturday +%Y%m%d)
-            ;;
+    case "$(uname -s)" in # Check OS
+    Darwin | Linux)       # Mac / Linux
+        lastCampaign_default=$(date -v -3d +%Y%m%d)
+        lastWeekly_default=$(date -v -sat +%Y%m%d)
+        ;;
+    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+        lastCampaign_default=$(date -d 'now - 3day' +%Y%m%d)
+        lastWeekly_default=$(date -dlast-saturday +%Y%m%d)
+        ;;
     esac
 
     for f in .*afkscript.ini; do
-        if [ ! -f "$f" ]; then continue; fi;
-        source "$f"                             # Load the file
+        if [ ! -f "$f" ]; then continue; fi
+        source "$f" # Load the file
         echo -e "# afk-daily\n\
 lastCampaign=${lastCampaign:-$lastCampaign_default}\n\
-lastWeekly=${lastWeekly:-$lastWeekly_default}" > "$f.tmp"
+lastWeekly=${lastWeekly:-$lastWeekly_default}" >"$f.tmp"
 
         case "$(uname -s)" in
-            CYGWIN*|MINGW32*|MSYS*|MINGW*)      # Windows
-                attrib +h "$f"                  # Make file invisible
-                ;;
+        CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+            attrib +h "$f"                   # Make file invisible
+            ;;
         esac
 
         # Unset all values
-        while read -r line ; do
+        while read -r line; do
             if [[ $line =~ ^(.*)= ]]; then
                 unset "${BASH_REMATCH[1]}"
             fi
-        done < "$f"
+        done <"$f"
 
         # Check for differences
         if cmp --silent -- "$f" "$f.tmp"; then
@@ -105,8 +105,8 @@ cleanConfig() {
 # ##############################################################################
 convertConfigSHtoINI() {
     for f in config*.sh; do
-        if [ ! -f "$f" ]; then continue; fi;
-        cp "$f" "$(basename "$f" .sh)".ini      # Copy new files
+        if [ ! -f "$f" ]; then continue; fi
+        cp "$f" "$(basename "$f" .sh)".ini # Copy new files
         echo "$f converted"
     done
 }
@@ -117,8 +117,8 @@ convertConfigSHtoINI() {
 # ##############################################################################
 updateConfig() {
     for f in config*.ini; do
-        if [ ! -f "$f" ]; then continue; fi;
-        source "$f"                             # Load the file
+        if [ ! -f "$f" ]; then continue; fi
+        source "$f" # Load the file
         echo -e "# --- CONFIG: Modify accordingly to your game! --- #\n\
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #\n\
 # Player\n\
@@ -174,14 +174,14 @@ doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
 # End\n\
 doCollectQuestChests=${doCollectQuestChests:-"true"}\n\
 doCollectMail=${doCollectMail:-"true"}\n\
-doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f.tmp"
+doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
 
         # Unset all values
-        while read -r line ; do
+        while read -r line; do
             if [[ $line =~ ^(.*)= ]]; then
                 unset "${BASH_REMATCH[1]}"
             fi
-        done < "$f"
+        done <"$f"
 
         # Check for differences
         if cmp --silent -- "$f" "$f.tmp"; then
@@ -203,17 +203,17 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" > "$f.tmp"
 runAFKScript() {
     convertAKFScriptTMPtoINI
     cleanAKFScript
-    touch ".afkscript.ini"                      # Create default file
+    touch ".afkscript.ini" # Create default file
     updateAFKScript
 }
 
 # ##############################################################################
 # Function Name : runConfig
 # ##############################################################################
-runConfig(){
+runConfig() {
     convertConfigSHtoINI
     cleanConfig
-    touch "config.ini"                          # Create default file
+    touch "config.ini" # Create default file
     updateConfig
 }
 
@@ -241,22 +241,22 @@ fi
 
 while getopts "hacl" opt; do
     case $opt in
-        h)
-            show_help
-            exit 0
-            ;;
-        a)
-            runAFKScript
-            ;;
-        c)
-            runConfig
-            ;;
-        l)
-            ls -al .*afkscript.ini config*.ini
-            ;;
-        \?)
-            echo "$OPTARG : Invalid option"
-            exit 1
-            ;;
+    h)
+        show_help
+        exit 0
+        ;;
+    a)
+        runAFKScript
+        ;;
+    c)
+        runConfig
+        ;;
+    l)
+        ls -al .*afkscript.ini config*.ini
+        ;;
+    \?)
+        echo "$OPTARG : Invalid option"
+        exit 1
+        ;;
     esac
 done
