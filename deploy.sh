@@ -317,7 +317,8 @@ deploy() {
 
     printf "\n"
     printInfo "Platform: ${cBlue}$1${cNc}"
-    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}\n"
+    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}"
+    printInfo "Latest tested patch: ${cBlue}$testedPatch${cNc}\n"
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                                  # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
@@ -537,6 +538,7 @@ checkConfig
 checkEOL $configFile
 checkEOL "afk-daily.sh"
 checkDate
+getLatestPatch
 
 if [ "$device" == "Bluestacks" ]; then
     restartAdb
