@@ -91,6 +91,27 @@ getColor() {
 }
 
 # ##############################################################################
+# Function Name : HEXColorDelta
+# Args          : <COLOR1> <COLOR2>
+# Output        : stdout [0 means same colors, 100 means opposite colors]
+# Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
+# ##############################################################################
+HEXColorDelta() {
+    if [ "$#" -ne 2 ] ; then
+        echo "Usage: HEXColorDelta <COLOR1> <COLOR2>" >&2
+        echo " 0 means same colors, 100 means opposite colors" >&2
+        return
+    fi
+    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] HEXColorDelta $*" >&2; fi
+    r=$((0x${1:0:2} - 0x${2:0:2}))
+    g=$((0x${1:2:2} - 0x${2:2:2}))
+    b=$((0x${1:4:2} - 0x${2:4:2}))
+    d=$((((765 - (${r#-} + ${g#-} + ${b#-})) * 100) / 765))                     # 765 = 3 * 255
+    d=$((100-d))                                # Delta is a distance... 0=same, 100=opposite need to reverse it
+    echo $d
+}
+
+# ##############################################################################
 # Function Name : inputSwipe
 # Descripton    : Swipe
 # Args          : <X> <Y> <XEND> <YEND> <TIME>
@@ -152,27 +173,6 @@ readHEX() {
     HEX=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
     HEX=${HEX:9:9}
     HEX="${HEX// /}"
-}
-
-# ##############################################################################
-# Function Name : HEXColorDelta
-# Args          : <COLOR1> <COLOR2>
-# Output        : stdout [0 means same colors, 100 means opposite colors]
-# Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
-# ##############################################################################
-HEXColorDelta() {
-    if [ "$#" -ne 2 ] ; then
-        echo "Usage: HEXColorDelta <COLOR1> <COLOR2>" >&2
-        echo " 0 means same colors, 100 means opposite colors" >&2
-        return
-    fi
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] HEXColorDelta $*" >&2; fi
-    r=$((0x${1:0:2} - 0x${2:0:2}))
-    g=$((0x${1:2:2} - 0x${2:2:2}))
-    b=$((0x${1:4:2} - 0x${2:4:2}))
-    d=$((((765 - (${r#-} + ${g#-} + ${b#-})) * 100) / 765))                     # 765 = 3 * 255
-    d=$((100-d))                                # Delta is a distance... 0=same, 100=opposite need to reverse it
-    echo $d
 }
 
 # ##############################################################################
