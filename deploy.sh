@@ -39,30 +39,30 @@ testServer=false
 # ##############################################################################
 checkAdb() {
     printTask "Checking for adb..."
-    if [ ! -d "./adb/platform-tools" ]; then    # Check for custom adb directory
-        if command -v adb &>/dev/null; then     # Check if ADB is already installed (with Path)
+    if [ ! -d "./adb/platform-tools" ]; then # Check for custom adb directory
+        if command -v adb &>/dev/null; then  # Check if ADB is already installed (with Path)
             printSuccess "Found in PATH!"
-        else                                    # If not, install it locally for this script
+        else # If not, install it locally for this script
             printWarn "Not found!"
             printTask "Installing adb..."
-            mkdir -p adb                        # Create directory
-            cd ./adb || exit                    # Change to new directory
+            mkdir -p adb     # Create directory
+            cd ./adb || exit # Change to new directory
 
-            case "$OSTYPE" in                   # Install depending on installed OS
+            case "$OSTYPE" in # Install depending on installed OS
             "msys")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip     # Windows
-                unzip ./platform-tools-latest-windows.zip                                               # Unzip
-                rm ./platform-tools-latest-windows.zip                                                  # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
+                unzip ./platform-tools-latest-windows.zip                                           # Unzip
+                rm ./platform-tools-latest-windows.zip                                              # Delete .zip
                 ;;
             "darwin")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip      # MacOS
-                unzip ./platform-tools-latest-darwin.zip                                                # Unzip
-                rm ./platform-tools-latest-darwin.zip                                                   # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
+                unzip ./platform-tools-latest-darwin.zip                                           # Unzip
+                rm ./platform-tools-latest-darwin.zip                                              # Delete .zip
                 ;;
             "linux-gnu")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip       # Linux
-                unzip ./platform-tools-latest-linux.zip                                                 # Unzip
-                rm ./platform-tools-latest-linux.zip                                                    # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
+                unzip ./platform-tools-latest-linux.zip                                           # Unzip
+                rm ./platform-tools-latest-linux.zip                                              # Delete .zip
                 ;;
             *)
                 printError "Couldn't find OS."
@@ -75,8 +75,8 @@ checkAdb() {
                 ;;
             esac
 
-            cd .. || exit                       # Change directory back
-            adb=./adb/platform-tools/adb        # Set adb path
+            cd .. || exit                # Change directory back
+            adb=./adb/platform-tools/adb # Set adb path
             printSuccess "Installed!"
         fi
     else
@@ -152,13 +152,13 @@ doCollectOakPresents=false
 doCollectQuestChests=true
 doCollectMail=true
 doCollectMerchantFreebies=false
-' > $configFile
+' >$configFile
         printSuccess "Created!\n"
         printInfo "Please edit $configFile if necessary and run this script again."
         exit
     fi
 
-    validateConfig                              # Validate config file
+    validateConfig # Validate config file
 }
 
 # ##############################################################################
@@ -184,8 +184,8 @@ checkDate() {
 # Args          : <PLATFORM>
 # ##############################################################################
 checkDevice() {
-    if [ "$#" -gt "0" ]; then                   # If parameters are sent
-        if [ "$1" = "Nox" ]; then               # Nox
+    if [ "$#" -gt "0" ]; then     # If parameters are sent
+        if [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
             $adb connect localhost:62001 1>/dev/null
             if ! $adb get-state 1>/dev/null; then
@@ -194,7 +194,7 @@ checkDevice() {
             else
                 printSuccess "Found Nox!"
             fi
-        elif [ "$1" = "Bluestacks" ]; then      # Bluestacks
+        elif [ "$1" = "Bluestacks" ]; then # Bluestacks
             printTask "Searching for Bluestacks through ADB... "
             if ! $adb get-state 1>/dev/null; then
                 printError "Not found!"
@@ -203,18 +203,18 @@ checkDevice() {
                 printSuccess "Found Bluestacks!"
             fi
         fi
-    else                                        # If parameters aren't sent
+    else # If parameters aren't sent
         printTask "Searching for device through ADB..."
 
-        if ! $adb get-state 1>/dev/null 2>&1; then                              # Checks if adb finds device
+        if ! $adb get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
             exit
         else
-            if [[ $($adb devices) =~ emulator ]]; then                          # Bluestacks
+            if [[ $($adb devices) =~ emulator ]]; then # Bluestacks
                 printSuccess "Found Bluestacks!"
                 deploy "Bluestacks" "$bluestacksDirectory"
-            else                                                                # Personal
+            else # Personal
                 printSuccess "Found Personal Device!"
                 deploy "Personal" "$personalDirectory"
             fi
@@ -267,7 +267,7 @@ checkGitUpdate() {
 # Function Name : checkSetupUpdate
 # Description   : Checks for setup update (.*afkscript.ini, config*.ini)
 # ##############################################################################
-checkSetupUpdate(){
+checkSetupUpdate() {
     printTask "Checking for setup updates..."
     for f in .*afkscript.tmp; do
         if [ -e "$f" ]; then
@@ -291,17 +291,17 @@ checkSetupUpdate(){
 # Output        : stdout <days>
 # ##############################################################################
 datediff() {
-    case "$(uname -s)" in                       # Check OS
-        Darwin|Linux)                           # Mac / Linux
-            d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
-            d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
-            ;;
-        CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
-            d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
-            d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
-            ;;
+    case "$(uname -s)" in # Check OS
+    Darwin | Linux)       # Mac / Linux
+        d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
+        d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
+        ;;
+    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+        d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
+        d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
+        ;;
     esac
-    echo $(( (d1 - d2) / 86400 ))
+    echo $(((d1 - d2) / 86400))
 }
 
 # ##############################################################################
@@ -310,7 +310,7 @@ datediff() {
 # Args          : <PLATFORM> <DIRECTORY>
 # ##############################################################################
 deploy() {
-    if [[ $($adb shell wm size) != *"1080x1920"* ]]; then                       # Check for resolution
+    if [[ $($adb shell wm size) != *"1080x1920"* ]]; then # Check for resolution
         printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
         exit
     fi
@@ -320,11 +320,24 @@ deploy() {
     printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}"
     printInfo "Latest tested patch: ${cBlue}$testedPatch${cNc}\n"
 
-    $adb shell mkdir -p "$2"/scripts/afk-arena                                  # Create directories if they don't already exist
-    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null                   # Push script to device
-    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null                    # Push config to device
+    $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
+    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
+    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
     # Run script. Comment line if you don't want to run the script after pushing to device
     $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$forceWeekly" "$testServer" && saveDate
+}
+
+# ##############################################################################
+# Function Name : getLatestPatch
+# Description   : Get latest patch script was tested on
+# ##############################################################################
+getLatestPatch() {
+    while IFS= read -r line; do
+        if [[ "$line" == *"badge/Patch-"* ]]; then
+            testedPatch=${line:79:7}
+            break
+        fi
+    done <"README.md"
 }
 
 # ##############################################################################
@@ -342,27 +355,27 @@ restartAdb() {
 # Function Name : saveDate
 # Description   : Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 # ##############################################################################
-saveDate(){
+saveDate() {
     if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
         if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
             newLastCampaign=$(date +%Y%m%d)
         fi
         if [ $forceWeekly = true ] || [ ! -f $tempFile ]; then
-            case "$(uname -s)" in                       # Check OS
-                Darwin|Linux)                           # Mac / Linux
-                    newLastWeekly=$(date -v -sat +%Y%m%d)
-                    ;;
-                CYGWIN*|MINGW32*|MSYS*|MINGW*)          # Windows
-                    newLastWeekly=$(date -dlast-saturday +%Y%m%d)
-                    ;;
+            case "$(uname -s)" in # Check OS
+            Darwin | Linux)       # Mac / Linux
+                newLastWeekly=$(date -v -sat +%Y%m%d)
+                ;;
+            CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+                newLastWeekly=$(date -dlast-saturday +%Y%m%d)
+                ;;
             esac
         fi
 
         echo -e "# afk-daily\n\
 lastCampaign=${newLastCampaign:-$lastCampaign}\n\
-lastWeekly=${newLastWeekly:-$lastWeekly}" > "$tempFile"
+lastWeekly=${newLastWeekly:-$lastWeekly}" >"$tempFile"
 
-        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi                 # Make file invisible if on windows
+        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi # Make file invisible if on windows
     fi
 }
 
@@ -473,59 +486,58 @@ show_help() {
 for arg in "$@"; do
     shift
     case "$arg" in
-        "--account") set -- "$@" "-a" ;;
-        "--check") set -- "$@" "-c" ;;
-        "--device") set -- "$@" "-d" ;;
-        "--fight") set -- "$@" "-f" ;;
-        "--help") set -- "$@" "-h" ;;
-        "--test") set -- "$@" "-t" ;;
-        "--weekly") set -- "$@" "-w" ;;
-        *)        set -- "$@" "$arg"
+    "--account") set -- "$@" "-a" ;;
+    "--check") set -- "$@" "-c" ;;
+    "--device") set -- "$@" "-d" ;;
+    "--fight") set -- "$@" "-f" ;;
+    "--help") set -- "$@" "-h" ;;
+    "--test") set -- "$@" "-t" ;;
+    "--weekly") set -- "$@" "-w" ;;
+    *) set -- "$@" "$arg" ;;
     esac
 done
 
-while getopts ":a:cd:fhtw" option ;
-do
+while getopts ":a:cd:fhtw" option; do
     case $option in
-        a)
-            tempFile=".${OPTARG}afkscript.tmp"
-            ;;
-        c)
-            checkAdb
-            checkGitUpdate
-            checkSetupUpdate
-            checkConfig
-            checkEOL $configFile
-            checkEOL "afk-daily.sh"
-            ;;
-        d)
-            if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
-                device="Bluestacks"
-            elif [ "$OPTARG" == "dev" ]; then
-                device="dev"
-            fi
-            ;;
-        f)
-            forceFightCampaign=true
-            ;;
-        h)
-            show_help
-            exit 0
-            ;;
-        t)
-            testServer=true
-            ;;
-        w)
-            forceWeekly=true
-            ;;
-        :)
-            printWarn "Argument required by this option: $OPTARG"
-            exit 1
-            ;;
-        \?)
-            printError "$OPTARG : Invalid option"
-            exit 1
-            ;;
+    a)
+        tempFile=".${OPTARG}afkscript.tmp"
+        ;;
+    c)
+        checkAdb
+        checkGitUpdate
+        checkSetupUpdate
+        checkConfig
+        checkEOL $configFile
+        checkEOL "afk-daily.sh"
+        ;;
+    d)
+        if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
+            device="Bluestacks"
+        elif [ "$OPTARG" == "dev" ]; then
+            device="dev"
+        fi
+        ;;
+    f)
+        forceFightCampaign=true
+        ;;
+    h)
+        show_help
+        exit 0
+        ;;
+    t)
+        testServer=true
+        ;;
+    w)
+        forceWeekly=true
+        ;;
+    :)
+        printWarn "Argument required by this option: $OPTARG"
+        exit 1
+        ;;
+    \?)
+        printError "$OPTARG : Invalid option"
+        exit 1
+        ;;
     esac
 done
 
