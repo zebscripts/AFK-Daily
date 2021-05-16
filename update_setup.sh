@@ -165,7 +165,7 @@ doGuildHuntsBattle=${doGuildHuntsBattle:-"false"}\n\
 doTwistedRealmBoss=${doTwistedRealmBoss:-"true"}\n\
 doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
-allowCrystalLevelUp=${allowCrystalLevelUp:-"false"}\n\
+allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
 # Only works if 'Hide Inn Heroes' is enabled under 'Settings -> Memory'\n\

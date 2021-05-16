@@ -262,9 +262,9 @@ testColorOR() {
         if [ "$HEX" = "$i" ]; then              # color found?
             return 0                            # At the first color found OR is break, return 0
         else
-            if { [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ] ;} || [ "$_testColorOR_max_delta" -gt "0" ]; then
+            if [ $DEBUG -ge 2 ] || [ "$_testColorOR_max_delta" -gt "0" ]; then
                 _testColorOR_delta=$(HEXColorDelta "$HEX" "$i")
-                if [ $DEBUG -ge 2 ] && [ $SHOW_DELTA -ge 1 ]; then
+                if [ $DEBUG -ge 2 ]; then
                     echo "[DEBUG] testColorOR $HEX != $i [Δ $_testColorOR_delta%]" >&2;
                 fi
                 if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
@@ -960,12 +960,12 @@ buyFromStore() {
         fi
     fi
     if [ "$forceWeekly" = true ]; then
-        # TODO: Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
+        # Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
         if [ "$buyWeeklyGuild" = true ]; then
             inputTapSleep 530 1810              # Guild Store
-            if testColorOR 250 740 000000; then                                 # row 1, item 1
+            if testColorOR 250 740 ea1c09; then                                 # row 1, item 1
                 buyFromStore_buyItem 180 810
-            elif testColorOR 500 740 000000; then                               # row 1, item 2
+            elif testColorOR 500 740 ed240f; then                               # row 1, item 2
                 buyFromStore_buyItem 420 810
             elif testColorOR 740 740 f51f06; then                               # row 1, item 3
                 buyFromStore_buyItem 660 810
@@ -979,13 +979,14 @@ buyFromStore() {
         if [ "$buyWeeklyLabyrinth" = true ]; then
             inputTapSleep 1020 1810             # Labyrinth Store
             inputSwipe 1050 1600 1050 750 50    # Swipe all the way down
+            wait
             if testColorOR -d "$DEFAULT_DELTA" 900 1500 000000; then            # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 900 1500
             elif testColorOR -d "$DEFAULT_DELTA" 660 1500 000000; then          # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 660 1500
             elif testColorOR -d "$DEFAULT_DELTA" 420 1500 000000; then          # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 420 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 180 1500 94e3fa; then          # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+            elif testColorOR -d "$DEFAULT_DELTA" 180 1500 8fdbf4; then          # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 180 1500
             elif testColorOR -d "$DEFAULT_DELTA" 900 1200 88d8ff; then          # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
                 buyFromStore_buyItem 900 1200
@@ -1655,9 +1656,6 @@ tests() {
     # test 410 850 # Row 1, slot 2
     # test 650 850 # Row 1, slot 3
     # test 910 850 # Row 1, slot 4
-    # Weekly - Purchase an item from the Guild Store once (check red dot first row)
-    # test 250 740 # row 1, item 1
-    # test 500 740 # row 1, item 2
 
     ## Next month
     # Check if red mark - Monthly Deals
