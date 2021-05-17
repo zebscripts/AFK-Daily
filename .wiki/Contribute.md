@@ -21,6 +21,7 @@ We use those extensions:
 Some other useful extensions:
 
 - [Guides](https://marketplace.visualstudio.com/items?itemName=spywhere.guides)
+- [shell-format](https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format)
 - [TODO Parser](https://marketplace.visualstudio.com/items?itemName=minhthai.vscode-todo-parser)
 - [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)
 
@@ -32,7 +33,7 @@ We use those settings (store in `.vscode/settings.json`):
 {
     // Global > Ruller
     "workbench.colorCustomizations": {
-        "editorRuler.foreground": "#333"        // rulers color
+        "editorRuler.foreground": "#333" // rulers color
     },
     // Global > EOL > LF
     "files.eol": "\n",
@@ -40,9 +41,8 @@ We use those settings (store in `.vscode/settings.json`):
     "[shellscript]": {
         // Ruller
         "editor.rulers": [
-            48,                                 // default comment
-            80,                                 // maximum code length, 2nd comment line
-            120                                 // maximum line length
+            80, // Terminal windows
+            125 // GitHub diff view
         ],
         // Tab
         "editor.insertSpaces": true,
@@ -53,22 +53,26 @@ We use those settings (store in `.vscode/settings.json`):
     // Extension - markdownlint > https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
     "markdownlint.config": {
         "default": true,
-        "MD033": false,                         // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md033
-        "MD036": false,                         // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md036
-        "MD041": false                          // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md041
+        "MD033": false, // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md033
+        "MD036": false, // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md036
+        "MD041": false  // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md041
     },
     // Extension - shellcheck > https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck
     "shellcheck.customArgs": [
-        "-x"                                    // https://github.com/koalaman/shellcheck/wiki/SC1091
+        "-x" // https://github.com/koalaman/shellcheck/wiki/SC1091
     ],
     "shellcheck.exclude": [
-        "1090",                                 // https://github.com/koalaman/shellcheck/wiki/SC1090
-        "1091",                                 // https://github.com/koalaman/shellcheck/wiki/SC1091
-        "2034",                                 // https://github.com/koalaman/shellcheck/wiki/SC2034
-        "2154",                                 // https://github.com/koalaman/shellcheck/wiki/SC2154
-        "3057",                                 // https://github.com/koalaman/shellcheck/wiki/SC3057
-        "3060"                                  // https://github.com/koalaman/shellcheck/wiki/SC3060
+        "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
+        "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
+        "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
+        "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
+        "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
+        "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
     ]
+    // Extension - Guides > https: //marketplace.visualstudio.com/items?itemName=spywhere.guides
+    // Extension - shell-format > https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
+    // Extension - TODO Parser > https://marketplace.visualstudio.com/items?itemName=minhthai.vscode-todo-parser
+    // Extension - Trailing Spaces > https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces
 }
 ```
 
@@ -140,11 +144,10 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     # Description    : Test function
     # Args           :
     # Return         :
-    # Author         : kevingrillet
     # ##############################################################################
     myfunc() {
         if [ $DEBUG -ge 3 ]; then echo "[DEBUG] myfunc" >&1; fi
-        clicTruc 800 600            # clic on button test
+        clicTruc 800 600 # clic on button test
     }
     ```
 
@@ -156,7 +159,7 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     # return values
     myfunc() {
         if [ $DEBUG -ge 3 ]; then echo "[DEBUG] myfunc" >&1; fi
-        clicTruc 800 600            # clic on button test
+        clicTruc 800 600 # clic on button test
     }
     ```
 
