@@ -28,6 +28,7 @@ adb=adb
 forceFightCampaign=false
 forceWeekly=false
 testServer=false
+debug=0
 
 # ##############################################################################
 # Section       : Functions
@@ -324,7 +325,7 @@ deploy() {
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
     # Run script. Comment line if you don't want to run the script after pushing to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$forceWeekly" "$testServer" && saveDate
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$forceWeekly" "$testServer" "$debug" && saveDate
 }
 
 # ##############################################################################
@@ -469,6 +470,15 @@ show_help() {
     echo "   -t, --test"
     echo "      Launch on test server (experimental)"
     echo
+    echo "   -v, --verbose [DEBUG]"
+    echo "      Show DEBUG informations"
+    echo "         DEBUG  = 0    Show no debug"
+    echo "         DEBUG >= 1    Show getColor calls > value"
+    echo "         DEBUG >= 2    Show test calls"
+    echo "         DEBUG >= 3    Show all core functions calls"
+    echo "         DEBUG >= 4    Show all functions calls"
+    echo "         DEBUG >= 9    Show all calls"
+    echo
     echo "   -w, --weekly"
     echo "      Force weekly"
     echo
@@ -492,12 +502,13 @@ for arg in "$@"; do
     "--fight") set -- "$@" "-f" ;;
     "--help") set -- "$@" "-h" ;;
     "--test") set -- "$@" "-t" ;;
+    "--verbose") set -- "$@" "-v" ;;
     "--weekly") set -- "$@" "-w" ;;
     *) set -- "$@" "$arg" ;;
     esac
 done
 
-while getopts ":a:cd:fhtw" option; do
+while getopts ":a:cd:fhtv:w" option; do
     case $option in
     a)
         tempFile=".${OPTARG}afkscript.tmp"
@@ -526,6 +537,9 @@ while getopts ":a:cd:fhtw" option; do
         ;;
     t)
         testServer=true
+        ;;
+    v)
+        debug=${OPTARG}
         ;;
     w)
         forceWeekly=true

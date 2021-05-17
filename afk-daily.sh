@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer>
+# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer> <DEBUG>
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -40,6 +40,7 @@ if [ $# -gt 0 ]; then
     forceFightCampaign=$2
     forceWeekly=$3
     testServer=$4
+    DEBUG=${5:-$DEBUG}
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
@@ -77,7 +78,7 @@ disableOrientation() {
 # Args          : [<-f>] <X> <Y>
 # ##############################################################################
 getColor() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] getColor $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] getColor $*" >&2; fi
     for arg in "$@"; do
         shift
         case "$arg" in
@@ -87,7 +88,7 @@ getColor() {
     done
     takeScreenshot
     readHEX "$1" "$2"
-    if [ $DEBUG -ge 1 ]; then echo "[DEBUG] getColor $* > HEX: $HEX" >&2; fi
+    if [ "$DEBUG" -ge 1 ]; then echo "[DEBUG] getColor $* > HEX: $HEX" >&2; fi
 }
 
 # ##############################################################################
@@ -102,7 +103,7 @@ HEXColorDelta() {
         echo " 0 means same colors, 100 means opposite colors" >&2
         return
     fi
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] HEXColorDelta $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] HEXColorDelta $*" >&2; fi
     r=$((0x${1:0:2} - 0x${2:0:2}))
     g=$((0x${1:2:2} - 0x${2:2:2}))
     b=$((0x${1:4:2} - 0x${2:4:2}))
@@ -117,7 +118,7 @@ HEXColorDelta() {
 # Args          : <X> <Y> <XEND> <YEND> <TIME>
 # ##############################################################################
 inputSwipe() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputSwipe $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] inputSwipe $*" >&2; fi
     input swipe "$1" "$2" "$3" "$4" "$5"
     screenshotRequired=true
 }
@@ -128,7 +129,7 @@ inputSwipe() {
 # Args          : <X> <Y> [<SLEEP>]
 # ##############################################################################
 inputTapSleep() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] inputTapSleep $*" >&2; fi
     input tap "$1" "$2"          # tap
     sleep "${3:-$DEFAULT_SLEEP}" # sleep
     screenshotRequired=true
@@ -140,7 +141,7 @@ inputTapSleep() {
 # Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilNotRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
+    if [ "$DEBUG" -ge 2 ]; then echo "[DEBUG] loopUntilNotRGB $*" >&2; fi
     sleep "$1"
     shift
     while testColorOR -f "$@"; do
@@ -154,7 +155,7 @@ loopUntilNotRGB() {
 # Args          : <SLEEP> <X> <Y> <COLOR> [<COLOR> ...]
 # ##############################################################################
 loopUntilRGB() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
+    if [ "$DEBUG" -ge 2 ]; then echo "[DEBUG] loopUntilRGB $*" >&2; fi
     sleep "$1"
     shift
     while testColorNAND -f "$@"; do
@@ -195,7 +196,7 @@ startApp() {
 # Output        : $SCREENSHOTLOCATION
 # ##############################################################################
 takeScreenshot() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] takeScreenshot [screenshotRequired=$screenshotRequired]" >&2; fi
     if [ $screenshotRequired = false ]; then return; fi
     screencap "$SCREENSHOTLOCATION"
     screenshotRequired=false
@@ -209,7 +210,7 @@ takeScreenshot() {
 # Output        : if true, return 0, else 1
 # ##############################################################################
 testColorNAND() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
+    if [ "$DEBUG" -ge 2 ]; then echo "[DEBUG] testColorNAND $*" >&2; fi
     _testColorNAND_max_delta=0
     for arg in "$@"; do
         shift
@@ -229,7 +230,7 @@ testColorNAND() {
         if [ "$HEX" = "$i" ]; then # color found?
             return 1               # At the first color found NAND is break, return 1
         else
-            if [ $DEBUG -ge 2 ] || [ "$_testColorNAND_max_delta" -gt "0" ]; then
+            if [ "$DEBUG" -ge 2 ] || [ "$_testColorNAND_max_delta" -gt "0" ]; then
                 _testColorNAND_delta=$(HEXColorDelta "$HEX" "$i")
                 echo "[DEBUG] testColorNAND $HEX != $i [Δ $_testColorNAND_delta%]" >&2
                 if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
@@ -249,7 +250,7 @@ testColorNAND() {
 # Output        : if true, return 0, else 1
 # ##############################################################################
 testColorOR() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
+    if [ "$DEBUG" -ge 2 ]; then echo "[DEBUG] testColorOR $*" >&2; fi
     _testColorOR_max_delta=0
     for arg in "$@"; do
         shift
@@ -269,9 +270,9 @@ testColorOR() {
         if [ "$HEX" = "$i" ]; then # color found?
             return 0               # At the first color found OR is break, return 0
         else
-            if [ $DEBUG -ge 2 ] || [ "$_testColorOR_max_delta" -gt "0" ]; then
+            if [ "$DEBUG" -ge 2 ] || [ "$_testColorOR_max_delta" -gt "0" ]; then
                 _testColorOR_delta=$(HEXColorDelta "$HEX" "$i")
-                if [ $DEBUG -ge 2 ]; then
+                if [ "$DEBUG" -ge 2 ]; then
                     echo "[DEBUG] testColorOR $HEX != $i [Δ $_testColorOR_delta%]" >&2
                 fi
                 if [ "$_testColorOR_delta" -le "$_testColorOR_max_delta" ]; then
@@ -292,7 +293,7 @@ testColorOR() {
 # Args          : <X> <Y> <COLOR> <SLEEP>
 # ##############################################################################
 testColorORTapSleep() {
-    if [ $DEBUG -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
+    if [ "$DEBUG" -ge 2 ]; then echo "[DEBUG] testColorORTapSleep $*" >&2; fi
     if testColorOR "$1" "$2" "$3"; then                # if color found
         inputTapSleep "$1" "$2" "${4:-$DEFAULT_SLEEP}" # tap & sleep
     fi
@@ -305,7 +306,7 @@ testColorORTapSleep() {
 # Output        : stdout MessageSuccess, stderr MessageFailure
 # ##############################################################################
 verifyHEX() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] verifyHEX $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] verifyHEX $*" >&2; fi
     getColor "$1" "$2"
     if [ "$HEX" != "$3" ]; then
         echo "[ERROR] verifyHEX: Failure! Expected $3, but got $HEX instead. [Δ $(HEXColorDelta "$HEX" "$3")%]" >&2
@@ -338,7 +339,7 @@ wait() {
 # Descripton    : Click on auto if not already enabled
 # ##############################################################################
 doAuto() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doAuto" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] doAuto" >&2; fi
     testColorORTapSleep 760 1440 332b2b 0 # On:743b29 Off:332b2b
 }
 
@@ -347,7 +348,7 @@ doAuto() {
 # Descripton    : Click on x4 if not already enabled
 # ##############################################################################
 doSpeed() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSpeed" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] doSpeed" >&2; fi
     testColorORTapSleep 990 1440 332b2b 0 # On:743b2a Off:332b2b
 }
 
@@ -356,7 +357,7 @@ doSpeed() {
 # Descripton    : Click on skip if avaible
 # ##############################################################################
 doSkip() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] doSkip" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] doSkip" >&2; fi
     testColorORTapSleep 760 1440 502e1d 0 # Exists: 502e1d
 }
 
@@ -368,7 +369,7 @@ doSkip() {
 #                   <FORCE>: true / false, default false
 # ##############################################################################
 switchTab() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] switchTab $* [activeTab=$activeTab]" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] switchTab $* [activeTab=$activeTab]" >&2; fi
     if [ "$1" = "$activeTab" ]; then
         return
     fi
@@ -428,7 +429,7 @@ switchTab() {
 # Args          : <SECONDS>
 # ##############################################################################
 waitBattleFinish() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] waitBattleFinish $*" >&2; fi
     sleep "$1"
     finished=false
     while [ $finished = false ]; do
@@ -453,7 +454,7 @@ waitBattleFinish() {
 # Descripton    : Waits until battle starts
 # ##############################################################################
 waitBattleStart() {
-    if [ $DEBUG -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&2; fi
+    if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] waitBattleStart" >&2; fi
     _waitBattleStart_count=0 # Max loops = 10 (10x.5s=5s max)
     # Check if pause button is present && less than 10 tries
     until testColorOR -f 110 1465 482f1f && [ $_waitBattleStart_count -lt 10 ]; do
@@ -475,7 +476,7 @@ waitBattleStart() {
 # Descripton    : Challenges a boss in the campaign
 # ##############################################################################
 challengeBoss() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
     inputTapSleep 550 1650
     if testColorOR 550 740 f2d79f; then # Check if boss
         inputTapSleep 550 1450
@@ -542,7 +543,7 @@ challengeBoss() {
 # Descripton    : Collects and sends companion points, as well as auto lending mercenaries
 # ##############################################################################
 collectFriendsAndMercenaries() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
     inputTapSleep 970 810 1              # Friends
     inputTapSleep 930 1600               # Send & Recieve
     if testColorOR 825 1750 df1909; then # Check if its necessary to send mercenaries
@@ -565,7 +566,7 @@ collectFriendsAndMercenaries() {
 # Descripton    : Collects fast rewards
 # ##############################################################################
 fastRewards() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
     if testColorOR 980 1620 ef1e05; then # check red dot to see if free fast reward is avaible
         inputTapSleep 950 1660 1
         inputTapSleep 710 1260
@@ -582,7 +583,7 @@ fastRewards() {
 # Descripton    : Loots afk chest
 # ##############################################################################
 lootAfkChest() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] lootAfkChest" >&2; fi
     inputTapSleep 550 1500 1
     inputTapSleep 750 1350 3
     inputTapSleep 550 1850 1 # Tap campaign in case of level up
@@ -599,7 +600,7 @@ lootAfkChest() {
 # Descripton    : Does the daily arena of heroes battles
 # ##############################################################################
 arenaOfHeroes() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] arenaOfHeroes" >&2; fi
     inputTapSleep 740 1050 3
     if [ "$pvpEvent" = false ]; then
         inputTapSleep 550 450 3
@@ -703,7 +704,7 @@ arenaOfHeroes() {
 # Output        : If failed, return 1
 # ##############################################################################
 arenaOfHeroes_tapClosestOpponent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] arenaOfHeroes_tapClosestOpponent $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] arenaOfHeroes_tapClosestOpponent $*" >&2; fi
     # Depending on the opponent number sent as a parameter ($1), this function
     # would attempt to check if there's an opponent above the one sent.
     # If there isn't, check the one above that one and so on until one is found.
@@ -773,7 +774,7 @@ arenaOfHeroes_tapClosestOpponent() {
 # Descripton    : Try to battle in every Kings Tower
 # ##############################################################################
 kingsTower() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
     inputTapSleep 500 870 # King's Tower
 
     # Towers
@@ -794,7 +795,7 @@ kingsTower() {
 # Args          : <X> <Y>
 # ##############################################################################
 kingsTower_battle() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] kingsTower_battle $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] kingsTower_battle $*" >&2; fi
     _kingsTower_battle_COUNT=0
     inputTapSleep "$1" "$2" 2 # Tap chosen tower
 
@@ -844,7 +845,7 @@ kingsTower_battle() {
 # Args          : <START_FROM_TAB>: true / false
 # ##############################################################################
 legendsTournament() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] legendsTournament $*" >&2; fi
     if [ "$1" = true ]; then # Check if starting from tab or already inside activity
         inputTapSleep 740 1050
     fi
@@ -887,7 +888,7 @@ legendsTournament() {
 # Descripton    : Starts Solo bounties
 # ##############################################################################
 soloBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] soloBounties" >&2; fi
     inputTapSleep 600 1320 1
     inputTapSleep 780 1550 1 # Collect all
     inputTapSleep 350 1550   # Dispatch all
@@ -909,7 +910,7 @@ soloBounties() {
 # Args          : <START_FROM_TAB>: true / false
 # ##############################################################################
 teamBounties() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] teamBounties $*" >&2; fi
     if [ "$1" = true ]; then # Check if starting from tab or already inside activity
         inputTapSleep 600 1320 1
     fi
@@ -933,7 +934,7 @@ teamBounties() {
 # Descripton    : Buy items from store
 # ##############################################################################
 buyFromStore() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] buyFromStore" >&2; fi
     inputTapSleep 330 1650 3
 
     if [ "$buyStoreDust" = true ]; then # Dust
@@ -1011,7 +1012,7 @@ buyFromStore() {
 # Args          : <X> <Y>
 # ##############################################################################
 buyFromStore_buyItem() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] buyFromStore_buyItem $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] buyFromStore_buyItem $*" >&2; fi
     inputTapSleep "$1" "$2" 1 # Item
     inputTapSleep 550 1540 1  # Purchase
     inputTapSleep 550 1700    # Close popup
@@ -1022,7 +1023,7 @@ buyFromStore_buyItem() {
 # Descripton    : Battles against Guild boss Wrizz
 # ##############################################################################
 guildHunts() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] guildHunts" >&2; fi
     inputTapSleep 380 360 10
 
     if testColorOR 380 500 793929; then # Check for fortune chest
@@ -1059,7 +1060,7 @@ guildHunts() {
 # Descripton    : Repeat a battle for as long as totalAmountGuildBossTries
 # ##############################################################################
 guildHunts_quickBattle() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] guildHunts_quickBattle" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] guildHunts_quickBattle" >&2; fi
     _guildHunts_quickBattle_COUNT=0
     # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
     until [ "$_guildHunts_quickBattle_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
@@ -1088,7 +1089,7 @@ guildHunts_quickBattle() {
 # Descripton    : Let's do a "free" summon with Companion Points
 # ##############################################################################
 nobleTavern() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] nobleTavern" >&2; fi
     inputTapSleep 280 1370 3 # The Noble Tavern
     inputTapSleep 600 1820 1 # The noble tavern again
 
@@ -1111,7 +1112,7 @@ nobleTavern() {
 # Descripton    : Collect Oak Inn
 # ##############################################################################
 oakInn() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] oakInn" >&2; fi
     inputTapSleep 780 270 5 # Oak Inn
 
     _oakInn_COUNT=0
@@ -1156,7 +1157,7 @@ oakInn() {
 # Descripton    : Search available present tabs in Oak Inn
 # ##############################################################################
 oakInn_presentTab() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_presentTab" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] oakInn_presentTab" >&2; fi
     oakInn_presentTabs=0
     if testColorOR 270 1800 c79663; then                  # 1 gift c79663
         oakInn_presentTabs=$((oakInn_presentTabs + 1000)) # Increment
@@ -1177,7 +1178,7 @@ oakInn_presentTab() {
 # Descripton    : Searches for a "good" present in oak Inn
 # ##############################################################################
 oakInn_searchPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_searchPresent " >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] oakInn_searchPresent " >&2; fi
     inputSwipe 400 1600 400 310 50 # Swipe all the way down
     sleep 1
 
@@ -1224,7 +1225,7 @@ oakInn_searchPresent() {
 # Descripton    : Tries to collect a present from one Oak Inn friend
 # ##############################################################################
 oakInn_tryCollectPresent() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] oakInn_tryCollectPresent" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] oakInn_tryCollectPresent" >&2; fi
     oakInn_searchPresent # Search for a "good" present
     if [ $oakRes = 0 ]; then
         oakInn_presentTab # If no present found, search for other tabs
@@ -1369,7 +1370,7 @@ oakInn_tryCollectPresent() {
 # Descripton    : Strenghen Crystal
 # ##############################################################################
 strengthenCrystal() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
     if testColorOR 870 1115 f31f06; then # If red circle
         inputTapSleep 760 1030 3         # Resonating Crystal
 
@@ -1398,7 +1399,7 @@ strengthenCrystal() {
 # Descripton    : Auto ascend heroes
 # ##############################################################################
 templeOfAscension() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] templeOfAscension" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] templeOfAscension" >&2; fi
     if testColorOR 450 1050 ef2118; then # If red circle
         inputTapSleep 280 960            # Temple Of Ascension
         inputTapSleep 900 800            # Auto Ascend
@@ -1419,7 +1420,7 @@ templeOfAscension() {
 # Args          : <START_FROM_TAB>: true / false
 # ##############################################################################
 twistedRealmBoss() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] twistedRealmBoss $*" >&2; fi
     # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then # Check if starting from tab or already inside activity
         inputTapSleep 380 360 10
@@ -1460,7 +1461,7 @@ twistedRealmBoss() {
 # Descripton    : Checks where to end the script
 # ##############################################################################
 checkWhereToEnd() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] checkWhereToEnd" >&2; fi
     case "$endAt" in
     "oak")
         switchTab "Ranhorn" true
@@ -1508,7 +1509,7 @@ checkWhereToEnd() {
 # Descripton    : Collects quest chests (well, switch tab then call collectQuestChests_quick)
 # ##############################################################################
 collectQuestChests() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectQuestChests" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
@@ -1527,7 +1528,7 @@ collectQuestChests() {
 # Descripton    : Collects quest chests
 # ##############################################################################
 collectQuestChests_quick() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectQuestChests_quick" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectQuestChests_quick" >&2; fi
     # Collect Quests
     while testColorOR 700 670 82fdf5; do
         inputTapSleep 930 680
@@ -1560,7 +1561,7 @@ collectQuestChests_quick() {
 # Descripton    : Collects mail
 # ##############################################################################
 collectMail() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
     if testColorOR 1020 580 e51f06; then # Red mark
         inputTapSleep 960 630            # Mail
@@ -1578,7 +1579,7 @@ collectMail() {
 # Descripton    : Collects Daily/Weekly/Monthly from the merchants page
 # ##############################################################################
 collectMerchants() {
-    if [ $DEBUG -ge 4 ]; then echo "[DEBUG] collectMerchants" >&2; fi
+    if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectMerchants" >&2; fi
     inputTapSleep 120 300 3 # Merchants
     inputTapSleep 510 1820  # Merchant Ship
 
@@ -1823,13 +1824,16 @@ run() {
 }
 
 echo "[INFO] Starting script... ($(date)) "
-echo
 if [ "$forceFightCampaign" = true ]; then
     echo "[INFO] Fight Campaign is ON"
 fi
 if [ "$forceWeekly" = true ]; then
     echo "[INFO] Weekly is ON"
 fi
+if [ "$DEBUG" -gt 0 ]; then
+    echo "[INFO] Debug is ON [$DEBUG]"
+fi
+echo
 
 init
 run
