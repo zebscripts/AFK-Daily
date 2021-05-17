@@ -356,7 +356,7 @@ restartAdb() {
 # Description   : Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 # ##############################################################################
 saveDate() {
-    if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
+    if [ $forceFightCampaign = true ] || [ $forceWeekly = true ] || [ ! -f $tempFile ]; then
         if [ $forceFightCampaign = true ] || [ ! -f $tempFile ]; then
             newLastCampaign=$(date +%Y%m%d)
         fi
