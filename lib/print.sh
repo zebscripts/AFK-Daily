@@ -1,3 +1,10 @@
+#!/bin/bash
+# ##############################################################################
+# Script Name   : print.sh
+# Description   : Small lib containing basic print functions
+# GitHub        : https://github.com/zebscripts/AFK-Daily
+# License       : MIT
+# ##############################################################################
 # Colors
 cNc='\033[0m'
 cRed='\033[0;31m'
@@ -7,31 +14,31 @@ cYellow='\033[0;33m'
 cCyan='\033[0;36m'
 
 # Task
-function printTask() {
-    printf "${cBlue}Task:${cNc} $1\n"
+printTask() {
+    echo -e "${cBlue}Task:${cNc} $1"
 }
 
 # Info
-function printInfo() {
-    printf "${cCyan}Info:${cNc} $1\n"
+printInfo() {
+    echo -e "${cCyan}Info:${cNc} $1"
 }
 
 # Tip
-function printTip() {
-    printf "${cGreen}Tip:${cNc} $1\n"
+printTip() {
+    echo -e "${cGreen}Tip:${cNc} $1"
 }
 
 # Success
-function printSuccess() {
-    printf "${cGreen}Success:${cNc} $1\n"
+printSuccess() {
+    echo -e "${cGreen}Success:${cNc} $1"
 }
 
 # Error
-function printError() {
-    printf "${cRed}Error:${cNc} $1\n"
+printError() {
+    echo -e "${cRed}Error:${cNc} $1"
 }
 
 # Warn
-function printWarn() {
-    printf "${cYellow}Warning:${cNc} $1\n"
+printWarn() {
+    echo -e "${cYellow}Warning:${cNc} $1"
 }
