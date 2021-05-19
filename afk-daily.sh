@@ -553,7 +553,7 @@ collectFriendsAndMercenaries() {
         inputTapSleep 750 1410 1         # Auto Lend
         inputTapSleep 70 1810 0          # Return
     else
-        echo "[INFO] No mercenaries to lend..."
+        echo "[WARN] No mercenaries to lend..."
     fi
     inputTapSleep 70 1810 0 # Return
 
