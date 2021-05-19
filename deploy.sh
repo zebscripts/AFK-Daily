@@ -520,6 +520,7 @@ while getopts ":a:cd:fhtv:w" option; do
         checkConfig
         checkEOL $configFile
         checkEOL "afk-daily.sh"
+        exit
         ;;
     d)
         if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then

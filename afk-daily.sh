@@ -1656,7 +1656,7 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    # TODO:
+    # TODO: Replace 000000
     # Buy Elite Hero Soulstone
     # test 410 850 # Row 1, slot 2
     # test 650 850 # Row 1, slot 3
