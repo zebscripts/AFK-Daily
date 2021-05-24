@@ -29,6 +29,7 @@ forceFightCampaign=false
 forceWeekly=false
 testServer=false
 debug=0
+output=""
 
 # ##############################################################################
 # Section       : Functions
@@ -439,6 +440,39 @@ validateConfig() {
 # ##############################################################################
 
 # ##############################################################################
+# Function Name : check_all
+# ##############################################################################
+check_all() {
+    checkAdb
+    checkGitUpdate
+    checkSetupUpdate
+    checkConfig
+    checkEOL $configFile
+    checkEOL "afk-daily.sh"
+}
+
+# ##############################################################################
+# Function Name : run
+# ##############################################################################
+run(){
+    check_all
+
+    checkDate
+    getLatestPatch
+
+    if [ "$device" == "Bluestacks" ]; then
+        restartAdb
+        checkDevice "Bluestacks"
+        deploy "Bluestacks" "$bluestacksDirectory"
+    elif [ "$device" == "dev" ]; then
+        deploy "Personal" "$personalDirectory"
+    else
+        restartAdb
+        checkDevice
+    fi
+}
+
+# ##############################################################################
 # Function Name : show_help
 # ##############################################################################
 show_help() {
@@ -462,10 +496,13 @@ show_help() {
     echo
     echo "   -d, --device [DEVICE]"
     echo "      Specify desired device"
-    echo "      Values for <DEVICE>: bs, dev"
+    echo "      Values for [DEVICE]: bs, dev"
     echo
     echo "   -f, --fight"
     echo "      Force campaign battle (ignore 3 day optimisation)"
+    echo
+    echo "   -o, --output [OUTPUT_FILE]"
+    echo "      Write log in OUTPUT_FILE"
     echo
     echo "   -t, --test"
     echo "      Launch on test server (experimental)"
@@ -501,6 +538,7 @@ for arg in "$@"; do
     "--device") set -- "$@" "-d" ;;
     "--fight") set -- "$@" "-f" ;;
     "--help") set -- "$@" "-h" ;;
+    "--output") set -- "$@" "-o" ;;
     "--test") set -- "$@" "-t" ;;
     "--verbose") set -- "$@" "-v" ;;
     "--weekly") set -- "$@" "-w" ;;
@@ -508,18 +546,13 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhtv:w" option; do
+while getopts ":a:cd:fho:tv:w" option; do
     case $option in
     a)
         tempFile=".${OPTARG}afkscript.tmp"
         ;;
     c)
-        checkAdb
-        checkGitUpdate
-        checkSetupUpdate
-        checkConfig
-        checkEOL $configFile
-        checkEOL "afk-daily.sh"
+        check_all
         exit
         ;;
     d)
@@ -535,6 +568,9 @@ while getopts ":a:cd:fhtv:w" option; do
     h)
         show_help
         exit 0
+        ;;
+    o)
+        output=${OPTARG}
         ;;
     t)
         testServer=true
@@ -557,23 +593,8 @@ while getopts ":a:cd:fhtv:w" option; do
 done
 
 clear
-
-checkAdb
-#checkGitUpdate
-#checkSetupUpdate
-checkConfig
-checkEOL $configFile
-checkEOL "afk-daily.sh"
-checkDate
-getLatestPatch
-
-if [ "$device" == "Bluestacks" ]; then
-    restartAdb
-    checkDevice "Bluestacks"
-    deploy "Bluestacks" "$bluestacksDirectory"
-elif [ "$device" == "dev" ]; then
-    deploy "Personal" "$personalDirectory"
+if [ "$output" != "" ]; then
+    run 2>&1 | tee "$output"
 else
-    restartAdb
-    checkDevice
+    run
 fi
