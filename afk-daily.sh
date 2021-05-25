@@ -1286,13 +1286,13 @@ function buyFromStore() {
 
 # Collects
 function collectQuestChests() {
-    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have a screenshot somewhere of this.
     input tap 960 250 # Quests
     wait
 
     # Collect daily Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff1" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1322,7 +1322,7 @@ function collectQuestChests() {
 
     # Collect weekly Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff1" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1534,7 +1534,7 @@ function oakInn() {
 
 # --- Script Start --- #
 echo "[INFO] Starting script... ($(date)) "
-echo
+
 closeApp
 sleep 0.5
 startApp

@@ -4,3 +4,5 @@ config*.sh
 adb
 .markdownlint.json
 .afkscript.tmp
+config*.ini
+.*afkscript.ini
