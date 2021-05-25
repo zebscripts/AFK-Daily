@@ -19,7 +19,7 @@ DEBUG=0
 # DEBUG >= 3    Show all core functions calls
 # DEBUG >= 4    Show all functions calls
 # DEBUG >= 9    Show tap calls
-DEFAULT_DELTA=2 # Default delta for colors
+DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
 pvpEvent=false  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
@@ -546,7 +546,7 @@ collectFriendsAndMercenaries() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectFriendsAndMercenaries" >&2; fi
     inputTapSleep 970 810 1              # Friends
     inputTapSleep 930 1600               # Send & Recieve
-    if testColorOR 825 1750 df1909; then # Check if its necessary to send mercenaries
+    if testColorOR -d "$DEFAULT_DELTA" 825 1750 df1909; then # Check if its necessary to send mercenaries
         inputTapSleep 720 1760           # Short-Term
         inputTapSleep 990 190            # Manage
         inputTapSleep 630 1590           # Apply
@@ -567,13 +567,13 @@ collectFriendsAndMercenaries() {
 # ##############################################################################
 fastRewards() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] fastRewards" >&2; fi
-    if testColorOR 980 1620 ef1e05; then # check red dot to see if free fast reward is avaible
+    if testColorOR -d "$DEFAULT_DELTA" 980 1620 ef1e05; then # check red dot to see if free fast reward is avaible
         inputTapSleep 950 1660 1
         inputTapSleep 710 1260
         inputTapSleep 560 1800 1
         inputTapSleep 400 1250
     else
-        echo "[INFO] No free fast reward..."
+        echo "[WARN] No free fast reward..."
     fi
     verifyHEX 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
 }
@@ -607,7 +607,7 @@ arenaOfHeroes() {
     else
         inputTapSleep 550 900 3
     fi
-    if testColorOR 1050 1770 e52505; then # Red mark?
+    if testColorOR -d "$DEFAULT_DELTA" 1050 1770 e52505; then # Red mark?
         inputTapSleep 1000 1800           # Record
         inputTapSleep 980 410             # Close
     fi
@@ -860,7 +860,7 @@ legendsTournament() {
     inputTapSleep 550 280 3  # Chest
     inputTapSleep 550 1550 3 # Collect
 
-    if testColorOR 1040 1800 e72007; then # Red mark?
+    if testColorOR -d "$DEFAULT_DELTA" 1040 1800 e72007; then # Red mark?
         inputTapSleep 1000 1800           # Record
         inputTapSleep 990 380             # Close
     fi
@@ -968,13 +968,13 @@ buyFromStore() {
         # Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
         if [ "$buyWeeklyGuild" = true ]; then
             inputTapSleep 530 1810              # Guild Store
-            if testColorOR 250 740 ea1c09; then # row 1, item 1
+            if testColorOR -d "$DEFAULT_DELTA" 250 740 ea1c09; then # row 1, item 1
                 buyFromStore_buyItem 180 810
-            elif testColorOR 500 740 ed240f; then # row 1, item 2
+            elif testColorOR -d "$DEFAULT_DELTA" 500 740 ed240f; then # row 1, item 2
                 buyFromStore_buyItem 420 810
-            elif testColorOR 740 740 f51f06; then # row 1, item 3
+            elif testColorOR -d "$DEFAULT_DELTA" 740 740 f51f06; then # row 1, item 3
                 buyFromStore_buyItem 660 810
-            elif testColorOR 980 740 f12f1e; then # row 1, item 4
+            elif testColorOR -d "$DEFAULT_DELTA" 980 740 f12f1e; then # row 1, item 4
                 buyFromStore_buyItem 900 810
             else
                 buyFromStore_buyItem 180 810
@@ -1094,7 +1094,7 @@ nobleTavern() {
     inputTapSleep 600 1820 1 # The noble tavern again
 
     #until testColorOR 890 850 f4e38e; do       # Looking for heart
-    until testColorOR 875 835 fc9473; do # Looking for heart
+    until testColorOR -d "$DEFAULT_DELTA" 875 835 fc9473; do # Looking for heart
         inputTapSleep 870 1630 1         # Next pannel
     done
 
@@ -1371,7 +1371,7 @@ oakInn_tryCollectPresent() {
 # ##############################################################################
 strengthenCrystal() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] strengthenCrystal" >&2; fi
-    if testColorOR 870 1115 f31f06; then # If red circle
+    if testColorOR -d "$DEFAULT_DELTA" 870 1115 f31f06; then # If red circle
         inputTapSleep 760 1030 3         # Resonating Crystal
 
         # Detect if free slot, and take it.
@@ -1400,7 +1400,7 @@ strengthenCrystal() {
 # ##############################################################################
 templeOfAscension() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] templeOfAscension" >&2; fi
-    if testColorOR 450 1050 ef2118; then # If red circle
+    if testColorOR -d "$DEFAULT_DELTA" 450 1050 ef2118; then # If red circle
         inputTapSleep 280 960            # Temple Of Ascension
         inputTapSleep 900 800            # Auto Ascend
         inputTapSleep 550 1460           # Confirm
@@ -1563,7 +1563,7 @@ collectQuestChests_quick() {
 collectMail() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectMail" >&2; fi
     # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
-    if testColorOR 1020 580 e51f06; then # Red mark
+    if testColorOR -d "$DEFAULT_DELTA" 1020 580 e51f06; then # Red mark
         inputTapSleep 960 630            # Mail
         inputTapSleep 790 1470           # Collect all
         inputTapSleep 110 1850           # Return
@@ -1590,7 +1590,7 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1 # Collect rewards
 
-    if testColorOR 325 1530 fc260d; then      # Check if red mark - Weekly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 325 1530 fc260d; then      # Check if red mark - Weekly Deals
         inputTapSleep 280 1620 1              # Weekly Deals
         if testColorNAND 375 940 050a0f; then # Checks for Special Weekly Bundles
             inputTapSleep 200 1200 1          # Free
@@ -1602,7 +1602,7 @@ collectMerchants() {
         echo "[WARN] No weekly reward to collect."
     fi
 
-    if testColorOR 505 1530 000000; then      # TODO: Check if red mark - Monthly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 505 1530 000000; then      # TODO: Check if red mark - Monthly Deals
         inputTapSleep 460 1620 1              # Monthly Deals
         if testColorNAND 375 940 0b080a; then # Checks for Special Monthly Bundles
             inputTapSleep 200 1200 1          # Free
