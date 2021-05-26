@@ -607,7 +607,7 @@ arenaOfHeroes() {
     else
         inputTapSleep 550 900 3
     fi
-    if testColorOR -d "$DEFAULT_DELTA" 1050 1770 e52505; then # Red mark?
+    if testColorOR -d "$DEFAULT_DELTA" 1050 1770 fb1e0d; then # Red mark? old value: e52505 (d=5)
         inputTapSleep 1000 1800           # Record
         inputTapSleep 980 410             # Close
     fi
@@ -1530,7 +1530,7 @@ collectQuestChests() {
 collectQuestChests_quick() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectQuestChests_quick" >&2; fi
     # Collect Quests
-    while testColorOR 700 670 82fdf5; do
+    while testColorOR -d "$DEFAULT_DELTA" 700 670 82fdf5; do
         inputTapSleep 930 680
     done
 
