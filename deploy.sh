@@ -570,7 +570,7 @@ while getopts ":a:cd:fho:tv:w" option; do
         exit 0
         ;;
     o)
-        output=${OPTARG}
+        output="${OPTARG}"
         ;;
     t)
         testServer=true

@@ -1823,7 +1823,7 @@ run() {
     checkWhereToEnd
 }
 
-echo "[INFO] Starting script... ($(date)) "
+echo "[INFO] Starting script... ($(date))"
 if [ "$forceFightCampaign" = true ]; then
     echo "[INFO] Fight Campaign is ON"
 fi
@@ -1839,5 +1839,5 @@ init
 run
 
 echo
-echo "[INFO] End of script! ($(date)) "
+echo "[INFO] End of script! ($(date))"
 exit
