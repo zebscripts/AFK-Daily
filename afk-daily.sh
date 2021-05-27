@@ -1514,11 +1514,9 @@ collectQuestChests() {
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
 
-    # Weekly quests
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
 
-    # Return
     inputTapSleep 70 1650 1 # Return
     verifyHEX 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
@@ -1530,7 +1528,7 @@ collectQuestChests() {
 collectQuestChests_quick() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] collectQuestChests_quick" >&2; fi
     # Collect Quests
-    while testColorOR -d "$DEFAULT_DELTA" 700 670 82fdf5; do
+    while testColorOR -d "$DEFAULT_DELTA" 700 670 7dfff1; do # Old value: 82fdf5
         inputTapSleep 930 680
     done
 
