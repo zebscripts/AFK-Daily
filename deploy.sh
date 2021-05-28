@@ -520,7 +520,7 @@ show_help() {
     echo "      Force weekly"
     echo
     echo "EXAMPLES"
-    echo "   Run script for Bluestacks"
+    echo "   Run script for Bluestacks (default)"
     echo "      deploy.sh -d bs"
     echo
     echo "   Run script on test server"
@@ -528,6 +528,9 @@ show_help() {
     echo
     echo "   Run script forcing fight & weekly"
     echo "      deploy.sh -fw"
+    echo
+    echo "   Run script with output file (folder need to be created)"
+    echo "      deploy.sh -o \".history/\$(date +%Y%m%d).log\""
 }
 
 for arg in "$@"; do
