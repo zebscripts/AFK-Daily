@@ -96,6 +96,7 @@ checkConfig() {
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
     else
+        # TODO: Instead of having doGuildHuntsBattle=true/false, we should have a variable on the general section defining if its fast rewards or not. Something like guildBattleType=fast
         printWarn "Not found!"
         printTask "Creating new $configFile file..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
@@ -147,8 +148,7 @@ doStrengthenCrystal=true
 allowCrystalLevelUp=false
 doTempleOfAscension=false
 doCompanionPointsSummon=false
-# Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
-doCollectOakPresents=false
+doCollectOakPresents=false # Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory"
 
 # End
 doCollectQuestChests=true
@@ -454,7 +454,7 @@ check_all() {
 # ##############################################################################
 # Function Name : run
 # ##############################################################################
-run(){
+run() {
     check_all
 
     checkDate
