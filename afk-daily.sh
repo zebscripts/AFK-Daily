@@ -948,20 +948,18 @@ buyFromStore() {
         buyFromStore_buyItem 180 1430
     fi
     # Amplifying Emblem
-    # TODO: check yellow
     if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 180 1430 d8995d; then
         buyFromStore_buyItem 180 1430
     fi
-    # TODO: Buy Elite Hero Soulstone
     if [ "$buyStoreSoulstone" = true ]; then                    # Soulstone (widh 90 diamonds)
-        if testColorOR -d "$DEFAULT_DELTA" 900 850 c6a3e6; then # row 1, item 4
-            buyFromStore_buyItem 900 850
+        if testColorOR -d "$DEFAULT_DELTA" 910 850 a569d7; then # row 1, item 4
+            buyFromStore_buyItem 910 850
         fi
-        if testColorOR -d "$DEFAULT_DELTA" 660 850 a775ae; then # row 1, item 3
-            buyFromStore_buyItem 660 850
+        if testColorOR -d "$DEFAULT_DELTA" 650 850 57447b; then # row 1, item 3
+            buyFromStore_buyItem 650 850
         fi
-        if testColorOR -d "$DEFAULT_DELTA" 420 850 000000; then # row 1, item 2
-            buyFromStore_buyItem 420 850
+        if testColorOR -d "$DEFAULT_DELTA" 410 850 9787c9; then # row 1, item 2
+            buyFromStore_buyItem 410 850
         fi
     fi
     if [ "$forceWeekly" = true ]; then
@@ -980,16 +978,15 @@ buyFromStore() {
                 buyFromStore_buyItem 180 810
             fi
         fi
-        # TODO: Weekly - Purchase an item or hero from the Labyrinth store once
         if [ "$buyWeeklyLabyrinth" = true ]; then
             inputTapSleep 1020 1810          # Labyrinth Store
             inputSwipe 1050 1600 1050 750 50 # Swipe all the way down
             wait
-            if testColorOR -d "$DEFAULT_DELTA" 900 1500 000000; then # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+            if testColorOR -d "$DEFAULT_DELTA" 900 1500 36bae4; then # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 900 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 660 1500 000000; then # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1500 7fd1e7; then # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 660 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 420 1500 000000; then # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+            elif testColorOR -d "$DEFAULT_DELTA" 420 1500 91abac; then # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 420 1500
             elif testColorOR -d "$DEFAULT_DELTA" 180 1500 8fdbf4; then # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
                 buyFromStore_buyItem 180 1500
@@ -1589,7 +1586,7 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1 # Collect rewards
 
-    if testColorOR -d "$DEFAULT_DELTA" 325 1530 fc260d; then # Check if red mark - Weekly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 430 1530 e51f06; then # Check if red mark - Weekly Deals
         inputTapSleep 280 1620 1                             # Weekly Deals
         if testColorNAND 375 940 050a0f; then                # Checks for Special Weekly Bundles
             inputTapSleep 200 1200 1                         # Free
@@ -1655,19 +1652,9 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    # TODO: Replace 000000
-    # Buy Elite Hero Soulstone
-    # test 410 850 # Row 1, slot 2
-    # test 650 850 # Row 1, slot 3
-    # test 910 850 # Row 1, slot 4
-
     ## Next month
     # Check if red mark - Monthly Deals
-    # test 505 1530
-    # Weekly - Purchase an item or hero from the Labyrinth store once
-    # test 900 1500 # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-    # test 660 1500 # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-    # test 420 1500 # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+    # test 600 1530
     exit
 }
 
