@@ -479,7 +479,7 @@ challengeBoss() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
     inputTapSleep 550 1650
     if testColorOR 550 740 f2d79f; then # Check if boss
-        inputTapSleep 550 1450
+        inputTapSleep 550 1450 3
     fi
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
@@ -488,7 +488,7 @@ challengeBoss() {
         _challengeBoss_COUNT=0
 
         # Check for battle screen
-        while testColorOR -f 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
+        while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
             inputTapSleep 550 1850 0 # Battle
             waitBattleStart
             doAuto
@@ -1598,7 +1598,7 @@ collectMerchants() {
         echo "[WARN] No weekly reward to collect."
     fi
 
-    if testColorOR -d "$DEFAULT_DELTA" 505 1530 000000; then # TODO: Check if red mark - Monthly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 610 1530 f91c0b; then # Check if red mark - Monthly Deals
         inputTapSleep 460 1620 1                             # Monthly Deals
         if testColorNAND 375 940 0b080a; then                # Checks for Special Monthly Bundles
             inputTapSleep 200 1200 1                         # Free
@@ -1652,9 +1652,7 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    ## Next month
-    # Check if red mark - Monthly Deals
-    # test 600 1530
+    # HEXColorDelta "$HEX"
     exit
 }
 
