@@ -477,6 +477,7 @@ waitBattleStart() {
 # ##############################################################################
 challengeBoss() {
     # TODO: Timings are way to tight here. My BS almost couldn't catch up with it.
+    # TODO: Potentially breaks when player gets to change chapter
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] challengeBoss" >&2; fi
     inputTapSleep 550 1650
     if testColorOR 550 740 f2d79f; then # Check if boss
