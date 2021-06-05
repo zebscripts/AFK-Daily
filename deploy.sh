@@ -597,7 +597,7 @@ done
 
 clear
 if [ "$output" != "" ]; then
-    run 2>&1 | tee "$output"
+    run 2>&1 | tee -a "$output"
 else
     run
 fi
