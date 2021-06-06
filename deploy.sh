@@ -168,10 +168,10 @@ doCollectMerchantFreebies=false
 # Description   : Check date to decide whether to beat campaign or not.
 # ##############################################################################
 checkDate() {
-    # TODO: This might be breaking in the following case: The date is longer than 3 days, which means the script will attempt 
-    # TODO: to fight in the campaign longer. But when trying to enter the campaign, it fails to do so, restarts and skips 
-    # TODO: campaign fight, and finishes running by updating the last run date to todays date. Which is false because it did 
-    # TODO: not manage to fight in the campaign, so the last date fought is technically wrong. I'm not sure this is a thing, 
+    # TODO: This might be breaking in the following case: The date is longer than 3 days, which means the script will attempt
+    # TODO: to fight in the campaign longer. But when trying to enter the campaign, it fails to do so, restarts and skips
+    # TODO: campaign fight, and finishes running by updating the last run date to todays date. Which is false because it did
+    # TODO: not manage to fight in the campaign, so the last date fought is technically wrong. I'm not sure this is a thing,
     # TODO: I'd need to test it, but I think it just happened to me.
     printTask "Checking last time script was run..."
     if [ -f $tempFile ]; then
@@ -471,7 +471,7 @@ run() {
         checkDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
     elif [ "$device" == "dev" ]; then
-        deploy "Personal" "$personalDirectory"
+        checkDevice
     else
         restartAdb
         checkDevice

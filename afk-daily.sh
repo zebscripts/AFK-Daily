@@ -575,9 +575,9 @@ fastRewards() {
         inputTapSleep 560 1800 1
         inputTapSleep 400 1250
     else
-        echo "[WARN] No free fast reward..."
+        echo "[INFO] Fast Rewards collected already, not collecting..."
     fi
-    verifyHEX 450 1775 cc9261 "Fast rewards collected." "Failed to collect fast rewards."
+    verifyHEX 450 1775 cc9261 "Fast rewards checked." "Failed to check fast rewards."
 }
 
 # ##############################################################################
