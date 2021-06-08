@@ -340,6 +340,7 @@ wait() {
 # ##############################################################################
 doAuto() {
     if [ "$DEBUG" -ge 3 ]; then echo "[DEBUG] doAuto" >&2; fi
+    # TODO: sometimes won't work :/
     testColorORTapSleep 760 1440 332b2b 0 # On:743b29 Off:332b2b
 }
 
@@ -362,7 +363,7 @@ doSkip() {
 }
 
 # ##############################################################################
-# Function Name : waitBattleFinish
+# Function Name : switchTab
 # Descripton    : Switches to another tab if required by config.
 # Args          : <TAB_NAME> [<FORCE>]
 #                   <TAB_NAME>: Campaign / Dark Forest / Ranhorn / Chat
@@ -609,7 +610,7 @@ arenaOfHeroes() {
     else
         inputTapSleep 550 900 3
     fi
-    if testColorOR -d "$DEFAULT_DELTA" 1050 1770 fb1e0d; then # Red mark? old value: e52505 (d=5)
+    if testColorOR -d "$DEFAULT_DELTA" 1050 1770 e72707; then # Red mark? old value: e52505 (d=5), fb1e0d (d=5)
         inputTapSleep 1000 1800                               # Record
         inputTapSleep 980 410                                 # Close
     fi
@@ -777,14 +778,15 @@ arenaOfHeroes_tapClosestOpponent() {
 # ##############################################################################
 kingsTower() {
     if [ "$DEBUG" -ge 4 ]; then echo "[DEBUG] kingsTower" >&2; fi
-    inputTapSleep 500 870 # King's Tower
+    inputTapSleep 500 870 5 # King's Tower
 
     # Towers
-    kingsTower_battle 550 900  # Main Tower
-    kingsTower_battle 250 500  # Tower of Light
-    kingsTower_battle 800 500  # The Brutal Citadel
-    kingsTower_battle 250 1400 # The World Tree
-    kingsTower_battle 800 1400 # The Forsaken Necropolis
+    kingsTower_battle 550 800  # Main Tower
+    kingsTower_battle 300 950  # Tower of Light
+    kingsTower_battle 400 1250 # The Brutal Citadel
+    kingsTower_battle 750 660  # The World Tree
+    kingsTower_battle 270 500  # Celestial Sanctum
+    kingsTower_battle 780 1100 # The Forsaken Necropolis
 
     # Exit
     inputTapSleep 70 1810
@@ -1093,7 +1095,7 @@ nobleTavern() {
     inputTapSleep 600 1820 1 # The noble tavern again
 
     #until testColorOR 890 850 f4e38e; do       # Looking for heart
-    until testColorOR -d "$DEFAULT_DELTA" 875 835 fc9473; do # Looking for heart
+    until testColorOR -d "$DEFAULT_DELTA" 875 835 f39067; do # Looking for heart, old value: fc9473 (d=4)
         inputTapSleep 870 1630 1                             # Next pannel
     done
 
@@ -1439,7 +1441,7 @@ twistedRealmBoss() {
         doAuto
         doSpeed
 
-        # TODO: Maybe use the waitUntilbattleFinish() instead of loop here?
+        # TODO: Maybe use the waitBattleFinish() instead of loop here?
         loopUntilRGB 30 420 380 ca9c5d # Start checking for a finished Battle after 40 seconds
         wait
         inputTapSleep 550 800 3
@@ -1654,7 +1656,7 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    # HEXColorDelta "$HEX"
+    HEXColorDelta "$HEX"
     exit
 }
 
