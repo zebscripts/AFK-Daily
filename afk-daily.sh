@@ -1050,7 +1050,7 @@ function legendsTournament() {
 function battleKingsTower() {
     local COUNT=0
     input tap $1 $2 # Tap chosen tower
-    sleep 2
+    sleep 3
 
     # Check if inside tower
     getColor 550 150
@@ -1110,14 +1110,15 @@ function battleKingsTower() {
 # Battles once in the kings tower
 function kingsTower() {
     input tap 500 870 # King's Tower
-    sleep 2
+    sleep 5
 
     # Towers
-    battleKingsTower 550 900  # Main Tower
-    battleKingsTower 250 500  # Tower of Light
-    battleKingsTower 800 500  # The Brutal Citadel
-    battleKingsTower 250 1400 # The World Tree
-    battleKingsTower 800 1400 # The Forsaken Necropolis
+    battleKingsTower 550 800  # Main Tower
+    battleKingsTower 300 970  # Tower of Light
+    battleKingsTower 400 1250  # The Brutal Citadel
+    battleKingsTower 780 700 # The World Tree
+    battleKingsTower 780 1190 # The Forsaken Necropolis
+    battleKingsTower 280 500 # Celestial Sanctum
 
     # Exit
     input tap 70 1810
