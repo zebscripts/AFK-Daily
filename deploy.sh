@@ -183,6 +183,7 @@ checkDate() {
             forceWeekly=true
         fi
     fi
+    printSuccess "Done!"
 }
 
 # ##############################################################################
@@ -603,7 +604,7 @@ done
 
 clear
 if [ "$output" != "" ]; then
-    run 2>&1 | tee -a "$output"
+    run 2>&1 | tee -a | cat -v | "$output"
 else
     run
 fi

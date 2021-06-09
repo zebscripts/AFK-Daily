@@ -13,32 +13,45 @@ cGreen='\033[0;32m'
 cYellow='\033[0;33m'
 cCyan='\033[0;36m'
 
+withoutNewLine=false
+
 # Task
 printTask() {
-    echo -e "${cBlue}Task:${cNc} $1"
+    if [ $withoutNewLine = true ]; then echo; fi
+    echo -n -e "${cBlue}[TASK]${cNc}  $1 "
+    withoutNewLine=true
 }
 
 # Info
 printInfo() {
-    echo -e "${cCyan}Info:${cNc} $1"
+    if [ $withoutNewLine = true ]; then echo; fi
+    echo -e "${cCyan}[INFO]${cNc}  $1"
+    withoutNewLine=false
 }
 
 # Tip
 printTip() {
-    echo -e "${cGreen}Tip:${cNc} $1"
+    if [ $withoutNewLine = true ]; then echo; fi
+    echo -e "${cGreen}[TIP]${cNc}   $1"
+    withoutNewLine=false
 }
 
 # Success
 printSuccess() {
-    echo -e "${cGreen}Success:${cNc} $1"
+    echo -e "${cGreen}$1${cNc}"
+    withoutNewLine=false
 }
 
 # Error
 printError() {
-    echo -e "${cRed}Error:${cNc} $1"
+    if [ $withoutNewLine = true ]; then echo; fi
+    echo -e "${cRed}[ERROR]${cNc} $1"
+    withoutNewLine=false
 }
 
 # Warn
 printWarn() {
-    echo -e "${cYellow}Warning:${cNc} $1"
+    if [ $withoutNewLine = true ]; then echo; fi
+    echo -e "${cYellow}[WARN]${cNc}  $1"
+    withoutNewLine=false
 }
