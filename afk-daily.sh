@@ -333,7 +333,7 @@ verifyHEX() {
         init
         run
     else
-        echo "${Green}[SUCCESS]${Color_Off} $4"
+        echo "${Green}[OK]${Color_Off}    $4"
     fi
 }
 
