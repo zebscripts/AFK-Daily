@@ -1132,7 +1132,7 @@ function guildHunts() {
 
     # Check for fortune chest
     getColor 380 500
-    if [ "$RGB" == "793929" ]; then
+    if [ "$RGB" == "8e4633" ]; then
         input tap 560 1300
         sleep 2
         input tap 540 1830
@@ -1292,7 +1292,7 @@ function collectQuestChests() {
 
     # Collect daily Quests
     getColor 700 670
-    while [ "$RGB" == "7dfff1" ]; do
+    while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1322,7 +1322,7 @@ function collectQuestChests() {
 
     # Collect weekly Quests
     getColor 700 670
-    while [ "$RGB" == "7dfff1" ]; do
+    while [ "$RGB" == "82fdf5" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1524,7 +1524,8 @@ function oakInn() {
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
-# test 700 670 3 0.5 # Check for chest collection RGB
+# test 380 500 3 0.5 # Check for fortune chest collection RGG
+# test 700 670 3 0.5 # Check for Quest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
 # test 740 205 3 0.5 # Check if game is updating
 # test 270 1800 3 0.5 # Oak Inn Present Tab 1
