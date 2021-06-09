@@ -32,6 +32,7 @@ forceWeekly=false
 testServer=false
 activeTab="Start"
 screenshotRequired=true
+dayofweek=$(TZ=UTC date +%u)
 
 # Colors
 Color_Off="\033[0m" # Text Reset
@@ -504,6 +505,8 @@ challengeBoss() {
         # Fight in the campaign because of Mythic Trick
         echo "${Cyan}[INFO]${Color_Off}  Fighting in the campaign ${Blue}$maxCampaignFights${Color_Off} time(s) because of Mythic Trick."
         _challengeBoss_COUNT=0
+        _challengeBoss_LOOSE=0
+        _challengeBoss_WIN=0
 
         # Check for battle screen
         while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
@@ -529,10 +532,12 @@ challengeBoss() {
                 else
                     inputTapSleep 550 1150 3 # Continue to next battle
                 fi
-            else # Loose
+                _challengeBoss_WIN=$((_challengeBoss_WIN + 1)) # Increment
+            else                                                 # Loose
                 # Try again
                 inputTapSleep 550 1720 5
 
+                _challengeBoss_LOOSE=$((_challengeBoss_LOOSE + 1)) # Increment
                 _challengeBoss_COUNT=$((_challengeBoss_COUNT + 1)) # Increment
             fi
         done
@@ -553,7 +558,13 @@ challengeBoss() {
     fi
 
     wait
-    verifyHEX 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
+    if [ "$forceFightCampaign" = "true" ]; then
+        verifyHEX 450 1775 cc9261 \
+            "Challenged boss in campaign. [${Green}$_challengeBoss_WIN${Color_Off} W / ${Red}$_challengeBoss_LOOSE${Color_Off} L]" \
+            "Failed to fight boss in Campaign. [${Green}$_challengeBoss_WIN${Color_Off} W / ${Red}$_challengeBoss_LOOSE${Color_Off} L]"
+    else
+        verifyHEX 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
+    fi
 }
 
 # ##############################################################################
@@ -633,6 +644,8 @@ arenaOfHeroes() {
 
     if testColorNAND 200 1800 382314 382214; then # Check for new season
         _arenaOfHeroes_COUNT=0
+        _arenaOfHeroes_LOOSE=0
+        _arenaOfHeroes_WIN=0
         until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # inputTapSleep 815 540
@@ -692,7 +705,10 @@ arenaOfHeroes() {
                 doSkip
                 waitBattleFinish 2
                 if [ "$battleFailed" = false ]; then
-                    inputTapSleep 550 1550 # Collect
+                    inputTapSleep 550 1550                         # Collect
+                    _arenaOfHeroes_WIN=$((_arenaOfHeroes_WIN + 1)) # Increment
+                else
+                    _arenaOfHeroes_LOOSE=$((_arenaOfHeroes_LOOSE + 1)) # Increment
                 fi
                 inputTapSleep 550 1550 3 # Finish battle
             fi
@@ -708,10 +724,14 @@ arenaOfHeroes() {
     if [ "$doLegendsTournament" = false ]; then # Return to Tab if $doLegendsTournament = false
         inputTapSleep 70 1810
         inputTapSleep 70 1810
-        verifyHEX 240 1775 d49a61 "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+        verifyHEX 240 1775 d49a61 \
+            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]" \
+            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]"
     else
         inputTapSleep 70 1810
-        verifyHEX 760 70 1f2d3a "Checked the Arena of Heroes out." "Failed to check the Arena of Heroes out."
+        verifyHEX 760 70 1f2d3a \
+            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]" \
+            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]"
     fi
 }
 
@@ -796,12 +816,49 @@ kingsTower() {
     inputTapSleep 500 870 5 # King's Tower
 
     # Towers
-    kingsTower_battle 550 800  # Main Tower
-    kingsTower_battle 300 950  # Tower of Light
-    kingsTower_battle 400 1250 # The Brutal Citadel
-    kingsTower_battle 750 660  # The World Tree
-    kingsTower_battle 270 500  # Celestial Sanctum
-    kingsTower_battle 780 1100 # The Forsaken Necropolis
+    kingsTower_battle 550 800 # Main Tower
+    _kingsTower_WIN=$?
+    echo "${Cyan}[INFO]${Color_Off}  Main Tower [${Blue}$_kingsTower_WIN${Color_Off} W]"
+
+    if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+        kingsTower_battle 300 950 # Tower of Light
+        _kingsTower_WIN=$?
+        if [ $_kingsTower_WIN -ge 0 ]; then
+            echo "${Cyan}[INFO]${Color_Off}  Tower of Light [${Blue}$_kingsTower_WIN${Color_Off} W]"
+        fi
+    fi
+
+    if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+        kingsTower_battle 400 1250 # The Brutal Citadel
+        _kingsTower_WIN=$?
+        if [ $_kingsTower_WIN -ge 0 ]; then
+            echo "${Cyan}[INFO]${Color_Off}  The Brutal Citadel [${Blue}$_kingsTower_WIN${Color_Off} W]"
+        fi
+    fi
+
+    if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
+        kingsTower_battle 750 660 # The World Tree
+        _kingsTower_WIN=$?
+        if [ $_kingsTower_WIN -ge 0 ]; then
+            echo "${Cyan}[INFO]${Color_Off}  The World Tree [${Blue}$_kingsTower_WIN${Color_Off} W]"
+        fi
+    fi
+
+    if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+        kingsTower_battle 270 500 # Celestial Sanctum
+        _kingsTower_WIN=$?
+        if [ $_kingsTower_WIN -ge 0 ]; then
+            echo "${Cyan}[INFO]${Color_Off}  Celestial Sanctum [${Blue}$_kingsTower_WIN${Color_Off} W]"
+        fi
+    fi
+
+    if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
+        kingsTower_battle 780 1100 # The Forsaken Necropolis
+        _kingsTower_WIN=$?
+        if [ $_kingsTower_WIN -ge 0 ]; then
+            echo "${Cyan}[INFO]${Color_Off}  The Forsaken Necropolis [${Blue}$_kingsTower_WIN${Color_Off} W]"
+        fi
+    fi
 
     # Exit
     inputTapSleep 70 1810
@@ -816,11 +873,13 @@ kingsTower() {
 kingsTower_battle() {
     if [ "$DEBUG" -ge 4 ]; then echo "${Purple}[DEBUG]${Color_Off} kingsTower_battle $*" >&2; fi
     _kingsTower_battle_COUNT=0
+    _kingsTower_battle_WIN=-1
     inputTapSleep "$1" "$2" 2 # Tap chosen tower
 
     # Check if inside tower
     if testColorOR 550 150 1a1212; then
         inputTapSleep 540 1350 # Challenge
+        _kingsTower_battle_WIN=0
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
         while [ "$_kingsTower_battle_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
@@ -829,8 +888,9 @@ kingsTower_battle() {
 
             # Check if win or lose battle
             if [ "$battleFailed" = false ]; then
-                inputTapSleep 550 1850 4 # Collect
-                inputTapSleep 550 170    # Tap on the top to close possible limited offer
+                _kingsTower_battle_WIN=$((_kingsTower_battle_WIN + 1)) # Increment
+                inputTapSleep 550 1850 4                               # Collect
+                inputTapSleep 550 170                                  # Tap on the top to close possible limited offer
 
                 # TODO: Limited offers might screw this up. Tapping 550 170 might close an offer.
                 # Tap top of the screen to close any possible Limited Offers
@@ -856,6 +916,7 @@ kingsTower_battle() {
         fi
         sleep 2
     fi
+    return $_kingsTower_battle_WIN
 }
 
 # ##############################################################################
@@ -885,6 +946,8 @@ legendsTournament() {
     fi
 
     _legendsTournament_COUNT=0
+    _legendsTournament_LOOSE=0
+    _legendsTournament_WIN=0
     until [ "$_legendsTournament_COUNT" -ge "$totalAmountTournamentTries" ]; do # Repeat a battle for as long as totalAmountTournamentTries
         inputTapSleep 550 1840 4                                                # Challenge
         inputTapSleep 800 1140 4                                                # Third opponent
@@ -892,14 +955,21 @@ legendsTournament() {
         # inputTapSleep 770 1470 4
         waitBattleStart
         doSkip
-        sleep 4
+        waitBattleFinish 4
+        if [ "$battleFailed" = false ]; then
+            _legendsTournament_WIN=$((_legendsTournament_WIN + 1)) # Increment
+        else
+            _legendsTournament_LOOSE=$((_legendsTournament_LOOSE + 1)) # Increment
+        fi
         inputTapSleep 550 800 4                                    # Tap anywhere to close
         _legendsTournament_COUNT=$((_legendsTournament_COUNT + 1)) # Increment
     done
 
     inputTapSleep 70 1810
     inputTapSleep 70 1810
-    verifyHEX 240 1775 d49a61 "Battled at the Legends Tournament." "Failed to battle at the Legends Tournament."
+    verifyHEX 240 1775 d49a61 \
+        "Battled at the Legends Tournament. [${Green}$_legendsTournament_WIN${Color_Off} W / ${Red}$_legendsTournament_LOOSE${Color_Off} L]" \
+        "Failed to battle at the Legends Tournament. [${Green}$_legendsTournament_WIN${Color_Off} W / ${Red}$_legendsTournament_LOOSE${Color_Off} L]"
 }
 
 # ##############################################################################
@@ -1382,6 +1452,40 @@ oakInn_tryCollectPresent() {
 }
 
 # ##############################################################################
+# Function Name : oakInnSpeedy
+# Descripton    : Collect Oak Inn faster than oakInn()
+# Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
+# ##############################################################################
+oakInnSpeedy() {
+    if [ "$DEBUG" -ge 4 ]; then echo "${Purple}[DEBUG]${Color_Off} oakInn" >&2; fi
+    inputTapSleep 780 270 5 # Oak Inn
+    _oakInn_COUNT=0
+    _oakInn_COLLECTED=0
+    until [ "$_oakInn_COLLECTED" -ge "$totalAmountOakRewards" ] || [ "$_oakInn_COUNT" -ge $((totalAmountOakRewards * 10)) ]; do
+        _oakInn_ROW_COUNT=0
+        screenshotRequired=true
+        until [ "$_oakInn_ROW_COUNT" -ge 100 ]; do
+            if testColorOR -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
+                inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 .5 # Tap present
+                inputTapSleep 540 1650 1                               # Ok
+                inputTapSleep 540 1650 .5                              # Collect reward
+                _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1))           # Increment
+                break
+            fi
+            _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment
+        done
+        _oakInn_COUNT=$((_oakInn_COUNT + 1)) # Increment
+    done
+
+    inputTapSleep 70 1810 0
+
+    wait
+    verifyHEX 20 1775 d49a61 \
+        "Attempted to collect Oak Inn presents. [${Blue}$_oakInn_COLLECTED${Color_Off}]" \
+        "Failed to collect Oak Inn presents. [${Blue}$_oakInn_COLLECTED${Color_Off}]"
+}
+
+# ##############################################################################
 # Function Name : strengthenCrystal
 # Descripton    : Strenghen Crystal
 # ##############################################################################
@@ -1455,9 +1559,7 @@ twistedRealmBoss() {
         waitBattleStart
         doAuto
         doSpeed
-
-        # TODO: Maybe use the waitBattleFinish() instead of loop here?
-        loopUntilRGB 30 420 380 ca9c5d # Start checking for a finished Battle after 40 seconds
+        waitBattleFinish 40
         wait
         inputTapSleep 550 800 3
         inputTapSleep 550 800
@@ -1672,7 +1774,7 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    HEXColorDelta "$HEX"
+    # HEXColorDelta "$HEX"
     echo "${Cyan}[INFO]${Color_Off}  End of tests! ($(date))"
     exit
 }
@@ -1808,6 +1910,8 @@ run() {
     fi
     if [ "$doCollectOakPresents" = true ]; then
         doCollectOakPresents=false
+        # TODO: WIP > Will do both atm
+        oakInnSpeedy
         oakInn
     fi
 
@@ -1840,11 +1944,9 @@ fi
 if [ "$DEBUG" -gt 0 ]; then
     echo "${Cyan}[INFO]${Color_Off}  Debug is ON [${Blue}$DEBUG${Color_Off}]"
 fi
-echo
 
 init
 run
 
-echo
 echo "${Cyan}[INFO]${Color_Off}  End of script! ($(date))"
 exit
