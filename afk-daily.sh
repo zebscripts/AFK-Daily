@@ -268,7 +268,10 @@ testColorOR() {
     shift                          # ignore arg
     for i in "$@"; do              # loop in colors
         if [ "$HEX" = "$i" ]; then # color found?
-            return 0               # At the first color found OR is break, return 0
+            if [ "$DEBUG" -ge 2 ]; then
+                echo "[DEBUG] testColorOR $HEX = $i" >&2
+            fi
+            return 0 # At the first color found OR is break, return 0
         else
             if [ "$DEBUG" -ge 2 ] || [ "$_testColorOR_max_delta" -gt "0" ]; then
                 _testColorOR_delta=$(HEXColorDelta "$HEX" "$i")
@@ -1376,7 +1379,7 @@ strengthenCrystal() {
         inputTapSleep 760 1030 3                             # Resonating Crystal
 
         # Detect if free slot, and take it.
-        testColorORTapSleep 620 1250 8ae9cf # Detected: 8ae9cf / Not: e4c38e
+        testColorORTapSleep 620 1250 87ead2 # Detected: 87ead2 / Not: e4c38e
 
         inputTapSleep 550 1850               # Strenghen Crystal
         if testColorOR 700 1250 9aedc4; then # If Level up
