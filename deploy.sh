@@ -451,7 +451,7 @@ validateConfig() {
 # ##############################################################################
 check_all() {
     checkAdb
-    checkGitUpdate
+    # checkGitUpdate # TODO: Uncomment this when releasing
     checkSetupUpdate
     checkConfig
     checkEOL $configFile
