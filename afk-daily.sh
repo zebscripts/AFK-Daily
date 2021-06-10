@@ -333,7 +333,7 @@ verifyHEX() {
         init
         run
     else
-        echo "${Green}[OK]${Color_Off}    $4"
+        echo "${Green}[DONE]${Color_Off}  $4"
     fi
 }
 
@@ -454,7 +454,7 @@ waitBattleFinish() {
         if testColorOR -f 560 350 b8894d b7894c; then # Victory
             battleFailed=false
             finished=true
-        elif [ "$HEX" = '171932' ]; then # Failed
+        elif [ "$HEX" = '171932' ] || [ "$HEX" = "171d3c" ]; then # Failed & Failed in Challenger Tournament
             battleFailed=true
             finished=true
         # First HEX local device, second bluestacks
@@ -560,8 +560,8 @@ challengeBoss() {
     wait
     if [ "$forceFightCampaign" = "true" ]; then
         verifyHEX 450 1775 cc9261 \
-            "Challenged boss in campaign. [${Green}$_challengeBoss_WIN${Color_Off} W / ${Red}$_challengeBoss_LOOSE${Color_Off} L]" \
-            "Failed to fight boss in Campaign. [${Green}$_challengeBoss_WIN${Color_Off} W / ${Red}$_challengeBoss_LOOSE${Color_Off} L]"
+            "Challenged boss in campaign. [${Green}$_challengeBoss_WIN W${Color_Off} / ${Red}$_challengeBoss_LOOSE L${Color_Off}]" \
+            "Failed to fight boss in Campaign. [${Green}$_challengeBoss_WIN W${Color_Off} / ${Red}$_challengeBoss_LOOSE L${Color_Off}]"
     else
         verifyHEX 450 1775 cc9261 "Challenged boss in campaign." "Failed to fight boss in Campaign."
     fi
@@ -725,13 +725,13 @@ arenaOfHeroes() {
         inputTapSleep 70 1810
         inputTapSleep 70 1810
         verifyHEX 240 1775 d49a61 \
-            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]" \
-            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]"
+            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN W${Color_Off} / ${Red}$_arenaOfHeroes_LOOSE L${Color_Off}]" \
+            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN W${Color_Off} / ${Red}$_arenaOfHeroes_LOOSE L${Color_Off}]"
     else
         inputTapSleep 70 1810
         verifyHEX 760 70 1f2d3a \
-            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]" \
-            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN${Color_Off} W / ${Red}$_arenaOfHeroes_LOOSE${Color_Off} L]"
+            "Checked the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN W${Color_Off} / ${Red}$_arenaOfHeroes_LOOSE L${Color_Off}]" \
+            "Failed to check the Arena of Heroes out. [${Green}$_arenaOfHeroes_WIN W${Color_Off} / ${Red}$_arenaOfHeroes_LOOSE L${Color_Off}]"
     fi
 }
 
@@ -818,13 +818,13 @@ kingsTower() {
     # Towers
     kingsTower_battle 550 800 # Main Tower
     _kingsTower_WIN=$?
-    echo "${Cyan}[INFO]${Color_Off}  Main Tower [${Blue}$_kingsTower_WIN${Color_Off} W]"
+    echo "${Cyan}[INFO]${Color_Off}  Main Tower [${Green}$_kingsTower_WIN W${Color_Off}]"
 
     if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 300 950 # Tower of Light
         _kingsTower_WIN=$?
         if [ $_kingsTower_WIN -ge 0 ]; then
-            echo "${Cyan}[INFO]${Color_Off}  Tower of Light [${Blue}$_kingsTower_WIN${Color_Off} W]"
+            echo "${Cyan}[INFO]${Color_Off}  Tower of Light [${Green}$_kingsTower_WIN W${Color_Off}]"
         fi
     fi
 
@@ -832,7 +832,7 @@ kingsTower() {
         kingsTower_battle 400 1250 # The Brutal Citadel
         _kingsTower_WIN=$?
         if [ $_kingsTower_WIN -ge 0 ]; then
-            echo "${Cyan}[INFO]${Color_Off}  The Brutal Citadel [${Blue}$_kingsTower_WIN${Color_Off} W]"
+            echo "${Cyan}[INFO]${Color_Off}  The Brutal Citadel [${Green}$_kingsTower_WIN W${Color_Off}]"
         fi
     fi
 
@@ -840,7 +840,7 @@ kingsTower() {
         kingsTower_battle 750 660 # The World Tree
         _kingsTower_WIN=$?
         if [ $_kingsTower_WIN -ge 0 ]; then
-            echo "${Cyan}[INFO]${Color_Off}  The World Tree [${Blue}$_kingsTower_WIN${Color_Off} W]"
+            echo "${Cyan}[INFO]${Color_Off}  The World Tree [${Green}$_kingsTower_WIN W${Color_Off}]"
         fi
     fi
 
@@ -848,7 +848,7 @@ kingsTower() {
         kingsTower_battle 270 500 # Celestial Sanctum
         _kingsTower_WIN=$?
         if [ $_kingsTower_WIN -ge 0 ]; then
-            echo "${Cyan}[INFO]${Color_Off}  Celestial Sanctum [${Blue}$_kingsTower_WIN${Color_Off} W]"
+            echo "${Cyan}[INFO]${Color_Off}  Celestial Sanctum [${Green}$_kingsTower_WIN W${Color_Off}]"
         fi
     fi
 
@@ -856,7 +856,7 @@ kingsTower() {
         kingsTower_battle 780 1100 # The Forsaken Necropolis
         _kingsTower_WIN=$?
         if [ $_kingsTower_WIN -ge 0 ]; then
-            echo "${Cyan}[INFO]${Color_Off}  The Forsaken Necropolis [${Blue}$_kingsTower_WIN${Color_Off} W]"
+            echo "${Cyan}[INFO]${Color_Off}  The Forsaken Necropolis [${Green}$_kingsTower_WIN W${Color_Off}]"
         fi
     fi
 
@@ -968,8 +968,8 @@ legendsTournament() {
     inputTapSleep 70 1810
     inputTapSleep 70 1810
     verifyHEX 240 1775 d49a61 \
-        "Battled at the Legends Tournament. [${Green}$_legendsTournament_WIN${Color_Off} W / ${Red}$_legendsTournament_LOOSE${Color_Off} L]" \
-        "Failed to battle at the Legends Tournament. [${Green}$_legendsTournament_WIN${Color_Off} W / ${Red}$_legendsTournament_LOOSE${Color_Off} L]"
+        "Battled at the Legends Tournament. [${Green}$_legendsTournament_WIN W${Color_Off} / ${Red}$_legendsTournament_LOOSE L${Color_Off}]" \
+        "Failed to battle at the Legends Tournament. [${Green}$_legendsTournament_WIN W${Color_Off} / ${Red}$_legendsTournament_LOOSE L${Color_Off}]"
 }
 
 # ##############################################################################
@@ -1818,7 +1818,7 @@ init() {
         if [ "$waitForUpdate" = true ]; then
             echo "${Cyan}[INFO]${Color_Off}  Waiting for game to finish update..."
             loopUntilNotRGB 5 740 205 ffc359
-            echo "${Green}[OK]${Color_Off}    Game finished updating."
+            echo "${Green}[DONE]${Color_Off}  Game finished updating."
         else
             echo "${Yellow}[WARN]${Color_Off}  Not waiting for update to finish." >&2
         fi
@@ -1910,9 +1910,8 @@ run() {
     fi
     if [ "$doCollectOakPresents" = true ]; then
         doCollectOakPresents=false
-        # TODO: WIP > Will do both atm
         oakInnSpeedy
-        oakInn
+        # oakInn
     fi
 
     # END
