@@ -1562,11 +1562,11 @@ switchTab "Campaign"
 
 # Check if game is being updated
 getColor 740 205
-if [ "$RGB" == "ffc15b" ]; then
+if [ "$RGB" == "ffc359" ]; then
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
         echo "[INFO]: Waiting for game to finish update..."
-        loopUntilNotRGB 5 740 205 ffc15b
+        loopUntilNotRGB 5 740 205 ffc359
         echo "[OK]: Game finished updating."
     else
         echo "[WARN]: Not waiting for update to finish."
