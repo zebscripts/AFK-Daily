@@ -236,7 +236,7 @@ checkDevice() {
 # Args          : <FILE>
 # ##############################################################################
 checkEOL() {
-    printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
+    printTask "Checking Line endings of file ${cCyan}$1${cNc}..."
     if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
         printWarn "Found CLRF!"
         printTask "Converting to LF..."
@@ -325,9 +325,9 @@ deploy() {
     # fi
 
     printf "\n"
-    printInfo "Platform: ${cBlue}$1${cNc}"
-    printInfo "Script Directory: ${cBlue}$2/scripts/afk-arena${cNc}"
-    printInfo "Latest tested patch: ${cBlue}$testedPatch${cNc}\n"
+    printInfo "Platform: ${cCyan}$1${cNc}"
+    printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
+    printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device

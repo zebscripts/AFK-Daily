@@ -6,52 +6,65 @@
 # License       : MIT
 # ##############################################################################
 # Colors
-cNc='\033[0m'
-cRed='\033[0;31m'
-cBlue='\033[0;34m'
-cGreen='\033[0;32m'
-cYellow='\033[0;33m'
-cCyan='\033[0;36m'
+cNc="\033[0m"        # Text Reset
+cRed="\033[1;91m"    # Red
+cGreen="\033[1;92m"  # Green
+cYellow="\033[1;93m" # Yellow
+cBlue="\033[1;94m"   # Blue
+cPurple="\033[1;95m" # Purple
+cCyan="\033[0;96m"   # Cyan
+cWhite="\033[0;97m"  # White
 
 withoutNewLine=false
 
+checkNewLine(){
+    if [ $withoutNewLine = true ]; then echo; fi
+    withoutNewLine=false
+}
+
+colorTest() {
+    for clfg in 30 31 32 33 34 35 36 37 90 91 92 93 94 95 96 97 39; do
+        str=""
+        for attr in 0 1 2 4 5 7; do
+            str="$str\033[${attr};${clfg}m[attr=${attr};clfg=${clfg}]\033[0m"
+        done
+        echo -e "$str"
+    done
+}
+
 # Task
 printTask() {
-    if [ $withoutNewLine = true ]; then echo; fi
-    echo -n -e "${cBlue}[TASK]${cNc}  $1 "
+    checkNewLine
     withoutNewLine=true
+    echo -n -e "${cBlue}[TASK]${cWhite}  $1${cNc} "
 }
 
 # Info
 printInfo() {
-    if [ $withoutNewLine = true ]; then echo; fi
-    echo -e "${cCyan}[INFO]${cNc}  $1"
-    withoutNewLine=false
+    checkNewLine
+    echo -e "${cBlue}[INFO]${cWhite}  $1${cNc}"
 }
 
 # Tip
 printTip() {
-    if [ $withoutNewLine = true ]; then echo; fi
-    echo -e "${cGreen}[TIP]${cNc}   $1"
-    withoutNewLine=false
+    checkNewLine
+    echo -e "${cPurple}[TIP]${cWhite}   $1${cNc}"
 }
 
 # Success
 printSuccess() {
-    echo -e "${cGreen}$1${cNc}"
     withoutNewLine=false
+    echo -e "${cGreen}$1${cNc}"
 }
 
 # Error
 printError() {
-    if [ $withoutNewLine = true ]; then echo; fi
-    echo -e "${cRed}[ERROR]${cNc} $1"
-    withoutNewLine=false
+    checkNewLine
+    echo -e "${cRed}[ERROR]${cWhite} $1${cNc}"
 }
 
 # Warn
 printWarn() {
-    if [ $withoutNewLine = true ]; then echo; fi
-    echo -e "${cYellow}[WARN]${cNc}  $1"
-    withoutNewLine=false
+    checkNewLine
+    echo -e "${cYellow}[WARN]${cWhite}  $1${cNc}"
 }
