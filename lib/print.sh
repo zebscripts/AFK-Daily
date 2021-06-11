@@ -7,11 +7,11 @@
 # ##############################################################################
 # Colors
 cNc="\033[0m"        # Text Reset
-cRed="\033[1;91m"    # Red
-cGreen="\033[1;92m"  # Green
-cYellow="\033[1;93m" # Yellow
-cBlue="\033[1;94m"   # Blue
-cPurple="\033[1;95m" # Purple
+cRed="\033[0;91m"    # Red
+cGreen="\033[0;92m"  # Green
+cYellow="\033[0;93m" # Yellow
+cBlue="\033[0;94m"   # Blue
+cPurple="\033[0;95m" # Purple
 cCyan="\033[0;96m"   # Cyan
 cWhite="\033[0;97m"  # White
 
