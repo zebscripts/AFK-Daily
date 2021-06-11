@@ -44,6 +44,13 @@ printInColorTest() {
     printSuccess "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
 }
 
+printInNewLine() {
+    if [ -n "$1" ]; then
+        echo
+        echo "$1"
+    fi
+}
+
 # Task
 printTask() {
     checkNewLine
@@ -65,7 +72,11 @@ printTip() {
 
 # Success
 printSuccess() {
-    withoutNewLine=false
+    if [ $withoutNewLine = false ]; then
+        echo -n "        ";
+    else
+        withoutNewLine=false
+    fi
     echo -e "${cGreen}$1${cNc}"
 }
 

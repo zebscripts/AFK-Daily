@@ -25,14 +25,15 @@ pvpEvent=false  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
+activeTab="Start"
+currentPos="default"
+dayofweek=$(TZ=UTC date +%u)
 HEX=00000000
-oakRes=0
 forceFightCampaign=false
 forceWeekly=false
-testServer=false
-activeTab="Start"
+oakRes=0
 screenshotRequired=true
-dayofweek=$(TZ=UTC date +%u)
+testServer=false
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -61,6 +62,31 @@ fi
 # Section       : Core Functions
 # Description   : It's like a library of usefull functions
 # ##############################################################################
+
+# ##############################################################################
+# Function Name : checkToDo
+# Description   : Check if argument is ToDo
+# Args          : <TODO>: boolean
+# Output        : return 0/1
+# ##############################################################################
+checkToDo() {
+    if [ "$(eval echo \$"$1")" = false ]; then
+        return 1
+    fi
+    if [ "$1" = "$currentPos" ]; then
+        tries=$((tries+1))
+    else
+        eval "$currentPos=false"
+        currentPos="$1"
+        tries=0
+    fi
+    if [ $tries -lt 3 ]; then
+        return 0
+    else
+        eval "$1=false"
+        return 1
+    fi
+}
 
 # ##############################################################################
 # Function Name : closeApp
@@ -571,12 +597,11 @@ challengeBoss() {
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
         printInColor "INFO" "Fighting in the campaign ${cCyan}$maxCampaignFights${cNc} time(s) because of Mythic Trick."
-        _challengeBoss_COUNT=0
         _challengeBoss_LOOSE=0
         _challengeBoss_WIN=0
 
         # Check for battle screen
-        while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$_challengeBoss_COUNT" -lt "$maxCampaignFights" ]; do
+        while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$maxCampaignFights" -le 0 ]; do
             inputTapSleep 550 1850 0 # Battle
             waitBattleStart
             doAuto
@@ -605,7 +630,7 @@ challengeBoss() {
                 inputTapSleep 550 1720 5
 
                 _challengeBoss_LOOSE=$((_challengeBoss_LOOSE + 1)) # Increment
-                _challengeBoss_COUNT=$((_challengeBoss_COUNT + 1)) # Increment
+                maxCampaignFights=$((maxCampaignFights - 1)) # Dicrement
             fi
         done
 
@@ -710,11 +735,10 @@ arenaOfHeroes() {
     inputTapSleep 540 1800 # Challenge
 
     if testColorNAND 200 1800 382314 382214; then # Check for new season
-        _arenaOfHeroes_COUNT=0
         _arenaOfHeroes_LOOSE=0
         _arenaOfHeroes_WIN=0
         printInColor "INFO" "Fighting in the Arena Of Heroes ${cCyan}$totalAmountArenaTries${cNc} time(s)."
-        until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do # Repeat a battle for as long as totalAmountArenaTries
+        until [ "$totalAmountArenaTries" -le 0 ]; do # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # inputTapSleep 815 540
 
@@ -727,7 +751,7 @@ arenaOfHeroes() {
             #  Opponent 5: 820 1400     ->        aaf2bb
             case $arenaHeroesOpponent in
             1)
-                if testColorOR 820 700 a7f1b7; then # Check if opponent exists
+                if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then # Check if opponent exists
                     inputTapSleep 820 700 0         # Fight opponent
                 else
                     # Refresh opponents and try to fight opponent $arenaHeroesOpponent
@@ -735,28 +759,28 @@ arenaOfHeroes() {
                 fi
                 ;;
             2)
-                if testColorOR 820 870 2daab4 aff3c0; then # Check if opponent exists
+                if testColorOR -d "$DEFAULT_DELTA" 820 870 2daab4 aff3c0; then # Check if opponent exists
                     inputTapSleep 820 870 0                # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 2 # Try to fight the closest opponent to 2
                 fi
                 ;;
             3)
-                if testColorOR 820 1050 a7f1b7; then # Check if opponent exists
+                if testColorOR -d "$DEFAULT_DELTA" 820 1050 a7f1b7; then # Check if opponent exists
                     inputTapSleep 820 1050 0         # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 3 # Try to fight the closest opponent to 3
                 fi
                 ;;
             4)
-                if testColorOR 820 1220 2daab4 aff3c0; then # Check if opponent exists
+                if testColorOR -d "$DEFAULT_DELTA" 820 1220 2daab4 aff3c0; then # Check if opponent exists
                     inputTapSleep 820 1220 0                # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 4 # Try to fight the closest opponent to 4
                 fi
                 ;;
             5)
-                if testColorOR 820 1400 aaf2bb; then # Check if opponent exists
+                if testColorOR -d "$DEFAULT_DELTA" 820 1400 aaf2bb; then # Check if opponent exists
                     inputTapSleep 820 1400 0         # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 5 # Try to fight the closest opponent to 5
@@ -780,7 +804,7 @@ arenaOfHeroes() {
                 fi
                 inputTapSleep 550 1550 3 # Finish battle
             fi
-            _arenaOfHeroes_COUNT=$((_arenaOfHeroes_COUNT + 1)) # Increment
+            totalAmountArenaTries=$((totalAmountArenaTries - 1)) # Dicrement
         done
 
         inputTapSleep 1000 380
@@ -824,49 +848,49 @@ arenaOfHeroes_tapClosestOpponent() {
         case $arenaHeroesOpponent in
         1)
             # Check if opponent 1 exists and fight if true
-            if testColorOR 820 700 a7f1b7; then inputTapSleep 820 700 0; else return 1; fi
+            if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then inputTapSleep 820 700 0; else return 1; fi
             ;;
         2)
             # Check if opponent 2 exists and fight if true
-            if testColorOR 820 870 2daab4 aff3c0; then inputTapSleep 820 870 0; else return 1; fi
+            if testColorOR -d "$DEFAULT_DELTA" 820 870 2daab4 aff3c0; then inputTapSleep 820 870 0; else return 1; fi
             ;;
         3)
             # Check if opponent 3 exists and fight if true
-            if testColorOR 820 1050 a7f1b7; then inputTapSleep 820 1050 0; else return 1; fi
+            if testColorOR -d "$DEFAULT_DELTA" 820 1050 a7f1b7; then inputTapSleep 820 1050 0; else return 1; fi
             ;;
         4)
             # Check if opponent 4 exists and fight if true
-            if testColorOR 820 1220 2daab4 aff3c0; then inputTapSleep 820 1220 0; else return 1; fi
+            if testColorOR -d "$DEFAULT_DELTA" 820 1220 2daab4 aff3c0; then inputTapSleep 820 1220 0; else return 1; fi
             ;;
         5)
             # Check if opponent 5 exists and fight if true
-            if testColorOR 820 1400 aaf2bb; then inputTapSleep 820 1400 0; else return 1; fi
+            if testColorOR -d "$DEFAULT_DELTA" 820 1400 aaf2bb; then inputTapSleep 820 1400 0; else return 1; fi
             ;;
         esac
         ;;
     2)
-        if testColorOR 820 700 a7f1b7; then # Check if opponent 1 exists
+        if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then # Check if opponent 1 exists
             inputTapSleep 820 700 0         # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 1 # Try to fight the closest opponent to 2
         fi
         ;;
     3)
-        if testColorOR 820 870 2daab4 aff3c0; then # Check if opponent 2 exists
+        if testColorOR -d "$DEFAULT_DELTA" 820 870 2daab4 aff3c0; then # Check if opponent 2 exists
             inputTapSleep 820 870 0                # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 2 # Try to fight the closest opponent to 3
         fi
         ;;
     4)
-        if testColorOR 820 1050 a7f1b7; then # Check if opponent 3 exists
+        if testColorOR -d "$DEFAULT_DELTA" 820 1050 a7f1b7; then # Check if opponent 3 exists
             inputTapSleep 820 1050 0         # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 3 # Try to fight the closest opponent to 4
         fi
         ;;
     5)
-        if testColorOR 820 1220 2daab4 aff3c0; then # Check if opponent 4 exists
+        if testColorOR -d "$DEFAULT_DELTA" 820 1220 2daab4 aff3c0; then # Check if opponent 4 exists
             inputTapSleep 820 1220 0                # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 4 # Try to fight the closest opponent to 5
@@ -996,11 +1020,10 @@ legendsTournament() {
         inputTapSleep 990 380                                 # Close
     fi
 
-    _legendsTournament_COUNT=0
     _legendsTournament_LOOSE=0
     _legendsTournament_WIN=0
     printInColor "INFO" "Fighting in the Legends' Tournament ${cCyan}$totalAmountTournamentTries${cNc} time(s)."
-    until [ "$_legendsTournament_COUNT" -ge "$totalAmountTournamentTries" ]; do # Repeat a battle for as long as totalAmountTournamentTries
+    until [ "$totalAmountTournamentTries" -le 0 ]; do # Repeat a battle for as long as totalAmountTournamentTries
         inputTapSleep 550 1840 4                                                # Challenge
         inputTapSleep 800 1140 4                                                # Third opponent
         inputTapSleep 550 1850 4                                                # Begin Battle
@@ -1014,7 +1037,7 @@ legendsTournament() {
             _legendsTournament_LOOSE=$((_legendsTournament_LOOSE + 1)) # Increment
         fi
         inputTapSleep 550 800 4                                    # Tap anywhere to close
-        _legendsTournament_COUNT=$((_legendsTournament_COUNT + 1)) # Increment
+        totalAmountTournamentTries=$((totalAmountTournamentTries + 1)) # Dicrement
     done
 
     inputTapSleep 70 1810
@@ -1897,9 +1920,9 @@ init() {
     # Preload graphics
     switchTab "Campaign" true
     sleep 3
-    switchTab "Dark Forest" true
+    switchTab "Dark Forest"
     sleep 1
-    switchTab "Ranhorn" true
+    switchTab "Ranhorn"
     sleep 1
     switchTab "Campaign" true
 
@@ -1922,101 +1945,44 @@ init() {
 run() {
     # CAMPAIGN TAB
     switchTab "Campaign"
-    if [ "$doLootAfkChest" = true ]; then lootAfkChest; fi # Will be false after 2nd uses
-    if [ "$doChallengeBoss" = true ]; then
-        doChallengeBoss=false
-        challengeBoss
+    if checkToDo doCollectMerchantFreebies; then
+        collectMerchants
+        currentPos="default"# doCollectMerchantFreebies Will be false after 2nd uses
     fi
-    if [ "$doFastRewards" = true ]; then
-        doFastRewards=false
-        fastRewards
-    fi
-    if [ "$doCollectFriendsAndMercenaries" = true ]; then
-        doCollectFriendsAndMercenaries=false
-        collectFriendsAndMercenaries
-    fi
-    if [ "$doLootAfkChest" = true ]; then
-        doLootAfkChest=false
-        lootAfkChest
-    fi
+    if checkToDo doLootAfkChest; then lootAfkChest; fi
+    if checkToDo doChallengeBoss; then challengeBoss; fi
+    if checkToDo doFastRewards; then fastRewards; fi
+    if checkToDo doCollectFriendsAndMercenaries; then collectFriendsAndMercenaries; fi
+    if checkToDo doLootAfkChest; then lootAfkChest; fi
 
     # DARK FOREST TAB
     switchTab "Dark Forest"
-    if [ "$doSoloBounties" = true ]; then
-        doSoloBounties=false
+    if checkToDo doSoloBounties; then
         soloBounties
-        if [ "$doTeamBounties" = true ]; then
-            doTeamBounties=false
-            teamBounties
-        fi
-    elif [ "$doTeamBounties" = true ]; then
-        doTeamBounties=false
-        teamBounties true
-    fi
-    if [ "$doArenaOfHeroes" = true ]; then
-        doArenaOfHeroes=false
+        if checkToDo doTeamBounties; then teamBounties; fi
+    elif checkToDo doTeamBounties; then teamBounties true; fi
+    if checkToDo doArenaOfHeroes; then
         arenaOfHeroes
-        if [ "$doLegendsTournament" = true ]; then
-            doLegendsTournament=false
-            legendsTournament
-        fi
-    elif [ "$doLegendsTournament" = true ]; then
-        doLegendsTournament=false
-        legendsTournament true
-    fi
-    if [ "$doKingsTower" = true ]; then
-        doKingsTower=false
-        kingsTower
-    fi
+        if checkToDo doLegendsTournament; then legendsTournament; fi
+    elif checkToDo doLegendsTournament; then legendsTournament true; fi
+    if checkToDo doKingsTower; then kingsTower; fi
 
     # RANHORN TAB
     switchTab "Ranhorn"
-    if [ "$doGuildHunts" = true ]; then
-        doGuildHunts=false
+    if checkToDo doGuildHunts; then
         guildHunts
-        if [ "$doTwistedRealmBoss" = true ]; then
-            doTwistedRealmBoss=false
-            twistedRealmBoss
-        fi
-    elif [ "$doTwistedRealmBoss" = true ]; then
-        doTwistedRealmBoss=false
-        twistedRealmBoss true
-    fi
-    if [ "$doBuyFromStore" = true ]; then
-        doBuyFromStore=false
-        buyFromStore
-    fi
-    if [ "$doStrengthenCrystal" = true ]; then
-        doStrengthenCrystal=false
-        strengthenCrystal
-    fi
-    if [ "$doTempleOfAscension" = true ]; then
-        doTempleOfAscension=false
-        templeOfAscension
-    fi
-    if [ "$doCompanionPointsSummon" = true ]; then
-        doCompanionPointsSummon=false
-        nobleTavern
-    fi
-    if [ "$doCollectOakPresents" = true ]; then
-        doCollectOakPresents=false
-        oakInnSpeedy
-        # oakInn
-    fi
+        if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
+    elif checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
+    if checkToDo doBuyFromStore; then buyFromStore; fi
+    if checkToDo doStrengthenCrystal; then strengthenCrystal; fi
+    if checkToDo doTempleOfAscension; then templeOfAscension; fi
+    if checkToDo doCompanionPointsSummon; then nobleTavern; fi
+    if checkToDo doCollectOakPresents; then oakInnSpeedy; fi
 
     # END
-    if [ "$doCollectQuestChests" = true ]; then
-        doCollectQuestChests=false
-        collectQuestChests
-    fi
-    if [ "$doCollectMail" = true ]; then
-        doCollectMail=false
-        collectMail
-    fi
-    if [ "$doCollectMerchantFreebies" = true ]; then
-        doCollectMerchantFreebies=false
-        collectMerchants
-    fi
+    if checkToDo doCollectQuestChests; then collectQuestChests; fi
+    if checkToDo doCollectMail; then collectMail; fi
+    if checkToDo doCollectMerchantFreebies; then collectMerchants; fi
 
     # Ends at given location
     sleep 1
