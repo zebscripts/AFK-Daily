@@ -356,9 +356,7 @@ verifyHEX() {
     getColor "$1" "$2"
     if [ "$HEX" != "$3" ]; then
         printInColor "ERROR" "verifyHEX: Failure! Expected ${cCyan}$3${cNc}, but got ${cCyan}$HEX${cNc} instead. [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]" >&2
-        echo >&2
         printInColor "ERROR" "$5" >&2
-        #exit
         printInColor "INFO" "Restarting"
         init
         run
@@ -676,6 +674,7 @@ arenaOfHeroes() {
         _arenaOfHeroes_COUNT=0
         _arenaOfHeroes_LOOSE=0
         _arenaOfHeroes_WIN=0
+        printInColor "INFO" "Fighting in the Arena Of Heroes ${cCyan}$totalAmountArenaTries${cNc} time(s)."
         until [ "$_arenaOfHeroes_COUNT" -ge "$totalAmountArenaTries" ]; do # Repeat a battle for as long as totalAmountArenaTries
             # Refresh
             # inputTapSleep 815 540
@@ -847,47 +846,31 @@ kingsTower() {
 
     # Towers
     kingsTower_battle 550 800 # Main Tower
-    _kingsTower_WIN=$?
-    printInColor "INFO" "Main Tower [${cGreen}$_kingsTower_WIN W${cNc}]"
+    printInColor "INFO" "Main Tower [${cGreen}$? W${cNc}]"
 
     if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 300 950 # Tower of Light
-        _kingsTower_WIN=$?
-        if [ $_kingsTower_WIN -ge 0 ]; then
-            printInColor "INFO" "Tower of Light [${cGreen}$_kingsTower_WIN W${cNc}]"
-        fi
+        printInColor "INFO" "Tower of Light [${cGreen}$? W${cNc}]"
     fi
 
     if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 400 1250 # The Brutal Citadel
-        _kingsTower_WIN=$?
-        if [ $_kingsTower_WIN -ge 0 ]; then
-            printInColor "INFO" "The Brutal Citadel [${cGreen}$_kingsTower_WIN W${cNc}]"
-        fi
+        printInColor "INFO" "The Brutal Citadel [${cGreen}$? W${cNc}]"
     fi
 
     if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 750 660 # The World Tree
-        _kingsTower_WIN=$?
-        if [ $_kingsTower_WIN -ge 0 ]; then
-            printInColor "INFO" "The World Tree [${cGreen}$_kingsTower_WIN W${cNc}]"
-        fi
+        printInColor "INFO" "The World Tree [${cGreen}$? W${cNc}]"
     fi
 
     if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 270 500 # Celestial Sanctum
-        _kingsTower_WIN=$?
-        if [ $_kingsTower_WIN -ge 0 ]; then
-            printInColor "INFO" "Celestial Sanctum [${cGreen}$_kingsTower_WIN W${cNc}]"
-        fi
+        printInColor "INFO" "Celestial Sanctum [${cGreen}$? W${cNc}]"
     fi
 
     if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
         kingsTower_battle 780 1100 # The Forsaken Necropolis
-        _kingsTower_WIN=$?
-        if [ $_kingsTower_WIN -ge 0 ]; then
-            printInColor "INFO" "The Forsaken Necropolis [${cGreen}$_kingsTower_WIN W${cNc}]"
-        fi
+        printInColor "INFO" "The Forsaken Necropolis [${cGreen}$? W${cNc}]"
     fi
 
     # Exit
@@ -903,13 +886,12 @@ kingsTower() {
 kingsTower_battle() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower_battle $*" >&2; fi
     _kingsTower_battle_COUNT=0
-    _kingsTower_battle_WIN=-1
+    _kingsTower_battle_WIN=0
     inputTapSleep "$1" "$2" 2 # Tap chosen tower
 
     # Check if inside tower
     if testColorOR 550 150 1a1212; then
         inputTapSleep 540 1350 # Challenge
-        _kingsTower_battle_WIN=0
 
         # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
         while [ "$_kingsTower_battle_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
@@ -978,6 +960,7 @@ legendsTournament() {
     _legendsTournament_COUNT=0
     _legendsTournament_LOOSE=0
     _legendsTournament_WIN=0
+    printInColor "INFO" "Fighting in the Legends' Tournament ${cCyan}$totalAmountTournamentTries${cNc} time(s)."
     until [ "$_legendsTournament_COUNT" -ge "$totalAmountTournamentTries" ]; do # Repeat a battle for as long as totalAmountTournamentTries
         inputTapSleep 550 1840 4                                                # Challenge
         inputTapSleep 800 1140 4                                                # Third opponent
@@ -1149,14 +1132,19 @@ guildHunts() {
     wait
 
     inputTapSleep 290 860 3
+    printInColor "INFO" "Fighting Wrizz ${cCyan}$totalAmountGuildBossTries${cNc} time(s)."
     guildHunts_quickBattle
     inputTapSleep 970 890 1              # Soren
     if testColorOR 715 1815 8ae5c4; then # If Soren is open
+        printInColor "INFO" "Fighting Soren ${cCyan}$totalAmountGuildBossTries${cNc} time(s)."
         guildHunts_quickBattle
-    elif [ "$canOpenSoren" = true ]; then    # If Soren is closed
+    elif [ "$canOpenSoren" = true ]; then # If Soren is closed
+        printInColor "INFO" "Soren is closed."
         if testColorOR 580 1753 fae0ac; then # If soren is "openable"
+            printInColor "INFO" "Oppening Soren."
             inputTapSleep 550 1850
             inputTapSleep 700 1250 1
+            printInColor "INFO" "Fighting Soren ${cCyan}$totalAmountGuildBossTries${cNc} time(s)."
             guildHunts_quickBattle
         fi
     fi
@@ -1790,10 +1778,10 @@ colorTest() {
 # Output        : stdout colors test
 # ##############################################################################
 printInColorTest() {
-    printInColor "DEBUG" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
-    printInColor "DONE" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
-    printInColor "ERROR" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
-    printInColor "INFO" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printInColor "DEBUG" "Lorem ipsum ${cCyan}dolor${cNc} sit amet [${cGreen}25 W${cNc} / ${cRed}10 L${cNc}]"
+    printInColor "DONE" "Lorem ipsum ${cCyan}dolor${cNc} sit amet [${cGreen}25${cNc} W / ${cRed}10${cNc} L]"
+    printInColor "ERROR" "Lorem ipsum ${cCyan}dolor${cNc} sit amet [25 ${cGreen}W${cNc} / 10 ${cRed}L${cNc}]"
+    printInColor "INFO" "Lorem ipsum ${cCyan}dolor${cNc} sit amet [${cGreen}25 W${cNc}]"
     printInColor "TEST" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
     printInColor "WARN" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
     printInColor "" "Lorem ipsum ${cCyan}dolor${cNc} sit amet"

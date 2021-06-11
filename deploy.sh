@@ -604,7 +604,8 @@ done
 
 clear
 if [ "$output" != "" ]; then
-    run 2>&1 | tee -a | cat -v | "$output"
+    touch "$output"
+    run 2>&1 | tee -a "$output"
 else
     run
 fi

@@ -17,7 +17,7 @@ cWhite="\033[0;97m"  # White
 
 withoutNewLine=false
 
-checkNewLine(){
+checkNewLine() {
     if [ $withoutNewLine = true ]; then echo; fi
     withoutNewLine=false
 }
@@ -30,6 +30,18 @@ colorTest() {
         done
         echo -e "$str"
     done
+}
+
+printInColorTest() {
+    printTask "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printSuccess "Lorem ipsum dolor sit amet"
+    printTask "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printWarn "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printTask "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printError "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printInfo "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printTip "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
+    printSuccess "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
 }
 
 # Task
