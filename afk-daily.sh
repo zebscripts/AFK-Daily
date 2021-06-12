@@ -75,7 +75,7 @@ checkToDo() {
         return 1
     fi
     if [ "$1" = "$currentPos" ]; then
-        tries=$((tries+1))
+        tries=$((tries + 1))
     else
         eval "$currentPos=false"
         currentPos="$1"
@@ -631,7 +631,7 @@ challengeBoss() {
                 inputTapSleep 550 1720 5
 
                 _challengeBoss_LOOSE=$((_challengeBoss_LOOSE + 1)) # Increment
-                maxCampaignFights=$((maxCampaignFights - 1)) # Dicrement
+                maxCampaignFights=$((maxCampaignFights - 1))       # Dicrement
             fi
         done
 
@@ -753,7 +753,7 @@ arenaOfHeroes() {
             case $arenaHeroesOpponent in
             1)
                 if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then # Check if opponent exists
-                    inputTapSleep 820 700 0         # Fight opponent
+                    inputTapSleep 820 700 0                             # Fight opponent
                 else
                     # Refresh opponents and try to fight opponent $arenaHeroesOpponent
                     arenaOfHeroes_tapClosestOpponent 1
@@ -761,28 +761,28 @@ arenaOfHeroes() {
                 ;;
             2)
                 if testColorOR -d "$DEFAULT_DELTA" 820 870 2daab4 aff3c0; then # Check if opponent exists
-                    inputTapSleep 820 870 0                # Fight opponent
+                    inputTapSleep 820 870 0                                    # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 2 # Try to fight the closest opponent to 2
                 fi
                 ;;
             3)
                 if testColorOR -d "$DEFAULT_DELTA" 820 1050 a7f1b7; then # Check if opponent exists
-                    inputTapSleep 820 1050 0         # Fight opponent
+                    inputTapSleep 820 1050 0                             # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 3 # Try to fight the closest opponent to 3
                 fi
                 ;;
             4)
                 if testColorOR -d "$DEFAULT_DELTA" 820 1220 2daab4 aff3c0; then # Check if opponent exists
-                    inputTapSleep 820 1220 0                # Fight opponent
+                    inputTapSleep 820 1220 0                                    # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 4 # Try to fight the closest opponent to 4
                 fi
                 ;;
             5)
                 if testColorOR -d "$DEFAULT_DELTA" 820 1400 aaf2bb; then # Check if opponent exists
-                    inputTapSleep 820 1400 0         # Fight opponent
+                    inputTapSleep 820 1400 0                             # Fight opponent
                 else
                     arenaOfHeroes_tapClosestOpponent 5 # Try to fight the closest opponent to 5
                 fi
@@ -871,28 +871,28 @@ arenaOfHeroes_tapClosestOpponent() {
         ;;
     2)
         if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then # Check if opponent 1 exists
-            inputTapSleep 820 700 0         # Fight opponent
+            inputTapSleep 820 700 0                             # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 1 # Try to fight the closest opponent to 2
         fi
         ;;
     3)
         if testColorOR -d "$DEFAULT_DELTA" 820 870 2daab4 aff3c0; then # Check if opponent 2 exists
-            inputTapSleep 820 870 0                # Fight opponent
+            inputTapSleep 820 870 0                                    # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 2 # Try to fight the closest opponent to 3
         fi
         ;;
     4)
         if testColorOR -d "$DEFAULT_DELTA" 820 1050 a7f1b7; then # Check if opponent 3 exists
-            inputTapSleep 820 1050 0         # Fight opponent
+            inputTapSleep 820 1050 0                             # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 3 # Try to fight the closest opponent to 4
         fi
         ;;
     5)
         if testColorOR -d "$DEFAULT_DELTA" 820 1220 2daab4 aff3c0; then # Check if opponent 4 exists
-            inputTapSleep 820 1220 0                # Fight opponent
+            inputTapSleep 820 1220 0                                    # Fight opponent
         else
             arenaOfHeroes_tapClosestOpponent 4 # Try to fight the closest opponent to 5
         fi
@@ -1023,11 +1023,11 @@ legendsTournament() {
 
     _legendsTournament_LOOSE=0
     _legendsTournament_WIN=0
-    printInColor "INFO" "Fighting in the Legends' Tournament ${cCyan}$totalAmountTournamentTries${cNc} time(s)."
+    printInColor "INFO" "Fighting in the Legends' Challenger Tournament ${cCyan}$totalAmountTournamentTries${cNc} time(s)."
     until [ "$totalAmountTournamentTries" -le 0 ]; do # Repeat a battle for as long as totalAmountTournamentTries
-        inputTapSleep 550 1840 4                                                # Challenge
-        inputTapSleep 800 1140 4                                                # Third opponent
-        inputTapSleep 550 1850 4                                                # Begin Battle
+        inputTapSleep 550 1840 4                      # Challenge
+        inputTapSleep 800 1140 4                      # Third opponent
+        inputTapSleep 550 1850 4                      # Begin Battle
         # inputTapSleep 770 1470 4
         waitBattleStart
         doSkip
@@ -1037,8 +1037,8 @@ legendsTournament() {
         else
             _legendsTournament_LOOSE=$((_legendsTournament_LOOSE + 1)) # Increment
         fi
-        inputTapSleep 550 800 4                                    # Tap anywhere to close
-        totalAmountTournamentTries=$((totalAmountTournamentTries + 1)) # Dicrement
+        inputTapSleep 550 800 4                                        # Tap anywhere to close
+        totalAmountTournamentTries=$((totalAmountTournamentTries - 1)) # Dicrement
     done
 
     inputTapSleep 70 1810
