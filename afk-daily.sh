@@ -28,7 +28,6 @@ totalAmountOakRewards=3
 activeTab="Start"
 currentPos="default"
 dayofweek=$(TZ=UTC date +%u)
-doLootAfkChest2="$doLootAfkChest"
 HEX=00000000
 forceFightCampaign=false
 forceWeekly=false
@@ -58,6 +57,7 @@ else
     # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
     . "/storage/emulated/0/scripts/afk-arena/config.ini"
 fi
+doLootAfkChest2="$doLootAfkChest"
 
 # ##############################################################################
 # Section       : Core Functions
