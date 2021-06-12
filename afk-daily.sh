@@ -450,7 +450,6 @@ wait() {
 # ##############################################################################
 doAuto() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "doAuto" >&2; fi
-    # TODO: sometimes won't work :/
     testColorORTapSleep 760 1440 332b2b 0 # On:743b29 Off:332b2b
 }
 
@@ -513,7 +512,6 @@ switchTab() {
         if [ "${2:-false}" = true ] ||
             [ "$doGuildHunts" = true ] ||
             [ "$doTwistedRealmBoss" = true ] ||
-            [ "$doGuildHunts" = true ] ||
             [ "$doBuyFromStore" = true ] ||
             [ "$doStrengthenCrystal" = true ] ||
             [ "$doCompanionPointsSummon" = true ] ||
@@ -588,9 +586,10 @@ waitBattleStart() {
 # ##############################################################################
 challengeBoss() {
     # TODO: Timings are way to tight here. My BS almost couldn't catch up with it.
+    # @kevingrillet > @Zebiano: I did add few seconds so I think it's OK now.
     # TODO: Potentially breaks when player gets to change chapter
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "challengeBoss" >&2; fi
-    inputTapSleep 550 1650
+    inputTapSleep 550 1650 3
     if testColorOR 550 740 f2d79f; then # Check if boss
         inputTapSleep 550 1450 3
     fi
@@ -603,7 +602,7 @@ challengeBoss() {
 
         # Check for battle screen
         while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$maxCampaignFights" -le 0 ]; do
-            inputTapSleep 550 1850 0 # Battle
+            inputTapSleep 550 1850 .5 # Battle
             waitBattleStart
             doAuto
             doSpeed
@@ -909,32 +908,26 @@ kingsTower() {
     inputTapSleep 500 870 5 # King's Tower
 
     # Towers
-    kingsTower_battle 550 800 # Main Tower
-    printInColor "INFO" "Main Tower [${cGreen}$? W${cNc}]"
+    printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
 
     if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        kingsTower_battle 300 950 # Tower of Light
-        printInColor "INFO" "Tower of Light [${cGreen}$? W${cNc}]"
+        printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
     fi
 
     if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        kingsTower_battle 400 1250 # The Brutal Citadel
-        printInColor "INFO" "The Brutal Citadel [${cGreen}$? W${cNc}]"
+        printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
     fi
 
     if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-        kingsTower_battle 750 660 # The World Tree
-        printInColor "INFO" "The World Tree [${cGreen}$? W${cNc}]"
+        printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
     fi
 
     if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        kingsTower_battle 270 500 # Celestial Sanctum
-        printInColor "INFO" "Celestial Sanctum [${cGreen}$? W${cNc}]"
+        printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
     fi
 
     if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-        kingsTower_battle 780 1100 # The Forsaken Necropolis
-        printInColor "INFO" "The Forsaken Necropolis [${cGreen}$? W${cNc}]"
+        printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
     fi
 
     # Exit
@@ -949,7 +942,7 @@ kingsTower() {
 # ##############################################################################
 kingsTower_battle() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower_battle ${cPurple}$*${cNc}" >&2; fi
-    _kingsTower_battle_COUNT=0
+    _kingsTower_battle_COUNT=0 # Equivalent to loose
     _kingsTower_battle_WIN=0
     inputTapSleep "$1" "$2" 2 # Tap chosen tower
 
@@ -992,7 +985,7 @@ kingsTower_battle() {
         fi
         sleep 2
     fi
-    return $_kingsTower_battle_WIN
+    getCountersInColor $_kingsTower_battle_WIN $_kingsTower_battle_COUNT
 }
 
 # ##############################################################################
@@ -1231,7 +1224,7 @@ guildHunts_quickBattle() {
     _guildHunts_quickBattle_COUNT=0
     # Check if possible to fight wrizz to secure totalAmountGuildBossTries -> Grey: a1a1a1 / Blue: 9de8be
     until [ "$_guildHunts_quickBattle_COUNT" -ge "$totalAmountGuildBossTries" ] || testColorOR 710 1840 a1a1a1; do
-        if [ "$doGuildHuntsBattle" = true ]; then
+        if [ "$guildBattleType" = "challenge" ]; then
             inputTapSleep 350 1840   # Challenge
             inputTapSleep 550 1850 0 # Battle
             waitBattleStart

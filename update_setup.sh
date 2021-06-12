@@ -161,14 +161,13 @@ doKingsTower=${doKingsTower:-"true"}\n\
 \n\
 # Ranhorn\n\
 doGuildHunts=${doGuildHunts:-"true"}\n\
-doGuildHuntsBattle=${doGuildHuntsBattle:-"false"}\n\
+guildBattleType=${guildBattleType:-"quick"}\n\
 doTwistedRealmBoss=${doTwistedRealmBoss:-"true"}\n\
 doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
 allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
-# Only works if 'Hide Inn Heroes' is enabled under 'Settings -> Memory'\n\
 doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
 \n\
 # End\n\

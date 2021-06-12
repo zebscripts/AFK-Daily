@@ -82,7 +82,7 @@ You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/w
 | Variable                  |   Type    | Description                                                                                                          | Default |
 | :------------------------ | :-------: | :------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `doGuildHunts`            | `Boolean` | If `true`, fights Wrizz and possibly Soren.                                                                          | `true`  |
-| `doGuildHuntsBattle`      | `Boolean` | If `true`, do guild hunt with manual challenge, no quick battle                                                      | `false` |
+| `guildBattleType`         | `Boolean` | If `doGuildHunts=true`, do guild hunt with `challenge` or `quick` battle                                             | `quick` |
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
 | `doStrengthenCrystal`     | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
