@@ -28,6 +28,7 @@ totalAmountOakRewards=3
 activeTab="Start"
 currentPos="default"
 dayofweek=$(TZ=UTC date +%u)
+doLootAfkChest2="$doLootAfkChest"
 HEX=00000000
 forceFightCampaign=false
 forceWeekly=false
@@ -1945,15 +1946,11 @@ init() {
 run() {
     # CAMPAIGN TAB
     switchTab "Campaign"
-    if checkToDo doCollectMerchantFreebies; then
-        collectMerchants
-        currentPos="default"# doCollectMerchantFreebies Will be false after 2nd uses
-    fi
     if checkToDo doLootAfkChest; then lootAfkChest; fi
     if checkToDo doChallengeBoss; then challengeBoss; fi
     if checkToDo doFastRewards; then fastRewards; fi
     if checkToDo doCollectFriendsAndMercenaries; then collectFriendsAndMercenaries; fi
-    if checkToDo doLootAfkChest; then lootAfkChest; fi
+    if checkToDo doLootAfkChest2; then lootAfkChest; fi
 
     # DARK FOREST TAB
     switchTab "Dark Forest"
