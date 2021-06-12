@@ -459,7 +459,7 @@ doAuto() {
 # ##############################################################################
 doSpeed() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "doSpeed" >&2; fi
-    testColorORTapSleep 990 1440 332b2b 0 # On:743b2a Off:332b2b
+    testColorORTapSleep 990 1440 332b2b 0 # On:[x2: 753b29, x4: 743b2a] Off:332b2b
 }
 
 # ##############################################################################
@@ -601,7 +601,7 @@ challengeBoss() {
         _challengeBoss_WIN=0
 
         # Check for battle screen
-        while testColorOR -d "$DEFAULT_DELTA" -f 20 1200 eaca95 && [ "$maxCampaignFights" -le 0 ]; do
+        while testColorOR -d 20 -f 20 1200 eaca95 && [ "$maxCampaignFights" -ge 0 ]; do
             inputTapSleep 550 1850 .5 # Battle
             waitBattleStart
             doAuto
@@ -907,27 +907,32 @@ kingsTower() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower" >&2; fi
     inputTapSleep 500 870 5 # King's Tower
 
-    # Towers
-    printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
+    if testColorOR 550 150 1a1212; then
+        # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
+        printInColor "INFO" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
+    else
+        # King's Tower with Towers of Esperia unlocked (after stage 15-1)
+        printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
 
-    if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
-    fi
+        if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
+        fi
 
-    if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
-    fi
+        if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
+        fi
 
-    if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-        printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
-    fi
+        if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
+        fi
 
-    if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-        printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
-    fi
+        if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
+        fi
 
-    if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-        printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
+        if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
+        fi
     fi
 
     # Exit
@@ -944,7 +949,10 @@ kingsTower_battle() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower_battle ${cPurple}$*${cNc}" >&2; fi
     _kingsTower_battle_COUNT=0 # Equivalent to loose
     _kingsTower_battle_WIN=0
-    inputTapSleep "$1" "$2" 2 # Tap chosen tower
+
+    if [ "$1" -ge 0 ] && [ "$2" -ge 0 ]; then # Will be -1 if we already are in the tower
+        inputTapSleep "$1" "$2" 2 # Tap chosen tower
+    fi
 
     # Check if inside tower
     if testColorOR 550 150 1a1212; then
@@ -1919,6 +1927,7 @@ init() {
     switchTab "Ranhorn"
     sleep 1
     switchTab "Campaign" true
+    sleep 1
 
     if testColorOR -f 740 205 ffc359; then # Check if game is being updated
         printInColor "WARN" "Game is being updated!" >&2
@@ -1980,15 +1989,10 @@ run() {
 }
 
 printInColor "INFO" "Starting script... ($(date))"
-if [ "$forceFightCampaign" = true ]; then
-    printInColor "INFO" "Fight Campaign is ON"
-fi
-if [ "$forceWeekly" = true ]; then
-    printInColor "INFO" "Weekly is ON"
-fi
-if [ "$DEBUG" -gt 0 ]; then
-    printInColor "INFO" "Debug is ON [${cCyan}$DEBUG${cNc}]"
-fi
+if [ "$testServer" = true ]; then printInColor "INFO" "Test server is ${cBlue}ON${cNc}" ;fi
+if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug is ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
+if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign is ${cBlue}ON${cNc}"; fi
+if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly is ${cBlue}ON${cNc}"; fi
 
 init
 run
