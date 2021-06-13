@@ -349,7 +349,7 @@ getLatestPatch() {
 # ##############################################################################
 restartAdb() {
     printTask "Restarting ADB..."
-    printInNewLine "$($adb kill-server)"
+    printInNewLine "$($adb kill-server 1>/dev/null 2>&1)"
     printInNewLine "$($adb start-server 1>/dev/null 2>&1)"
     printSuccess "Restarted!"
 }
