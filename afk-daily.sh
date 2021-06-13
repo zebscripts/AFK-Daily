@@ -341,7 +341,9 @@ testColorNAND() {
         else
             if [ "$DEBUG" -ge 2 ] || [ "$_testColorNAND_max_delta" -gt "0" ]; then
                 _testColorNAND_delta=$(HEXColorDelta "$HEX" "$i")
-                printInColor "DEBUG" "testColorNAND ${cCyan}$HEX${cNc} != ${cCyan}$i${cNc} [Δ ${cCyan}$_testColorNAND_delta${cNc}%]" >&2
+                if [ "$DEBUG" -ge 2 ]; then
+                    printInColor "DEBUG" "testColorNAND ${cCyan}$HEX${cNc} != ${cCyan}$i${cNc} [Δ ${cCyan}$_testColorNAND_delta${cNc}%]" >&2
+                fi
                 if [ "$_testColorNAND_delta" -le "$_testColorNAND_max_delta" ]; then
                     return 1
                 fi
@@ -423,7 +425,7 @@ verifyHEX() {
     if [ "$HEX" != "$3" ]; then
         printInColor "ERROR" "verifyHEX: Failure! Expected ${cCyan}$3${cNc}, but got ${cCyan}$HEX${cNc} instead. [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]" >&2
         printInColor "ERROR" "$5" >&2
-        printInColor "INFO" "Restarting"
+        printInColor "INFO" "Restarting [${cCyan}$tries${cNc}]"
         init
         run
     else
@@ -541,7 +543,7 @@ waitBattleFinish() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "waitBattleFinish ${cPurple}$*${cNc}" >&2; fi
     sleep "$1"
     finished=false
-    while [ $finished = false ]; do
+    until [ $finished = true ]; do
         # First HEX local device, second bluestacks
         if testColorOR -f 560 350 b8894d b7894c; then # Victory
             battleFailed=false
@@ -566,7 +568,7 @@ waitBattleStart() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "waitBattleStart" >&2; fi
     _waitBattleStart_count=0 # Max loops = 10 (10x.5s=5s max)
     # Check if pause button is present && less than 10 tries
-    until testColorOR -f 110 1465 482f1f && [ $_waitBattleStart_count -lt 10 ]; do
+    until testColorOR -f 110 1465 482f1f || [ $_waitBattleStart_count -ge 10 ]; do
         # Maybe pause button doesn't exist, so instead check for a skip button
         if testColorOR 760 1440 502e1d; then return; fi
 
@@ -589,9 +591,9 @@ challengeBoss() {
     # @kevingrillet > @Zebiano: I did add few seconds so I think it's OK now.
     # TODO: Potentially breaks when player gets to change chapter
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "challengeBoss" >&2; fi
-    inputTapSleep 550 1650 3
+    inputTapSleep 550 1650 3            # Begin
     if testColorOR 550 740 f2d79f; then # Check if boss
-        inputTapSleep 550 1450 3
+        inputTapSleep 550 1450 3        # Begin
     fi
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
@@ -601,7 +603,7 @@ challengeBoss() {
         _challengeBoss_WIN=0
 
         # Check for battle screen
-        while testColorOR -d 20 -f 20 1200 eaca95 && [ "$maxCampaignFights" -ge 0 ]; do
+        until testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 eaca95 || [ "$maxCampaignFights" -le 0 ]; do
             inputTapSleep 550 1850 .5 # Battle
             waitBattleStart
             doAuto
@@ -622,12 +624,25 @@ challengeBoss() {
                         inputTapSleep 550 1450 5
                     fi
                 else
-                    inputTapSleep 550 1150 3 # Continue to next battle
+                    inputTapSleep 550 1670 3 # Continue to next battle
+
+                    if testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 eaca95; then # For low levels, does not exists (before stage 4)
+                        inputTapSleep 550 1650 3                                 # Begin
+                        if testColorOR 550 740 f2d79f; then                      # Check if boss
+                            inputTapSleep 550 1450 3                             # Begin
+                        fi
+                    fi
                 fi
                 _challengeBoss_WIN=$((_challengeBoss_WIN + 1)) # Increment
             else                                               # Loose
-                # Try again
-                inputTapSleep 550 1720 5
+                inputTapSleep 550 1720 5                       # Try again
+
+                if testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 eaca95; then # For low levels, does not exists (before stage 4)
+                    inputTapSleep 550 1650 3                                 # Begin
+                    if testColorOR 550 740 f2d79f; then                      # Check if boss
+                        inputTapSleep 550 1450 3                             # Begin
+                    fi
+                fi
 
                 _challengeBoss_LOOSE=$((_challengeBoss_LOOSE + 1)) # Increment
                 maxCampaignFights=$((maxCampaignFights - 1))       # Dicrement
@@ -635,7 +650,9 @@ challengeBoss() {
         done
 
         # Return to campaign
-        inputTapSleep 60 1850 # Return
+        if testColorNAND 450 1775 cc9261; then # For low levels, you are automatically kick out (before stage 4)
+            inputTapSleep 60 1850              # Return
+        fi
 
         testColorORTapSleep 715 1260 feffff # Check for confirm to exit button
     else
@@ -792,17 +809,21 @@ arenaOfHeroes() {
             res=$?
             if [ $res = 0 ]; then
                 wait
-                inputTapSleep 550 1850 0 # Battle
-                waitBattleStart
-                doSkip
-                waitBattleFinish 2
-                if [ "$battleFailed" = false ]; then
-                    inputTapSleep 550 1550                         # Collect
-                    _arenaOfHeroes_WIN=$((_arenaOfHeroes_WIN + 1)) # Increment
+                if testColorOR -d "$DEFAULT_DELTA" 20 1200 eaca95; then
+                    inputTapSleep 550 1850 0 # Battle
+                    waitBattleStart
+                    doSkip
+                    waitBattleFinish 2
+                    if [ "$battleFailed" = false ]; then
+                        inputTapSleep 550 1550                         # Collect
+                        _arenaOfHeroes_WIN=$((_arenaOfHeroes_WIN + 1)) # Increment
+                    else
+                        _arenaOfHeroes_LOOSE=$((_arenaOfHeroes_LOOSE + 1)) # Increment
+                    fi
+                    inputTapSleep 550 1550 3 # Finish battle
                 else
-                    _arenaOfHeroes_LOOSE=$((_arenaOfHeroes_LOOSE + 1)) # Increment
+                    printInColor "WARN" "Failed to enter battle in the Arena of Heroes."
                 fi
-                inputTapSleep 550 1550 3 # Finish battle
             fi
             totalAmountArenaTries=$((totalAmountArenaTries - 1)) # Dicrement
         done
@@ -951,15 +972,15 @@ kingsTower_battle() {
     _kingsTower_battle_WIN=0
 
     if [ "$1" -ge 0 ] && [ "$2" -ge 0 ]; then # Will be -1 if we already are in the tower
-        inputTapSleep "$1" "$2" 2 # Tap chosen tower
+        inputTapSleep "$1" "$2" 2             # Tap chosen tower
     fi
 
     # Check if inside tower
     if testColorOR 550 150 1a1212; then
         inputTapSleep 540 1350 # Challenge
 
-        # Battle while less than maxKingsTowerFights & we haven't reached daily limit of 10 floors
-        while [ "$_kingsTower_battle_COUNT" -lt "$maxKingsTowerFights" ] && testColorNAND -f 550 150 1a1212; do
+        # Battle until equal to maxKingsTowerFights & we haven't reached daily limit of 10 floors
+        until [ "$_kingsTower_battle_COUNT" -ge "$maxKingsTowerFights" ] || testColorOR -f 550 150 1a1212; do
             inputTapSleep 550 1850 0 # Battle
             waitBattleFinish 2
 
@@ -1030,17 +1051,22 @@ legendsTournament() {
     until [ "$totalAmountTournamentTries" -le 0 ]; do # Repeat a battle for as long as totalAmountTournamentTries
         inputTapSleep 550 1840 4                      # Challenge
         inputTapSleep 800 1140 4                      # Third opponent
-        inputTapSleep 550 1850 4                      # Begin Battle
-        # inputTapSleep 770 1470 4
-        waitBattleStart
-        doSkip
-        waitBattleFinish 4
-        if [ "$battleFailed" = false ]; then
-            _legendsTournament_WIN=$((_legendsTournament_WIN + 1)) # Increment
+
+        if testColorOR -d "$DEFAULT_DELTA" 20 1200 eaca95; then
+            inputTapSleep 550 1850 4 # Begin Battle
+            # inputTapSleep 770 1470 4
+            waitBattleStart
+            doSkip
+            waitBattleFinish 4
+            if [ "$battleFailed" = false ]; then
+                _legendsTournament_WIN=$((_legendsTournament_WIN + 1)) # Increment
+            else
+                _legendsTournament_LOOSE=$((_legendsTournament_LOOSE + 1)) # Increment
+            fi
+            inputTapSleep 550 800 4 # Tap anywhere to close
         else
-            _legendsTournament_LOOSE=$((_legendsTournament_LOOSE + 1)) # Increment
+            printInColor "WARN" "Failed to enter battle at the Legends Tournament."
         fi
-        inputTapSleep 550 800 4                                        # Tap anywhere to close
         totalAmountTournamentTries=$((totalAmountTournamentTries - 1)) # Dicrement
     done
 
@@ -1731,7 +1757,7 @@ collectQuestChests() {
 collectQuestChests_quick() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectQuestChests_quick" >&2; fi
     # Collect Quests
-    while testColorOR -d "$DEFAULT_DELTA" 700 670 7dfff1; do # Old value: 82fdf5
+    until testColorNAND -d "$DEFAULT_DELTA" 700 670 7dfff1; do # Old value: 82fdf5
         inputTapSleep 930 680
     done
 
@@ -1991,7 +2017,7 @@ run() {
 }
 
 printInColor "INFO" "Starting script... ($(date))"
-if [ "$testServer" = true ]; then printInColor "INFO" "Test server is ${cBlue}ON${cNc}" ;fi
+if [ "$testServer" = true ]; then printInColor "INFO" "Test server is ${cBlue}ON${cNc}"; fi
 if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug is ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
 if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign is ${cBlue}ON${cNc}"; fi
 if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly is ${cBlue}ON${cNc}"; fi
