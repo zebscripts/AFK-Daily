@@ -1424,9 +1424,9 @@ function strengthenCrystal() {
 
     # Check if possible to buy a slot
     getColor 380 890
-    if [ "$RGB" == "efbd67" ]; then
+    if [ "$RGB" == "f5be5a" ]; then
         input tap 710 1265
-        sleep 2
+        sleep 4
     fi
 
     # TODO Can have a special bundle window. Only happens if a player actually levels the crystal up by a level. The window is closable by tapping the very top of the screen
@@ -1529,6 +1529,7 @@ function oakInn() {
 # test 700 670 3 0.5 # Check for Quest collection RGB
 # test 715 1815 3 0.5 # Check if Soren is open
 # test 740 205 3 0.5 # Check if game is updating
+# test 380 890 3 0.5 # Check for being able to spend coins in the crystal
 # test 270 1800 3 0.5 # Oak Inn Present Tab 1
 # test 410 1800 3 0.5 # Oak Inn Present Tab 2
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
