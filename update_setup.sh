@@ -24,7 +24,7 @@ cleanAKFScript() {
 # Descripton    : Convert old file & format
 # ##############################################################################
 convertAKFScriptTMPtoINI() {
-    for f in .*afkscript.tmp; do
+    for f in .*afkscript*.tmp; do
         if [ ! -f "$f" ]; then continue; fi
         echo "# afk-daily" >"$(basename "$f" .tmp)".ini
         case "$(uname -s)" in # Check OS
@@ -57,7 +57,7 @@ updateAFKScript() {
         ;;
     esac
 
-    for f in .*afkscript.ini; do
+    for f in .*afkscript*.ini; do
         if [ ! -f "$f" ]; then continue; fi
         source "$f" # Load the file
         echo -e "# afk-daily\n\

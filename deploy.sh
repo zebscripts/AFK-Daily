@@ -176,6 +176,11 @@ checkDate() {
         if [ "$(datediff "$lastWeekly")" -lt -7 ]; then
             forceWeekly=true
         fi
+    else
+        if [ "$doChallengeBoss" = true ]; then
+            forceFightCampaign=true
+        fi
+        forceWeekly=true
     fi
     printSuccess "Done!"
 }
@@ -271,15 +276,15 @@ checkGitUpdate() {
 # ##############################################################################
 checkSetupUpdate() {
     printTask "Checking for setup updates..."
-    for f in .*afkscript.tmp; do
+    for f in .*afkscript.*; do
         if [ -e "$f" ]; then
-            ./update_setup -a
+            printInNewLine "./update_setup.sh -a"
             break
         fi
     done
-    for f in config*.sh; do
+    for f in config*.*; do
         if [ -e "$f" ]; then
-            ./update_setup -c
+            printInNewLine "./update_setup.sh -c"
             break
         fi
     done
@@ -553,7 +558,7 @@ done
 while getopts ":a:cd:fho:tv:w" option; do
     case $option in
     a)
-        tempFile=".${OPTARG}afkscript.tmp"
+        tempFile=".afkscript-${OPTARG}.ini"
         ;;
     c)
         check_all

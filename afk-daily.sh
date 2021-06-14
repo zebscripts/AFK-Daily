@@ -1008,9 +1008,7 @@ kingsTower_battle() {
         done
 
         # Return from chosen tower / battle
-        if [ "$1" -ge 0 ] && [ "$2" -ge 0 ]; then # Will be -1 if we already are in the tower
-            inputTapSleep 70 1810 3
-        fi
+        inputTapSleep 70 1810 3
         if testColorOR 550 150 1a1212; then # In case still in tower, exit once more
             inputTapSleep 70 1810 0
         fi

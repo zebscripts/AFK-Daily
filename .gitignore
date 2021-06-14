@@ -8,5 +8,5 @@
 #.wiki/
 adb/
 config*.ini
-.*afkscript.ini
+.*afkscript*.ini
 *.bak
