@@ -1073,8 +1073,8 @@ legendsTournament() {
     inputTapSleep 70 1810
     inputTapSleep 70 1810
     verifyHEX 240 1775 d49a61 \
-        "Battled at the Legends Tournament. $(getCountersInColor $_legendsTournament_WIN $_legendsTournament_WIN)" \
-        "Failed to battle at the Legends Tournament. $(getCountersInColor $_legendsTournament_WIN $_legendsTournament_WIN)"
+        "Battled at the Legends Tournament. $(getCountersInColor $_legendsTournament_WIN $_legendsTournament_LOOSE)" \
+        "Failed to battle at the Legends Tournament. $(getCountersInColor $_legendsTournament_WIN $_legendsTournament_LOOSE)"
 }
 
 # ##############################################################################
