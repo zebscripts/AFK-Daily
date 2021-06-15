@@ -46,7 +46,7 @@ printInColorTest() {
 
 printInNewLine() {
     if [ -n "$1" ]; then
-        echo
+        checkNewLine
         echo "$1"
     fi
 }
