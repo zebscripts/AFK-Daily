@@ -278,13 +278,13 @@ checkSetupUpdate() {
     printTask "Checking for setup updates..."
     for f in .*afkscript.*; do
         if [ -e "$f" ]; then
-            printInNewLine "./update_setup.sh -a"
+            printInNewLine "$(./update_setup.sh -a)"
             break
         fi
     done
     for f in config*.*; do
         if [ -e "$f" ]; then
-            printInNewLine "./update_setup.sh -c"
+            printInNewLine "$(./update_setup.sh -c)"
             break
         fi
     done
@@ -507,6 +507,9 @@ show_help() {
     echo "   -f, --fight"
     echo "      Force campaign battle (ignore 3 day optimisation)"
     echo
+    echo "   -i, --ini [SUB]"
+    echo "      Specify config: \"config-[SUB].ini\""
+    echo
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
     echo
@@ -547,6 +550,7 @@ for arg in "$@"; do
     "--device") set -- "$@" "-d" ;;
     "--fight") set -- "$@" "-f" ;;
     "--help") set -- "$@" "-h" ;;
+    "--ini") set -- "$@" "-i" ;;
     "--output") set -- "$@" "-o" ;;
     "--test") set -- "$@" "-t" ;;
     "--verbose") set -- "$@" "-v" ;;
@@ -555,7 +559,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fho:tv:w" option; do
+while getopts ":a:cd:fhi:o:tv:w" option; do
     case $option in
     a)
         tempFile=".afkscript-${OPTARG}.ini"
@@ -577,6 +581,9 @@ while getopts ":a:cd:fho:tv:w" option; do
     h)
         show_help
         exit 0
+        ;;
+    i)
+        configFile="config-${OPTARG}.ini"
         ;;
     o)
         output="${OPTARG}"
