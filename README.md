@@ -12,7 +12,7 @@
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.64.03-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.65.03-blue.svg"></img></a>
   </p>
 </div>
 
@@ -118,17 +118,17 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 
 <hr>
 
-*Bluestacks:*
+*Bluestacks 5:*
 
 1. **Settings:** Under Bluestacks settings, make sure to make the following changes:
    1. **Display:**
       - Change the resolution to `1080x1920`
       - *Optional:* Change from Landscape (Tablet mode) to Portrait (Phone mode)
-      - *Optional:* Use `240 DPI` (still have to test how this affects the script)
-   2. **Preferences:**
-      - Enable Android Debug Bridge (ADB)
+      - *Recommended:* Use `240 DPI` (shouldn't affect the script, but you never know)
+   2. **Device Settings:**
+      - *Recommended:* Samsung Galaxy S8 Plus
    3. **Advanced:**
-      - *Optional:* Change the predefined profile to `Samsung Galaxy S10`
+      - Enable Android Debug Bridge (ADB)
 2. **AFK Arena:** Install the game. Duh.
 
 <hr>
