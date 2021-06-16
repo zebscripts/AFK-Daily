@@ -170,13 +170,13 @@ getCountersInColor() {
 # ##############################################################################
 # Function Name : HEXColorDelta
 # Args          : <COLOR1> <COLOR2>
-# Output        : stdout [0 means same colors, 100 means opposite colors]
+# Output        : stdout [0 means similar colors, 100 means opposite colors]
 # Source        : https://github.com/kevingrillet/ShellUtils/blob/main/utils/utils_colors.sh
 # ##############################################################################
 HEXColorDelta() {
     if [ "$#" -ne 2 ]; then
         echo "Usage: HEXColorDelta <COLOR1> <COLOR2>" >&2
-        echo " 0 means same colors, 100 means opposite colors" >&2
+        echo " 0 means similar colors, 100 means opposite colors" >&2
         return
     fi
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "HEXColorDelta ${cPurple}$*${cNc}" >&2; fi
@@ -425,7 +425,7 @@ verifyHEX() {
     if [ "$HEX" != "$3" ]; then
         printInColor "ERROR" "verifyHEX: Failure! Expected ${cCyan}$3${cNc}, but got ${cCyan}$HEX${cNc} instead. [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]" >&2
         printInColor "ERROR" "$5" >&2
-        printInColor "INFO" "Restarting [${cCyan}$tries${cNc}]"
+        printInColor "WARN" "Restarting for the ${cCyan}$((tries + 1))${cNc} time."
         init
         run
     else
@@ -479,6 +479,7 @@ doSkip() {
 # Args          : <TAB_NAME> [<FORCE>]
 #                   <TAB_NAME>: Campaign / Dark Forest / Ranhorn / Chat
 #                   <FORCE>: true / false, default false
+# TODO: Maybe put sentences "switched to Tab X" only visible in debug? They do kind of bloat the terminal.
 # ##############################################################################
 switchTab() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "switchTab ${cPurple}$*${cNc} [activeTab=${cCyan}$activeTab${cNc}]" >&2; fi
@@ -516,6 +517,7 @@ switchTab() {
             [ "$doTwistedRealmBoss" = true ] ||
             [ "$doBuyFromStore" = true ] ||
             [ "$doStrengthenCrystal" = true ] ||
+            [ "$doTempleOfAscension" = true ] ||
             [ "$doCompanionPointsSummon" = true ] ||
             [ "$doCollectOakPresents" = true ] ||
             [ "$doCollectQuestChests" = true ] ||
@@ -1159,16 +1161,17 @@ buyFromStore() {
         # Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
         if [ "$buyWeeklyGuild" = true ]; then
             inputTapSleep 530 1810                                  # Guild Store
-            if testColorOR -d "$DEFAULT_DELTA" 250 740 ea1c09; then # row 1, item 1
-                buyFromStore_buyItem 180 810
-            elif testColorOR -d "$DEFAULT_DELTA" 500 740 ed240f; then # row 1, item 2
-                buyFromStore_buyItem 420 810
-            elif testColorOR -d "$DEFAULT_DELTA" 740 740 f51f06; then # row 1, item 3
-                buyFromStore_buyItem 660 810
-            elif testColorOR -d "$DEFAULT_DELTA" 980 740 f12f1e; then # row 1, item 4
-                buyFromStore_buyItem 900 810
+            if testColorOR -d "$DEFAULT_DELTA" 100 910 87b8e4; then # row 1, item 1
+                if testColorOR -d "5" 250 740 ea1c09; then buyFromStore_buyItem 180 810; fi
+            elif testColorOR -d "$DEFAULT_DELTA" 345 910 93c1ed; then # row 1, item 2
+                if testColorOR -d "5" 500 740 ed240f; then buyFromStore_buyItem 420 810; fi
+            elif testColorOR -d "$DEFAULT_DELTA" 590 910 3b2312; then # row 1, item 3
+                if testColorOR -d "5" 740 740 f51f06; then buyFromStore_buyItem 660 810; fi
+            elif testColorOR -d "$DEFAULT_DELTA" 835 910 81bde2; then # row 1, item 4
+                if testColorOR -d "5" 980 740 f12f1e; then buyFromStore_buyItem 900 810; fi
             else
-                buyFromStore_buyItem 180 810
+                # TODO: Not sure if we should buy one if we don't find any... I think I prefer to not buy anything.
+                if testColorOR -d "$DEFAULT_DELTA" 100 910 87b8e4; then buyFromStore_buyItem 180 810; fi
             fi
         fi
         if [ "$buyWeeklyLabyrinth" = true ]; then
@@ -1216,7 +1219,8 @@ guildHunts() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "guildHunts" >&2; fi
     inputTapSleep 380 360 10
 
-    if testColorOR 380 500 793929; then # Check for fortune chest
+    # Check for fortune chest
+    if testColorOR 380 500 8e4633; then
         inputTapSleep 560 1300
         inputTapSleep 540 1830
     fi
@@ -1568,6 +1572,7 @@ oakInn_tryCollectPresent() {
 oakInnSpeedy() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
     inputTapSleep 780 270 5 # Oak Inn
+    printInColor "INFO" "Searching for presents to collect..."
     _oakInn_COUNT=0
     _oakInn_COLLECTED=0
     until [ "$_oakInn_COLLECTED" -ge "$totalAmountOakRewards" ] || [ "$_oakInn_COUNT" -ge $((totalAmountOakRewards * 10)) ]; do
@@ -1575,7 +1580,7 @@ oakInnSpeedy() {
         screenshotRequired=true
         until [ "$_oakInn_ROW_COUNT" -ge 100 ]; do
             if testColorOR -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
-                inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 .5 # Tap present
+                inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
                 inputTapSleep 540 1650 1                               # Ok
                 inputTapSleep 540 1650 .5                              # Collect reward
                 _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1))           # Increment
@@ -1597,6 +1602,9 @@ oakInnSpeedy() {
 # ##############################################################################
 # Function Name : strengthenCrystal
 # Descripton    : Strenghen Crystal
+# TODO: Would be nice to have a var inside config.ini that would make this function either do one action on the crystal or do
+# TODO: an action until it's not possible anymore (player is out of resources)
+# TODO: Actually make use of 'allowCrystalLevelUp' from the config.ini here...? Or am I missing something?
 # ##############################################################################
 strengthenCrystal() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "strengthenCrystal" >&2; fi
@@ -1626,9 +1634,12 @@ strengthenCrystal() {
 # ##############################################################################
 # Function Name : templeOfAscension
 # Descripton    : Auto ascend heroes
+# TODO: This is completely broken currently... Needs to be checked!
+# TODO: Would be cool to only do "Auto Ascend" and not "Smart Ascend" (or whatever it's called)
 # ##############################################################################
 templeOfAscension() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "templeOfAscension" >&2; fi
+    inputTapSleep 270 940 4                                  # Temple of Ascension
     if testColorOR -d "$DEFAULT_DELTA" 450 1050 ef2118; then # If red circle
         inputTapSleep 280 960                                # Temple Of Ascension
         inputTapSleep 900 800                                # Auto Ascend
@@ -1639,6 +1650,7 @@ templeOfAscension() {
         printInColor "WARN" "No heroes to ascend."
     fi
 
+    inputTapSleep 70 1810 # Exit
     wait
     verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
 }
@@ -1735,6 +1747,7 @@ checkWhereToEnd() {
 # ##############################################################################
 # Function Name : collectQuestChests
 # Descripton    : Collects quest chests (well, switch tab then call collectQuestChests_quick)
+# TODO: Would be nice to check which chests are redeemable to save some time and not attempt to collect unclaimable chests
 # ##############################################################################
 collectQuestChests() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectQuestChests" >&2; fi
@@ -1852,6 +1865,7 @@ collectMerchants() {
 # Function Name : colorTest
 # Description   : Print all colors
 # Output        : stdout colors test
+# TODO: Remove before release
 # ##############################################################################
 colorTest() {
     for clfg in 30 31 32 33 34 35 36 37 90 91 92 93 94 95 96 97 39; do
@@ -1867,6 +1881,7 @@ colorTest() {
 # Function Name : printInColorTest
 # Description   : Print all types of messages
 # Output        : stdout colors test
+# TODO: Remove before release
 # ##############################################################################
 printInColorTest() {
     printInColor "DEBUG" "Lorem ipsum ${cCyan}dolor${cNc} sit amet [${cGreen}25 W${cNc} / ${cRed}10 L${cNc}]"
@@ -1883,6 +1898,8 @@ printInColorTest() {
 # Description   : Print HEX then exit
 # Args          : <X> <Y> [<REPEAT>] [<SLEEP>]
 # Output        : stdout color
+# TODO: Add argument to insert another color to test for delta between $HEX and color. Very low priority though! If it's too complicated
+# TODO: we shouldn't even do it, I don't want to bloat the script even more...
 # ##############################################################################
 test() {
     _test_COUNT=0
@@ -1902,6 +1919,7 @@ test() {
 # ##############################################################################
 tests() {
     printInColor "INFO" "Starting tests... ($(date))"
+    test 450 1050                              # Random coords
     # colorTest                                 # Print all available colors :)
     # printInColorTest                          # Test all printInColor possibilities
     # test 550 740                              # Check for Boss in Campaign
@@ -1915,8 +1933,7 @@ tests() {
     # test 550 1800                             # Oak Inn Present Tab 3
     # test 690 1800                             # Oak Inn Present Tab 4
 
-    # test
-    # HEXColorDelta "$HEX"
+    # HEXColorDelta "$HEX" "ea1c09"
     printInColor "INFO" "End of tests! ($(date))"
     exit
 }
@@ -1941,15 +1958,13 @@ init() {
 
     # Loop until the game has launched
     loopUntilRGB 1 450 1775 cc9261
-    wait
+    sleep 3
 
     # Close popup
+    # TODO: Still not working...
     until testColorOR 450 1775 cc9261; do
         inputTapSleep 550 1850 .1
     done
-
-    # Open menu for friends, etc
-    inputTapSleep 970 380 0
 
     # Preload graphics
     switchTab "Campaign" true
@@ -1960,6 +1975,9 @@ init() {
     sleep 1
     switchTab "Campaign" true
     sleep 1
+
+    # Open menu for friends, etc
+    inputTapSleep 970 380 0
 
     if testColorOR -f 740 205 ffc359; then # Check if game is being updated
         printInColor "WARN" "Game is being updated!" >&2
@@ -2011,6 +2029,7 @@ run() {
     if checkToDo doCollectOakPresents; then oakInnSpeedy; fi
 
     # END
+    # TODO: Remove these from a specific tab as they can be executed on the campaign, dark forest and/or ranhorn
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
     if checkToDo doCollectMail; then collectMail; fi
     if checkToDo doCollectMerchantFreebies; then collectMerchants; fi

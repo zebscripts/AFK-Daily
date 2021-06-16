@@ -128,6 +128,8 @@ arenaHeroesOpponent=${arenaHeroesOpponent:-"5"}\n\
 # General\n\
 waitForUpdate=${waitForUpdate:-"true"}\n\
 endAt=${endAt:-"championship"}\n\
+guildBattleType=${guildBattleType:-"quick"}\n\
+allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 \n\
 # Repetitions\n\
 maxCampaignFights=${maxCampaignFights:-"5"}\n\
@@ -161,11 +163,9 @@ doKingsTower=${doKingsTower:-"true"}\n\
 \n\
 # Ranhorn\n\
 doGuildHunts=${doGuildHunts:-"true"}\n\
-guildBattleType=${guildBattleType:-"quick"}\n\
 doTwistedRealmBoss=${doTwistedRealmBoss:-"true"}\n\
 doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
-allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
 doCollectOakPresents=${doCollectOakPresents:-"false"}\n\

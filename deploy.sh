@@ -100,6 +100,7 @@ checkConfig() {
         printTask "Creating new $configFile file..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -107,6 +108,8 @@ arenaHeroesOpponent=5
 # General
 waitForUpdate=true
 endAt="championship"
+guildBattleType=quick
+allowCrystalLevelUp=false
 
 # Repetitions
 maxCampaignFights=5
@@ -140,11 +143,9 @@ doKingsTower=true
 
 # Ranhorn
 doGuildHunts=true
-guildBattleType=quick
 doTwistedRealmBoss=true
 doBuyFromStore=true
 doStrengthenCrystal=true
-allowCrystalLevelUp=false
 doTempleOfAscension=false
 doCompanionPointsSummon=false
 doCollectOakPresents=false
@@ -563,6 +564,12 @@ for arg in "$@"; do
 done
 
 while getopts ":a:cd:fhi:o:tv:w" option; do
+    # TODO: Add an -s flag for testing hex value of a coordinate. 
+    # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
+    # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
+    # TODO: Now that I think about it, this will probably be meh to implement with the current way stuff works. I think the best way to fix
+    # TODO: this is by adding a optargs inside afk-daily.sh if possible, of course adding all the already existing parameters the script
+    # TODO: accepts. That would be dope! I wonder if .sh supports optarg(s) though...
     case $option in
     a)
         tempFile=".afkscript-${OPTARG}.ini"

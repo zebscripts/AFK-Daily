@@ -15,6 +15,7 @@ cPurple="\033[0;95m" # Purple
 cCyan="\033[0;96m"   # Cyan
 cWhite="\033[0;97m"  # White
 
+# Variables
 withoutNewLine=false
 
 checkNewLine() {
@@ -22,6 +23,7 @@ checkNewLine() {
     withoutNewLine=false
 }
 
+# TODO: Remove before release
 colorTest() {
     for clfg in 30 31 32 33 34 35 36 37 90 91 92 93 94 95 96 97 39; do
         str=""
@@ -32,6 +34,7 @@ colorTest() {
     done
 }
 
+# TODO: Remove before release
 printInColorTest() {
     printTask "Lorem ipsum ${cCyan}dolor${cNc} sit amet"
     printSuccess "Lorem ipsum dolor sit amet"
@@ -73,7 +76,7 @@ printTip() {
 # Success
 printSuccess() {
     if [ $withoutNewLine = false ]; then
-        echo -n "        ";
+        echo -n "        "
     else
         withoutNewLine=false
     fi
