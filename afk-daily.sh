@@ -1534,6 +1534,9 @@ function oakInn() {
 # test 410 1800 3 0.5 # Oak Inn Present Tab 2
 # test 550 1800 3 0.5 # Oak Inn Present Tab 3
 # test 690 1800 3 0.5 # Oak Inn Present Tab 4
+# test 760 1440 3 0.5 # Auto button inside battle
+# test 990 1440 3 0.5 # Speed x4 button inside battle
+# test 760 1440 3 0.5 # Skip button inside battle
 
 # --- Script Start --- #
 echo "[INFO] Starting script... ($(date)) "
