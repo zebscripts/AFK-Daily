@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer> <DEBUG>
+# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer> <DEBUG> <configFile>
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -47,10 +47,10 @@ cCyan="\033[0;96m"   # [INFO]
 if [ $# -gt 0 ]; then
     SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
     # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
-    . "/$1/scripts/afk-arena/config.ini"
-    forceFightCampaign=$2
-    forceWeekly=$3
-    testServer=$4
+    . "/$1/scripts/afk-arena/${6:-"config.ini"}"
+    forceFightCampaign=${2:-false}
+    forceWeekly=${3:-false}
+    testServer=${4:-false}
     DEBUG=${5:-$DEBUG}
 else
     SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
@@ -576,6 +576,7 @@ waitBattleStart() {
         sleep .5
         # In case none were found, try again starting with the pause button
     done
+    sleep 1
 }
 
 # ##############################################################################
@@ -1941,6 +1942,11 @@ init() {
     # Loop until the game has launched
     loopUntilRGB 1 450 1775 cc9261
     wait
+
+    # Close popup
+    until testColorOR 450 1775 cc9261; do
+        inputTapSleep 550 1850 .1
+    done
 
     # Open menu for friends, etc
     inputTapSleep 970 380 0
