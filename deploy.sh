@@ -564,7 +564,7 @@ for arg in "$@"; do
 done
 
 while getopts ":a:cd:fhi:o:tv:w" option; do
-    # TODO: Add an -s flag for testing hex value of a coordinate. 
+    # TODO: Add an -s flag for testing hex value of a coordinate.
     # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
     # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
     # TODO: Now that I think about it, this will probably be meh to implement with the current way stuff works. I think the best way to fix
