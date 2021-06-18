@@ -1513,23 +1513,23 @@ collectQuestChests_quick() {
         inputTapSleep 930 680
     done
 
-    if testColorNAND 350 380 54332b; then
+    if testColorNAND 350 380 54332b && testColorNAND -d "$DEFAULT_DELTA" 270 450 4b2711; then
         inputTapSleep 330 430   # Chest 20
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 510 380 543323; then
+    if testColorNAND 510 380 543323 && testColorNAND -d "$DEFAULT_DELTA" 430 450 552813; then
         inputTapSleep 500 430   # Chest 40
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 670 380 54331b; then
+    if testColorNAND 670 380 54331b && testColorNAND -d "$DEFAULT_DELTA" 490 450 4e2713; then
         inputTapSleep 660 430   # Chest 60
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 830 380 533323; then
+    if testColorNAND 830 380 533323 && testColorNAND -d "$DEFAULT_DELTA" 680 450 4a3321; then
         inputTapSleep 830 430   # Chest 80
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 1000 380 543323; then
+    if testColorNAND 1000 380 543323 && testColorNAND -d "$DEFAULT_DELTA" 920 450 662611; then
         inputTapSleep 990 430 # Chest 100
         inputTapSleep 580 600 # Collect
     fi
@@ -1629,7 +1629,7 @@ test() {
 # ##############################################################################
 tests() {
     printInColor "INFO" "Starting tests... ($(date))"
-    test 450 1050 ef2118 # Random coords
+    # test 450 1050 ef2118 # Random coords
     # colorTest                                 # Print all available colors :)
     # printInColorTest                          # Test all printInColor possibilities
     # test 550 740                              # Check for Boss in Campaign
