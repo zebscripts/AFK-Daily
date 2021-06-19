@@ -1415,7 +1415,8 @@ twistedRealmBoss() {
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
             inputTapSleep 550 1850                 # Challenge
-            if testColorNAND 600 1250 53c6bb; then # Check if notice did popup
+            if testColorOR 600 1250 53c6bb; then # Check if notice did popup
+                inputTapSleep 70 1810
                 break
             fi
             inputTapSleep 550 1850 0 # Battle
