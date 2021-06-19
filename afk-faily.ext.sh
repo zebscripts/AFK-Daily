@@ -25,19 +25,19 @@ oakInn() {
         sleep 5
 
         oakInn_tryCollectPresent
-        if [ $oakRes = 0 ]; then # If return value is still 0, no presents were found at first friend
+        if [ "$oakRes" = 0 ]; then # If return value is still 0, no presents were found at first friend
             # Switch friend and search again
             inputTapSleep 1050 950   # Friends
             inputTapSleep 1025 530 5 # Second friend
 
             oakInn_tryCollectPresent
-            if [ $oakRes = 0 ]; then # If return value is again 0, no presents were found at second friend
+            if [ "$oakRes" = 0 ]; then # If return value is again 0, no presents were found at second friend
                 # Switch friend and search again
                 inputTapSleep 1050 950   # Friends
                 inputTapSleep 1025 650 5 # Third friend
 
                 oakInn_tryCollectPresent
-                if [ $oakRes = 0 ]; then # If return value is still freaking 0, I give up
+                if [ "$oakRes" = 0 ]; then # If return value is still freaking 0, I give up
                     printInColor "WARN" "Couldn't collect Oak Inn presents, sowy." >&2
                     break
                 fi

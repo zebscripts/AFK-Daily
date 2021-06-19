@@ -1171,9 +1171,6 @@ buyFromStore() {
                 if testColorOR -d "5" 740 740 f51f06; then buyFromStore_buyItem 660 810; fi
             elif testColorOR -d "$DEFAULT_DELTA" 835 910 81bde2; then # row 1, item 4
                 if testColorOR -d "5" 980 740 f12f1e; then buyFromStore_buyItem 900 810; fi
-            else
-                # TODO: Not sure if we should buy one if we don't find any... I think I prefer to not buy anything.
-                if testColorOR -d "$DEFAULT_DELTA" 100 910 87b8e4; then buyFromStore_buyItem 180 810; fi
             fi
         fi
         if [ "$buyWeeklyLabyrinth" = true ]; then
@@ -1402,7 +1399,6 @@ templeOfAscension() {
 # ##############################################################################
 twistedRealmBoss() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "twistedRealmBoss ${cPurple}$*${cNc}" >&2; fi
-    # TODO: Choose a formation (Would be dope!)
     if [ "$1" = true ]; then # Check if starting from tab or already inside activity
         inputTapSleep 380 360 10
     fi
@@ -1410,21 +1406,28 @@ twistedRealmBoss() {
     # inputTapSleep 380 360 10
     ## End of testing ##
 
-    inputTapSleep 820 820
+    inputTapSleep 820 820 # Twisted Realm
 
     if testColorOR 540 1220 9aedc1; then # Check if TR is being calculated
         printInColor "WARN" "Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
-        inputTapSleep 550 1850   # Twisted Realm
-        inputTapSleep 550 1850 0 # Challenge
-        waitBattleStart
-        doAuto
-        doSpeed
-        waitBattleFinish 40
-        wait
-        inputTapSleep 550 800 3
-        inputTapSleep 550 800
         # TODO: Repeat battle if variable says so
+        printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
+        until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
+            inputTapSleep 550 1850                 # Challenge
+            if testColorNAND 600 1250 53c6bb; then # Check if notice did popup
+                break
+            fi
+            inputTapSleep 550 1850 0 # Battle
+            waitBattleStart
+            doAuto
+            doSpeed
+            waitBattleFinish 40
+            wait
+            inputTapSleep 550 800 3                                                    # tap score screen
+            inputTapSleep 550 800                                                      # tap score screen to close it
+            totalAmountTwistedRealmBossTries=$((totalAmountTwistedRealmBossTries - 1)) # Dicrement
+        done
     fi
 
     inputTapSleep 70 1810
@@ -1513,23 +1516,23 @@ collectQuestChests_quick() {
         inputTapSleep 930 680
     done
 
-    if testColorNAND 350 380 54332b && testColorNAND -d "$DEFAULT_DELTA" 270 450 4b2711; then
+    if testColorNAND -d "$DEFAULT_DELTA" 270 450 4b2711 && testColorNAND 350 380 54332b; then
         inputTapSleep 330 430   # Chest 20
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 510 380 543323 && testColorNAND -d "$DEFAULT_DELTA" 430 450 552813; then
+    if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 510 380 543323; then
         inputTapSleep 500 430   # Chest 40
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 670 380 54331b && testColorNAND -d "$DEFAULT_DELTA" 490 450 4e2713; then
+    if testColorNAND -d "$DEFAULT_DELTA" 490 450 4e2713 && testColorNAND 670 380 54331b; then
         inputTapSleep 660 430   # Chest 60
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 830 380 533323 && testColorNAND -d "$DEFAULT_DELTA" 680 450 4a3321; then
+    if testColorNAND -d "$DEFAULT_DELTA" 680 450 4a3321 && testColorNAND 830 380 533323; then
         inputTapSleep 830 430   # Chest 80
         inputTapSleep 580 600 0 # Collect
     fi
-    if testColorNAND 1000 380 543323 && testColorNAND -d "$DEFAULT_DELTA" 920 450 662611; then
+    if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 1000 380 543323; then
         inputTapSleep 990 430 # Chest 100
         inputTapSleep 580 600 # Collect
     fi
@@ -1671,6 +1674,7 @@ init() {
 
     # Close popup
     # TODO: Still not working...
+    wait
     until testColorOR 450 1775 cc9261; do
         inputTapSleep 550 1850 .1
     done

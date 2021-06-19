@@ -117,6 +117,7 @@ maxKingsTowerFights=5
 totalAmountArenaTries=2+0
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=2+0
+totalAmountTwistedRealmBossTries=1
 
 # Store
 buyStoreDust=true
@@ -404,6 +405,7 @@ validateConfig() {
         $totalAmountArenaTries || -z \
         $totalAmountTournamentTries || -z \
         $totalAmountGuildBossTries || -z \
+        $totalAmountTwistedRealmBossTries || -z \
         $buyStoreDust || -z \
         $buyStorePoeCoins || -z \
         $buyStorePrimordialEmblem || -z \
