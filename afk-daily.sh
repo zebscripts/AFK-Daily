@@ -34,6 +34,9 @@ forceWeekly=false
 oakRes=0
 screenshotRequired=true
 testServer=false
+SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
+INILOCATION="/storage/emulated/0/scripts/afk-arena/"
+INIFILE="config.ini"
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -44,19 +47,37 @@ cBlue="\033[0;94m"   # Values
 cPurple="\033[0;95m" # [DEBUG]
 cCyan="\033[0;96m"   # [INFO]
 
-if [ $# -gt 0 ]; then
-    SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.dump"
-    # SCREENSHOTLOCATION="/$1/scripts/afk-arena/screen.png"
-    . "/$1/scripts/afk-arena/${6:-"config.ini"}"
-    forceFightCampaign=${2:-false}
-    forceWeekly=${3:-false}
-    testServer=${4:-false}
-    DEBUG=${5:-$DEBUG}
-else
-    SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
-    # SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.png"
-    . "/storage/emulated/0/scripts/afk-arena/config.ini"
-fi
+while getopts "d:fi:l:s:tw" opt; do
+    case $opt in
+    d)
+        DEBUG=$OPTARG
+        ;;
+    f)
+        forceFightCampaign=true
+        ;;
+    i)  INIFILE="$OPTARG"
+        ;;
+    l)
+        SCREENSHOTLOCATION="/$OPTARG/scripts/afk-arena/screen.dump"
+        INILOCATION="/$OPTARG/scripts/afk-arena/"
+        ;;
+    s)
+        totest=$OPTARG
+        ;;
+    t)
+        testServer=true
+        ;;
+    w)
+        forceWeekly=true
+        ;;
+    \?)
+        echo "$OPTARG : Invalid option"
+        exit 1
+        ;;
+    esac
+done
+
+. "$INILOCATION$INIFILE"
 doLootAfkChest2="$doLootAfkChest"
 
 # ##############################################################################
@@ -1646,6 +1667,17 @@ tests() {
 
 # Run test functions
 # tests
+
+if [ -n "$totest" ]; then
+    test_x=$(echo "$totest" | cut -d ',' -f 1)
+    test_y=$(echo "$totest" | cut -d ',' -f 2)
+    test_color=$(echo "$totest" | cut -d ',' -f 3)
+    test_repeat=$(echo "$totest" | cut -d ',' -f 4)
+    test_time=$(echo "$totest" | cut -d ',' -f 5)
+
+    test "$test_x" "$test_y" "$test_color" "$test_repeat" "$test_time"
+    exit
+fi
 
 # ##############################################################################
 # Section       : Script Start

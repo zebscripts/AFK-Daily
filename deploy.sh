@@ -30,6 +30,7 @@ forceWeekly=false
 testServer=false
 debug=0
 output=""
+totest=""
 
 # ##############################################################################
 # Section       : Functions
@@ -334,7 +335,12 @@ deploy() {
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
     # Run script. Comment line if you don't want to run the script after pushing to device
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$2" "$forceFightCampaign" "$forceWeekly" "$testServer" "$debug" "$configFile" && saveDate
+    args="-d $debug -i $configFile -l $2"
+    if [ $forceFightCampaign = true ]; then args="$args -f"; fi
+    if [ $forceWeekly = true ]; then args="$args -w"; fi
+    if [ $testServer = true ]; then args="$args -t"; fi
+    if [ -n "$totest" ]; then args="$args -s $totest"; fi
+    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 }
 
 # ##############################################################################
@@ -516,6 +522,9 @@ show_help() {
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
     echo
+    echo "   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]"
+    echo "      Test color of a pixel"
+    echo
     echo "   -t, --test"
     echo "      Launch on test server (experimental)"
     echo
@@ -541,6 +550,9 @@ show_help() {
     echo "   Run script forcing fight & weekly"
     echo "      ./deploy.sh -fw"
     echo
+    echo "   Run script for color testing"
+    echo "      ./deploy.sh -s 800,600"
+    echo
     echo "   Run script with output file (folder need to be created)"
     echo "      ./deploy.sh -o \".history/\$(date +%Y%m%d).log\""
     echo
@@ -565,7 +577,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhi:o:tv:w" option; do
+while getopts ":a:cd:fhi:o:s:tv:w" option; do
     # TODO: Add an -s flag for testing hex value of a coordinate.
     # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
     # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
@@ -599,6 +611,9 @@ while getopts ":a:cd:fhi:o:tv:w" option; do
         ;;
     o)
         output="${OPTARG}"
+        ;;
+    s)
+        totest=${OPTARG}
         ;;
     t)
         testServer=true
