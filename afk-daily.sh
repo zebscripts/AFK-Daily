@@ -479,7 +479,6 @@ doSkip() {
 # Args          : <TAB_NAME> [<FORCE>]
 #                   <TAB_NAME>: Campaign / Dark Forest / Ranhorn / Chat
 #                   <FORCE>: true / false, default false
-# TODO: Maybe put sentences "switched to Tab X" only visible in debug? They do kind of bloat the terminal.
 # ##############################################################################
 switchTab() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "switchTab ${cPurple}$*${cNc} [activeTab=${cCyan}$activeTab${cNc}]" >&2; fi
@@ -590,9 +589,6 @@ waitBattleStart() {
 # Descripton    : Challenges a boss in the campaign
 # ##############################################################################
 challengeBoss() {
-    # TODO: Timings are way to tight here. My BS almost couldn't catch up with it.
-    # @kevingrillet > @Zebiano: I did add few seconds so I think it's OK now.
-    # TODO: Potentially breaks when player gets to change chapter
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "challengeBoss" >&2; fi
     inputTapSleep 550 1650 3            # Begin
     if testColorOR 550 740 f2d79f; then # Check if boss
@@ -1273,7 +1269,7 @@ guildHunts_quickBattle() {
             inputTapSleep 550 800 1 # Reward x2
         else
             inputTapSleep 710 1840 # Quick Battle
-            # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+            # TODO: Check for "some resources have exceeded their maximum limit"
             inputTapSleep 720 1300 1 # Begin
             inputTapSleep 550 800 0  # Reward
             inputTapSleep 550 800 1  # Reward x2
@@ -1343,8 +1339,6 @@ oakInnSpeedy() {
 # ##############################################################################
 # Function Name : strengthenCrystal
 # Descripton    : Strenghen Crystal
-# TODO: Would be nice to have a var inside config.ini that would make this function either do one action on the crystal or do
-# TODO: an action until it's not possible anymore (player is out of resources)
 # ##############################################################################
 strengthenCrystal() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "strengthenCrystal" >&2; fi
@@ -1411,7 +1405,6 @@ twistedRealmBoss() {
     if testColorOR 540 1220 9aedc1; then # Check if TR is being calculated
         printInColor "WARN" "Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
-        # TODO: Repeat battle if variable says so
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
             inputTapSleep 550 1850                 # Challenge
@@ -1491,11 +1484,10 @@ checkWhereToEnd() {
 # ##############################################################################
 # Function Name : collectQuestChests
 # Descripton    : Collects quest chests (well, switch tab then call collectQuestChests_quick)
-# TODO: Would be nice to check which chests are redeemable to save some time and not attempt to collect unclaimable chests
 # ##############################################################################
 collectQuestChests() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectQuestChests" >&2; fi
-    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+    # TODO: Check for "some resources have exceeded their maximum limit"
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
 
@@ -1545,7 +1537,7 @@ collectQuestChests_quick() {
 # ##############################################################################
 collectMail() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMail" >&2; fi
-    # TODO: I think right here should be done a check for "some resources have exceeded their maximum limit". I have ascreenshot somewhere of this.
+    # TODO: Check for "some resources have exceeded their maximum limit"
     if testColorOR -d "$DEFAULT_DELTA" 1020 580 e51f06; then # Red mark
         inputTapSleep 960 630                                # Mail
         inputTapSleep 790 1470                               # Collect all
@@ -1564,6 +1556,7 @@ collectMail() {
 collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
     inputTapSleep 120 300 3 # Merchants
+    # TODO: Breaks if a pop-up message shows up
     inputTapSleep 510 1820  # Merchant Ship
 
     if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
@@ -1743,7 +1736,6 @@ run() {
     if checkToDo doCollectOakPresents; then oakInnSpeedy; fi
 
     # END
-    # TODO: Remove these from a specific tab as they can be executed on the campaign, dark forest and/or ranhorn
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
     if checkToDo doCollectMail; then collectMail; fi
     if checkToDo doCollectMerchantFreebies; then collectMerchants; fi
