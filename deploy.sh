@@ -319,18 +319,21 @@ datediff() {
 # Function Name : deploy
 # Description   : Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
 # Args          : <PLATFORM> <DIRECTORY>
+# FIXME: Still not working as expected. Switch BS to another resolution and it detects it's a wrong one,
+# FIXME: but changing it back didn't work then, kept on wrongly saying I had a wrong resolution.
 # ##############################################################################
 deploy() {
-    # TODO: Check why this does not always work
-    if [[ $($adb shell wm size) = "*1080x1920*" ]] || [[ $($adb shell wm size) = "*1920x1080*" ]]; then # Check for resolution
-        printWarn "Device does not have the correct resolution! Please use a resolution of 1080x1920."
-        printWarn "If your settings are fine, please open an issue with screen capture or it and a copy of the log."
-        $adb shell wm size
-        $adb shell wm density
-        $adb shell dumpsys display
+    if [[ $($adb shell wm size) != "*1080x1920*" ]] || [[ $($adb shell wm size) != "*1920x1080*" ]]; then # Check for resolution
+        printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
         if [ $ignoreResolution = false ]; then
-            printWarn "The script may not work properly. If you want to continue please add -r option."
+            $adb shell wm size
+            $adb shell wm density
+            $adb shell dumpsys display
+            printWarn "If you're sure your device settings are correct, please open an issue with a copy of the above log."
+            printWarn "In order to force the script to run anyways, please use the -r flag."
             exit
+        else 
+            printWarn "Running script regardless..."
         fi
     fi
 
@@ -590,12 +593,6 @@ for arg in "$@"; do
 done
 
 while getopts ":a:cd:fhi:o:rs:tv:w" option; do
-    # TODO: Add an -s flag for testing hex value of a coordinate.
-    # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
-    # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
-    # TODO: Now that I think about it, this will probably be meh to implement with the current way stuff works. I think the best way to fix
-    # TODO: this is by adding a optargs inside afk-daily.sh if possible, of course adding all the already existing parameters the script
-    # TODO: accepts. That would be dope! I wonder if .sh supports optarg(s) though...
     case $option in
     a)
         tempFile=".afkscript-${OPTARG}.ini"
