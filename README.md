@@ -216,27 +216,57 @@ OPTIONS
       Check if script is ready to be run
 
    -d, --device [DEVICE]
-      Specify desired device
-      Values for <DEVICE>: bs, dev
+      Specify target device
+      Values for [DEVICE]: bs, dev
 
    -f, --fight
       Force campaign battle (ignore 3 day optimisation)
 
+   -i, --ini [SUB]
+      Specify config: "config-[SUB].ini"
+
+   -o, --output [OUTPUT_FILE]
+      Write log in OUTPUT_FILE
+
+   -r
+      Ignore resolution warning. Use this at your own risks.
+
+   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]
+      Test color of a pixel
+
    -t, --test
       Launch on test server (experimental)
+
+   -v, --verbose [DEBUG]
+      Show DEBUG informations
+         DEBUG  = 0    Show no debug
+         DEBUG >= 1    Show getColor calls > value
+         DEBUG >= 2    Show test calls
+         DEBUG >= 3    Show all core functions calls
+         DEBUG >= 4    Show all functions calls
+         DEBUG >= 9    Show all calls
 
    -w, --weekly
       Force weekly
 
 EXAMPLES
-   Run script for Bluestacks
-      deploy.sh -d bs
+   Run script for Bluestacks (default)
+      ./deploy.sh -d bs
 
    Run script on test server
-      deploy.sh -t
+      ./deploy.sh -t
 
    Run script forcing fight & weekly
-      deploy.sh -fw
+      ./deploy.sh -fw
+
+   Run script for color testing
+      ./deploy.sh -s 800,600
+
+   Run script with output file (folder need to be created)
+      ./deploy.sh -o ".history/$(date +%Y%m%d).log"
+
+   Run script on test server with output file (folder need to be created)
+      ./deploy.sh -t -a "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
 
 ```
 
