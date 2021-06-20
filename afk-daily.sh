@@ -558,7 +558,7 @@ function challengeBoss() {
 
         # Check for battle screen
         getColor 20 1200
-        while [ "$RGB" == "eaca95" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+        while [ "$RGB" == "e6c58f" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
             input tap 550 1850 # Battle
             waitBattleStart
             doAuto
@@ -1521,7 +1521,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 630 1520 3 0.5
+# test 20 1200 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
