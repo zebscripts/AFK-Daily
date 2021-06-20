@@ -322,7 +322,7 @@ datediff() {
 # ##############################################################################
 deploy() {
     # TODO: Check why this does not always work
-    if [[ $($adb shell wm size) != *"1080x1920"* ]] || [[ $($adb shell wm size) != *"1920x1080"* ]]; then # Check for resolution
+    if [[ $($adb shell wm size) = "*1080x1920*" ]] || [[ $($adb shell wm size) = "*1920x1080*" ]]; then # Check for resolution
         printWarn "Device does not have the correct resolution! Please use a resolution of 1080x1920."
         printWarn "If your settings are fine, please open an issue with screen capture or it and a copy of the log."
         $adb shell wm size
