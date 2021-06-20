@@ -538,7 +538,7 @@ show_help() {
     echo "      Specify config: \"config-[SUB].ini\""
     echo
     echo "   -n"
-    echo "      Disable heads up notifications\""
+    echo "      Disable heads up notifications"
     echo
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
@@ -577,11 +577,11 @@ show_help() {
     echo "   Run script for color testing"
     echo "      ./deploy.sh -s 800,600"
     echo
-    echo "   Run script with output file (folder need to be created)"
-    echo "      ./deploy.sh -o \".history/\$(date +%Y%m%d).log\""
+    echo "   Run script with output file (folder need to be created) and notifications disabled"
+    echo "      ./deploy.sh -n -o \".history/\$(date +%Y%m%d).log\""
     echo
-    echo "   Run script on test server with output file (folder need to be created)"
-    echo "      ./deploy.sh -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
+    echo "   Run script on test server with output file (folder need to be created) and notifications disabled"
+    echo "      ./deploy.sh -n -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
 }
 
 for arg in "$@"; do
