@@ -27,6 +27,7 @@ device="default"
 adb=adb
 forceFightCampaign=false
 forceWeekly=false
+ignoreResolution=false
 testServer=false
 debug=0
 output=""
@@ -321,10 +322,17 @@ datediff() {
 # ##############################################################################
 deploy() {
     # TODO: Check why this does not always work
-    # if [[ $($adb shell wm size) != *"1080x1920"* ]]; then # Check for resolution
-    #     printError "Device does not have the correct resolution! Please use a resolution of 1080x1920."
-    #     exit
-    # fi
+    if [[ $($adb shell wm size) != *"1080x1920"* ]] || [[ $($adb shell wm size) != *"1920x1080"* ]]; then # Check for resolution
+        printWarn "Device does not have the correct resolution! Please use a resolution of 1080x1920."
+        printWarn "If your settings are fine, please open an issue with screen capture or it and a copy of the log."
+        $adb shell wm size
+        $adb shell wm density
+        $adb shell dumpsys display
+        if [ $ignoreResolution = false ]; then
+            printWarn "The script may not work properly. If you want to continue please add -r option."
+            exit
+        fi
+    fi
 
     printf "\n"
     printInfo "Platform: ${cCyan}$1${cNc}"
@@ -522,6 +530,9 @@ show_help() {
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
     echo
+    echo "   -r"
+    echo "      Ignore resolution warning. Use this at your own risks."
+    echo
     echo "   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]"
     echo "      Test color of a pixel"
     echo
@@ -577,7 +588,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhi:o:s:tv:w" option; do
+while getopts ":a:cd:fhi:o:rs:tv:w" option; do
     # TODO: Add an -s flag for testing hex value of a coordinate.
     # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
     # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
@@ -611,6 +622,9 @@ while getopts ":a:cd:fhi:o:s:tv:w" option; do
         ;;
     o)
         output="${OPTARG}"
+        ;;
+    r)
+        ignoreResolution=true
         ;;
     s)
         totest=${OPTARG}
