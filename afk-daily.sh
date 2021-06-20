@@ -1698,13 +1698,9 @@ init() {
     sleep 10
 
     # Loop until the game has launched
-    loopUntilRGB 1 450 1775 cc9261
-    sleep 3
-
-    # Close popup
-    # FIXME: Still not working...
-    wait
-    until testColorOR 450 1775 cc9261; do
+    until testColorOR -f 450 1775 cc9261; do
+        sleep 1
+        # Close popup
         inputTapSleep 550 1850 .1
     done
 
