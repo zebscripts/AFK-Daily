@@ -28,6 +28,7 @@ adb=adb
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
+disableNotif=false
 testServer=false
 debug=0
 output=""
@@ -342,6 +343,10 @@ deploy() {
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
     printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
 
+    if [ $disableNotif = true ]; then
+        $adb shell settings put global heads_up_notifications_enabled 0
+    fi
+
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
@@ -352,6 +357,10 @@ deploy() {
     if [ $testServer = true ]; then args="$args -t"; fi
     if [ -n "$totest" ]; then args="$args -s $totest"; fi
     $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
+
+    if [ $disableNotif = true ]; then
+        $adb shell settings put global heads_up_notifications_enabled 1
+    fi
 }
 
 # ##############################################################################
@@ -531,6 +540,9 @@ show_help() {
     echo "   -i, --ini [SUB]"
     echo "      Specify config: \"config-[SUB].ini\""
     echo
+    echo "   -n"
+    echo "      Disable heads up notifications"
+    echo
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
     echo
@@ -568,11 +580,11 @@ show_help() {
     echo "   Run script for color testing"
     echo "      ./deploy.sh -s 800,600"
     echo
-    echo "   Run script with output file (folder need to be created)"
-    echo "      ./deploy.sh -o \".history/\$(date +%Y%m%d).log\""
+    echo "   Run script with output file (folder need to be created) and notifications disabled"
+    echo "      ./deploy.sh -n -o \".history/\$(date +%Y%m%d).log\""
     echo
-    echo "   Run script on test server with output file (folder need to be created)"
-    echo "      ./deploy.sh -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
+    echo "   Run script on test server with output file (folder need to be created) and notifications disabled"
+    echo "      ./deploy.sh -n -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
 }
 
 for arg in "$@"; do
@@ -617,6 +629,9 @@ while getopts ":a:cd:fhi:o:rs:tv:w" option; do
         ;;
     i)
         configFile="config-${OPTARG}.ini"
+        ;;
+    n)
+        disableNotif=true
         ;;
     o)
         output="${OPTARG}"

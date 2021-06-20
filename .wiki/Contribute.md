@@ -21,8 +21,7 @@ We use those extensions:
 Some other useful extensions:
 
 - [Guides](https://marketplace.visualstudio.com/items?itemName=spywhere.guides)
-- [shell-format](https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format)
-- [TODO Parser](https://marketplace.visualstudio.com/items?itemName=minhthai.vscode-todo-parser)
+- [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
 - [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)
 
 ### Settings
@@ -68,10 +67,15 @@ We use those settings (store in `.vscode/settings.json`):
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
         "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
+    ],
+    // Extension - Todo Tree > https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree
+    "todo-tree.general.tags": [
+        "FIXME",
+        "TODO",
+        "WARN"
     ]
-    // Extension - Guides > https: //marketplace.visualstudio.com/items?itemName=spywhere.guides
+    // Extension - Guides > https://marketplace.visualstudio.com/items?itemName=spywhere.guides
     // Extension - shell-format > https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
-    // Extension - TODO Parser > https://marketplace.visualstudio.com/items?itemName=minhthai.vscode-todo-parser
     // Extension - Trailing Spaces > https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces
 }
 ```
@@ -144,10 +148,11 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     # Description    : Test function
     # Args           :
     # Return         :
+    # Remark         :
     # ##############################################################################
     myfunc() {
         if [ $DEBUG -ge 3 ]; then echo "[DEBUG] myfunc" >&1; fi
-        clicTruc 800 600 # clic on button test
+        test 800 600            # do test
     }
     ```
 
@@ -159,7 +164,7 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     # return values
     myfunc() {
         if [ $DEBUG -ge 3 ]; then echo "[DEBUG] myfunc" >&1; fi
-        clicTruc 800 600 # clic on button test
+        test 800 600            # do test
     }
     ```
 
