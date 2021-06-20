@@ -28,6 +28,7 @@ adb=adb
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
+disableNotif=false
 testServer=false
 debug=0
 output=""
@@ -327,7 +328,7 @@ deploy() {
         printWarn "If your settings are fine, please open an issue with screen capture or it and a copy of the log."
         $adb shell wm size
         $adb shell wm density
-        $adb shell dumpsys display
+        # $adb shell dumpsys display
         if [ $ignoreResolution = false ]; then
             printWarn "The script may not work properly. If you want to continue please add -r option."
             exit
@@ -339,6 +340,10 @@ deploy() {
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
     printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
 
+    if [ $disableNotif = true ]; then
+        $adb shell settings put global heads_up_notifications_enabled 0
+    fi
+
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
@@ -349,6 +354,10 @@ deploy() {
     if [ $testServer = true ]; then args="$args -t"; fi
     if [ -n "$totest" ]; then args="$args -s $totest"; fi
     $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
+
+    if [ $disableNotif = true ]; then
+        $adb shell settings put global heads_up_notifications_enabled 1
+    fi
 }
 
 # ##############################################################################
@@ -528,6 +537,9 @@ show_help() {
     echo "   -i, --ini [SUB]"
     echo "      Specify config: \"config-[SUB].ini\""
     echo
+    echo "   -n"
+    echo "      Disable heads up notifications\""
+    echo
     echo "   -o, --output [OUTPUT_FILE]"
     echo "      Write log in OUTPUT_FILE"
     echo
@@ -589,7 +601,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhi:o:rs:tv:w" option; do
+while getopts ":a:cd:fhi:no:rs:tv:w" option; do
     # TODO: Add an -s flag for testing hex value of a coordinate.
     # TODO: For example ./deploy.sh -s 320 400 would test the color for 3 times with 0.5 seconds in between each test and give the output
     # TODO: This is nice because I'm sick of scrolling the whole script just to run one test function
@@ -620,6 +632,9 @@ while getopts ":a:cd:fhi:o:rs:tv:w" option; do
         ;;
     i)
         configFile="config-${OPTARG}.ini"
+        ;;
+    n)
+        disableNotif=true
         ;;
     o)
         output="${OPTARG}"
