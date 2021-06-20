@@ -55,7 +55,8 @@ while getopts "d:fi:l:s:tw" opt; do
     f)
         forceFightCampaign=true
         ;;
-    i)  INIFILE="$OPTARG"
+    i)
+        INIFILE="$OPTARG"
         ;;
     l)
         SCREENSHOTLOCATION="/$OPTARG/scripts/afk-arena/screen.dump"
@@ -279,8 +280,6 @@ printInColor() {
         msg="${cRed}[ERROR]${cNc} "
     elif [ "$1" = "INFO" ]; then
         msg="${cBlue}[INFO]${cNc}  "
-    elif [ "$1" = "TEST" ]; then
-        msg="${cPurple}[TEST]${cNc}  "
     elif [ "$1" = "WARN" ]; then
         msg="${cYellow}[WARN]${cNc}  "
     else
@@ -608,6 +607,7 @@ waitBattleStart() {
 # ##############################################################################
 # Function Name : challengeBoss
 # Descripton    : Challenges a boss in the campaign
+# Remark        : Limited offers might screw this up.
 # ##############################################################################
 challengeBoss() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "challengeBoss" >&2; fi
@@ -636,7 +636,7 @@ challengeBoss() {
                     inputTapSleep 550 1670 6         # Next Stage
                     sleep 6
 
-                    # TODO: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
+                    # WARN: Limited offers will fuck this part of the script up. I'm yet to find a way to close any possible offers.
                     # Tap top of the screen to close any possible Limited Offers
                     # inputTapSleep 550 75
 
@@ -985,6 +985,7 @@ kingsTower() {
 # Function Name : kingsTower_battle
 # Descripton    : Battles in King's Towers
 # Args          : <X> <Y>
+# Remark        : Limited offers might screw this up.
 # ##############################################################################
 kingsTower_battle() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower_battle ${cPurple}$*${cNc}" >&2; fi
@@ -1010,7 +1011,7 @@ kingsTower_battle() {
                 inputTapSleep 550 1850 4                               # Collect
                 inputTapSleep 550 170                                  # Tap on the top to close possible limited offer
 
-                # TODO: Limited offers might screw this up. Tapping 550 170 might close an offer.
+                # WARN: Limited offers might screw this up. Tapping 550 170 might close an offer.
                 # Tap top of the screen to close any possible Limited Offers
                 # if testColorOR 550 150 1a1212; then # not on screen with Challenge button
                 #     inputTapSleep 550 75        # Tap top of the screen to close Limited Offer
@@ -1273,6 +1274,7 @@ guildHunts() {
 # ##############################################################################
 # Function Name : guildHunts_quickBattle
 # Descripton    : Repeat a battle for as long as totalAmountGuildBossTries
+# Remark        : May break because "some resources have exceeded their maximum limit"
 # ##############################################################################
 guildHunts_quickBattle() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "guildHunts_quickBattle" >&2; fi
@@ -1290,7 +1292,7 @@ guildHunts_quickBattle() {
             inputTapSleep 550 800 1 # Reward x2
         else
             inputTapSleep 710 1840 # Quick Battle
-            # TODO: Check for "some resources have exceeded their maximum limit"
+            # WARN: May break because "some resources have exceeded their maximum limit"
             inputTapSleep 720 1300 1 # Begin
             inputTapSleep 550 800 0  # Reward
             inputTapSleep 550 800 1  # Reward x2
@@ -1428,7 +1430,7 @@ twistedRealmBoss() {
     else
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
-            inputTapSleep 550 1850                 # Challenge
+            inputTapSleep 550 1850               # Challenge
             if testColorOR 600 1250 53c6bb; then # Check if notice did popup
                 inputTapSleep 70 1810
                 break
@@ -1505,10 +1507,11 @@ checkWhereToEnd() {
 # ##############################################################################
 # Function Name : collectQuestChests
 # Descripton    : Collects quest chests (well, switch tab then call collectQuestChests_quick)
+# Remark        : May break because "some resources have exceeded their maximum limit"
 # ##############################################################################
 collectQuestChests() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectQuestChests" >&2; fi
-    # TODO: Check for "some resources have exceeded their maximum limit"
+    # WARN: May break because "some resources have exceeded their maximum limit"
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
 
@@ -1555,10 +1558,11 @@ collectQuestChests_quick() {
 # ##############################################################################
 # Function Name : collectMail
 # Descripton    : Collects mail
+# Remark        : May break because "some resources have exceeded their maximum limit"
 # ##############################################################################
 collectMail() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMail" >&2; fi
-    # TODO: Check for "some resources have exceeded their maximum limit"
+    # WARN: May break because "some resources have exceeded their maximum limit"
     if testColorOR -d "$DEFAULT_DELTA" 1020 580 e51f06; then # Red mark
         inputTapSleep 960 630                                # Mail
         inputTapSleep 790 1470                               # Collect all
@@ -1573,12 +1577,13 @@ collectMail() {
 # ##############################################################################
 # Function Name : collectMerchants
 # Descripton    : Collects Daily/Weekly/Monthly from the merchants page
+# Remark        : Breaks if a pop-up message shows up
 # ##############################################################################
 collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
     inputTapSleep 120 300 3 # Merchants
-    # TODO: Breaks if a pop-up message shows up
-    inputTapSleep 510 1820  # Merchant Ship
+    # WARN: Breaks if a pop-up message shows up
+    inputTapSleep 510 1820 # Merchant Ship
 
     if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1          # Free
@@ -1620,22 +1625,22 @@ collectMerchants() {
 # ##############################################################################
 
 # ##############################################################################
-# Function Name : Test
+# Function Name : doTest
 # Description   : Print HEX then exit
 # Args          : <X> <Y> [<COLOR_TO_COMPARE>] [<REPEAT>] [<SLEEP>]
 # Output        : stdout color
 # ##############################################################################
-test() {
-    _test_COUNT=0
-    until [ "$_test_COUNT" -ge "${4:-3}" ]; do
+doTest() {
+    _doTest_COUNT=0
+    until [ "$_doTest_COUNT" -ge "${4:-3}" ]; do
         sleep "${5:-.5}"
         getColor -f "$1" "$2"
         if [ "$#" -ge 3 ] && [ "${3:-""}" != "" ]; then
-            printInColor "TEST" "[${cPurple}$1${cNc}, ${cPurple}$2${cNc}] > HEX: ${cCyan}$HEX${cNc} [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]"
+            printInColor "DEBUG" "doTest [${cPurple}$1${cNc}, ${cPurple}$2${cNc}] > HEX: ${cCyan}$HEX${cNc} [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]"
         else
-            printInColor "TEST" "[${cPurple}$1${cNc}, ${cPurple}$2${cNc}] > HEX: ${cCyan}$HEX${cNc}"
+            printInColor "DEBUG" "doTest [${cPurple}$1${cNc}, ${cPurple}$2${cNc}] > HEX: ${cCyan}$HEX${cNc}"
         fi
-        _test_COUNT=$((_test_COUNT + 1)) # Increment
+        _doTest_COUNT=$((_doTest_COUNT + 1)) # Increment
     done
     # exit
 }
@@ -1647,19 +1652,17 @@ test() {
 # ##############################################################################
 tests() {
     printInColor "INFO" "Starting tests... ($(date))"
-    # test 450 1050 ef2118 # Random coords
-    # colorTest                                 # Print all available colors :)
-    # printInColorTest                          # Test all printInColor possibilities
-    # test 550 740                              # Check for Boss in Campaign
-    # test 660 520                              # Check for Solo Bounties HEX
-    # test 650 570                              # Check for Team Bounties HEX
-    # test 700 670                              # Check for chest collection HEX
-    # test 715 1815                             # Check if Soren is open
-    # test 740 205                              # Check if game is updating
-    # test 270 1800                             # Oak Inn Present Tab 1
-    # test 410 1800                             # Oak Inn Present Tab 2
-    # test 550 1800                             # Oak Inn Present Tab 3
-    # test 690 1800                             # Oak Inn Present Tab 4
+    # doTest 450 1050 ef2118 # Random coords
+    # doTest 550 740         # Check for Boss in Campaign
+    # doTest 660 520         # Check for Solo Bounties HEX
+    # doTest 650 570         # Check for Team Bounties HEX
+    # doTest 700 670         # Check for chest collection HEX
+    # doTest 715 1815        # Check if Soren is open
+    # doTest 740 205         # Check if game is updating
+    # doTest 270 1800        # Oak Inn Present Tab 1
+    # doTest 410 1800        # Oak Inn Present Tab 2
+    # doTest 550 1800        # Oak Inn Present Tab 3
+    # doTest 690 1800        # Oak Inn Present Tab 4
 
     printInColor "INFO" "End of tests! ($(date))"
     exit
@@ -1675,7 +1678,7 @@ if [ -n "$totest" ]; then
     test_repeat=$(echo "$totest" | cut -d ',' -f 4)
     test_time=$(echo "$totest" | cut -d ',' -f 5)
 
-    test "$test_x" "$test_y" "$test_color" "$test_repeat" "$test_time"
+    doTest "$test_x" "$test_y" "$test_color" "$test_repeat" "$test_time"
     exit
 fi
 
@@ -1699,7 +1702,7 @@ init() {
     sleep 3
 
     # Close popup
-    # TODO: Still not working...
+    # FIXME: Still not working...
     wait
     until testColorOR 450 1775 cc9261; do
         inputTapSleep 550 1850 .1
