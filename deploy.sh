@@ -324,16 +324,16 @@ datediff() {
 # FIXME: but changing it back didn't work then, kept on wrongly saying I had a wrong resolution.
 # ##############################################################################
 deploy() {
-    if [[ $($adb shell wm size) != "*1080x1920*" ]] || [[ $($adb shell wm size) != "*1920x1080*" ]]; then # Check for resolution
+    if [[ $($adb shell wm size) != *"1080x1920"* ]] && [[ $($adb shell wm size) != *"1920x1080"* ]]; then # Check for resolution
         printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
         if [ $ignoreResolution = false ]; then
             $adb shell wm size
             $adb shell wm density
-            $adb shell dumpsys display
+            # $adb shell dumpsys display
             printWarn "If you're sure your device settings are correct, please open an issue with a copy of the above log."
             printWarn "In order to force the script to run anyways, please use the -r flag."
             exit
-        else 
+        else
             printWarn "Running script regardless..."
         fi
     fi
@@ -604,7 +604,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhi:o:rs:tv:w" option; do
+while getopts ":a:cd:fhi:no:rs:tv:w" option; do
     case $option in
     a)
         tempFile=".afkscript-${OPTARG}.ini"
