@@ -623,7 +623,7 @@ challengeBoss() {
         _challengeBoss_WIN=0
 
         # Check for battle screen
-        until testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 e6c58f || [ "$maxCampaignFights" -le 0 ]; do
+        until testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12 || [ "$maxCampaignFights" -le 0 ]; do
             inputTapSleep 550 1850 .5 # Battle
             waitBattleStart
             doAuto
@@ -646,7 +646,7 @@ challengeBoss() {
                 else
                     inputTapSleep 550 1670 3 # Continue to next battle
 
-                    if testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 eaca95; then # For low levels, does not exists (before stage 4)
+                    if testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12; then # For low levels, does not exists (before stage 4)
                         inputTapSleep 550 1650 3                                 # Begin
                         if testColorOR 550 740 f2d79f; then                      # Check if boss
                             inputTapSleep 550 1450 3                             # Begin
@@ -657,7 +657,7 @@ challengeBoss() {
             else                                               # Loose
                 inputTapSleep 550 1720 5                       # Try again
 
-                if testColorNAND -d "$DEFAULT_DELTA" -f 20 1200 eaca95; then # For low levels, does not exists (before stage 4)
+                if testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12; then # For low levels, does not exists (before stage 4)
                     inputTapSleep 550 1650 3                                 # Begin
                     if testColorOR 550 740 f2d79f; then                      # Check if boss
                         inputTapSleep 550 1450 3                             # Begin
