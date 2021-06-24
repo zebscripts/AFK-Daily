@@ -493,6 +493,7 @@ check_all() {
     # checkGitUpdate # TODO: Uncomment this when releasing
     checkSetupUpdate
     checkConfig
+    checkEOL $tempFile
     checkEOL $configFile
     checkEOL "afk-daily.sh"
 }
