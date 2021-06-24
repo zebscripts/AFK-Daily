@@ -64,12 +64,6 @@ updateAFKScript() {
 lastCampaign=${lastCampaign:-$lastCampaign_default}\n\
 lastWeekly=${lastWeekly:-$lastWeekly_default}" >"$f.tmp"
 
-        case "$(uname -s)" in
-        CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
-            attrib +h "$f"                   # Make file invisible
-            ;;
-        esac
-
         # Unset all values
         while read -r line; do
             if [[ $line =~ ^(.*)= ]]; then
@@ -203,7 +197,7 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
 runAFKScript() {
     convertAKFScriptTMPtoINI
     cleanAKFScript
-    touch ".afkscript.ini" # Create default file
+    touch "account-info/acc-main.ini" # Create default file
     updateAFKScript
 }
 

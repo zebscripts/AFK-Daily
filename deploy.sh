@@ -20,7 +20,7 @@ source ./lib/print.sh
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
 configFile="config.ini"
-tempFile=".afkscript.ini"
+tempFile="account-info/acc-main.ini"
 device="default"
 
 # Do not modify
@@ -37,6 +37,18 @@ totest=""
 # ##############################################################################
 # Section       : Functions
 # ##############################################################################
+
+# ##############################################################################
+# Function Name : checkFolders
+# Description   : Check if folders are present in the Repo
+# ##############################################################################
+checkFolders() {
+    printTask "Checking folders..."
+    if [ ! -d "account-info" ]; then
+        mkdir account-info
+    fi
+    printSuccess "Done!"
+}
 
 # ##############################################################################
 # Function Name : checkAdb
@@ -410,8 +422,6 @@ saveDate() {
         echo -e "# afk-daily\n\
 lastCampaign=${newLastCampaign:-$lastCampaign}\n\
 lastWeekly=${newLastWeekly:-$lastWeekly}" >"$tempFile"
-
-        if [ "$OSTYPE" = "msys" ]; then attrib +h $tempFile; fi # Make file invisible if on windows
     fi
 }
 
@@ -478,9 +488,9 @@ validateConfig() {
 # Function Name : check_all
 # ##############################################################################
 check_all() {
+    checkFolders
     checkAdb
-    # TODO: Uncomment this when releasing
-    # checkGitUpdate
+    # checkGitUpdate # TODO: Uncomment this when releasing
     checkSetupUpdate
     checkConfig
     checkEOL $configFile
@@ -607,7 +617,7 @@ done
 while getopts ":a:cd:fhi:no:rs:tv:w" option; do
     case $option in
     a)
-        tempFile=".afkscript-${OPTARG}.ini"
+        tempFile="account-info/acc-${OPTARG}.ini"
         ;;
     c)
         check_all

@@ -5,6 +5,7 @@
 *.code-workspace
 
 # Project specific
+account-info
 #.wiki/
 adb/
 *.bak

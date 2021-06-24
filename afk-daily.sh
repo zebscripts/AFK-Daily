@@ -481,7 +481,7 @@ doAuto() {
 # ##############################################################################
 doSpeed() {
     if [ "$DEBUG" -ge 3 ]; then printInColor "DEBUG" "doSpeed" >&2; fi
-    testColorORTapSleep 990 1440 332b2b 0 # On:[x2: 753b29, x4: 743b2a] Off:332b2b
+    testColorORTapSleep 990 1440 332b2b 0 # On:[x2: 753b29, x4: 743b29] Off:332b2b
 }
 
 # ##############################################################################
@@ -647,9 +647,9 @@ challengeBoss() {
                     inputTapSleep 550 1670 3 # Continue to next battle
 
                     if testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12; then # For low levels, does not exists (before stage 4)
-                        inputTapSleep 550 1650 3                                 # Begin
-                        if testColorOR 550 740 f2d79f; then                      # Check if boss
-                            inputTapSleep 550 1450 3                             # Begin
+                        inputTapSleep 550 1650 3                                  # Begin
+                        if testColorOR 550 740 f2d79f; then                       # Check if boss
+                            inputTapSleep 550 1450 3                              # Begin
                         fi
                     fi
                 fi
@@ -658,9 +658,9 @@ challengeBoss() {
                 inputTapSleep 550 1720 5                       # Try again
 
                 if testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12; then # For low levels, does not exists (before stage 4)
-                    inputTapSleep 550 1650 3                                 # Begin
-                    if testColorOR 550 740 f2d79f; then                      # Check if boss
-                        inputTapSleep 550 1450 3                             # Begin
+                    inputTapSleep 550 1650 3                                  # Begin
+                    if testColorOR 550 740 f2d79f; then                       # Check if boss
+                        inputTapSleep 550 1450 3                              # Begin
                     fi
                 fi
 
@@ -1031,7 +1031,7 @@ kingsTower_battle() {
         # Return from chosen tower / battle
         inputTapSleep 70 1810 3
         if [ "$1" -ge 0 ] && [ "$2" -ge 0 ]; then # Will be -1 if we already are in the tower (low level)
-            if testColorOR 550 150 1a1212; then # In case still in tower, exit once more
+            if testColorOR 550 150 1a1212; then   # In case still in tower, exit once more
                 inputTapSleep 70 1810 0
             fi
         fi
