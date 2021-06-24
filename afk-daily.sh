@@ -557,8 +557,8 @@ function challengeBoss() {
         local COUNT=0
 
         # Check for battle screen
-        getColor 20 1200
-        while [ "$RGB" == "e6c58f" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
+        getColor 200 1850
+        while [ "$RGB" == "2b1a12" ] && [ "$COUNT" -lt "$maxCampaignFights" ]; do
             input tap 550 1850 # Battle
             waitBattleStart
             doAuto
@@ -597,7 +597,7 @@ function challengeBoss() {
             fi
 
             # Check for battle screen
-            getColor 20 1200
+            getColor 200 1850
         done
 
         # Return to campaign
@@ -1293,7 +1293,7 @@ function collectQuestChests() {
 
     # Collect daily Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff1" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1323,7 +1323,7 @@ function collectQuestChests() {
 
     # Collect weekly Quests
     getColor 700 670
-    while [ "$RGB" == "82fdf5" ]; do
+    while [ "$RGB" == "7dfff1" ]; do
         input tap 930 680
         wait
         getColor 700 670
@@ -1521,7 +1521,7 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 20 1200 3 0.5
+# test 200 1850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
