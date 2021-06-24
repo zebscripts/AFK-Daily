@@ -252,20 +252,22 @@ checkDevice() {
 # Args          : <FILE>
 # ##############################################################################
 checkEOL() {
-    printTask "Checking Line endings of file ${cCyan}$1${cNc}..."
-    if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
-        printWarn "Found CLRF!"
-        printTask "Converting to LF..."
-        dos2unix "$1" 2>/dev/null
-
+    if [ -f $1 ]; then
+        printTask "Checking Line endings of file ${cCyan}$1${cNc}..."
         if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
-            printError "Failed to convert $1 to LF. Please do it yourself."
-            exit
+            printWarn "Found CLRF!"
+            printTask "Converting to LF..."
+            dos2unix "$1" 2>/dev/null
+
+            if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
+                printError "Failed to convert $1 to LF. Please do it yourself."
+                exit
+            else
+                printSuccess "Converted!"
+            fi
         else
-            printSuccess "Converted!"
+            printSuccess "Passed!"
         fi
-    else
-        printSuccess "Passed!"
     fi
 }
 
