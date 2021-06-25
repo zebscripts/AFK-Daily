@@ -974,6 +974,10 @@ kingsTower() {
         if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
             printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
         fi
+
+        if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
+            printInColor "INFO" "Infernal Fortress $(kingsTower_battle 620 1550)" # Infernal Fortress
+        fi
     fi
 
     # Exit
