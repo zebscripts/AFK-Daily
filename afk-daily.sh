@@ -1115,10 +1115,11 @@ function kingsTower() {
     # Towers
     battleKingsTower 550 800  # Main Tower
     battleKingsTower 300 970  # Tower of Light
-    battleKingsTower 400 1250  # The Brutal Citadel
-    battleKingsTower 780 700 # The World Tree
+    battleKingsTower 400 1250 # The Brutal Citadel
+    battleKingsTower 780 700  # The World Tree
     battleKingsTower 780 1190 # The Forsaken Necropolis
-    battleKingsTower 280 500 # Celestial Sanctum
+    battleKingsTower 280 500  # Celestial Sanctum
+    battleKingsTower 615 1500 # Infernal Fortress
 
     # Exit
     input tap 70 1810
