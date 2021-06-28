@@ -17,7 +17,7 @@
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
-> **Big changes with the last update! Please delete your `config.ini` file and run the script to generate a new one.** You're now more in control of the script, by choosing which parts of it to run. This also helps in case one feature is broken, just turning it off temporarily works around the issue. Or even if the script fails, just run it again without running the stuff before the error.
+> **We've created a Discord Server if you're interested!** It's a place to ask questions and get/give help, as well as a nice way to stay up to date with any news and features. Join us [here](https://discord.gg/Fq2cfqjp8D) or by clicking the link on the top right of this repository.
 
 This script is meant to automate the process of daily activities within the [AFK Arena](https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp&hl=en_US) game. It uses [ADB](https://developer.android.com/studio/command-line/adb) to analyse pixel colors in screenshots and tap on the screen accordingly. If you like my work, please consider starring this repository as it lets me know people use this script, which motivates me to keep working on it! :)
 
