@@ -11,3 +11,4 @@ adb/
 *.bak
 *.ini
 *.tmp
+*.log

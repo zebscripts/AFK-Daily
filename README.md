@@ -363,7 +363,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `allowCrystalLevelUp`     | `Boolean` | If `true`, and `doStrengthenCrystal=true` strengthens the resonating Crystal and level up if possible.               | `false` |
 | `doTempleOfAscension`     | `Boolean` | If `true`, auto ascend heroes.                                                                                       | `false` |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
-| `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |
+| `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `true` |
 
 ### End
 

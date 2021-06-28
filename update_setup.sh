@@ -131,7 +131,7 @@ maxKingsTowerFights=${maxKingsTowerFights:-"5"}\n\
 totalAmountArenaTries=${totalAmountArenaTries:-"2+0"}\n\
 totalAmountTournamentTries=${totalAmountTournamentTries:-"0"}\n\
 totalAmountGuildBossTries=${totalAmountGuildBossTries:-"2+0"}\n\
-totalAmountTwistedRealmBossTries=${totalAmountGuildBossTries:-"1"}\n\
+totalAmountTwistedRealmBossTries=${totalAmountTwistedRealmBossTries:-"1"}\n\
 \n\
 # Store\n\
 buyStoreDust=${buyStoreDust:-"true"}\n\
@@ -163,7 +163,7 @@ doBuyFromStore=${doBuyFromStore:-"true"}\n\
 doStrengthenCrystal=${doStrengthenCrystal:-"true"}\n\
 doTempleOfAscension=${doTempleOfAscension:-"false"}\n\
 doCompanionPointsSummon=${doCompanionPointsSummon:-"false"}\n\
-doCollectOakPresents=${doCollectOakPresents:-"false"}\n\
+doCollectOakPresents=${doCollectOakPresents:-"true"}\n\
 \n\
 # End\n\
 doCollectQuestChests=${doCollectQuestChests:-"true"}\n\

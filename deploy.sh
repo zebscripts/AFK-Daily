@@ -164,7 +164,7 @@ doBuyFromStore=true
 doStrengthenCrystal=true
 doTempleOfAscension=false
 doCompanionPointsSummon=false
-doCollectOakPresents=false
+doCollectOakPresents=true
 
 # End
 doCollectQuestChests=true
@@ -334,18 +334,18 @@ datediff() {
 # Function Name : deploy
 # Description   : Makes a Dir (if it doesn't exist), pushes script into Dir, Executes script in Dir.
 # Args          : <PLATFORM> <DIRECTORY>
-# FIXME: Still not working as expected. Switch BS to another resolution and it detects it's a wrong one,
-# FIXME: but changing it back didn't work then, kept on wrongly saying I had a wrong resolution.
 # ##############################################################################
 deploy() {
     if [[ $($adb shell wm size) != *"1080x1920"* ]] && [[ $($adb shell wm size) != *"1920x1080"* ]]; then # Check for resolution
+        echo
         printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
         if [ $ignoreResolution = false ]; then
-            $adb shell wm size
-            $adb shell wm density
+            printInfo "$(adb shell wm size)"
+            printInfo "$(adb shell wm density)"
             # $adb shell dumpsys display
-            printWarn "If you're sure your device settings are correct, please open an issue with a copy of the above log."
-            printWarn "In order to force the script to run anyways, please use the -r flag."
+            printWarn "Please let us know by opening an issue with a screenshot of this terminal output."
+            printWarn "If you're sure your device settings are correct and want to force the script to run regardless, use the -r flag."
+            printWarn "The script does NOT work on resolutions other than 1080x1920!"
             exit
         else
             printWarn "Running script regardless..."
@@ -355,16 +355,16 @@ deploy() {
     printf "\n"
     printInfo "Platform: ${cCyan}$1${cNc}"
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
-    printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
-
     if [ $disableNotif = true ]; then
         $adb shell settings put global heads_up_notifications_enabled 0
+        printInfo "Notifications: ${cCyan}OFF${cNc}"
     fi
+    printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
 
     $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
     $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
-    # Run script. Comment line if you don't want to run the script after pushing to device
+
     args="-d $debug -i $configFile -l $2"
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
@@ -374,6 +374,7 @@ deploy() {
 
     if [ $disableNotif = true ]; then
         $adb shell settings put global heads_up_notifications_enabled 1
+        printInfo "Notifications: ${cCyan}ON${cNc}\n"
     fi
 }
 

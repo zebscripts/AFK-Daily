@@ -445,6 +445,9 @@ verifyHEX() {
     if [ "$HEX" != "$3" ]; then
         printInColor "ERROR" "verifyHEX: Failure! Expected ${cCyan}$3${cNc}, but got ${cCyan}$HEX${cNc} instead. [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]" >&2
         printInColor "ERROR" "$5" >&2
+        # FIXME: The counter is wrong. Has showed "1 time" on the second and third restart
+        # FIXME: This could have been my fault btw, as I once changed this... But it made sense, at least in theory! :sweat_smile:
+        # FIXME: But it did just work on me... Wth is happening, why does it sometimes work, and sometimes no...?
         printInColor "WARN" "Restarting for the ${cCyan}$((tries + 1))${cNc} time."
         init
         run
@@ -711,7 +714,7 @@ collectFriendsAndMercenaries() {
         inputTapSleep 750 1410 1                             # Auto Lend
         inputTapSleep 70 1810 0                              # Return
     else
-        printInColor "WARN" "No mercenaries to lend..."
+        printInColor "INFO" "No mercenaries to lend..."
     fi
     inputTapSleep 70 1810 0 # Return
 
@@ -851,7 +854,7 @@ arenaOfHeroes() {
         inputTapSleep 1000 380
         sleep 4
     else
-        printInColor "WARN" "Unable to fight in the Arena of Heroes because a new season is soon launching." >&2
+        printInColor "INFO" "Unable to fight in the Arena of Heroes because a new season is soon launching." >&2
     fi
 
     if [ "$doLegendsTournament" = false ]; then # Return to Tab if $doLegendsTournament = false
@@ -1387,7 +1390,7 @@ strengthenCrystal() {
         inputTapSleep 200 1850 .5 # Better safe than sorry
         inputTapSleep 70 1810     # Exit
     else
-        printInColor "WARN" "Unable to strengthen the resonating Crystal."
+        printInColor "INFO" "Not necessary to strengthen the resonating Crystal."
     fi
     verifyHEX 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
@@ -1405,7 +1408,7 @@ templeOfAscension() {
         inputTapSleep 550 1810                               # Close
         inputTapSleep 70 1810                                # Exit
     else
-        printInColor "WARN" "No heroes to ascend."
+        printInColor "INFO" "No heroes to ascend."
     fi
 
     inputTapSleep 70 1810 # Exit
@@ -1430,7 +1433,7 @@ twistedRealmBoss() {
     inputTapSleep 820 820 # Twisted Realm
 
     if testColorOR 540 1220 9aedc1; then # Check if TR is being calculated
-        printInColor "WARN" "Unable to fight in the Twisted Realm because it's being calculated." >&2
+        printInColor "INFO" "Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
@@ -1573,7 +1576,7 @@ collectMail() {
         inputTapSleep 110 1850                               # Return
         inputTapSleep 110 1850                               # Return
     else
-        printInColor "WARN" "No mail to collect."
+        printInColor "INFO" "No mail to collect."
     fi
     verifyHEX 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
@@ -1605,7 +1608,7 @@ collectMerchants() {
         fi
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "WARN" "No weekly reward to collect."
+        printInColor "INFO" "No weekly reward to collect."
     fi
 
     if testColorOR -d "$DEFAULT_DELTA" 610 1530 f91c0b; then # Check if red mark - Monthly Deals
@@ -1617,7 +1620,7 @@ collectMerchants() {
         fi
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "WARN" "No monthly reward to collect."
+        printInColor "INFO" "No monthly reward to collect."
     fi
 
     inputTapSleep 70 1810 1
@@ -1703,7 +1706,7 @@ init() {
 
     # Loop until the game has launched
     until testColorOR -f 450 1775 cc9261; do
-        sleep 1
+        sleep 2
         # Close popup
         inputTapSleep 550 1850 .1
     done
@@ -1722,7 +1725,7 @@ init() {
     inputTapSleep 970 380 0
 
     if testColorOR -f 740 205 ffc359; then # Check if game is being updated
-        printInColor "WARN" "Game is being updated!" >&2
+        printInColor "INFO" "Game is being updated!" >&2
         if [ "$waitForUpdate" = true ]; then
             printInColor "INFO" "Waiting for game to finish update..."
             loopUntilNotRGB 5 740 205 ffc359
@@ -1781,10 +1784,10 @@ run() {
 }
 
 printInColor "INFO" "Starting script... ($(date))"
-if [ "$testServer" = true ]; then printInColor "INFO" "Test server is ${cBlue}ON${cNc}"; fi
-if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug is ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
-if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign is ${cBlue}ON${cNc}"; fi
-if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly is ${cBlue}ON${cNc}"; fi
+if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${cNc}"; fi
+if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
+if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign: ${cBlue}ON${cNc}"; fi
+if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}"; fi
 
 init
 run
