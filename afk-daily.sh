@@ -21,7 +21,8 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-pvpEvent=false  # Set to `true` if "Heroes of Esperia" event is live
+# TODO: use argument?
+pvpEvent=true  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
