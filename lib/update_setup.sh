@@ -7,6 +7,9 @@
 # License       : MIT
 # ##############################################################################
 
+# Source
+source ./lib/print.sh
+
 # TODO: Update for new files locations:
 #  Move: update_setup.sh     >   lib/update_setup.sh
 #
@@ -43,16 +46,18 @@ cleanAKFScript() {
 convertAKFScriptTMPtoINI() {
     for f in .*afkscript*.tmp; do
         if [ ! -f "$f" ]; then continue; fi
-        echo "# afk-daily" >"$(basename "$f" .tmp)".ini
+        echo "# afk-daily" >./account-info/acc.ini
         case "$(uname -s)" in # Check OS
         Darwin | Linux)       # Mac / Linux
+            # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
             echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
             ;;
         CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+            # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
             echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
             ;;
         esac
-        echo "$f converted"
+        # printSuccess "$f converted"
     done
 }
 
@@ -74,7 +79,7 @@ updateAFKScript() {
         ;;
     esac
 
-    for f in .*afkscript*.ini; do
+    for f in ./account-info/acc*.ini; do
         if [ ! -f "$f" ]; then continue; fi
         source "$f" # Load the file
         echo -e "# afk-daily\n\
@@ -93,7 +98,7 @@ lastWeekly=${lastWeekly:-$lastWeekly_default}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            echo "$f updated"
+            # echo "$f updated"
         fi
     done
 }
@@ -117,8 +122,8 @@ cleanConfig() {
 convertConfigSHtoINI() {
     for f in config*.sh; do
         if [ ! -f "$f" ]; then continue; fi
-        cp "$f" "$(basename "$f" .sh)".ini # Copy new files
-        echo "$f converted"
+        cp "$f" ./config/config.ini # Copy new files
+        # printSuccess "$f converted"
     done
 }
 
@@ -127,7 +132,7 @@ convertConfigSHtoINI() {
 # Descripton    : Update file, add new params
 # ##############################################################################
 updateConfig() {
-    for f in config*.ini; do
+    for f in ./config/config*.ini; do
         if [ ! -f "$f" ]; then continue; fi
         source "$f" # Load the file
         echo -e "# --- CONFIG: Modify accordingly to your game! --- #\n\
@@ -199,7 +204,7 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            echo "$f updated"
+            # echo "$f updated"
         fi
     done
 }
@@ -214,7 +219,7 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
 runAFKScript() {
     convertAKFScriptTMPtoINI
     cleanAKFScript
-    touch "account-info/acc-main.ini" # Create default file
+    touch "account-info/acc.ini" # Create default file
     updateAFKScript
 }
 
@@ -236,7 +241,7 @@ show_help() {
     echo -e "Description:"
     echo -e "  - Convert file to new format (.tmp/.sh > .ini)"
     echo -e "  - Clean the folder (remove old .tmp/.sh files)"
-    echo -e "  - Init with a file if run for the first time\n"
+    echo -e "  - Init with a file if run for the first time"
     echo -e "  - Update for new values\n"
     echo -e "Options:"
     echo -e "  h\tShow help"
@@ -250,7 +255,7 @@ if [ -z "$1" ]; then
     exit 0
 fi
 
-while getopts "hacl" opt; do
+while getopts ":hacl" opt; do
     case $opt in
     h)
         show_help

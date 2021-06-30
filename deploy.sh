@@ -19,8 +19,8 @@ source ./lib/print.sh
 # I won't blame you (unless you blame me).
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
-configFile="config.ini"
-tempFile="account-info/acc-main.ini"
+configFile="config/config.ini"
+tempFile="account-info/acc.ini"
 device="default"
 
 # Do not modify
@@ -46,6 +46,9 @@ checkFolders() {
     printTask "Checking folders..."
     if [ ! -d "account-info" ]; then
         mkdir account-info
+    fi
+    if [ ! -d "config" ]; then
+        mkdir config
     fi
     printSuccess "Done!"
 }
@@ -295,15 +298,17 @@ checkGitUpdate() {
 # ##############################################################################
 checkSetupUpdate() {
     printTask "Checking for setup updates..."
+    # .*afkscript.ini
     for f in .*afkscript.*; do
         if [ -e "$f" ]; then
-            printInNewLine "$(./update_setup.sh -a)"
+            printInNewLine "$(./lib/update_setup.sh -a)"
             break
         fi
     done
+    #
     for f in config*.*; do
         if [ -e "$f" ]; then
-            printInNewLine "$(./update_setup.sh -c)"
+            printInNewLine "$(./lib/update_setup.sh -c)"
             break
         fi
     done
@@ -499,6 +504,7 @@ check_all() {
     checkEOL $tempFile
     checkEOL $configFile
     checkEOL "afk-daily.sh"
+    checkDate
 }
 
 # ##############################################################################
@@ -506,8 +512,6 @@ check_all() {
 # ##############################################################################
 run() {
     check_all
-
-    checkDate
     getLatestPatch
 
     if [ "$device" == "Bluestacks" ]; then
@@ -604,13 +608,16 @@ show_help() {
 for arg in "$@"; do
     shift
     case "$arg" in
+    "--help") set -- "$@" "-h" ;;
     "--account") set -- "$@" "-a" ;;
     "--check") set -- "$@" "-c" ;;
     "--device") set -- "$@" "-d" ;;
     "--fight") set -- "$@" "-f" ;;
-    "--help") set -- "$@" "-h" ;;
     "--ini") set -- "$@" "-i" ;;
+    "--notifications") set -- "$@" "-n" ;;
     "--output") set -- "$@" "-o" ;;
+    "--resolution") set -- "$@" "-r" ;;
+    "--hex") set -- "$@" "-s" ;;
     "--test") set -- "$@" "-t" ;;
     "--verbose") set -- "$@" "-v" ;;
     "--weekly") set -- "$@" "-w" ;;

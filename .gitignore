@@ -6,6 +6,7 @@
 
 # Project specific
 account-info
+config
 #.wiki/
 adb/
 *.bak
