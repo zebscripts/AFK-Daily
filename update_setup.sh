@@ -7,6 +7,23 @@
 # License       : MIT
 # ##############################################################################
 
+# TODO: Update for new files locations:
+#  Move: update_setup.sh     >   lib/update_setup.sh
+#
+#  convertAKFScriptTMPtoINI:
+#    for:       .*afkscript*.tmp              >  ./account-info/acc-*.ini
+#    echo:      "$(basename "$f" .tmp)".ini   >  ./account-info/acc-"$(basename "$f" .tmp)".ini
+#  updateAFKScript:
+#    for:       .*afkscript*.ini              >  ./account-info/acc-*.ini
+#  convertConfigSHtoINI:
+#    for:       config*.sh                    >  ./config/config*.ini
+#    cp:        "$(basename "$f" .tmp)".ini   >  ./config/"$(basename "$f" .tmp)".ini
+#  updateConfig:
+#    for:       config*.ini                   >  ./config/config*.ini
+#  Maybe require ../ instead of ./
+#
+#  Check if works when called directly and deploy.sh
+
 # ##############################################################################
 # Section       : AFKScript
 # ##############################################################################
