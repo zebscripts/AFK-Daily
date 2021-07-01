@@ -50,11 +50,12 @@ convertAKFScriptTMPtoINI() {
         case "$(uname -s)" in # Check OS
         Darwin | Linux)       # Mac / Linux
             # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
-            echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
+            # The file was moved so it's normal, you can't add anything to a file not created line 49.
+            echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >>./account-info/acc.ini
             ;;
         CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
             # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
-            echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>"$(basename "$f" .tmp)".ini
+            echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>./account-info/acc.ini
             ;;
         esac
         # printSuccess "$f converted"
@@ -229,7 +230,7 @@ runAFKScript() {
 runConfig() {
     convertConfigSHtoINI
     cleanConfig
-    touch "config.ini" # Create default file
+    touch "config/config.ini" # Create default file
     updateConfig
 }
 
