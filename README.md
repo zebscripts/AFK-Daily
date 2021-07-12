@@ -12,7 +12,7 @@
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
   <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.67.02-blue.svg"></img></a>
+  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.67.03-blue.svg"></img></a>
   </p>
 </div>
 
@@ -134,6 +134,8 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 <hr>
 
 *Nox:*
+
+**Nox will most likely not work for you, please do not use it.** We plan to drop Nox support soon, so if you plan to keep on using the script please consider switching to Bluestacks. Sorry about that.
 
 1. **Settings:** Under Nox settings, make sure to make the following changes:
    1. **General:**
