@@ -135,7 +135,7 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
 
 *Nox:*
 
-**Nox will most likely not work for you, please do not use it.** We plan to drop Nox support soon, so if you plan to keep on using the script please consider switching to Bluestacks. Sorry about that.
+**We plan on dropping Nox support soon** (or at least highly recommend against using it), so if you plan to keep on using the script please consider switching to Bluestacks. Nox is simply slower and not reliable during testing on my machine, and I cannot make sure it'll work consistently. Sorry about that.
 
 1. **Settings:** Under Nox settings, make sure to make the following changes:
    1. **General:**
@@ -147,6 +147,11 @@ In order to run the script, you'll need to be able to run/execute `.sh` files. T
        - Change the phone model to `Google Pixel 2`
 2. **AFK Arena:** Install the game. Duh.
 3. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
+4. **Script settings:** Nox uses it's on `adb`, and I do not know where you have it installed on your machine. Because of this you'll have to let the script know where the location of it is:
+   1. Go to the Nox installation folder (on windows you can right click the app and click on "Go to folder location")
+   2. You should now be inside a `bin` folder, where you can find the `Nox.exe` file, as well as the `nox_adb.exe` file
+   3. Copy the path of the current location (click on the bar on the top where the folder names are and copy it)
+   4. Every time you run the script, you'll also have to insert the path like so: `./deploy.sh nox path/to/nox/bin/nox_adb.exe`
 
 <hr>
 
@@ -203,7 +208,7 @@ You can also execute the script with the following optional parameters:
   bluestacks|bs|-bluestacks|-bs
     Deploy to Bluestacks.
 
-  nox|n|-nox|-n
+  nox|n|-nox|-n path/to/nox/bin/nox_adb.exe
     Deploy to Nox.
 ```
 
@@ -226,7 +231,7 @@ Running the script on Bluestacks:
 Running the script on Nox:
 
 ```sh
-./deploy.sh nox
+./deploy.sh nox path/to/nox/bin/nox_adb.exe
 ```
 
 ## Config/Variables

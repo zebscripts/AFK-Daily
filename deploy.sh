@@ -343,6 +343,7 @@ if [ "$1" ]; then
 
     # Nox
     elif [ "$1" == "nox" ] || [ "$1" == "n" ] || [ "$1" == "-nox" ] || [ "$1" == "-n" ]; then
+        adb=$2
         restartAdb
         checkForDevice "Nox"
         deploy "Nox" "$noxDirectory"

@@ -1438,7 +1438,7 @@ function strengthenCrystal() {
 
     input tap 70 1810
     wait
-    verifyRGB 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
+    verifyRGB 20 1775 d49a61 "Strengthened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
 
 # Let's do a "free" summon
@@ -1570,11 +1570,11 @@ getColor 740 205
 if [ "$RGB" == "ffc359" ]; then
     echo "[WARN] Game is being updated!"
     if [ "$waitForUpdate" == true ]; then
-        echo "[INFO]: Waiting for game to finish update..."
+        echo "[INFO] Waiting for game to finish update..."
         loopUntilNotRGB 5 740 205 ffc359
-        echo "[OK]: Game finished updating."
+        echo "[OK] Game finished updating."
     else
-        echo "[WARN]: Not waiting for update to finish."
+        echo "[WARN] Not waiting for update to finish."
     fi
 fi
 
