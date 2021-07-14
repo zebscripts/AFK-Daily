@@ -10,23 +10,6 @@
 # Source
 source ./lib/print.sh
 
-# TODO: Update for new files locations:
-#  Move: update_setup.sh     >   lib/update_setup.sh
-#
-#  convertAKFScriptTMPtoINI:
-#    for:       .*afkscript*.tmp              >  ./account-info/acc-*.ini
-#    echo:      "$(basename "$f" .tmp)".ini   >  ./account-info/acc-"$(basename "$f" .tmp)".ini
-#  updateAFKScript:
-#    for:       .*afkscript*.ini              >  ./account-info/acc-*.ini
-#  convertConfigSHtoINI:
-#    for:       config*.sh                    >  ./config/config*.ini
-#    cp:        "$(basename "$f" .tmp)".ini   >  ./config/"$(basename "$f" .tmp)".ini
-#  updateConfig:
-#    for:       config*.ini                   >  ./config/config*.ini
-#  Maybe require ../ instead of ./
-#
-#  Check if works when called directly and deploy.sh
-
 # ##############################################################################
 # Section       : AFKScript
 # ##############################################################################
@@ -49,16 +32,13 @@ convertAKFScriptTMPtoINI() {
         echo "# afk-daily" >./account-info/acc.ini
         case "$(uname -s)" in # Check OS
         Darwin | Linux)       # Mac / Linux
-            # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
-            # The file was moved so it's normal, you can't add anything to a file not created line 49.
             echo "lastCampaign=$(date -r "$(cat "$f")" +%Y%m%d)" >>./account-info/acc.ini
             ;;
         CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
-            # FIXME: This is actually throwing an error to me right now and I didn't change anything here? Confusion.
             echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>./account-info/acc.ini
             ;;
         esac
-        # printSuccess "$f converted"
+        printInfo "$f converted"
     done
 }
 
@@ -99,7 +79,7 @@ lastWeekly=${lastWeekly:-$lastWeekly_default}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            # echo "$f updated"
+            printInfo "$f updated"
         fi
     done
 }
@@ -205,7 +185,7 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            # echo "$f updated"
+            printInfo "$f updated"
         fi
     done
 }
@@ -269,7 +249,7 @@ while getopts ":hacl" opt; do
         runConfig
         ;;
     l)
-        ls -al .*afkscript.ini config*.ini
+        ls -al account-info/acc-*.ini config/config*.ini
         ;;
     \?)
         echo "$OPTARG : Invalid option"

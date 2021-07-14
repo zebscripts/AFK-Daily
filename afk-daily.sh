@@ -22,7 +22,7 @@ DEBUG=0
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
 # TODO: use argument?
-pvpEvent=true  # Set to `true` if "Heroes of Esperia" event is live
+pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -1349,12 +1349,12 @@ oakInnSpeedy() {
         until [ "$_oakInn_ROW_COUNT" -ge 100 ]; do
             if testColorOR -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
                 inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
-                # TODO: Check that we actually hit the present by checking for the pop-up message 
+                # TODO: Check that we actually hit the present by checking for the pop-up message
                 # TODO: 250 1300 e3cfa6 (but I'd prefer to have 250 1200, so will try this another day)
                 # TODO: In case it's not found, then exit this loop without incrementing and try again
-                inputTapSleep 540 1650 1                              # Ok
-                inputTapSleep 540 1650 .5                             # Collect reward
-                _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1))          # Increment
+                inputTapSleep 540 1650 1                     # Ok
+                inputTapSleep 540 1650 .5                    # Collect reward
+                _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1)) # Increment
                 break
             fi
             _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment

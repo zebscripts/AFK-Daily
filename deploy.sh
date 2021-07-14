@@ -480,7 +480,7 @@ validateConfig() {
         $doCollectMerchantFreebies ]]; then
         printError "$configFile has missing/wrong entries."
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
-        printInfo "or run ./update_setup.sh -c"
+        printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
         exit
