@@ -649,7 +649,7 @@ while getopts ":a:cd:fhi:no:rs:tv:w" option; do
         exit 0
         ;;
     i)
-        configFile="config-${OPTARG}.ini"
+        configFile="config/config-${OPTARG}.ini"
         ;;
     n)
         disableNotif=true
