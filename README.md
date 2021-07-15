@@ -291,7 +291,7 @@ Running the script on Nox:
 ```sh
 ./deploy.sh -d nox
 ```
-<!-- TODO: Update variables -->
+
 ## Config/Variables
 
 The script acts depending on a set of variables. In order to change these, open `config.ini` with a text editor of choice, and update them. If you do not have/see a `config.ini` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside `config.ini`.**
