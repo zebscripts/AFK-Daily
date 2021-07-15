@@ -57,7 +57,7 @@ while getopts "d:fi:l:s:tw" opt; do
         forceFightCampaign=true
         ;;
     i)
-        INIFILE="$OPTARG"
+        INIFILE="${OPTARG#config/}"
         ;;
     l)
         SCREENSHOTLOCATION="/$OPTARG/scripts/afk-arena/screen.dump"
