@@ -19,6 +19,8 @@ source ./lib/print.sh
 # I won't blame you (unless you blame me).
 personalDirectory="storage/emulated/0"
 bluestacksDirectory="storage/emulated/0"
+memuDirectory="storage/emulated/0"
+noxDirectory="data"
 configFile="config/config.ini"
 tempFile="account-info/acc.ini"
 device="default"
@@ -58,6 +60,15 @@ checkFolders() {
 # Description   : Checks for ADB and installs if not present
 # ##############################################################################
 checkAdb() {
+    if [ $device = "Nox" ]; then
+        printTask "Checking for nox_adb.exe"
+        if [ -f "$adb" ]; then
+            printSuccess "Found!"
+        else
+            printSuccess "Not found!"
+        fi
+        return 0
+    fi
     printTask "Checking for adb..."
     if [ ! -d "./adb/platform-tools" ]; then # Check for custom adb directory
         if command -v adb &>/dev/null; then  # Check if ADB is already installed (with Path)
@@ -212,33 +223,42 @@ checkDate() {
 # ##############################################################################
 checkDevice() {
     if [ "$#" -gt "0" ]; then     # If parameters are sent
-        if [ "$1" = "Nox" ]; then # Nox
-            printTask "Searching for Nox through ADB..."
-            $adb connect localhost:62001 1>/dev/null
-            if ! $adb get-state 1>/dev/null; then
-                printError "Not found!"
-                exit
-            else
-                printSuccess "Found Nox!"
-            fi
-        elif [ "$1" = "Bluestacks" ]; then # Bluestacks
+        if [ "$1" = "Bluestacks" ]; then # Bluestacks
             printTask "Searching for Bluestacks through ADB... "
-            if ! $adb get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
             else
                 printSuccess "Found Bluestacks!"
             fi
+        elif [ "$1" = "Memu" ]; then # Memu
+            printTask "Searching for Memu through ADB..."
+            "$adb" connect localhost:21503 1>/dev/null
+            if ! "$adb" get-state 1>/dev/null; then
+                printError "Not found!"
+                exit
+            else
+                printSuccess "Found Memu!"
+            fi
+        elif [ "$1" = "Nox" ]; then # Nox
+            printTask "Searching for Nox through ADB..."
+            "$adb" connect localhost:62001 1>/dev/null
+            if ! "$adb" get-state 1>/dev/null; then
+                printError "Not found!"
+                exit
+            else
+                printSuccess "Found Nox!"
+            fi
         fi
     else # If parameters aren't sent
         printTask "Searching for device through ADB..."
 
-        if ! $adb get-state 1>/dev/null 2>&1; then # Checks if adb finds device
+        if ! "$adb" get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
             exit
         else
-            if [[ $($adb devices) =~ emulator ]]; then # Bluestacks
+            if [[ $("$adb" devices) =~ emulator ]]; then # Bluestacks
                 printSuccess "Found Bluestacks!"
                 deploy "Bluestacks" "$bluestacksDirectory"
             else # Personal
@@ -255,7 +275,7 @@ checkDevice() {
 # Args          : <FILE>
 # ##############################################################################
 checkEOL() {
-    if [ -f $1 ]; then
+    if [ -f "$1" ]; then
         printTask "Checking Line endings of file ${cCyan}$1${cNc}..."
         if [[ $(head -1 "$1" | cat -A) =~ \^M ]]; then
             printWarn "Found CLRF!"
@@ -341,7 +361,7 @@ datediff() {
 # Args          : <PLATFORM> <DIRECTORY>
 # ##############################################################################
 deploy() {
-    if [[ $($adb shell wm size) != *"1080x1920"* ]] && [[ $($adb shell wm size) != *"1920x1080"* ]]; then # Check for resolution
+    if [[ $("$adb" shell wm size) != *"1080x1920"* ]] && [[ $("$adb" shell wm size) != *"1920x1080"* ]]; then # Check for resolution
         echo
         printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
         if [ $ignoreResolution = false ]; then
@@ -361,24 +381,24 @@ deploy() {
     printInfo "Platform: ${cCyan}$1${cNc}"
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
     if [ $disableNotif = true ]; then
-        $adb shell settings put global heads_up_notifications_enabled 0
+        "$adb" shell settings put global heads_up_notifications_enabled 0
         printInfo "Notifications: ${cCyan}OFF${cNc}"
     fi
     printInfo "Latest tested patch: ${cCyan}$testedPatch${cNc}\n"
 
-    $adb shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
-    $adb push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
-    $adb push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
+    "$adb" shell mkdir -p "$2"/scripts/afk-arena                # Create directories if they don't already exist
+    "$adb" push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
+    "$adb" push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
 
     args="-d $debug -i $configFile -l $2"
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
     if [ -n "$totest" ]; then args="$args -s $totest"; fi
-    $adb shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
+    "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
     if [ $disableNotif = true ]; then
-        $adb shell settings put global heads_up_notifications_enabled 1
+        "$adb" shell settings put global heads_up_notifications_enabled 1
         printInfo "Notifications: ${cCyan}ON${cNc}\n"
     fi
 }
@@ -518,6 +538,14 @@ run() {
         restartAdb
         checkDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
+    elif [ "$device" == "Memu" ]; then
+        restartAdb
+        checkDevice "Memu"
+        deploy "Memu" "$memuDirectory"
+    elif [ "$device" == "Nox" ]; then
+        restartAdb
+        checkDevice "Nox"
+        deploy "Nox" "$noxDirectory"
     elif [ "$device" == "dev" ]; then
         checkDevice
     else
@@ -635,8 +663,17 @@ while getopts ":a:cd:fhi:no:rs:tv:w" option; do
         exit
         ;;
     d)
-        if [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
+        if [ "$OPTARG" == "Bluestacks" ] || [ "$OPTARG" == "bluestacks" ] || [ "$OPTARG" == "bs" ]; then
             device="Bluestacks"
+        elif [ "$OPTARG" == "Memu" ] || [ "$OPTARG" == "memu" ]; then
+            device="Memu"
+        elif [ "$OPTARG" == "Nox" ] || [ "$OPTARG" == "nox" ]; then
+            device="Nox"
+            adb="$(ps -W | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+            if [ -z "$adb" ]; then
+                printError "nox_adb.exe not found, please check your Nox settings"
+                exit 1
+            fi
         elif [ "$OPTARG" == "dev" ]; then
             device="dev"
         fi
