@@ -14,6 +14,7 @@
 - [[FAQ]]
 - [[Feature Requests]]
 - [[Known Issues]]
+- [[Specific]]
 - [[Troubleshooting]]
 
 ### Development

@@ -63,6 +63,7 @@ We use those settings (store in `.vscode/settings.json`):
     "shellcheck.exclude": [
         "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
+        "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
@@ -114,10 +115,11 @@ If you need to remove rules, please be certain that is your only choice. Here th
 
 - [1090](https://github.com/koalaman/shellcheck/wiki/SC1090): Can't follow non-constant source
 - [1091](https://github.com/koalaman/shellcheck/wiki/SC1091): Not following (Source not found) -> link to the previous one
-- [2034](https://github.com/koalaman/shellcheck/wiki/SC2034): foo appears unused. Verify it or export it
+- [2009](https://github.com/koalaman/shellcheck/wiki/SC2009): `pgrep` doesn't exixts in Git Bash
+- [2034](https://github.com/koalaman/shellcheck/wiki/SC2034): `foo` appears unused. Verify it or export it
 - [2154](https://github.com/koalaman/shellcheck/wiki/SC2154): var is referenced but not assigned -> link to the previous one
-- [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX sh, string indexing is undefined (Well, it works)
-- [3060](https://github.com/koalaman/shellcheck/wiki/SC3060): In POSIX sh, string replacement is undefined (Well, it works)
+- [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX `sh`, string indexing is undefined (Well, it works)
+- [3060](https://github.com/koalaman/shellcheck/wiki/SC3060): In POSIX `sh`, string replacement is undefined (Well, it works)
 
 ### Best Practices
 

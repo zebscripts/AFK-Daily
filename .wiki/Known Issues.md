@@ -11,7 +11,15 @@
 
 - `protocol fault: stat response has wrong message id`
 
-   This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
+    This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
+
+    IF bluestacks has the good settings please restart you `adb`.
+
+    1. Restart Bluestacks
+    2. Restart the terminal
+    3. Run `./adb/platform-tools/adb kill-server`
+    4. Run `./adb/platform-tools/adb start-server`
+    5. It should be working now. If not please contact us on discord with the result of this command: `./adb/platform-tools/adb devices`
 
 <hr>
 
@@ -19,4 +27,4 @@ If you encounter an issue that is *not* listed above or in [issues](https://gith
 
 <hr>
 
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Feature-Requests) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting)
+[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Feature-Requests) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Specific)

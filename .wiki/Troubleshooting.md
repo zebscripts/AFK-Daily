@@ -24,4 +24,4 @@ After reporting the issue, please set `DEBUG` and `SHOW_DELTA` to default `0`.
 
 <hr>
 
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Known-Issues) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Contribute)
+[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Specific) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Contribute)
