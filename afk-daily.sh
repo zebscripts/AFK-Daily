@@ -21,7 +21,6 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-# TODO: use argument?
 pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
@@ -99,6 +98,7 @@ checkToDo() {
     fi
     if [ "$1" = "$currentPos" ]; then
         tries=$((tries + 1))
+        printInColor "DEBUG" "checkToDo > $currentPos [$tries]" #TODO: To comment when releasing
     else
         eval "$currentPos=false"
         currentPos="$1"
@@ -446,9 +446,7 @@ verifyHEX() {
     if [ "$HEX" != "$3" ]; then
         printInColor "ERROR" "verifyHEX: Failure! Expected ${cCyan}$3${cNc}, but got ${cCyan}$HEX${cNc} instead. [Δ ${cCyan}$(HEXColorDelta "$HEX" "$3")${cNc}%]" >&2
         printInColor "ERROR" "$5" >&2
-        # FIXME: The counter is wrong. Has showed "1 time" on the second and third restart
-        # FIXME: This could have been my fault btw, as I once changed this... But it made sense, at least in theory! :sweat_smile:
-        # FIXME: But it did just work on me... Wth is happening, why does it sometimes work, and sometimes no...?
+        # WARN: The counter sometimes goes wrong. I did leave a print when tries > 0. Need to see if this bug comes back.
         printInColor "WARN" "Restarting for the ${cCyan}$((tries + 1))${cNc} time."
         init
         run
@@ -1349,13 +1347,12 @@ oakInnSpeedy() {
         until [ "$_oakInn_ROW_COUNT" -ge 100 ]; do
             if testColorOR -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
                 inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
-                # TODO: Check that we actually hit the present by checking for the pop-up message
-                # TODO: 250 1300 e3cfa6 (but I'd prefer to have 250 1200, so will try this another day)
-                # TODO: In case it's not found, then exit this loop without incrementing and try again
-                inputTapSleep 540 1650 1                     # Ok
-                inputTapSleep 540 1650 .5                    # Collect reward
-                _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1)) # Increment
-                break
+                if testColorOR 250 1200 eaddb8; then
+                    inputTapSleep 540 1650 1                     # Ok
+                    inputTapSleep 540 1650 .5                    # Collect reward
+                    _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1)) # Increment
+                    break
+                fi
             fi
             _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment
         done
