@@ -3,7 +3,7 @@
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
 DEVICEWIDTH=1080
-pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
+pvpEvent=false # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
