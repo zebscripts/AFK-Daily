@@ -267,6 +267,7 @@ function oakSearchPresent() {
 
 # Search available present tabs in Oak Inn
 function oakPresentTab() {
+    # TODO: Script not checking for gifts present in tabs correctly. RGB values need to be updated.
     oakPresentTabs=0
     getColor 270 1800 # 1 gift c79663
     if [ "$RGB" == "c79663" ]; then
@@ -1267,17 +1268,17 @@ function buyFromStore() {
 
     # Dust
     if [ "$buyStoreDust" == true ]; then
-        buyStoreItem 180 840
+        buyStoreItem 175 1100
         wait
     fi
     # Poe Coins
     if [ "$buyStorePoeCoins" == true ]; then
-        buyStoreItem 670 1430
+        buyStoreItem 675 1690
         wait
     fi
     # Emblems
     if [ "$buyStoreEmblems" == true ]; then
-        buyStoreItem 180 1430
+        buyStoreItem 175 1690
         wait
     fi
     input tap 70 1810
@@ -1450,7 +1451,7 @@ function nobleTavern() {
 
     # Looking for heart
     getColor 875 835
-    until [ "$RGB" == "fc9473" ]; do
+    until [ "$RGB" == "f6936a" ]; do
         input tap 870 1630 # Next pannel
         sleep 1
         getColor 875 835
@@ -1538,6 +1539,7 @@ function oakInn() {
 # test 760 1440 3 0.5 # Auto button inside battle
 # test 990 1440 3 0.5 # Speed x4 button inside battle
 # test 760 1440 3 0.5 # Skip button inside battle
+# test 875 835 3 0.5 # Check for companion summon
 
 # --- Script Start --- #
 echo "[INFO] Starting script... ($(date)) "
