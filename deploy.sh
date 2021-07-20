@@ -2,7 +2,11 @@
 # ##############################################################################
 # Script Name   : deploy.sh
 # Description   : Used to run afk-daily on phone
-# Args          : [-h] [-d <DEVICE>] [-a <ACCOUNT>] [-f] [-t] [-w]
+# Args          : [-h, --help] [-a, --account [ACCOUNT]] [-c, --check]
+#                 [-d, --device [DEVICE]] [-e, --event [EVENT]] [-f, --fight]
+#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]] [-r]
+#                 [-s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]]
+#                 [-t, --test] [-v, --verbose [DEBUG]] [-w, --weekly]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -24,6 +28,7 @@ noxDirectory="data"
 configFile="config/config.ini"
 tempFile="account-info/acc.ini"
 device="default"
+evt="" # Default dev evt
 
 # Do not modify
 adb=adb
@@ -222,7 +227,7 @@ checkDate() {
 # Args          : <PLATFORM>
 # ##############################################################################
 checkDevice() {
-    if [ "$#" -gt "0" ]; then     # If parameters are sent
+    if [ "$#" -gt "0" ]; then            # If parameters are sent
         if [ "$1" = "Bluestacks" ]; then # Bluestacks
             printTask "Searching for Bluestacks through ADB... "
             if ! "$adb" get-state 1>/dev/null; then
@@ -367,7 +372,7 @@ deploy() {
         if [ $ignoreResolution = false ]; then
             printInfo "$(adb shell wm size)"
             printInfo "$(adb shell wm density)"
-            # $adb shell dumpsys display
+            # "$adb" shell dumpsys display
             printWarn "Please let us know by opening an issue with a screenshot of this terminal output."
             printWarn "If you're sure your device settings are correct and want to force the script to run regardless, use the -r flag."
             printWarn "The script does NOT work on resolutions other than 1080x1920!"
@@ -395,6 +400,7 @@ deploy() {
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
     if [ -n "$totest" ]; then args="$args -s $totest"; fi
+    if [ -n "$evt" ]; then args="$args -e $evt"; fi
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
     if [ $disableNotif = true ]; then
@@ -580,6 +586,10 @@ show_help() {
     echo "      Specify target device"
     echo "      Values for [DEVICE]: bs, dev"
     echo
+    echo "   -e, --event [EVENT]"
+    echo "      Specify active event"
+    echo "      Values for [DEVICE]: hoe"
+    echo
     echo "   -f, --fight"
     echo "      Force campaign battle (ignore 3 day optimisation)"
     echo
@@ -640,6 +650,7 @@ for arg in "$@"; do
     "--account") set -- "$@" "-a" ;;
     "--check") set -- "$@" "-c" ;;
     "--device") set -- "$@" "-d" ;;
+    "--event") set -- "$@" "-e" ;;
     "--fight") set -- "$@" "-f" ;;
     "--ini") set -- "$@" "-i" ;;
     "--notifications") set -- "$@" "-n" ;;
@@ -653,7 +664,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:fhi:no:rs:tv:w" option; do
+while getopts ":a:cd:e:fhi:no:rs:tv:w" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -677,6 +688,9 @@ while getopts ":a:cd:fhi:no:rs:tv:w" option; do
         elif [ "$OPTARG" == "dev" ]; then
             device="dev"
         fi
+        ;;
+    e)
+        evt="${OPTARG}"
         ;;
     f)
         forceFightCampaign=true

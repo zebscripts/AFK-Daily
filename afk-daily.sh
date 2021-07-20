@@ -2,7 +2,8 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : <SCREENSHOTLOCATION> <forceFightCampaign> <forceWeekly> <testServer> <DEBUG> <configFile>
+# Args          : [-d DEVICE] [-e EVENT] [-f] [-i INI] [-l LOCATION]
+#                 [-s TOTEST] [-t] [-w]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -21,11 +22,12 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-pvpEvent=true # Set to `true` if "Heroes of Esperia" event is live
+eventHoe=false  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
 activeTab="Start"
+activeEvents=""
 currentPos="default"
 dayofweek=$(TZ=UTC date +%u)
 HEX=00000000
@@ -47,10 +49,21 @@ cBlue="\033[0;94m"   # Values
 cPurple="\033[0;95m" # [DEBUG]
 cCyan="\033[0;96m"   # [INFO]
 
-while getopts "d:fi:l:s:tw" opt; do
+while getopts "d:e:fi:l:s:tw" opt; do
     case $opt in
     d)
         DEBUG=$OPTARG
+        ;;
+    e)
+        buIFS=IFS
+        # Explication: https://stackoverflow.com/a/7718539/7295428
+        IFS=','
+        for i in $OPTARG; do
+            if [ "$i" = "hoe" ]; then
+                eventHoe=true
+            fi
+        done
+        IFS=buIFS
         ;;
     f)
         forceFightCampaign=true
@@ -762,7 +775,7 @@ lootAfkChest() {
 arenaOfHeroes() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "arenaOfHeroes" >&2; fi
     inputTapSleep 740 1050 3
-    if [ "$pvpEvent" = false ]; then
+    if [ "$eventHoe" = false ]; then
         inputTapSleep 550 450 3
     else
         inputTapSleep 550 900 3
@@ -1059,7 +1072,7 @@ legendsTournament() {
     ## For testing only! Keep as comment ##
     # inputTapSleep 740 1050 1
     ## End of testing ##
-    if [ "$pvpEvent" = false ]; then
+    if [ "$eventHoe" = false ]; then
         inputTapSleep 550 900 # Legend's Challenger Tournament
     else
         inputTapSleep 550 1450 # Legend's Challenger Tournament
@@ -1500,7 +1513,7 @@ checkWhereToEnd() {
     "championship")
         switchTab "Dark Forest" true
         inputTapSleep 740 1050
-        if [ "$pvpEvent" = false ]; then
+        if [ "$eventHoe" = false ]; then
             inputTapSleep 550 1370 0
         else
             inputTapSleep 550 1680 0
@@ -1710,6 +1723,7 @@ init() {
         sleep 2
         # Close popup
         inputTapSleep 550 1850 .1
+        #TODO: check special popup that need to be closed with the cross
     done
 
     # Preload graphics
@@ -1789,6 +1803,10 @@ if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${
 if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
 if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign: ${cBlue}ON${cNc}"; fi
 if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}"; fi
+
+# Events
+if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia |"; fi
+if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
 init
 run
