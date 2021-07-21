@@ -159,6 +159,8 @@ buyStorePoeCoins=true
 buyStorePrimordialEmblem=false
 buyStoreAmplifyingEmblem=false
 buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
@@ -324,14 +326,14 @@ checkGitUpdate() {
 checkSetupUpdate() {
     printTask "Checking for setup updates..."
     # .*afkscript.ini
-    for f in .*afkscript.*; do
+    for f in .*afkscript.*  ./account-info/acc*.ini; do
         if [ -e "$f" ]; then
             printInNewLine "$(./lib/update_setup.sh -a)"
             break
         fi
     done
-    #
-    for f in config*.*; do
+    # config
+    for f in config*.* ./config/config*.ini; do
         if [ -e "$f" ]; then
             printInNewLine "$(./lib/update_setup.sh -c)"
             break
@@ -481,6 +483,8 @@ validateConfig() {
         $buyStorePrimordialEmblem || -z \
         $buyStoreAmplifyingEmblem || -z \
         $buyStoreSoulstone || -z \
+        $buyStoreLimitedGoldOffer || -z \
+        $buyStoreLimitedDiamOffer || -z \
         $buyWeeklyGuild || -z \
         $buyWeeklyLabyrinth || -z \
         $doLootAfkChest || -z \

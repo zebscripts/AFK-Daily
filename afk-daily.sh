@@ -1172,6 +1172,99 @@ buyFromStore() {
     inputTapSleep 330 1650 3
 
     if [ "$buyStoreDust" = true ]; then # Dust
+        buyFromStore_buyItem 175 1100
+    fi
+    if [ "$buyStorePoeCoins" = true ]; then # Poe Coins
+        buyFromStore_buyItem 675 1690
+    fi
+    # Primordial Emblem
+    if [ "$buyStorePrimordialEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 9eabbd; then #TODO: Update Color
+        buyFromStore_buyItem 175 1690
+    fi
+    # Amplifying Emblem
+    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 d5af84; then
+        buyFromStore_buyItem 175 1690
+    fi
+    if [ "$buyStoreSoulstone" = true ]; then                     # Soulstone (widh 90 diamonds)
+        if testColorOR -d "$DEFAULT_DELTA" 910 1100 cf9ced; then # row 1, item 4
+            buyFromStore_buyItem 910 1100
+        fi
+        if testColorOR -d "$DEFAULT_DELTA" 650 1100 57447b; then # row 1, item 3 #TODO: Update Color
+            buyFromStore_buyItem 650 1100
+        fi
+        if testColorOR -d "$DEFAULT_DELTA" 410 1100 9787c9; then # row 1, item 2 #TODO: Update Color
+            buyFromStore_buyItem 410 1100
+        fi
+    fi
+    if [ "$buyStoreLimitedGoldOffer" = true ]; then # Limited Gold Offer
+        buyFromStore_buyItem 420 820
+    fi
+    if [ "$buyStoreLimitedDiamOffer" = true ]; then # Limited Diam Offer
+        buyFromStore_buyItem 670 820
+    fi
+    if [ "$forceWeekly" = true ]; then
+        # Weekly - Purchase an item from the Guild Store once (check red dot first row for most useful item)
+        if [ "$buyWeeklyGuild" = true ]; then
+            inputTapSleep 530 1810 # Guild Store
+            if testColorOR -d "5" 620 750 ef1f06; then
+                buyFromStore_buyItem 550 820 # Limited
+            elif testColorOR -d "5" 250 1040 ef1e06; then
+                buyFromStore_buyItem 180 1100 # row 1, item 1
+            elif testColorOR -d "5" 500 1040 ed1f06; then
+                buyFromStore_buyItem 420 1100 # row 1, item 2
+            elif testColorOR -d "5" 744 1040 ed1f06; then
+                buyFromStore_buyItem 660 1100 # row 1, item 3
+            elif testColorOR -d "5" 980 1040 ef1e06; then
+                buyFromStore_buyItem 900 1100 # row 1, item 4
+            fi
+        fi
+        if [ "$buyWeeklyLabyrinth" = true ]; then
+            inputTapSleep 1020 1810          # Labyrinth Store
+            inputSwipe 1050 1600 1050 750 50 # Swipe all the way down
+            wait
+            if testColorOR -d "$DEFAULT_DELTA" 900 1500 36bae4; then # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 900 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1500 7fd1e7; then # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 660 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 420 1500 91abac; then # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 420 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 180 1500 8fdbf4; then # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 180 1500
+            elif testColorOR -d "$DEFAULT_DELTA" 900 1200 88d8ff; then # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 900 1200
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1200 67d2fc; then # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 660 1200
+            else
+                printInColor "INFO" "Can't buy item from Labyrinth store"
+            fi
+        fi
+    fi
+    inputTapSleep 70 1810 # Return
+    verifyHEX 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
+}
+
+# ##############################################################################
+# Function Name : buyFromStore_buyItem
+# Descripton    : Buys an item from the Store
+# Args          : <X> <Y>
+# ##############################################################################
+buyFromStore_buyItem() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "buyFromStore_buyItem ${cPurple}$*${cNc}" >&2; fi
+    inputTapSleep "$1" "$2" 1 # Item
+    inputTapSleep 550 1540 1  # Purchase
+    inputTapSleep 550 1700    # Close popup
+}
+
+# ##############################################################################
+# Function Name : buyFromStore_test
+# Descripton    : Buy items from store ON TEST SERVER (old shop)
+# Remark        : Should be removed if one day the test server has the new shop
+# ##############################################################################
+buyFromStore_test() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "buyFromStore_test" >&2; fi
+    inputTapSleep 330 1650 3
+
+    if [ "$buyStoreDust" = true ]; then # Dust
         buyFromStore_buyItem 180 840
     fi
     if [ "$buyStorePoeCoins" = true ]; then # Poe Coins
@@ -1233,18 +1326,6 @@ buyFromStore() {
     fi
     inputTapSleep 70 1810 # Return
     verifyHEX 20 1775 d49a61 "Visited the Store." "Failed to visit the Store."
-}
-
-# ##############################################################################
-# Function Name : buyFromStore_buyItem
-# Descripton    : Buys an item from the Store
-# Args          : <X> <Y>
-# ##############################################################################
-buyFromStore_buyItem() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "buyFromStore_buyItem ${cPurple}$*${cNc}" >&2; fi
-    inputTapSleep "$1" "$2" 1 # Item
-    inputTapSleep 550 1540 1  # Purchase
-    inputTapSleep 550 1700    # Close popup
 }
 
 # ##############################################################################
@@ -1539,6 +1620,12 @@ collectQuestChests() {
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
 
+    #WARN: May break if the reward is a new champ...
+    inputTapSleep 930 1650                                     # Campaign
+    until testColorNAND -d "$DEFAULT_DELTA" 950 610 acf0bd; do # Old value: 82fdf5
+        inputTapSleep 860 610
+    done
+
     inputTapSleep 70 1650 1 # Return
     verifyHEX 20 1775 d49a61 "Collected daily and weekly quest chests." "Failed to collect daily and weekly quest chests."
 }
@@ -1723,7 +1810,8 @@ init() {
         sleep 2
         # Close popup
         inputTapSleep 550 1850 .1
-        #TODO: check special popup that need to be closed with the cross
+        #Check special popup that need to be closed with the cross
+        testColorORTapSleep 1100 300 131517
     done
 
     # Preload graphics
@@ -1782,7 +1870,11 @@ run() {
         guildHunts
         if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
     elif checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
-    if checkToDo doBuyFromStore; then buyFromStore; fi
+    if checkToDo doBuyFromStore; then
+        if [ "$testServer" = true ]; then
+            buyFromStore_test
+        else buyFromStore; fi
+    fi
     if checkToDo doStrengthenCrystal; then strengthenCrystal; fi
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
