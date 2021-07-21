@@ -588,7 +588,7 @@ show_help() {
     echo
     echo "   -d, --device [DEVICE]"
     echo "      Specify target device"
-    echo "      Values for [DEVICE]: bs, dev"
+    echo "      Values for [DEVICE]: bs, dev, nox, memu"
     echo
     echo "   -e, --event [EVENT]"
     echo "      Specify active event"
