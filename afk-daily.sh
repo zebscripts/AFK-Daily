@@ -1178,7 +1178,7 @@ buyFromStore() {
         buyFromStore_buyItem 675 1690
     fi
     # Primordial Emblem
-    if [ "$buyStorePrimordialEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 9eabbd; then #TODO: Update Color
+    if [ "$buyStorePrimordialEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 c6ced5; then
         buyFromStore_buyItem 175 1690
     fi
     # Amplifying Emblem
