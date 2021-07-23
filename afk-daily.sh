@@ -30,15 +30,16 @@ activeTab="Start"
 activeEvents=""
 currentPos="default"
 dayofweek=$(TZ=UTC date +%u)
-HEX=00000000
 forceFightCampaign=false
 forceWeekly=false
+hasEnded=false
+HEX=00000000
+INILOCATION="/storage/emulated/0/scripts/afk-arena/"
+INIFILE="config.ini"
 oakRes=0
 screenshotRequired=true
 testServer=false
 SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
-INILOCATION="/storage/emulated/0/scripts/afk-arena/"
-INIFILE="config.ini"
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -1189,7 +1190,7 @@ buyFromStore() {
         if testColorOR -d "$DEFAULT_DELTA" 910 1100 cf9ced; then # row 1, item 4
             buyFromStore_buyItem 910 1100
         fi
-        if testColorOR -d "$DEFAULT_DELTA" 650 1100 57447b; then # row 1, item 3 #TODO: Update Color
+        if testColorOR -d "$DEFAULT_DELTA" 650 1100 b165c0; then # row 1, item 3
             buyFromStore_buyItem 650 1100
         fi
         if testColorOR -d "$DEFAULT_DELTA" 410 1100 9787c9; then # row 1, item 2 #TODO: Update Color
@@ -1844,6 +1845,8 @@ init() {
 # Descripton    : Run the script based on config
 # ##############################################################################
 run() {
+    if [ "$hasEnded" = true ]; then return 0; fi # if the script has restarted we need a way to stop looping at the end.
+
     # CAMPAIGN TAB
     switchTab "Campaign"
     if checkToDo doLootAfkChest; then lootAfkChest; fi
@@ -1884,10 +1887,11 @@ run() {
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
     if checkToDo doCollectMail; then collectMail; fi
     if checkToDo doCollectMerchantFreebies; then collectMerchants; fi
-
     # Ends at given location
     sleep 1
     checkWhereToEnd
+
+    hasEnded=true
 }
 
 printInColor "INFO" "Starting script... ($(date))"
