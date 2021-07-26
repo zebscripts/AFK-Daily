@@ -647,20 +647,20 @@ function fastRewards() {
 
 # Collects and sends companion points, as well as auto lending mercenaries
 function collectFriendsAndMercenaries() {
-    input tap 970 810
+    input tap 970 810 # Friends
     sleep 1
-    input tap 930 1600
+    input tap 930 1600 # Send and receive
     wait
-    input tap 720 1760
+    input tap 720 1760 # Short-term
+    sleep 5
+    input tap 990 190 # Manage
     wait
-    input tap 990 190
+    input tap 630 1590 # Apply
     wait
-    input tap 630 1590
-    wait
-    input tap 750 1410
+    input tap 750 1410 # Auto Lend
     sleep 1
-    input tap 70 1810
-    input tap 70 1810
+    input tap 70 1810 # Back
+    input tap 70 1810 # Back
 
     # TODO: Check if its necessary to send mercenaries
 
