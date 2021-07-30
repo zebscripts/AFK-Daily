@@ -1643,20 +1643,20 @@ collectQuestChests_quick() {
     done
 
     if testColorNAND -d "$DEFAULT_DELTA" 270 450 4b2711 && testColorNAND 350 380 54332b; then
-        inputTapSleep 330 430     # Chest 20
-        inputTapSleep 580 600 0.5 # Collect
+        inputTapSleep 330 430   # Chest 20
+        inputTapSleep 580 600 0 # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 510 380 543323; then
-        inputTapSleep 500 430     # Chest 40
-        inputTapSleep 580 600 0.5 # Collect
+        inputTapSleep 500 430   # Chest 40
+        inputTapSleep 580 600 0 # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 490 450 4e2713 && testColorNAND 670 380 54331b; then
-        inputTapSleep 660 430     # Chest 60
-        inputTapSleep 580 600 0.5 # Collect
+        inputTapSleep 660 430   # Chest 60
+        inputTapSleep 580 600 0 # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 680 450 4a3321 && testColorNAND 830 380 533323; then
-        inputTapSleep 830 430     # Chest 80
-        inputTapSleep 580 600 0.5 # Collect
+        inputTapSleep 830 430   # Chest 80
+        inputTapSleep 580 600 0 # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 1000 380 543323; then
         inputTapSleep 990 430 # Chest 100
