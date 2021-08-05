@@ -269,20 +269,20 @@ function oakSearchPresent() {
 function oakPresentTab() {
     # TODO: Script not checking for gifts present in tabs correctly. RGB values need to be updated.
     oakPresentTabs=0
-    getColor 270 1800 # 1 gift c79663
-    if [ "$RGB" == "c79663" ]; then
+    getColor 270 1800 # 1 gift cf9a67
+    if [ "$RGB" == "cf9a67" ]; then
         ((oakPresentTabs = oakPresentTabs + 1000)) # Increment
     fi
-    getColor 410 1800 # 2 gift bb824f
-    if [ "$RGB" == "bb824f" ]; then
+    getColor 410 1800 # 2 gift be8350
+    if [ "$RGB" == "be8350" ]; then
         ((oakPresentTabs = oakPresentTabs + 200)) # Increment
     fi
-    getColor 550 1800 # 3 gift af6e3b
-    if [ "$RGB" == "af6e3b" ]; then
+    getColor 550 1800 # 3 gift ae6c39
+    if [ "$RGB" == "ae6c39" ]; then
         ((oakPresentTabs = oakPresentTabs + 30)) # Increment
     fi
-    getColor 690 1800 # 4 gift b57b45
-    if [ "$RGB" == "b57b45" ]; then
+    getColor 690 1800 # 4 gift b17940
+    if [ "$RGB" == "b17940" ]; then
         ((oakPresentTabs = oakPresentTabs + 4)) # Increment
     fi
 }
@@ -1523,7 +1523,6 @@ function oakInn() {
 }
 
 # Test function (X, Y, amountTimes, waitTime)
-# test 200 1850 3 0.5
 # test 550 740 3 0.5 # Check for Boss in Campaign
 # test 660 520 3 0.5 # Check for Solo Bounties RGB
 # test 650 570 3 0.5 # Check for Team Bounties RGB
