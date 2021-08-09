@@ -1,62 +1,35 @@
-The script acts depending on a set of variables. In order to change these, open `config.ini` with a text editor of choice, and update them. If you do not have/see a `config.ini` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit. **Do not delete any variable inside `config.ini`.**
-
-You can update you `config.ini` with `update_setup.sh -c`.
-
-## Account
-
-| [VIP Rank](https://afk-arena.fandom.com/wiki/VIP_Rank) | Free Arena of Heroes | Free Legends’ Challenger Tournament | Guild Boss |
-| :--: | :------------------: | :---------------------------------: | :--------: |
-|  0   |          2           |                  5                  |     2      |
-|  1   |        2 + 1         |                  5                  |     2      |
-|  3   |        2 + 2         |                  5                  |     2      |
-|  5   |        2 + 3         |                  5                  |     2      |
-|  6   |        2 + 3         |                  5                  |   2 + 1    |
-|  7   |        2 + 4         |                  5                  |   2 + 1    |
-|  9   |        2 + 5         |                  5                  |   2 + 1    |
-|  11  |        2 + 6         |                  5                  |   2 + 1    |
-|  13  |        2 + 7         |                  5                  |   2 + 1    |
-
-VIP Rank 10 is the maximum for free players (account level 200).
-
-You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/wiki/Quests#Dailies).
-
-## Config File
+The script acts depending on a set of variables. In order to change these, open `config.ini` with a text editor of choice, and update them. If you do not have/see a `config.ini` file, simply run the script once (`./deploy.sh`), it should get automatically generated for you to edit.
 
 ### Player
 
 | Variable              |   Type    | Description                                                                                                                                | Default |
 | :-------------------- | :-------: | :----------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `canOpenSoren`        | `Boolean` | Set to `true` if the player has permissions to open Soren.                                                                                 | `false` |
+| `canOpenSoren`        | `Boolean` | If `true`, the player has permission to open Soren.                                                                                        | `false` |
 | `arenaHeroesOpponent` | `Number`  | Choose which opponent to fight in the Arena of Heroes. Possible entries: `1`, `2`, `3`, `4`, `5`. `1` being at the top, `5` at the bottom. |   `5`   |
 
 ### General
 
 | Variable        |   Type    | Description                                                                                                                                  |    Default     |
 | :-------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
-| `waitForUpdate` | `Boolean` | If `true`, waits until the update has finished downloading. If `false`, ignores update and runs script.                                      |     `true`     |
+| `waitForUpdate` | `Boolean` | If `true`, waits until the in-game update has finished.                                                                                      |     `true`     |
 | `endAt`         | `String`  | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`. | `championship` |
 
 ### Repetitions
 
-| Variable                     |   Type   | Description                                                                                                              | Default |
-| :--------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
-| `maxCampaignFights`          | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |  `5`    |
-| `maxKingsTowerFights`        | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |  `5`    |
-| `totalAmountArenaTries`      | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
-| `totalAmountTournamentTries` | `Number` | The total amount of tries the player may fight in the Tournament.                                                        |   `0`   |
-| `totalAmountGuildBossTries`  | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| Variable                    |   Type   | Description                                                                                                              | Default |
+| :-------------------------- | :------: | :----------------------------------------------------------------------------------------------------------------------- | :-----: |
+| `maxCampaignFights`         | `Number` | The total amount of attempts to fight in the campaign. Only losses count as attempts.                                    |   `5`   |
+| `maxKingsTowerFights`       | `Number` | The total amount of attempts to fight in each King's Towers. Only losses count as attempts.                              |   `5`   |
+| `totalAmountArenaTries`     | `Number` | The total amount of tries the player may fight in the Arena. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
+| `totalAmountGuildBossTries` | `Number` | The total amount of tries the player may fight a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`. |  `2+0`  |
 
 ### Store
 
-| Variable                    |   Type    | Description                                                       | Default |
-| :-------------------------- | :-------: | :---------------------------------------------------------------- | :-----: |
-| `buyStoreDust`              | `Boolean` | If `true`, buys Dust from the store for Gold.                     | `true`  |
-| `buyStorePoeCoins`          | `Boolean` | If `true`, buys Poe Coins from the store for Gold.                | `true`  |
-| `buyStoreSoulstone`         | `Boolean` | If `true`, buys Elite Hero Soulstones from the store for 90 Gems. | `false` |
-| `buyStorePrimordialEmblem`  | `Boolean` | If `true`, buys Primordial Emblem from the store for Gold.        | `false` |
-| `buyStoreAmplifyingEmblem`  | `Boolean` | If `true`, buys Amplifying Emblem from the store for Gold.        | `false` |
-| `buyWeeklyGuild`            | `Boolean` | If `true`, buys first item of Guild store.                        | `false` |
-| `buyWeeklyLabyrinth`        | `Boolean` | If `true`, buys Soulstones from the Labyrinth store.              | `false` |
+| Variable           |   Type    | Description                                        | Default |
+| :----------------- | :-------: | :------------------------------------------------- | :-----: |
+| `buyStoreDust`     | `Boolean` | If `true`, buys Dust from the store for Gold.      | `true`  |
+| `buyStorePoeCoins` | `Boolean` | If `true`, buys Poe Coins from the store for Gold. | `true`  |
+| `buyStoreEmblems`  | `Boolean` | If `true`, buys Emblems from the store for Gold.   | `false` |
 
 ### Campaign
 
@@ -82,12 +55,9 @@ You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/w
 | Variable                  |   Type    | Description                                                                                                          | Default |
 | :------------------------ | :-------: | :------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `doGuildHunts`            | `Boolean` | If `true`, fights Wrizz and possibly Soren.                                                                          | `true`  |
-| `guildBattleType`         | `Boolean` | If `doGuildHunts=true`, do guild hunt with `challenge` or `quick` battle                                             | `quick` |
 | `doTwistedRealmBoss`      | `Boolean` | If `true`, fights current Twisted Realm Boss.                                                                        | `true`  |
 | `doBuyFromStore`          | `Boolean` | If `true`, buys items from store.                                                                                    | `true`  |
 | `doStrengthenCrystal`     | `Boolean` | If `true`, strengthens the resonating Crystal (without leveling up).                                                 | `true`  |
-| `allowCrystalLevelUp`     | `Boolean` | If `true`, and `doStrengthenCrystal=true` strengthens the resonating Crystal and level up if possible.               | `false` |
-| `doTempleOfAscension`     | `Boolean` | If `true`, auto ascend heroes.                                                                                       | `false` |
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points.                                                                   | `false` |
 | `doCollectOakPresents`    | `Boolean` | **Only works if "Hide Inn Heroes" is enabled under "Settings -> Memory".** If `true`, collects Oak Inn red presents. | `false` |
 
@@ -101,4 +71,8 @@ You also win 2 Arena Tickets with [Daily rewards](https://afk-arena.fandom.com/w
 
 <hr>
 
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Usage) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/FAQ)
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Installation">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Usage">Next page</a>
+</div>

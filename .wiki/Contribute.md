@@ -1,4 +1,4 @@
-If you want to help you are more than welcome.
+Thank you for thinking about contributing! Help is always welcome.
 
 ## Join the project
 
@@ -13,7 +13,7 @@ We use [![Visual Studio Code](https://img.shields.io/badge/Visual_Studio_Code-00
 
 ### Extensions
 
-We use those extensions:
+Mandatory extensions:
 
 - [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 - [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
@@ -26,7 +26,7 @@ Some other useful extensions:
 
 ### Settings
 
-We use those settings (store in `.vscode/settings.json`):
+Visual Studio Code generates a custom file inside repositories (`.vscode/settings.json`) for settings regarding the IDE and extensions. If you want, you can use our settings:
 
 ```js
 {
@@ -63,7 +63,6 @@ We use those settings (store in `.vscode/settings.json`):
     "shellcheck.exclude": [
         "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
-        "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
@@ -89,7 +88,7 @@ You can use tools like [![WinMerge](https://img.shields.io/badge/WinMerge-yellow
 
 ## Clean code
 
-The principles of [Clean Code](https://www.pearson.com/us/higher-education/program/Martin-Clean-Code-A-Handbook-of-Agile-Software-Craftsmanship/PGM63937.html) apply to Bash as well. It really helps having a robust script.
+The principles of [Clean Code](https://www.pearson.com/us/higher-education/program/Martin-Clean-Code-A-Handbook-of-Agile-Software-Craftsmanship/PGM63937.html) apply to Bash as well. It really helps in having a robust script.
 
 > Many people hack together shell scripts quickly to do simple tasks, but these soon take on a life of their own. Unfortunately shell scripts are full of subtle effects which result in scripts failing in unusual ways. It’s possible to write scripts which minimise these problems.
 
@@ -97,19 +96,19 @@ The principles of [Clean Code](https://www.pearson.com/us/higher-education/progr
 
 ### Markdown - MarkdownLint
 
-It's a bit useless, but well, if we are trying to do robust code, why not having robust Markdown too?
+It's a bit useless, but well, if we are trying to do robust code, why not have robust Markdown too?
 
-We are using [MarkdownLint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint). Please try to have 0 warning / error in the code.
+We are using [MarkdownLint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint). Please try to have 0 warnings and/or errors.
 
 I did remove some rules because they are too restrictive for a good looking ReadMe on GitHub:
 
-- [MD033](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md033): As you know, Markdowwn can't center elements... so we are using HTML instead.
+- [MD033](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md033): As you know, Markdown can't center elements. Because of this, we are using HTML instead.
 - [MD036](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md036): Without removing it you can't do `**Lorem ipsum dolor sit amet**`.
 - [MD041](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md041): We are using HTML header because it's sexy instead of the classic `# AFK-Daily`.
 
 ### Shell - ShellCheck
 
-We are using [ShellCheck](https://github.com/koalaman/shellcheck). Please try to have 0 warning / error in the code.
+We are using [ShellCheck](https://github.com/koalaman/shellcheck). Please try to have 0 warnings and/or errors.
 
 If you need to remove rules, please be certain that is your only choice. Here the list of the already removes rules:
 
@@ -123,7 +122,7 @@ If you need to remove rules, please be certain that is your only choice. Here th
 
 ### Best Practices
 
-Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-practices.html) of my best practices. I did edit some of it for more portability and maintainability.
+Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-practices.html) of our best practices. We edited some of it for more portability and maintainability.
 
 1. Use functions
 
@@ -132,7 +131,6 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     ```sh
     myfunc() {
         if [ $DEBUG -ge 3 ]; then echo "[DEBUG] myfunc" >&1; fi
-
     }
     ```
 
@@ -170,13 +168,13 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     }
     ```
 
-    - Try to comment everything, every click / condition / loop, it really helps maintain the code.
-    - Try to align comments, it help for the visibility of them.
+    - Try to comment everything, every click, condition, loop. It really helps maintain the code.
+    - Try to align comments, it helps for the visibility of them.
 
 3. ~~Use `shift` to read function arguments~~
 4. *Declare your variables*
 
-    Instead of `local`, prefix your var with the name of the function (`local` is undefined in `sh`).
+    Instead of `local`, prefix your variable with the name of the function (`local` is undefined in `sh`).
 
     ```sh
     myfunc() {
@@ -215,7 +213,7 @@ Here is the [source](https://www.javacodegeeks.com/2013/10/shell-scripting-best-
     > Use `$(command)` instead of `` `command` `` because it is easier to nest multiple commands and makes your code more readable.
 
 15. ~~Use process substitution instead of creating temporary files~~
-16. Use mktemp if you have to create temporary files
+16. Use `mktemp` if you have to create temporary files
 
     > Try to avoid creating temporary files. If you must, use `mktemp` to create a temporary directory and then write your files to it. Make sure you remove the directory after you are done.
 
@@ -243,8 +241,4 @@ Some other useful documentation:
 - [The Art of Command Line](https://github.com/jlevy/the-art-of-command-line#the-art-of-command-line)
 - [Pure Bash Bible](https://github.com/dylanaraps/pure-bash-bible#pure-bash-bible)
 
-*If you have any doubt, just ask, there will be always someone to answer (well, I hope so)*
-
-<hr>
-
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting)
+*If you have any doubt, just ask, there will always be someone to answer (well, I hope so)!*

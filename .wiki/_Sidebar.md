@@ -1,22 +1,21 @@
-## AFK-Daily
+## General
+1. [[Home]]
+2. [[Features]]
+3. [[Supported Devices]]
 
-- [[Home]]
-- [[Features]]
+## [[Get started]]
+1. [[AFK Arena requirements]]
+2. [[Tools]]
+3. [[Installation]]
+4. [[Config]]
+5. [[Usage]]
 
-### Installer
-
-1. [[Requirements]]
-2. [[Usage]]
-3. [[Config]]
-
-### Help
-
+## Help
+- [[Tips]]
 - [[FAQ]]
-- [[Feature Requests]]
 - [[Known Issues]]
-- [[Specific]]
 - [[Troubleshooting]]
 
-### Development
-
+## Development
+- [[Feature Requests]]
 - [[Contribute]]

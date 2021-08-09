@@ -1,4 +1,6 @@
-- [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hard coded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example for this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
+If you encounter an issue that is *not* listed below or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! You can also [join our Discord](https://discord.com/invite/Fq2cfqjp8D) and let us know there that you're having trouble.
+
+- [`#4`](https://github.com/zebscripts/afk-daily/issues/4) - Since the timings are quite hardcoded for now, there's always a chance that the script might skip something because it tried to take an action before the game even loaded it. An example of this is at the beginning when loading the game and switching between the first Tabs, or while fighting in the Legends Tournament. Worst case scenario the script either exits, or you'll have to go fight one extra time at the tournament.
 - [`#32`](https://github.com/zebscripts/AFK-Daily/issues/32) - Script breaks whenever resources are full. Please make sure to always collect them/spend them.
 - [`#33`](https://github.com/zebscripts/AFK-Daily/issues/33) - Script waits forever in the Arena of Heroes
 - The script does not auto-update to the latest version
@@ -11,20 +13,4 @@
 
 - `protocol fault: stat response has wrong message id`
 
-    This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
-
-    IF bluestacks has the good settings please restart you `adb`.
-
-    1. Restart Bluestacks
-    2. Restart the terminal
-    3. Run `./adb/platform-tools/adb kill-server`
-    4. Run `./adb/platform-tools/adb start-server`
-    5. It should be working now. If not please contact us on discord with the result of this command: `./adb/platform-tools/adb devices`
-
-<hr>
-
-If you encounter an issue that is *not* listed above or in [issues](https://github.com/zebscripts/AFK-Daily/issues), feel free to [open a new issue](https://github.com/zebscripts/afk-daily/issues/new)! I will try my best to add existing ones.
-
-<hr>
-
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Feature-Requests) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Specific)
+   This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
