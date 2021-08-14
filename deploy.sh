@@ -55,8 +55,8 @@ function checkAdb() {
             # If not, install it locally for this script
             printWarn "Not found!"
             printTask "Installing adb..."
-            mkdir -p adb # Create directory
-            cd ./adb  # Change to new directory
+            mkdir -p adb
+            cd ./adb || exit 1
 
             # Install depending on installed OS
             case "$OSTYPE" in
@@ -204,12 +204,12 @@ function validateConfig() {
 # Params: file
 function checkLineEndings() {
     printTask "Checking Line endings of file ${cBlue}$1${cNc}..."
-    if [[ $(head -1 $1 | cat -A) =~ \^M ]]; then
+    if [[ "$(head -1 "$1" | cat -A)" =~ \^M ]]; then
         printWarn "Found CLRF!"
         printTask "Converting to LF..."
-        dos2unix $1 2>/dev/null
+        dos2unix "$1" 2>/dev/null
 
-        if [[ $(head -1 $1 | cat -A) =~ \^M ]]; then
+        if [[ "$(head -1 "$1" | cat -A)" =~ \^M ]]; then
             printError "Failed to convert $1 to LF. Please do it yourself."
             exit
         else
@@ -283,10 +283,10 @@ function checkDate() {
     if [ -f $tempFile ]; then
         value=$(< $tempFile) # Time of last beat campaign
         now=$(date +"%s") # Current time
-        let "difference = $now - $value" # Time since last beat campaign
+	now=$((now - value)) # Time since last beat campaign
 
         # If been longer than 3 days, set forceFightCampaign=true
-        if [ $difference -gt 255600 ]; then
+        if [ "$difference" -gt 255600 ]; then
             forceFightCampaign=true
         fi
     fi
@@ -295,7 +295,7 @@ function checkDate() {
 # Overwrite temp file with date if has been greater than 3 days or it doesn't exist
 function saveDate(){
     if [ $forceFightCampaign == true ] || [ ! -f $tempFile ]; then
-        echo $(date +"%s") > .afkscript.tmp # Write date to file
+        date +"%s" > .afkscript.tmp # Write date to file
 
         # Make file invisible if on windows
         if [ "$OSTYPE" == "msys" ]; then attrib +h $tempFile; fi

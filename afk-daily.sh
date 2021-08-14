@@ -1,4 +1,4 @@
-#!/system/bin/sh
+#!/bin/bash
 
 # --- Variables --- #
 # Probably you don't need to modify this. Do it if you know what you're doing, I won't blame you (unless you blame me).
