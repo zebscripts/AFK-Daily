@@ -797,34 +797,34 @@ function tapClosestOpponent() {
         1)
             # Check if opponent 1 exists and fight if true
             getColor 820 700
-            if [ "$RGB" == "a7f1b7" ]; then input tap 820 700; else return 1; fi
+            if [ "$RGB" == "acf0bd" ]; then input tap 820 700; else return 1; fi
             ;;
         2)
             # Check if opponent 2 exists and fight if true
             getColor 820 870
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 870; else return 1; fi
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then input tap 820 870; else return 1; fi
             ;;
         3)
             # Check if opponent 3 exists and fight if true
             getColor 820 1050
-            if [ "$RGB" == "a7f1b7" ]; then input tap 820 1050; else return 1; fi
+            if [ "$RGB" == "acf0bd" ]; then input tap 820 1050; else return 1; fi
             ;;
         4)
             # Check if opponent 4 exists and fight if true
             getColor 820 1220
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then input tap 820 1220; else return 1; fi
+            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff1b8" ]; then input tap 820 1220; else return 1; fi
             ;;
         5)
             # Check if opponent 5 exists and fight if true
             getColor 820 1400
-            if [ "$RGB" == "aaf2bb" ]; then input tap 820 1400; else return 1; fi
+            if [ "$RGB" == "adf1be" ]; then input tap 820 1400; else return 1; fi
             ;;
         esac
         ;;
     2)
         # Check if opponent 1 exists
         getColor 820 700
-        if [ "$RGB" == "a7f1b7" ]; then
+        if [ "$RGB" == "acf0bd" ]; then
             # Fight opponent
             input tap 820 700
         else
@@ -835,7 +835,7 @@ function tapClosestOpponent() {
     3)
         # Check if opponent 2 exists
         getColor 820 870
-        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then
             # Fight opponent
             input tap 820 870
         else
@@ -846,7 +846,7 @@ function tapClosestOpponent() {
     4)
         # Check if opponent 3 exists
         getColor 820 1050
-        if [ "$RGB" == "a7f1b7" ]; then
+        if [ "$RGB" == "acf0bd" ]; then
             # Fight opponent
             input tap 820 1050
         else
@@ -857,7 +857,7 @@ function tapClosestOpponent() {
     5)
         # Check if opponent 4 exists
         getColor 820 1220
-        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff1b8" ]; then
             # Fight opponent
             input tap 820 1220
         else
@@ -897,16 +897,16 @@ function arenaOfHeroes() {
 
             # Fight specific opponent
             #                                Free         x1
-            #  Opponent 1: 820 700      ->        a7f1b7
-            #  Opponent 2: 820 870      ->  2eaab4      aff3c0
-            #  Opponent 3: 820 1050     ->        a7f1b7
-            #  Opponent 4: 820 1220     ->  2daab4      aff3c0
-            #  Opponent 5: 820 1400     ->        aaf2bb
+            #  Opponent 1: 820 700      ->        acf0bd
+            #  Opponent 2: 820 870      ->  2eaab4      aff3be
+            #  Opponent 3: 820 1050     ->        acf0bd
+            #  Opponent 4: 820 1220     ->  2daab4      aff1b8
+            #  Opponent 5: 820 1400     ->        adf1be
             case $arenaHeroesOpponent in
             1)
                 # Check if opponent exists
                 getColor 820 700
-                if [ "$RGB" == "a7f1b7" ]; then
+                if [ "$RGB" == "acf0bd" ]; then
                     # Fight opponent
                     input tap 820 700
                 else
@@ -917,7 +917,7 @@ function arenaOfHeroes() {
             2)
                 # Check if opponent exists
                 getColor 820 870
-                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then
                     # Fight opponent
                     input tap 820 870
                 else
@@ -928,7 +928,7 @@ function arenaOfHeroes() {
             3)
                 # Check if opponent exists
                 getColor 820 1050
-                if [ "$RGB" == "a7f1b7" ]; then
+                if [ "$RGB" == "acf0bd" ]; then
                     # Fight opponent
                     input tap 820 1050
                 else
@@ -939,7 +939,7 @@ function arenaOfHeroes() {
             4)
                 # Check if opponent exists
                 getColor 820 1220
-                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3c0" ]; then
+                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff1b8" ]; then
                     # Fight opponent
                     input tap 820 1220
                 else
@@ -950,7 +950,7 @@ function arenaOfHeroes() {
             5)
                 # Check if opponent exists
                 getColor 820 1400
-                if [ "$RGB" == "aaf2bb" ]; then
+                if [ "$RGB" == "adf1be" ]; then
                     # Fight opponent
                     input tap 820 1400
                 else
@@ -1528,6 +1528,11 @@ function oakInn() {
 # test 650 570 3 0.5 # Check for Team Bounties RGB
 # test 380 500 3 0.5 # Check for fortune chest collection RGG
 # test 700 670 3 0.5 # Check for Quest collection RGB
+# test 820 700 3 0.5 # Check for arena opponent 1
+# test 820 870 3 0.5 # Check for arena opponent 2
+# test 820 1050 3 0.5 # Check for arena opponent 3
+# test 820 1220 3 0.5 # Check for arena opponent 4
+# test 820 1400 3 0.5 # Check for arena opponent 5
 # test 715 1815 3 0.5 # Check if Soren is open
 # test 740 205 3 0.5 # Check if game is updating
 # test 380 890 3 0.5 # Check for being able to spend coins in the crystal
