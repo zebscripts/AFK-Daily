@@ -958,6 +958,11 @@ function arenaOfHeroes() {
                     tapClosestOpponent 5
                 fi
                 ;;
+            *)
+                # Invalid option
+                echo "[WARN] Invalid arenaHeroesOpponent option in config, skipping..."
+                break
+                ;;
             esac
 
             # Check if return value of tapClosesopponent is 0. If it is 0, then it means a battle has been found.
