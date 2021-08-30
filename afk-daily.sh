@@ -797,11 +797,11 @@ arenaOfHeroes() {
 
             # Fight specific opponent
             #                                Free         x1
-            #  Opponent 1: 820 700      ->        a7f1b7
-            #  Opponent 2: 820 870      ->  2eaab4      aff3c0
-            #  Opponent 3: 820 1050     ->        a7f1b7
-            #  Opponent 4: 820 1220     ->  2daab4      aff3c0
-            #  Opponent 5: 820 1400     ->        aaf2bb
+            #  Opponent 1: 820 700      ->        acf0bd
+            #  Opponent 2: 820 870      ->  2eaab4      aff3be
+            #  Opponent 3: 820 1050     ->        acf0bd
+            #  Opponent 4: 820 1220     ->  2daab4      aff1b8
+            #  Opponent 5: 820 1400     ->        adf1be
             case $arenaHeroesOpponent in
             1)
                 if testColorOR -d "$DEFAULT_DELTA" 820 700 a7f1b7; then # Check if opponent exists
@@ -838,6 +838,11 @@ arenaOfHeroes() {
                 else
                     arenaOfHeroes_tapClosestOpponent 5 # Try to fight the closest opponent to 5
                 fi
+                ;;
+            *)
+                # Invalid option
+                echo "[WARN] Invalid arenaHeroesOpponent option in config, skipping..."
+                break
                 ;;
             esac
 
