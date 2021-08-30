@@ -509,6 +509,7 @@ validateConfig() {
         $doCollectMail || -z \
         $doCollectMerchantFreebies ]]; then
         printError "$configFile has missing/wrong entries."
+        echo
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
         printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
