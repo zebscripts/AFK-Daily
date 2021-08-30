@@ -1477,7 +1477,7 @@ strengthenCrystal() {
         inputTapSleep 760 1030 3                             # Resonating Crystal
 
         # Detect if free slot, and take it.
-        testColorORTapSleep 620 1250 87ead2 # Detected: 87ead2 / Not: e4c38e
+        testColorORTapSleep 620 1250 82ead0 # Detected: 82ead0 / Not: e4c38e
 
         inputTapSleep 550 1850                                                    # Strenghen Crystal
         if testColorOR 700 1250 9aedc4 && [ "$allowCrystalLevelUp" = true ]; then # If Level up
