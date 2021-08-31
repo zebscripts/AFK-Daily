@@ -580,9 +580,8 @@ show_help() {
     echo "      Show help"
     echo
     echo "   -a, --account [ACCOUNT]"
-    echo "      Use .afkscript.ini with a tag (multiple accounts)"
+    echo "      Specify account: \"acc-[ACCOUNT].ini\""
     echo "      Remark: Please don't use spaces!"
-    echo "      Example: -a account1"
     echo
     echo "   -c, --check"
     echo "      Check if script is ready to be run"
@@ -593,13 +592,14 @@ show_help() {
     echo
     echo "   -e, --event [EVENT]"
     echo "      Specify active event"
-    echo "      Values for [DEVICE]: hoe"
+    echo "      Values for [EVENT]: hoe"
     echo
     echo "   -f, --fight"
     echo "      Force campaign battle (ignore 3 day optimisation)"
     echo
-    echo "   -i, --ini [SUB]"
-    echo "      Specify config: \"config-[SUB].ini\""
+    echo "   -i, --ini [CONFIG]"
+    echo "      Specify config: \"config-[CONFIG].ini\""
+    echo "      Remark: Please don't use spaces!"
     echo
     echo "   -n"
     echo "      Disable heads up notifications"
@@ -641,10 +641,10 @@ show_help() {
     echo "   Run script for color testing"
     echo "      ./deploy.sh -s 800,600"
     echo
-    echo "   Run script with output file (folder need to be created) and notifications disabled"
+    echo "   Run script with output file (folder need to be created) and with disabled notifications"
     echo "      ./deploy.sh -n -o \".history/\$(date +%Y%m%d).log\""
     echo
-    echo "   Run script on test server with output file (folder need to be created) and notifications disabled"
+    echo "   Run script on test server with output file (folder need to be created) and with disabled notifications"
     echo "      ./deploy.sh -n -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
 }
 
