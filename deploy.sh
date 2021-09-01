@@ -569,83 +569,93 @@ run() {
 # Function Name : show_help
 # ##############################################################################
 show_help() {
-    echo "USAGE: deploy.sh [OPTIONS]"
-    echo
-    echo "DESCRIPTION"
-    echo "   Automate daily activities within the AFK Arena game."
-    echo "   More info: https://github.com/zebscripts/AFK-Daily"
-    echo
-    echo "OPTIONS"
-    echo "   -h, --help"
-    echo "      Show help"
-    echo
-    echo "   -a, --account [ACCOUNT]"
-    echo "      Specify account: \"acc-[ACCOUNT].ini\""
-    echo "      Remark: Please don't use spaces!"
-    echo
-    echo "   -c, --check"
-    echo "      Check if script is ready to be run"
-    echo
-    echo "   -d, --device [DEVICE]"
-    echo "      Specify target device"
-    echo "      Values for [DEVICE]: bs, dev, nox, memu"
-    echo
-    echo "   -e, --event [EVENT]"
-    echo "      Specify active event"
-    echo "      Values for [EVENT]: hoe"
-    echo
-    echo "   -f, --fight"
-    echo "      Force campaign battle (ignore 3 day optimisation)"
-    echo
-    echo "   -i, --ini [CONFIG]"
-    echo "      Specify config: \"config-[CONFIG].ini\""
-    echo "      Remark: Please don't use spaces!"
-    echo
-    echo "   -n"
-    echo "      Disable heads up notifications"
-    echo
-    echo "   -o, --output [OUTPUT_FILE]"
-    echo "      Write log in OUTPUT_FILE"
-    echo
-    echo "   -r"
-    echo "      Ignore resolution warning. Use this at your own risks."
-    echo
-    echo "   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]"
-    echo "      Test color of a pixel"
-    echo
-    echo "   -t, --test"
-    echo "      Launch on test server (experimental)"
-    echo
-    echo "   -v, --verbose [DEBUG]"
-    echo "      Show DEBUG informations"
-    echo "         DEBUG  = 0    Show no debug"
-    echo "         DEBUG >= 1    Show getColor calls > value"
-    echo "         DEBUG >= 2    Show test calls"
-    echo "         DEBUG >= 3    Show all core functions calls"
-    echo "         DEBUG >= 4    Show all functions calls"
-    echo "         DEBUG >= 9    Show all calls"
-    echo
-    echo "   -w, --weekly"
-    echo "      Force weekly"
-    echo
-    echo "EXAMPLES"
-    echo "   Run script for Bluestacks (default)"
-    echo "      ./deploy.sh -d bs"
-    echo
-    echo "   Run script on test server"
-    echo "      ./deploy.sh -t"
-    echo
-    echo "   Run script forcing fight & weekly"
-    echo "      ./deploy.sh -fw"
-    echo
-    echo "   Run script for color testing"
-    echo "      ./deploy.sh -s 800,600"
-    echo
-    echo "   Run script with output file (folder need to be created) and with disabled notifications"
-    echo "      ./deploy.sh -n -o \".history/\$(date +%Y%m%d).log\""
-    echo
-    echo "   Run script on test server with output file (folder need to be created) and with disabled notifications"
-    echo "      ./deploy.sh -n -t -a \"test\" -i \"test\" -o \".history/\$(date +%Y%m%d).test.log\""
+    echo -e "${cWhite}"
+    echo -e "    _     ___   _  __        ___           _   _         "
+    echo -e "   /_\   | __| | |/ /  ___  |   \   __ _  (_) | |  _  _  "
+    echo -e "  / _ \  | _|  | ' <  |___| | |) | / _\` | | | | | | || | "
+    echo -e " /_/ \_\ |_|   |_|\_\       |___/  \__,_| |_| |_|  \_, | "
+    echo -e "                                                   |__/  "
+    echo -e
+    echo -e "USAGE: ${cYellow}deploy.sh${cWhite} ${cCyan}[OPTIONS]${cWhite}"
+    echo -e
+    echo -e "DESCRIPTION"
+    echo -e "   Automate daily activities within the AFK Arena game."
+    echo -e "   More info: https://github.com/zebscripts/AFK-Daily"
+    echo -e
+    echo -e "OPTIONS"
+    echo -e "   ${cCyan}-h${cWhite}, ${cCyan}--help${cWhite}"
+    echo -e "      Show help"
+    echo -e
+    echo -e "   ${cCyan}-a${cWhite}, ${cCyan}--account${cWhite} ${cGreen}[ACCOUNT]${cWhite}"
+    echo -e "      Specify account: \"acc-${cGreen}[ACCOUNT]${cWhite}.ini\""
+    echo -e "      Remark: Please don't use spaces!"
+    echo -e
+    echo -e "   ${cCyan}-d${cWhite}, ${cCyan}--device${cWhite} ${cGreen}[DEVICE]${cWhite}"
+    echo -e "      Specify target device."
+    echo -e "      Values for ${cGreen}[DEVICE]${cWhite}: bs (default), dev, nox, memu"
+    echo -e
+    echo -e "   ${cCyan}-e${cWhite}, ${cCyan}--event${cWhite} ${cGreen}[EVENT]${cWhite}"
+    echo -e "      Specify active event."
+    echo -e "      Values for ${cGreen}[EVENT]${cWhite}: hoe"
+    echo -e
+    echo -e "   ${cCyan}-f${cWhite}, ${cCyan}--fight${cWhite}"
+    echo -e "      Force campaign battle (ignore 3 day optimisation)."
+    echo -e
+    echo -e "   ${cCyan}-i${cWhite}, ${cCyan}--ini${cWhite} ${cGreen}[CONFIG]${cWhite}"
+    echo -e "      Specify config: \"config-${cGreen}[CONFIG]${cWhite}.ini\""
+    echo -e "      Remark: Please don't use spaces!"
+    echo -e
+    echo -e "   ${cCyan}-n${cWhite}"
+    echo -e "      Disable heads up notifications."
+    echo -e
+    echo -e "   ${cCyan}-r${cWhite}"
+    echo -e "      Ignore resolution warning. Use this at your own risk."
+    echo -e
+    echo -e "   ${cCyan}-t${cWhite}, ${cCyan}--test${cWhite}"
+    echo -e "      Launch on test server (experimental)."
+    echo -e
+    echo -e "   ${cCyan}-w${cWhite}, ${cCyan}--weekly${cWhite}"
+    echo -e "      Force weekly."
+    echo -e
+    echo -e "DEV OPTIONS"
+    echo -e
+    echo -e "   ${cCyan}-c${cWhite}, ${cCyan}--check${cWhite}"
+    echo -e "      Check if script is ready to be run."
+    echo -e
+    echo -e "   ${cCyan}-o${cWhite}, ${cCyan}--output${cWhite} ${cGreen}[OUTPUT_FILE]${cWhite}"
+    echo -e "      Write log in ${cGreen}[OUTPUT_FILE]${cWhite}"
+    echo -e "      Remark: Folder need to be created"
+    echo -e
+    echo -e "   ${cCyan}-s${cWhite} ${cGreen}<X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]${cWhite}"
+    echo -e "      Test color of a pixel."
+    echo -e
+    echo -e "   ${cCyan}-v${cWhite}, ${cCyan}--verbose${cWhite} ${cGreen}[DEBUG]${cWhite}"
+    echo -e "      Show DEBUG informations"
+    echo -e "         DEBUG  = 0    Show no debug"
+    echo -e "         DEBUG >= 1    Show getColor calls > value"
+    echo -e "         DEBUG >= 2    Show test calls"
+    echo -e "         DEBUG >= 3    Show all core functions calls"
+    echo -e "         DEBUG >= 4    Show all functions calls"
+    echo -e "         DEBUG >= 9    Show all calls"
+    echo -e
+    echo -e "EXAMPLES"
+    echo -e "   Run script for Bluestacks"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}bs${cWhite}"
+    echo -e
+    echo -e "   Run script on test server"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-t${cWhite}"
+    echo -e
+    echo -e "   Run script forcing fight & weekly"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
+    echo -e
+    echo -e "   Run script for color testing"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
+    echo -e
+    echo -e "   Run script with output file and with disabled notifications"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
+    echo -e
+    echo -e "   Run script on test server with output file and with disabled notifications"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-t${cWhite} ${cCyan}-a${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
 }
 
 for arg in "$@"; do
