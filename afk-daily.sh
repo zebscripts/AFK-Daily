@@ -1198,9 +1198,6 @@ buyFromStore() {
         if testColorOR -d "$DEFAULT_DELTA" 650 1100 b165c0; then # row 1, item 3
             buyFromStore_buyItem 650 1100
         fi
-        if testColorOR -d "$DEFAULT_DELTA" 410 1100 9787c9; then # row 1, item 2 #TODO: Update Color
-            buyFromStore_buyItem 410 1100
-        fi
     fi
     if [ "$buyStoreLimitedGoldOffer" = true ]; then # Limited Gold Offer
         buyFromStore_buyItem 420 820
