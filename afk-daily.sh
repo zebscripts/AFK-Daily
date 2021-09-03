@@ -1909,6 +1909,7 @@ if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}
 if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia |"; fi
 if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
+echo
 init
 run
 
