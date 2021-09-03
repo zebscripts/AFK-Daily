@@ -1,4 +1,5 @@
 Here's a list of tools you need to have/install to be able to run this script:
+
 1. An Android device/emulator
 2. Being able to run `.sh` scripts
 

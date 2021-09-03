@@ -7,7 +7,7 @@ Theoretically, anything that supports `adb` and is capable of running the latest
 
 <hr>
 
-*[Bluestacks 5](https://www.bluestacks.com/):*
+## [Bluestacks 5](https://www.bluestacks.com/)
 
    1. **Display:**
       - Change the resolution to `1080x1920`
@@ -20,11 +20,17 @@ Theoretically, anything that supports `adb` and is capable of running the latest
 
 <hr>
 
-*[Memu](https://www.memuplay.com/):*
+## [Memu](https://www.memuplay.com/)
+
+*It's in beta*
+
+   1. **Display:**
+      - Change the resolution to `1080x1920`
+      - *Optional:* Change from Landscape (Tablet mode) to Portrait (Phone mode)
 
 <hr>
 
-*[Nox](https://www.bignox.com/):*
+## [Nox](https://www.bignox.com/)
 
 1. **Settings:** Under Nox settings, make sure to make the following changes:
    1. **General:**
@@ -36,15 +42,10 @@ Theoretically, anything that supports `adb` and is capable of running the latest
        - Change the phone model to `Google Pixel 2`
 2. **AFK Arena:** Install the game. Duh.
 3. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
-4. **Script settings:** Nox uses it's on `adb`, and I do not know where you have it installed on your machine. Because of this you'll have to let the script know where the location of it is:
-   1. Go to the Nox installation folder (on windows you can right click the app and click on "Go to folder location")
-   2. You should now be inside a `bin` folder, where you can find the `Nox.exe` file, as well as the `nox_adb.exe` file
-   3. Copy the path of the current location (click on the bar on the top where the folder names are and copy it)
-   4. Every time you run the script, you'll also have to insert the path like so: `./deploy.sh nox path/to/nox/bin/nox_adb.exe`
 
 <hr>
 
-*Personal Device:*
+## Personal Device
 
 1. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 2. **Resolution:** Make sure your Device is set to `1080x1920`.

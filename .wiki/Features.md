@@ -20,28 +20,29 @@ As of now, the script is capable of completing the following:
 * Collect Daily/Weekly/Monthly rewards from Merchants
 
 ## Push campaign/towers only
+
 It is also possible to use the script to push campaign levels or Kings Towers only. In order to do this, simply disable any other feature in the `config.ini` and set `maxCampaignFights` and/or `maxKingsTowerFights` accordingly.
 
-## There are more features planned though, check them out here!
+## There are more features planned though, check them out here
 
-- [x] Add some sort of config, ideally a `./deploy.sh config`
-- [x] Check if there are Bounty Quests to collect before sending out heroes on quests
-- [x] Fight in more than just the main tower
-- [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
-- [x] Fight the twisted realm as well
-- [ ] Collect Soulstones
-- [x] Collect weekly quests
-- [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
-- [x] Make script output pretty
-- [ ] Test for screen size with `adb shell wm size`
-- [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
-- [x] Actually try to beat the campaign level every 3 days to maximize farm
-- [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
-- [ ] Compatibility for users who aren't as advanced in the game:
-  - [ ] Mercenaries
-  - [ ] Bounties without auto-fill
-  - [ ] Arenas without skipping
-  - [ ] Kings Tower without factional towers
-  - [ ] Guild Hunts without quick battle
-- [x] Collect daily rewards from Oak Inn
-- [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+* [x] Add some sort of config, ideally a `./deploy.sh config`
+* [x] Check if there are Bounty Quests to collect before sending out heroes on quests
+* [x] Fight in more than just the main tower
+* [ ] Choose if you want to fight Wrizz/Soren or use Quick Battle
+* [x] Fight the twisted realm as well
+* [ ] Collect Soulstones
+* [x] Collect weekly quests
+* [x] Collect Merchant Daily/Weekly/Monthly rewards (~~Will probably never happen if the games interface stays the same~~ Ended up happening!)
+* [x] Make script output pretty
+* [ ] Test for screen size with `adb shell wm size`
+* [x] Android emulator compatibility (Aiming for Bluestacks and Nox)
+* [x] Actually try to beat the campaign level every 3 days to maximize farm
+* [ ] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0`
+* [ ] Compatibility for users who aren't as advanced in the game:
+  * [ ] Mercenaries
+  * [ ] Bounties without auto-fill
+  * [ ] Arenas without skipping
+  * [ ] Kings Tower without factional towers
+  * [ ] Guild Hunts without quick battle
+* [x] Collect daily rewards from Oak Inn
+* [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)

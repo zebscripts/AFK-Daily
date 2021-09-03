@@ -11,6 +11,13 @@ You can also execute the script with the following optional parameters:
 
 ```text
 $ ./deploy.sh -h
+
+    _     ___   _  __        ___           _   _
+   /_\   | __| | |/ /  ___  |   \   __ _  (_) | |  _  _
+  / _ \  | _|  | ' <  |___| | |) | / _` | | | | | | || |
+ /_/ \_\ |_|   |_|\_\       |___/  \__,_| |_| |_|  \_, |
+                                                   |__/
+
 USAGE: deploy.sh [OPTIONS]
 
 DESCRIPTION
@@ -22,34 +29,47 @@ OPTIONS
       Show help
 
    -a, --account [ACCOUNT]
-      Use .afkscript.ini with a tag (multiple accounts)
+      Specify account: "acc-[ACCOUNT].ini"
       Remark: Please don't use spaces!
-      Example: -a account1
-
-   -c, --check
-      Check if script is ready to be run
 
    -d, --device [DEVICE]
-      Specify target device
-      Values for [DEVICE]: bs, dev
+      Specify target device.
+      Values for [DEVICE]: bs (default), dev, nox, memu
+
+   -e, --event [EVENT]
+      Specify active event.
+      Values for [EVENT]: hoe
 
    -f, --fight
-      Force campaign battle (ignore 3 day optimisation)
+      Force campaign battle (ignore 3 day optimisation).
 
-   -i, --ini [SUB]
-      Specify config: "config-[SUB].ini"
+   -i, --ini [CONFIG]
+      Specify config: "config-[CONFIG].ini"
+      Remark: Please don't use spaces!
 
-   -o, --output [OUTPUT_FILE]
-      Write log in OUTPUT_FILE
+   -n
+      Disable heads up notifications.
 
    -r
-      Ignore resolution warning. Use this at your own risks.
-
-   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]
-      Test color of a pixel
+      Ignore resolution warning. Use this at your own risk.
 
    -t, --test
-      Launch on test server (experimental)
+      Launch on test server (experimental).
+
+   -w, --weekly
+      Force weekly.
+
+DEV OPTIONS
+
+   -c, --check
+      Check if script is ready to be run.
+
+   -o, --output [OUTPUT_FILE]
+      Write log in [OUTPUT_FILE]
+      Remark: Folder need to be created
+
+   -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]
+      Test color of a pixel.
 
    -v, --verbose [DEBUG]
       Show DEBUG informations
@@ -60,11 +80,8 @@ OPTIONS
          DEBUG >= 4    Show all functions calls
          DEBUG >= 9    Show all calls
 
-   -w, --weekly
-      Force weekly
-
 EXAMPLES
-   Run script for Bluestacks (default)
+   Run script for Bluestacks
       ./deploy.sh -d bs
 
    Run script on test server
@@ -76,11 +93,11 @@ EXAMPLES
    Run script for color testing
       ./deploy.sh -s 800,600
 
-   Run script with output file (folder need to be created)
-      ./deploy.sh -o ".history/$(date +%Y%m%d).log"
+   Run script with output file and with disabled notifications
+      ./deploy.sh -n -o ".history/$(date +%Y%m%d).log"
 
-   Run script on test server with output file (folder need to be created)
-      ./deploy.sh -t -a "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
+   Run script on test server with output file and with disabled notifications
+      ./deploy.sh -n -t -a "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
 ```
 
 ## Examples

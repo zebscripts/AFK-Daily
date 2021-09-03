@@ -14,6 +14,6 @@ Though Lilith has confirmed, that using Bluestacks macros is allowed in the game
 
 Do with this information what you want. I'm *not responsible at all* if anything happens to your account. **Use at your own risk.**
 
-###  Will this ever be available on iOS?
+### Will this ever be available on iOS?
 
 Nope. Install Bluestacks and run this script.

@@ -1,9 +1,11 @@
 ## General
+
 1. [[Home]]
 2. [[Features]]
 3. [[Supported Devices]]
 
 ## [[Get started]]
+
 1. [[AFK Arena requirements]]
 2. [[Tools]]
 3. [[Installation]]
@@ -11,11 +13,13 @@
 5. [[Usage]]
 
 ## Help
+
 - [[Tips]]
 - [[FAQ]]
 - [[Known Issues]]
 - [[Troubleshooting]]
 
 ## Development
+
 - [[Feature Requests]]
 - [[Contribute]]
