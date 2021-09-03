@@ -14,8 +14,6 @@ If you are creating a [Github Issue](https://github.com/zebscripts/AFK-Daily/iss
 - Copy/paste the log
 - Open the [issue](https://github.com/zebscripts/AFK-Daily/issues)
 
-After reporting the issue, please set `DEBUG` and `SHOW_DELTA` to default `0`.
-
 <!-- <hr>
 
 <div align="center">
