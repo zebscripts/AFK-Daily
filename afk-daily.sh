@@ -802,7 +802,7 @@ function tapClosestOpponent() {
         2)
             # Check if opponent 2 exists and fight if true
             getColor 820 870
-            if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then input tap 820 870; else return 1; fi
+            if [ "$RGB" == "2eaab4" ] || [ "$RGB" == "aff3be" ]; then input tap 820 870; else return 1; fi
             ;;
         3)
             # Check if opponent 3 exists and fight if true
@@ -835,7 +835,7 @@ function tapClosestOpponent() {
     3)
         # Check if opponent 2 exists
         getColor 820 870
-        if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then
+        if [ "$RGB" == "2eaab4" ] || [ "$RGB" == "aff3be" ]; then
             # Fight opponent
             input tap 820 870
         else
@@ -917,7 +917,7 @@ function arenaOfHeroes() {
             2)
                 # Check if opponent exists
                 getColor 820 870
-                if [ "$RGB" == "2daab4" ] || [ "$RGB" == "aff3be" ]; then
+                if [ "$RGB" == "2eaab4" ] || [ "$RGB" == "aff3be" ]; then
                     # Fight opponent
                     input tap 820 870
                 else
