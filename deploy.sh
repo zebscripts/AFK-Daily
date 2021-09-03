@@ -81,8 +81,8 @@ checkAdb() {
         else # If not, install it locally for this script
             printWarn "Not found!"
             printTask "Installing adb..."
-            mkdir -p adb     # Create directory
-            cd ./adb || exit # Change to new directory
+            mkdir -p adb       # Create directory
+            cd ./adb || exit 1 # Change to new directory
 
             case "$OSTYPE" in # Install depending on installed OS
             "msys")
@@ -111,7 +111,7 @@ checkAdb() {
                 ;;
             esac
 
-            cd .. || exit                # Change directory back
+            cd .. || exit 1              # Change directory back
             adb=./adb/platform-tools/adb # Set adb path
             printSuccess "Installed!"
         fi
@@ -316,6 +316,16 @@ checkGitUpdate() {
             printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
             printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
         fi
+    else
+        printTask "Checking for updates..."
+        if ./lib/update_git.sh; then
+            printSuccess "Checked/Updated!"
+        else
+            printError "Require an update!"
+            printError "Please download the last version directly on github."
+            printError "Link: https://github.com/zebscripts/AFK-Daily"
+            exit 1
+        fi
     fi
 }
 
@@ -418,7 +428,7 @@ deploy() {
 getLatestPatch() {
     while IFS= read -r line; do
         if [[ "$line" == *"badge/Patch-"* ]]; then
-            testedPatch=${line:79:7}
+            testedPatch=${line:80:7}
             break
         fi
     done <"README.md"
