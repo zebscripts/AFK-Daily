@@ -1,19 +1,18 @@
+<!-- Header -->
 <div align="center">
-  <!-- <img src="Stuff/AppIcon-readme.png" width="200" height="200"> -->
-  <h1>afk-daily.sh</h1>
-  <p>
-    <b>Automate daily activities within the AFK Arena game</b>
-  </p>
-
-  <!-- Badges -->
-  <!-- Script status -->
-  <p>
-  <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
-  <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
-  <!-- Latest patch -->
-  <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.70.03-blue.svg"></img></a>
-  </p>
+   <a href="https://github.com/kyechan99/capsule-render">
+      <img align="center" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=250&section=header&text=AFK-Script&fontAlign=30&fontAlignY=35&fontSize=70&desc=Automate%20daily%20activities%20within%20the%20AFK%20Arena%20game&descAlign=55&descSize=25" />
+   </a>
+   </br>
+   <!-- Badges -->
+   <a href="#features" alt="Script Status"><img src="https://img.shields.io/badge/Script-Passing-green.svg"></img></a>
+   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Partial-orange.svg"></img></a> -->
+   <!-- <a href="#issues" alt="Script Status"><img src="https://img.shields.io/badge/Script-Failing-red.svg"></img></a> -->
+   <!-- Latest patch -->
+   <a alt="Latest patch tested on"><img src="https://img.shields.io/badge/Patch-1.70.03-blue.svg"></img></a>
+   <!-- Need to allow widget: https://shields.io/category/chat -->
+   <a alt="Discord" href="https://discord.gg/Fq2cfqjp8D"><img src="https://img.shields.io/discord/859136061049143307?label=Discord&logo=discord"></img></a>
+   <a alt="Language" href="https://www.gnu.org/software/bash/"><img src="https://img.shields.io/badge/Language-Shell-yellow.svg"></img></a>
 </div>
 
 <!-- Uncomment the following quote whenever the script is Failing -->
@@ -259,7 +258,7 @@ OPTIONS
 EXAMPLES
    Run script for Bluestacks (default)
       ./deploy.sh -d bs
-      
+
    Run script for Nox
       ./deploy.sh -d nox
 
@@ -465,3 +464,10 @@ This is most likely because your device does not have [busybox](https://play.goo
 **`protocol fault: stat response has wrong message id`**
 
 This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
+
+<!-- Footer -->
+<div align="center">
+   <a href="https://github.com/kyechan99/capsule-render">
+      <img align="center" src="https://capsule-render.vercel.app/api?section=footer&type=waving&color=gradient&height=100" />
+   </a>
+</div>
