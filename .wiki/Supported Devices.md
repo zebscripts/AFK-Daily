@@ -52,3 +52,11 @@ Theoretically, anything that supports `adb` and is capable of running the latest
 3. **AFK Arena:** Install the game. Duh.
 4. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
 5. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** This will install one specific command that the script uses for pixel analysis.
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Features">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Get-started">Next page</a>
+</div> -->

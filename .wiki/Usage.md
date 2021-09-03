@@ -126,4 +126,6 @@ Running the script on Nox:
 
 <div align="center">
 <a href="https://github.com/zebscripts/AFK-Daily/wiki/Config">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Specific">Next page</a>
 </div>

@@ -21,3 +21,9 @@ Great! It's always nice to have more people take part and make the experience a 
 ## Discord
 
 We've created a Discord server! Feel free to join us [here](https://discord.com/invite/Fq2cfqjp8D).
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Features">Next page</a>
+</div> -->

@@ -17,3 +17,11 @@ Do with this information what you want. I'm *not responsible at all* if anything
 ### Will this ever be available on iOS?
 
 Nope. Install Bluestacks and run this script.
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Tips">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Known-Issues">Next page</a>
+</div> -->

@@ -52,4 +52,10 @@ deploy.sh -d Memu
 
 If everything worked as expected, you should see the game restart and then play on it's own and attempt to do daily stuff for you! From this point on, all you have to do to run the script again is open a terminal inside the AFK-daily folder and the running `bash deploy.sh`.
 
-[Previous](https://github.com/zebscripts/AFK-Daily/wiki/Known-Issues) | [Next](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting)
+<hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Usage">Previous page</a>
+<!-- |
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Tips">Next page</a> -->
+</div>

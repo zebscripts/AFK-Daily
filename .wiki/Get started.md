@@ -8,10 +8,12 @@ Here's how you can get started:
 
 That is the general order in which you should be doing things. We recommend hitting the `Next page` button at the end of this page to navigate to the next one, or you can always quickly jump to a specific guide through the sidebar.
 
-Also, take a look at the [tips](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting) or [troubleshooting](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting) articles for some more info.
+Also, take a look at the [tips](https://github.com/zebscripts/AFK-Daily/wiki/Tips) or [troubleshooting](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting) articles for some more info.
 
 <hr>
 
 <div align="center">
+<!-- <a href="https://github.com/zebscripts/AFK-Daily/wiki/Supported-Devices">Previous page</a>
+| -->
 <a href="https://github.com/zebscripts/AFK-Daily/wiki/AFK-Arena-requirements">Next page</a>
 </div>

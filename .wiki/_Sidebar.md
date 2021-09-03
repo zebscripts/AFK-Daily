@@ -11,6 +11,7 @@
 3. [[Installation]]
 4. [[Config]]
 5. [[Usage]]
+6. [[Specific]]
 
 ## Help
 

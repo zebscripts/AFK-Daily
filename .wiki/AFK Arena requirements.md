@@ -11,7 +11,7 @@ The script has gotten pretty modular lately, and users have a lot of control ove
 <hr>
 
 <div align="center">
-<a href="https://github.com/zebscripts/AFK-Daily/wiki/AFK-Arena-requirements">Previous page</a>
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Get-started">Previous page</a>
 |
 <a href="https://github.com/zebscripts/AFK-Daily/wiki/Tools">Next page</a>
 </div>

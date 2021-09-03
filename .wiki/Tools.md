@@ -12,7 +12,7 @@ Next up is being able to run/execute `.sh` files. This shouldn't be a problem fo
 <hr>
 
 <div align="center">
-<a href="https://github.com/zebscripts/AFK-Daily/wiki/Tools">Previous page</a>
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/AFK-Arena-requirements">Previous page</a>
 |
 <a href="https://github.com/zebscripts/AFK-Daily/wiki/Installation">Next page</a>
 </div>

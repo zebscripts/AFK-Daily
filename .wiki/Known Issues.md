@@ -14,3 +14,11 @@ If you encounter an issue that is *not* listed below or in [issues](https://gith
 - `protocol fault: stat response has wrong message id`
 
    This most likely happens because you did not enable Android Debug Bridge under the Bluestacks settings. Check the [requirements for Bluestacks](#requirements--installation) out.
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/FAQ">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting">Next page</a>
+</div> -->

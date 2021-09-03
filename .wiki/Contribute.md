@@ -242,3 +242,9 @@ Some other useful documentation:
 - [Pure Bash Bible](https://github.com/dylanaraps/pure-bash-bible#pure-bash-bible)
 
 *If you have any doubt, just ask, there will always be someone to answer (well, I hope so)!*
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Contribute">Previous page</a>
+</div> -->

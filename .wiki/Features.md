@@ -46,3 +46,11 @@ It is also possible to use the script to push campaign levels or Kings Towers on
   * [ ] Guild Hunts without quick battle
 * [x] Collect daily rewards from Oak Inn
 * [x] [Summon one hero with companion points to get the 20 Activity points from the daily bounty](https://github.com/zebscripts/AFK-Daily/discussions/34)
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Home">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Supported-Devices">Next page</a>
+</div> -->

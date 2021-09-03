@@ -2,7 +2,7 @@
 
 1. Clone this repo and `cd` into it.
 2. Connect your device to the computer (or start your emulator of choice).
-3. Run `./deploy.sh` to generate [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) and change its values if necessary.
+3. Run `./deploy.sh -c` to generate [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) and change its values if necessary.
 4. Check the [[usage]] page on how to run the script (or run `./deploy.sh` again).
 5. Watch your device magically play for you. It's fun! I promise.
 
@@ -15,7 +15,7 @@
 3. Clone this repository by running `git clone https://github.com/zebscripts/AFK-Daily.git` in the terminal.
 4. Run `cd AFK-Daily` in the terminal.
 5. Connect your device to the computer (or start your emulator of choice).
-6. Type `./deploy.sh` into your terminal.
+6. Type `./deploy.sh -c` into your terminal.
 7. Configure [`config.ini`](https://github.com/zebscripts/AFK-Daily/wiki/Config) if necessary.
 8. Check the [[usage]] page on how to run the script.
 9. Watch your device magically play for you. It's fun! I promise.
@@ -25,7 +25,7 @@
 <hr>
 
 <div align="center">
-<a href="https://github.com/zebscripts/AFK-Daily/wiki/Installation">Previous page</a>
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Tools">Previous page</a>
 |
 <a href="https://github.com/zebscripts/AFK-Daily/wiki/Config">Next page</a>
 </div>

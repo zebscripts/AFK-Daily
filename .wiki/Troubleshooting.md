@@ -21,3 +21,11 @@ Then:
 - Open the [issue](https://github.com/zebscripts/AFK-Daily/issues)
 
 After reporting the issue, please set `DEBUG` and `SHOW_DELTA` to default `0`.
+
+<!-- <hr>
+
+<div align="center">
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Known-Issues">Previous page</a>
+|
+<a href="https://github.com/zebscripts/AFK-Daily/wiki/Feature-Requests">Next page</a>
+</div> -->
