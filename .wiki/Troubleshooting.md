@@ -8,13 +8,7 @@ If you are creating a [Github Issue](https://github.com/zebscripts/AFK-Daily/iss
 
 *This will be implemented soon*
 
-To get decent logs, you need to edit `afk-daily.sh`, so before launch, do the following:
-
-- Line 6: `DEBUG=4`
-- Line 13: `SHOW_DELTA=1`
-
-Then:
-
+- Add the option `-v 4` to your command: `./deploy.sh -v 4`
 - Reproduce the issue
 - Take a screenshot of the problem
 - Copy/paste the log
