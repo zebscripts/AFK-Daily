@@ -36,7 +36,7 @@ As of now, the script is capable of completing the following:
   * [x] Make script output pretty
   * [x] Android emulator compatibility (Bluestacks, Nox, Memu)
   * [x] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0` using `-n`
-  * [ ] Test for screen size with `adb shell wm size`
+  * [x] Test for screen size with `adb shell wm size`
 
 ## Push campaign/towers only
 
