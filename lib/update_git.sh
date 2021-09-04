@@ -8,7 +8,7 @@
 # ##############################################################################
 
 # Consts
-headRow=13
+headRow=8
 remoteURL="https://raw.githubusercontent.com/zebscripts/AFK-Daily/master/README.md"
 
 # ##############################################################################
@@ -17,8 +17,8 @@ remoteURL="https://raw.githubusercontent.com/zebscripts/AFK-Daily/master/README.
 # Output        : return 0/1
 # ##############################################################################
 checkUpdate() {
-    localPatch=$(<README.md head -n$headRow | tail -n1 | sed -n 's/.*version-\([^"]*\)-.*/\1/p')
-    remotePatch=$(curl --silent $remoteURL | head -n$headRow | tail -n1 | sed -n 's/.*version-\([^"]*\)-.*/\1/p')
+    localPatch=$(<README.md head -n$headRow | tail -n1 | sed -n 's/.*Version-\([^"]*\)-.*/\1/p')
+    remotePatch=$(curl --silent $remoteURL | head -n$headRow | tail -n1 | sed -n 's/.*Version-\([^"]*\)-.*/\1/p')
     if [ "$localPatch" = "$remotePatch" ]; then
         return 0
     else

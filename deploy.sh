@@ -427,7 +427,7 @@ deploy() {
 getLatestPatch() {
     while IFS= read -r line; do
         if [[ "$line" == *"badge/Patch-"* ]]; then
-            testedPatch=${line:80:7}
+            testedPatch=${line:90:7}
             break
         fi
     done <"README.md"
