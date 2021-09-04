@@ -321,10 +321,8 @@ checkGitUpdate() {
         if ./lib/update_git.sh; then
             printSuccess "Checked/Updated!"
         else
-            printError "Require an update!"
-            printError "Please download the last version directly on github."
-            printError "Link: https://github.com/zebscripts/AFK-Daily"
-            exit 1
+            printWarn "Update found! Please download the last version on github."
+            printWarn "Link: https://github.com/zebscripts/AFK-Daily"
         fi
     fi
 }
