@@ -7,20 +7,20 @@ Nox is using a specific `adb` version, called `nox_adb.exe`. There is a high cha
 - Our wiki: <https://github.com/zebscripts/AFK-Daily/wiki/Requirements>
 - More info: <https://www.bignox.com/blog/how-to-connect-android-studio-with-nox-app-player-for-android-development-and-debug/>
 
-Run the script using this kind of command:
+Run the script using the following command:
 
 ```console
 deploy.sh -d Nox
 ```
 
-*If you need help with `nox_adb.exe` please contact us on discord with the result of this command `ps -W | grep -i nox_adb.exe`.*
+*If you need help with `nox_adb.exe` please contact us on our [Discord](https://discord.gg/Fq2cfqjp8D) server with the result of this command `ps -W | grep -i nox_adb.exe`.*
 
-### Memu
+### MEmu
 
-Memu enable `adb` by default, so there are no requirements other than opening Memu before running the script specifying the device with this kind of command:
+MEmu has `adb` enabled by default, so there are no requirements other than opening Memu before running the script. Run the script on MEmu with the following command:
 
 ```console
-deploy.sh -d Memu
+deploy.sh -d memu
 ```
 
 ## OS
@@ -50,7 +50,7 @@ deploy.sh -d Memu
 11. Install AFK Arena in Bluestacks and make sure you have your account set up.
 12. Now it's finally time to try and run the script by executing `bash deploy.sh` again.
 
-If everything worked as expected, you should see the game restart and then play on it's own and attempt to do daily stuff for you! From this point on, all you have to do to run the script again is open a terminal inside the AFK-daily folder and the running `bash deploy.sh`.
+If everything worked as expected, you should see the game restart and then play on it's own and attempt to do daily stuff for you! From this point on, all you have to do to run the script again is open a terminal inside the AFK-daily folder and then run `bash deploy.sh`.
 
 <hr>
 

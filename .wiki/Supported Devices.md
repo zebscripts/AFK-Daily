@@ -1,9 +1,11 @@
 Theoretically, anything that supports `adb` and is capable of running the latest AFK Arena game version with a resolution of `1080x1920` should be supported. We do, however, **recommend using Bluestacks** as it's our emulator of choice to test the script on. It's impossible for us to test the script on every other platform, which means at least Bluestacks will most likely always work.
 
-- Bluestacks 5
-- Memu
-- Nox
-- Personal device
+Here's a list of devices where the script has been successfully run at least once:
+
+- [Bluestacks 5](#bluestacks-5)
+- [MEmu](#memu)
+- [Nox](#nox)
+- [Personal Android device](#personal-android-device)
 
 <hr>
 
@@ -20,9 +22,7 @@ Theoretically, anything that supports `adb` and is capable of running the latest
 
 <hr>
 
-## [Memu](https://www.memuplay.com/)
-
-*It's in beta*
+## [MEmu](https://www.memuplay.com/)
 
    1. **Display:**
       - Change the resolution to `1080x1920`
@@ -38,20 +38,16 @@ Theoretically, anything that supports `adb` and is capable of running the latest
    2. **Performance:**
        - Change the resolution to `1080x1920`
        - *Optional:* Mobile Phone (instead of Tablet)
-   3. **Phone model & Internet:**
-       - Change the phone model to `Google Pixel 2`
-2. **AFK Arena:** Install the game. Duh.
-3. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
+2. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 
 <hr>
 
-## Personal Device
+## Personal Android device
 
 1. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 2. **Resolution:** Make sure your Device is set to `1080x1920`.
-3. **AFK Arena:** Install the game. Duh.
-4. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
-5. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** This will install one specific command that the script uses for pixel analysis.
+3. **Root:** Unfortunately root is necessary. If you don't have root access, please use an emulator (Bluestacks).
+4. **[BusyBox](https://play.google.com/store/apps/details?id=stericson.busybox):** This will install one specific command that the script uses for pixel analysis.
 
 <!-- <hr>
 

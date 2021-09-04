@@ -1,42 +1,38 @@
-As of now, the script is capable of completing the following:
+The script is capable of the following:
 
-* Campaign
-  * [x] Loot AFK chest
-  * [x] Fight the current campaign level (automatically fights every three days for Mythic Trick)
-  * [x] Collect Fast Rewards
-  * [x] Send and receive Companion Points
-  * [x] Auto-lend Mercenaries
-* Dark Forest
-  * [x] Send Heroes on Solo and Team Bounty Quests
-  * [x] Fight in the Arena of Heroes
-  * [x] Fight in the Legends Tournament
-  * [x] Fight in all available King's Towers
-* Ranhorn
-  * [x] Fight Wrizz and Soren if available. Can also open Soren for you.
-  * [x] Fight in the Twisted Realm (necessary to have at least fought once against each TR boss for the game to save your formation)
-  * [x] Buy various items from the Store
-    * [x] Dust
-    * [x] Peo Coins
-    * [x] Soulstone
-    * [x] Primordial Emblem
-    * [x] Amplifying Emblem
-    * [x] Limited Gold / Diam offer
-    * [x] Weekly Guild
-    * [x] Weekly Labyrinth
-  * [x] Strengthen the Resonating Crystal
-  * [x] Summon one Hero with Companion Points
-  * [x] Collect Oak Inn presents
-* Finish
-  * [x] Collect daily, weekly, campaign quest chests
-  * [x] Collect Mail
-  * [x] Collect Daily/Weekly/Monthly rewards from Merchants
-* Miscellaneous
-  * [x] Possibility to specify a config file: `-c config`
-  * [x] Choose if you want to fight Wrizz/Soren or use Quick Battle
-  * [x] Make script output pretty
-  * [x] Android emulator compatibility (Bluestacks, Nox, Memu)
-  * [x] [Disable notifications while script is running](https://android.stackexchange.com/questions/194058/how-to-disable-peek-heads-up-notifications-globally-in-android-oreo): `adb shell settings put global heads_up_notifications_enabled 0` using `-n`
-  * [x] Test for screen size with `adb shell wm size`
+* **Campaign**
+  * Loot AFK chest
+  * Fight the current campaign level (automatically fight every three days for Mythic Trick)
+  * Collect Fast Rewards
+  * Send and receive Companion Points
+  * Auto-lend Mercenaries
+* **Dark Forest**
+  * Send Heroes on Solo and Team Bounty Quests
+  * Fight in the Arena of Heroes
+  * Fight in the Legends Tournament
+  * Fight in all available King's Towers
+* **Ranhorn**
+  * Fight Wrizz and Soren if available. Can also open Soren for you.
+  * Fight in the Twisted Realm
+  * Buy various items from the Store
+    * Dust
+    * Poe Coins
+    * Soulstone
+    * Primordial Emblem
+    * Amplifying Emblem
+    * Limited Gold / Diam offer
+    * Weekly Guild
+    * Weekly Labyrinth
+  * Strengthen the Resonating Crystal
+  * Summon one Hero with Companion Points
+  * Collect Oak Inn presents
+* **Finish**
+  * Collect Daily/Weekly/Campaign quest chests
+  * Collect Mail
+  * Collect Daily/Weekly/Monthly rewards from Merchants
+* **Miscellaneous**
+  * Pretty script output
+  * Android emulator compatibility (Bluestacks, Nox, Memu)
 
 ## Push campaign/towers only
 

@@ -18,6 +18,8 @@
 > **Version 2 has been released!** We've completely revamped the script, added various new features and made the script more consistent and powerful. Make sure to update in order to make use of it!
 > 
 > Also, [join us on discord](https://discord.gg/Fq2cfqjp8D) to keep up to date with the latest features, as well as for any troubleshooting or updating help.
+> 
+> **A massive thank you to [@kevingrillet](https://github.com/kevingrillet) for basically doing all the work related to this new script version!** He's been incredibly useful and helpful, as well as patient (opened PR on the 26th of April, that's over 4 Months ago). His PR has the same amount of changes that the whole script had since I started it, that's how much work went into this! I seriously mean it when I say I cannot thank him enough for the amount of work and effort put into making the script that much better. Thank you very, very much Kevin.
 
 ## Description
 

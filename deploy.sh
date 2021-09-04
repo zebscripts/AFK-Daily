@@ -608,14 +608,14 @@ show_help() {
     echo -e "      Values for ${cGreen}[EVENT]${cWhite}: hoe"
     echo -e
     echo -e "   ${cCyan}-f${cWhite}, ${cCyan}--fight${cWhite}"
-    echo -e "      Force campaign battle (ignore 3 day optimisation)."
+    echo -e "      Force campaign battle (ignore 3-day optimisation)."
     echo -e
     echo -e "   ${cCyan}-i${cWhite}, ${cCyan}--ini${cWhite} ${cGreen}[CONFIG]${cWhite}"
     echo -e "      Specify config: \"config-${cGreen}[CONFIG]${cWhite}.ini\""
     echo -e "      Remark: Please don't use spaces!"
     echo -e
     echo -e "   ${cCyan}-n${cWhite}"
-    echo -e "      Disable heads up notifications."
+    echo -e "      Disable heads-up notifications while script is running."
     echo -e
     echo -e "   ${cCyan}-r${cWhite}"
     echo -e "      Ignore resolution warning. Use this at your own risk."
@@ -633,7 +633,7 @@ show_help() {
     echo -e
     echo -e "   ${cCyan}-o${cWhite}, ${cCyan}--output${cWhite} ${cGreen}[OUTPUT_FILE]${cWhite}"
     echo -e "      Write log in ${cGreen}[OUTPUT_FILE]${cWhite}"
-    echo -e "      Remark: Folder need to be created"
+    echo -e "      Remark: Folder needs to be created"
     echo -e
     echo -e "   ${cCyan}-s${cWhite} ${cGreen}<X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]${cWhite}"
     echo -e "      Test color of a pixel."
@@ -648,8 +648,11 @@ show_help() {
     echo -e "         DEBUG >= 9    Show all calls"
     echo -e
     echo -e "EXAMPLES"
-    echo -e "   Run script for Bluestacks"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}bs${cWhite}"
+    echo -e "   Run script"
+    echo -e "      ${cYellow}./deploy.sh${cWhite}"
+    echo -e
+    echo -e "   Run script with specific emulator (for example Nox)"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}nox${cWhite}"
     echo -e
     echo -e "   Run script on test server"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-t${cWhite}"

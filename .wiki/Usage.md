@@ -1,11 +1,9 @@
-While creating this repository and script, I wanted to make it as easy as possible for anyone to use it. That's why I've implemented various checks in order to run the script, so you don't have to! These include:
+While creating this repository and script, we wanted to make it as easy as possible for anyone to use it. That's why we've implemented various checks in order to run the script, so you don't have to! These include:
 
-- Check if adb is installed, and if not install it.
-- Check for File line endings
-- Check what type of device is connected per ADB, and connect accordingly*
-- Deploy the script on your device to be able to run it
-
-*\* Unfortunately it won't detect nox without you specifying it as an optional parameter. At least not yet.*
+- Install `adb` locally if necessary
+- Check for File line-endings
+- Check what type of device is connected per ADB, and connect accordingly
+- Auto-update the script if a new version is found
 
 You can also execute the script with the following optional parameters:
 
@@ -13,16 +11,16 @@ You can also execute the script with the following optional parameters:
 $ ./deploy.sh -h
 
     _     ___   _  __        ___           _   _
-   /_\   | __| | |/ /  ___  |   \   __ _  (_) | |  _  _
-  / _ \  | _|  | ' <  |___| | |) | / _` | | | | | | || |
- /_/ \_\ |_|   |_|\_\       |___/  \__,_| |_| |_|  \_, |
-                                                   |__/
+   /_\   | __| | |/ /  ___  |   \   __ _  (_) | |  _  _  
+  / _ \  | _|  | ' <  |___| | |) | / _` | | | | | | || | 
+ /_/ \_\ |_|   |_|\_\       |___/  \__,_| |_| |_|  \_, | 
+                                                   |__/  
 
 USAGE: deploy.sh [OPTIONS]
 
 DESCRIPTION
-   Automate daily activities within the AFK Arena game.
-   More info: https://github.com/zebscripts/AFK-Daily
+   Automate daily activities within the AFK Arena game.  
+   More info: https://github.com/zebscripts/AFK-Daily    
 
 OPTIONS
    -h, --help
@@ -41,14 +39,14 @@ OPTIONS
       Values for [EVENT]: hoe
 
    -f, --fight
-      Force campaign battle (ignore 3 day optimisation).
+      Force campaign battle (ignore 3-day optimisation).
 
    -i, --ini [CONFIG]
       Specify config: "config-[CONFIG].ini"
       Remark: Please don't use spaces!
 
    -n
-      Disable heads up notifications.
+      Disable heads-up notifications while script is running.
 
    -r
       Ignore resolution warning. Use this at your own risk.
@@ -66,7 +64,7 @@ DEV OPTIONS
 
    -o, --output [OUTPUT_FILE]
       Write log in [OUTPUT_FILE]
-      Remark: Folder need to be created
+      Remark: Folder needs to be created
 
    -s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]
       Test color of a pixel.
@@ -81,8 +79,11 @@ DEV OPTIONS
          DEBUG >= 9    Show all calls
 
 EXAMPLES
-   Run script for Bluestacks
-      ./deploy.sh -d bs
+   Run script
+      ./deploy.sh
+
+   Run script with specific emulator (for example Nox)
+      ./deploy.sh -d nox
 
    Run script on test server
       ./deploy.sh -t
@@ -114,12 +115,6 @@ Running the script on Bluestacks:
 
 ```sh
 ./deploy.sh -d bs
-```
-
-Running the script on Nox:
-
-```sh
-./deploy.sh -d nox
 ```
 
 <hr>

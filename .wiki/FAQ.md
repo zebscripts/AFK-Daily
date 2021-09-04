@@ -1,6 +1,6 @@
-### Can I get banned by using this script?
+### Q: Can I get banned by using this script?
 
-I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Terms of Service](https://www.lilithgames.com/termofservice.html) states the following:
+**A:** I've tried getting in contact with Lilith through various means, and until this day I did **not** get an answer from them. Their [Terms of Service](https://www.lilithgames.com/termofservice.html) states the following:
 
 > You agree not to do any of the following while using our Services, Lilith Content, or User Content: [...] Use cheats, exploits, hacks, bots, mods or third party software designed to gain an advantage, perceived or actual, over other Members, or modify or interfere with the Service; [...]
 
@@ -14,9 +14,9 @@ Though Lilith has confirmed, that using Bluestacks macros is allowed in the game
 
 Do with this information what you want. I'm *not responsible at all* if anything happens to your account. **Use at your own risk.**
 
-### Will this ever be available on iOS?
+### Q: Will this ever be available on iOS?
 
-Nope. Install Bluestacks and run this script.
+**A:** Nope. Install Bluestacks and run this script.
 
 <!-- <hr>
 

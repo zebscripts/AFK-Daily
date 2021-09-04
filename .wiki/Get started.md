@@ -6,7 +6,7 @@ Here's how you can get started:
 4. Change the [script config](https://github.com/zebscripts/AFK-Daily/wiki/Config) to your needs.
 5. Run the script and watch it do stuff for you! It's fun, I promise.
 
-That is the general order in which you should be doing things. We recommend hitting the `Next page` button at the end of this page to navigate to the next one, or you can always quickly jump to a specific guide through the sidebar.
+That is the general order in which you should be doing things. We recommend hitting the `Next page` button at the bottom of each page to navigate to the next one, or you can always quickly jump to a specific guide through the sidebar.
 
 Also, take a look at the [tips](https://github.com/zebscripts/AFK-Daily/wiki/Tips) or [troubleshooting](https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting) articles for some more info.
 
