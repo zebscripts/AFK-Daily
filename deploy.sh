@@ -416,6 +416,7 @@ deploy() {
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
     if [ $disableNotif = true ]; then
+        echo
         "$adb" shell settings put global heads_up_notifications_enabled 1
         printInfo "Notifications: ${cCyan}ON${cNc}\n"
     fi

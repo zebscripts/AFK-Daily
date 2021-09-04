@@ -1910,5 +1910,6 @@ echo
 init
 run
 
+echo
 printInColor "INFO" "End of script! ($(date))"
 exit
