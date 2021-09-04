@@ -3,7 +3,6 @@
    <a href="https://github.com/kyechan99/capsule-render">
       <img align="center" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=250&section=header&text=AFK-Daily&fontAlign=30&fontAlignY=35&fontSize=70&desc=Automate%20daily%20activities%20within%20the%20AFK%20Arena%20game&descAlign=55&descSize=25" />
    </a>
-   </br>
 
    <!-- Badges -->
    <a alt="Script version"><img src="https://img.shields.io/badge/Version-2.0.0-blue"></img></a>
