@@ -32,6 +32,7 @@ evt="" # Default dev evt
 
 # Do not modify
 adb=adb
+devMode=false
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
@@ -554,20 +555,19 @@ run() {
     check_all
     getLatestPatch
 
-    if [ "$device" == "Bluestacks" ]; then
+    if [ "$devMode" = false ]; then
         restartAdb
+    fi
+
+    if [ "$device" == "Bluestacks" ]; then
         checkDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
     elif [ "$device" == "Memu" ]; then
-        restartAdb
         checkDevice "Memu"
         deploy "Memu" "$memuDirectory"
     elif [ "$device" == "Nox" ]; then
-        restartAdb
         checkDevice "Nox"
         deploy "Nox" "$noxDirectory"
-    elif [ "$device" == "dev" ]; then
-        checkDevice
     else
         restartAdb
         checkDevice
@@ -601,7 +601,7 @@ show_help() {
     echo -e
     echo -e "   ${cCyan}-d${cWhite}, ${cCyan}--device${cWhite} ${cGreen}[DEVICE]${cWhite}"
     echo -e "      Specify target device."
-    echo -e "      Values for ${cGreen}[DEVICE]${cWhite}: bs (default), dev, nox, memu"
+    echo -e "      Values for ${cGreen}[DEVICE]${cWhite}: bs (default), nox, memu"
     echo -e
     echo -e "   ${cCyan}-e${cWhite}, ${cCyan}--event${cWhite} ${cGreen}[EVENT]${cWhite}"
     echo -e "      Specify active event."
@@ -627,6 +627,9 @@ show_help() {
     echo -e "      Force weekly."
     echo -e
     echo -e "DEV OPTIONS"
+    echo -e
+    echo -e "   ${cCyan}-b${cWhite}"
+    echo -e "      Dev mode: do not restart adb."
     echo -e
     echo -e "   ${cCyan}-c${cWhite}, ${cCyan}--check${cWhite}"
     echo -e "      Check if script is ready to be run."
@@ -691,10 +694,13 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:e:fhi:no:rs:tv:w" option; do
+while getopts ":ab:cd:e:fhi:no:rs:tv:w" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
+        ;;
+    b)
+        devMode=true
         ;;
     c)
         check_all
@@ -712,8 +718,6 @@ while getopts ":a:cd:e:fhi:no:rs:tv:w" option; do
                 printError "nox_adb.exe not found, please check your Nox settings"
                 exit 1
             fi
-        elif [ "$OPTARG" == "dev" ]; then
-            device="dev"
         fi
         ;;
     e)
