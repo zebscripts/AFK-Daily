@@ -538,7 +538,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    # checkGitUpdate
+    checkGitUpdate
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
