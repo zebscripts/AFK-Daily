@@ -308,13 +308,19 @@ checkEOL() {
 checkGitUpdate() {
     if command -v git &>/dev/null; then
         printTask "Checking for updates..."
-        if git pull &>/dev/null; then
-            printSuccess "Checked/Updated!"
-        elif git fetch --all &>/dev/null && git reset --hard origin/master; then
-            printSuccess "Checked/Updated!"
+        git fetch --all &> /dev/null # Dl remote repo
+        if [ -z "$(git status --porcelain)" ]; then # Check if there is any difference
+            if git pull &>/dev/null; then # Try to pull
+                printSuccess "Checked/Updated!"
+            elif git reset --hard origin/master; then # Else reset hard
+                printSuccess "Checked/Updated!"
+            else # Else fail
+                printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
+                printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+            fi
+            exit 1 # Anyway exit, there is an update!
         else
-            printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+            printSuccess "Checked/Updated!"
         fi
     else
         printTask "Checking for updates..."
