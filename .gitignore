@@ -1,9 +1,15 @@
-# Custom
-.vscode
-config*.sh
-adb
-.markdownlint.json
-.afkscript.tmp
+# VSCode
+.history/
+.vscode/*
+#!.vscode/settings.json
+*.code-workspace
+
+# Project specific
+account-info
+config
+#.wiki/
+adb/
+*.bak
+*.ini
 *.tmp
-config*.ini
-.*afkscript.ini
+*.log
