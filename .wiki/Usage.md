@@ -32,7 +32,7 @@ OPTIONS
 
    -d, --device [DEVICE]
       Specify target device.
-      Values for [DEVICE]: bs (default), dev, nox, memu
+      Values for [DEVICE]: bs (default), nox, memu
 
    -e, --event [EVENT]
       Specify active event.
@@ -58,6 +58,9 @@ OPTIONS
       Force weekly.
 
 DEV OPTIONS
+
+   -b
+      Dev mode: do not restart adb.
 
    -c, --check
       Check if script is ready to be run.
