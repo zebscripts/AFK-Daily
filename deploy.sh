@@ -322,13 +322,22 @@ checkGitUpdate() {
         else
             printSuccess "Checked/Updated!"
         fi
-    else
+    else # No git :'(
         printTask "Checking for updates..."
         if ./lib/update_git.sh; then
             printSuccess "Checked/Updated!"
-        else
-            printWarn "Update found! Please download the last version on github."
+        else # There is an update, but no git :(
+            printWarn "Update found! Try to auto update!"
+            printWarn "If it fails, Please download the last version on github."
             printWarn "Link: https://github.com/zebscripts/AFK-Daily"
+
+            curl -s -L -O https://github.com/zebscripts/AFK-Daily/archive/master.zip
+            unzip -qq master.zip
+            cp AFK-Daily-master ..
+            rm -rf AFK-Daily-master master.zip
+
+            printSuccess "Checked/Updated!"
+            exit 1
         fi
     fi
 }
