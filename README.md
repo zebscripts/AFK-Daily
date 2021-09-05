@@ -15,7 +15,7 @@
 <!-- Uncomment for news -->
 > ## News
 >
-> **Version 2 has been released!** We've completely revamped the script, added various new features and made the script more consistent and powerful. Make sure to update in order to make use of it!
+> **Version 2 has been released!** We've completely revamped the script, added various new features and made the script more consistent and powerful. Make sure to update in order to make use of it! Expect some bugs here and there please, and make sure to let us know in case you find any.
 >
 > Also, [join us on discord](https://discord.gg/Fq2cfqjp8D) to keep up to date with the latest features, as well as for any troubleshooting or updating help.
 > 

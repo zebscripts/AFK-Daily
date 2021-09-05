@@ -538,7 +538,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    # checkGitUpdate # TODO: Uncomment this when releasing
+    checkGitUpdate
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
