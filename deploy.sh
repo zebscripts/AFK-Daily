@@ -306,11 +306,11 @@ checkEOL() {
 # Description   : Checks for script update (with git)
 # ##############################################################################
 checkGitUpdate() {
-    if command -v git &>/dev/null; then
+    if command -v git &>/dev/null && [ -d "./.git" ]; then # Check if there git command & .git folder
         printTask "Checking for updates..."
-        git fetch --all &> /dev/null # Dl remote repo
+        git fetch --all &>/dev/null                 # Dl remote repo
         if [ -z "$(git status --porcelain)" ]; then # Check if there is any difference
-            if git pull &>/dev/null; then # Try to pull
+            if git pull &>/dev/null; then           # Try to pull
                 printSuccess "Checked/Updated!"
             elif git reset --hard origin/master; then # Else reset hard
                 printSuccess "Checked/Updated!"
@@ -349,7 +349,7 @@ checkGitUpdate() {
 checkSetupUpdate() {
     printTask "Checking for setup updates..."
     # .*afkscript.ini
-    for f in .*afkscript.*  ./account-info/acc*.ini; do
+    for f in .*afkscript.* ./account-info/acc*.ini; do
         if [ -e "$f" ]; then
             printInNewLine "$(./lib/update_setup.sh -a)"
             break
