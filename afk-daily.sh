@@ -634,7 +634,7 @@ challengeBoss() {
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
-        printInColor "INFO" "Fighting in the campaign ${cCyan}$maxCampaignFights${cNc} time(s) because of Mythic Trick."
+        printInColor "INFO" "Fighting in the campaign until ${cCyan}$maxCampaignFights${cNc} defeat(s) because of Mythic Trick."
         _challengeBoss_LOOSE=0
         _challengeBoss_WIN=0
 
@@ -968,6 +968,7 @@ arenaOfHeroes_tapClosestOpponent() {
 kingsTower() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower" >&2; fi
     inputTapSleep 500 870 5 # King's Tower
+    printInColor "INFO" "Fighting King's Tower until ${cCyan}$maxKingsTowerFights${cNc} defeat(s)."
 
     if testColorOR 550 150 1a1212; then
         # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
