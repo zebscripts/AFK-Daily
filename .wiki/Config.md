@@ -8,15 +8,16 @@ The script acts depending on a set of variables. In order to change these, open 
 - [Dark Forest](#dark-forest)
 - [Ranhorn](#ranhorn)
 - [End](#end)
+- [Useful config files](#useful-config-files)
 
-### Player
+## Player
 
 | Variable              |   Type    | Description                                                                                                                                               | Default |
 | :-------------------- | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `canOpenSoren`        | `Boolean` | If `true`, player has permission to open Soren.                                                                                                           | `false` |
 | `arenaHeroesOpponent` | `Number`  | Choose which opponent to fight in the Arena of Heroes. Possible entries: `1`, `2`, `3`, `4` or `5`, where `1` is the top opponent and `5` the bottom one. |   `5`   |
 
-### General
+## General
 
 | Variable              |   Type    | Description                                                                                                                                  |    Default     |
 | :-------------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
@@ -25,7 +26,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `guildBattleType`     | `String`  | Choose type of Guild fight. Possible entries: `quick` or `challenge`.                                                                        |    `quick`     |
 | `allowCrystalLevelUp` | `Boolean` | If `true`, allows the Resonating Crystal to be leveled up.                                                                                   |     `true`     |
 
-### Repetitions
+## Repetitions
 
 | Variable                           |   Type   | Description                                                                                                    | Default |
 | :--------------------------------- | :------: | :------------------------------------------------------------------------------------------------------------- | :-----: |
@@ -36,7 +37,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `totalAmountGuildBossTries`        | `Number` | The total amount of fights against a Guild Boss. The minimum is always 2, that's why its displayed as `2+X`.   |  `2+0`  |
 | `totalAmountTwistedRealmBossTries` | `Number` | The total amount of fights in the Twisted Realm.                                                               |   `1`   |
 
-### Store
+## Store
 
 | Variable                   |   Type    | Description                                                        | Default | Image                                                                                                                       |
 | :------------------------- | :-------: | :----------------------------------------------------------------- | :-----: | :-------------------------------------------------------------------------------------------------------------------------: |
@@ -50,7 +51,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `buyWeeklyGuild`           | `Boolean` | If `true`, buys one Stone from Guild Coins once a Week.            | `false` |                                                                                                                             |
 | `buyWeeklyLabyrinth`       | `Boolean` | If `true`, buys Rare Soulstones from Labyrinth Tokens once a Week. | `false` | ![Rare Soulstones](https://user-images.githubusercontent.com/7203617/132167981-baac849d-613a-4716-881e-ee21a9b2d4a1.png)    |
 
-### Campaign
+## Campaign
 
 | Variable                         |   Type    | Description                                                      | Default |
 | :------------------------------- | :-------: | :--------------------------------------------------------------- | :-----: |
@@ -59,7 +60,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doFastRewards`                  | `Boolean` | If `true`, collects free fast rewards.                           | `true`  |
 | `doCollectFriendsAndMercenaries` | `Boolean` | If `true`, collects Companion Points and auto-lends mercenaries. | `true`  |
 
-### Dark Forest
+## Dark Forest
 
 | Variable              |   Type    | Description                                              | Default |
 | :-------------------- | :-------: | :------------------------------------------------------- | :-----: |
@@ -69,7 +70,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doLegendsTournament` | `Boolean` | If `true`, fights in the Legends' Challenger Tournament. | `true`  |
 | `doKingsTower`        | `Boolean` | If `true`, fights in the King's Towers.                  | `true`  |
 
-### Ranhorn
+## Ranhorn
 
 | Variable                  |   Type    | Description                                        | Default |
 | :------------------------ | :-------: | :------------------------------------------------- | :-----: |
@@ -81,13 +82,218 @@ The script acts depending on a set of variables. In order to change these, open 
 | `doCompanionPointsSummon` | `Boolean` | If `true`, summons one hero with Companion Points. | `false` |
 | `doCollectOakPresents`    | `Boolean` | If `true`, collects Oak Inn presents.              | `true`  |
 
-### End
+## End
 
 | Variable                    |   Type    | Description                                                                                 | Default |
 | :-------------------------- | :-------: | :------------------------------------------------------------------------------------------ | :-----: |
 | `doCollectQuestChests`      | `Boolean` | If `true`, collects daily quest chests.                                                     | `true`  |
 | `doCollectMail`             | `Boolean` | If `true` and possible, collects mail rewards.                                              | `true`  |
 | `doCollectMerchantFreebies` | `Boolean` | If `true` and possible, collects free daily/weekly/monthly rewards from the Merchants page. | `false` |
+
+## Useful config files
+
+<details>
+  <summary>config-Arena.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=0
+totalAmountArenaTries=50
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=true
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Push_Campaign.ini</summary>
+
+Need to be run with `-f` flag!
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=50
+maxKingsTowerFights=0
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=true
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Push_Towers.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=50
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=true
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
 
 <hr>
 
