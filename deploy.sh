@@ -314,7 +314,7 @@ checkGitUpdate() {
             printSuccess "Checked/Updated!"
         else
             printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
         fi
     else
         printTask "Checking for updates..."
