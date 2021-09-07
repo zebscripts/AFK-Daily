@@ -1435,7 +1435,7 @@ nobleTavern() {
 # ##############################################################################
 oakInnSpeedy() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
-    inputTapSleep 780 270 5 # Oak Inn
+    inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
     _oakInn_COUNT=0
     _oakInn_COLLECTED=0
