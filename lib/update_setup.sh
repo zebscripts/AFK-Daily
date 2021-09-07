@@ -117,7 +117,7 @@ updateConfig() {
         if [ ! -f "$f" ]; then continue; fi
         source "$f" # Load the file
         echo -e "# --- CONFIG: Modify accordingly to your game! --- #\n\
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #\n\
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #\n\
 # Player\n\
 canOpenSoren=${canOpenSoren:-"false"}\n\
 arenaHeroesOpponent=${arenaHeroesOpponent:-"5"}\n\
