@@ -694,7 +694,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":ab:cd:e:fhi:no:rs:tv:w" option; do
+while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
