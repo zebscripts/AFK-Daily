@@ -634,7 +634,7 @@ challengeBoss() {
 
     if [ "$forceFightCampaign" = "true" ]; then # Fight battle or not
         # Fight in the campaign because of Mythic Trick
-        printInColor "INFO" "Fighting in the campaign ${cCyan}$maxCampaignFights${cNc} time(s) because of Mythic Trick."
+        printInColor "INFO" "Fighting in the campaign until ${cCyan}$maxCampaignFights${cNc} defeat(s) because of Mythic Trick."
         _challengeBoss_LOOSE=0
         _challengeBoss_WIN=0
 
@@ -968,6 +968,7 @@ arenaOfHeroes_tapClosestOpponent() {
 kingsTower() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "kingsTower" >&2; fi
     inputTapSleep 500 870 5 # King's Tower
+    printInColor "INFO" "Fighting King's Tower until ${cCyan}$maxKingsTowerFights${cNc} defeat(s)."
 
     if testColorOR 550 150 1a1212; then
         # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
@@ -1434,7 +1435,7 @@ nobleTavern() {
 # ##############################################################################
 oakInnSpeedy() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
-    inputTapSleep 780 270 5 # Oak Inn
+    inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
     _oakInn_COUNT=0
     _oakInn_COLLECTED=0
@@ -1645,24 +1646,24 @@ collectQuestChests_quick() {
     done
 
     if testColorNAND -d "$DEFAULT_DELTA" 265 450 4b2711 && testColorNAND 295 410 71211e; then # OFF: 4b2711 COLLECTED: 71211e
-        inputTapSleep 330 430   # Chest 20
-        inputTapSleep 580 600 0 # Collect
+        inputTapSleep 330 430                                                                 # Chest 20
+        inputTapSleep 580 600 0                                                               # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
-        inputTapSleep 500 430   # Chest 40
-        inputTapSleep 580 600 0 # Collect
+        inputTapSleep 500 430                                                                 # Chest 40
+        inputTapSleep 580 600 0                                                               # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 595 450 4e2713 && testColorNAND 625 410 8f2d28; then # OFF: 4e2713 COLLECTED: 8f2d28
-        inputTapSleep 660 430   # Chest 60
-        inputTapSleep 580 600 0 # Collect
+        inputTapSleep 660 430                                                                 # Chest 60
+        inputTapSleep 580 600 0                                                               # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 760 450 502611 && testColorNAND 785 410 c21c22; then # OFF: 502611 COLLECTED: c21c22
-        inputTapSleep 830 430   # Chest 80
-        inputTapSleep 580 600 0 # Collect
+        inputTapSleep 830 430                                                                 # Chest 80
+        inputTapSleep 580 600 0                                                               # Collect
     fi
     if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 950 410 6e1819; then # OFF: 662611 COLLECTED: 6e1819
-        inputTapSleep 990 430 # Chest 100
-        inputTapSleep 580 600 # Collect
+        inputTapSleep 990 430                                                                 # Chest 100
+        inputTapSleep 580 600                                                                 # Collect
     fi
 }
 

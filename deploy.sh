@@ -32,6 +32,7 @@ evt="" # Default dev evt
 
 # Do not modify
 adb=adb
+devMode=false
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
@@ -133,7 +134,7 @@ checkConfig() {
         printWarn "Not found!"
         printTask "Creating new $configFile file..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 
 # Player
 canOpenSoren=false
@@ -316,7 +317,7 @@ checkGitUpdate() {
                 printSuccess "Checked/Updated!"
             else # Else fail
                 printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-                printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+                printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
             fi
             exit 1 # Anyway exit, there is an update!
         else
@@ -537,7 +538,7 @@ validateConfig() {
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
         printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
-        printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
+        printInfo "https://github.com/zebscripts/AFK-Daily/wiki/Config"
         exit
     fi
     printSuccess "Passed!"
@@ -569,20 +570,19 @@ run() {
     check_all
     getLatestPatch
 
-    if [ "$device" == "Bluestacks" ]; then
+    if [ "$devMode" = false ]; then
         restartAdb
+    fi
+
+    if [ "$device" == "Bluestacks" ]; then
         checkDevice "Bluestacks"
         deploy "Bluestacks" "$bluestacksDirectory"
     elif [ "$device" == "Memu" ]; then
-        restartAdb
         checkDevice "Memu"
         deploy "Memu" "$memuDirectory"
     elif [ "$device" == "Nox" ]; then
-        restartAdb
         checkDevice "Nox"
         deploy "Nox" "$noxDirectory"
-    elif [ "$device" == "dev" ]; then
-        checkDevice
     else
         restartAdb
         checkDevice
@@ -616,7 +616,7 @@ show_help() {
     echo -e
     echo -e "   ${cCyan}-d${cWhite}, ${cCyan}--device${cWhite} ${cGreen}[DEVICE]${cWhite}"
     echo -e "      Specify target device."
-    echo -e "      Values for ${cGreen}[DEVICE]${cWhite}: bs (default), dev, nox, memu"
+    echo -e "      Values for ${cGreen}[DEVICE]${cWhite}: bs (default), nox, memu"
     echo -e
     echo -e "   ${cCyan}-e${cWhite}, ${cCyan}--event${cWhite} ${cGreen}[EVENT]${cWhite}"
     echo -e "      Specify active event."
@@ -642,6 +642,9 @@ show_help() {
     echo -e "      Force weekly."
     echo -e
     echo -e "DEV OPTIONS"
+    echo -e
+    echo -e "   ${cCyan}-b${cWhite}"
+    echo -e "      Dev mode: do not restart adb."
     echo -e
     echo -e "   ${cCyan}-c${cWhite}, ${cCyan}--check${cWhite}"
     echo -e "      Check if script is ready to be run."
@@ -706,10 +709,13 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:cd:e:fhi:no:rs:tv:w" option; do
+while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
+        ;;
+    b)
+        devMode=true
         ;;
     c)
         check_all
@@ -727,8 +733,6 @@ while getopts ":a:cd:e:fhi:no:rs:tv:w" option; do
                 printError "nox_adb.exe not found, please check your Nox settings"
                 exit 1
             fi
-        elif [ "$OPTARG" == "dev" ]; then
-            device="dev"
         fi
         ;;
     e)
