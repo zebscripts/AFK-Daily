@@ -1,5 +1,16 @@
 Thank you for thinking about contributing! Help is always welcome.
 
+- [Join the project](#Join-the-project)
+- [Editor](#Editor)
+  - [Extensions](#Extensions)
+  - [Settings](#Settings)
+- [Check before a pull request](#check-before-a-pull-request)
+- [Clean code](#clean-code)
+  - [Markdown - MarkdownLint](#markdown---markdownlint)
+  - [Shell - ShellCheck](#shell---shellcheck)
+  - [Best Practices](#best-practices)
+- [Useful config files](#useful-config-files)
+
 ## Join the project
 
 Here are the first steps to your first contributions. You can either use the command line or GitHub Desktop:
@@ -242,6 +253,343 @@ Some other useful documentation:
 - [Pure Bash Bible](https://github.com/dylanaraps/pure-bash-bible#pure-bash-bible)
 
 *If you have any doubt, just ask, there will always be someone to answer (well, I hope so)!*
+
+## Useful config files
+
+<details>
+  <summary>config-Debug.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=false
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=0
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=true
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Test_Campaign.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=10
+maxKingsTowerFights=0
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=true
+doChallengeBoss=true
+doFastRewards=true
+doCollectFriendsAndMercenaries=true
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Test_Dark_Forest.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=10
+totalAmountArenaTries=2+6+2
+totalAmountTournamentTries=5
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=true
+doTeamBounties=true
+doArenaOfHeroes=true
+doLegendsTournament=true
+doKingsTower=true
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Test_Ranhorn.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=true
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=0
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=3
+totalAmountTwistedRealmBossTries=3
+
+# Store
+buyStoreDust=true
+buyStorePoeCoins=true
+buyStorePrimordialEmblem=true
+buyStoreAmplifyingEmblem=true
+buyStoreSoulstone=true
+buyStoreLimitedGoldOffer=true
+buyStoreLimitedDiamOffer=true
+buyWeeklyGuild=true
+buyWeeklyLabyrinth=true
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=true
+doTwistedRealmBoss=true
+doBuyFromStore=true
+doStrengthenCrystal=true
+doTempleOfAscension=true
+doCompanionPointsSummon=true
+doCollectOakPresents=true
+
+# End
+doCollectQuestChests=false
+doCollectMail=false
+doCollectMerchantFreebies=false
+
+```
+
+</details>
+
+<details>
+  <summary>config-Test_End.ini</summary>
+
+```ini
+# --- CONFIG: Modify accordingly to your game! --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# Player
+canOpenSoren=false
+arenaHeroesOpponent=5
+
+# General
+waitForUpdate=true
+endAt=campaign
+guildBattleType=quick
+allowCrystalLevelUp=false
+
+# Repetitions
+maxCampaignFights=0
+maxKingsTowerFights=0
+totalAmountArenaTries=0
+totalAmountTournamentTries=0
+totalAmountGuildBossTries=0
+totalAmountTwistedRealmBossTries=0
+
+# Store
+buyStoreDust=false
+buyStorePoeCoins=false
+buyStorePrimordialEmblem=false
+buyStoreAmplifyingEmblem=false
+buyStoreSoulstone=false
+buyStoreLimitedGoldOffer=false
+buyStoreLimitedDiamOffer=false
+buyWeeklyGuild=false
+buyWeeklyLabyrinth=false
+
+# --- Actions --- #
+# Campaign
+doLootAfkChest=false
+doChallengeBoss=false
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
+
+# Dark Forest
+doSoloBounties=false
+doTeamBounties=false
+doArenaOfHeroes=false
+doLegendsTournament=false
+doKingsTower=false
+
+# Ranhorn
+doGuildHunts=false
+doTwistedRealmBoss=false
+doBuyFromStore=false
+doStrengthenCrystal=false
+doTempleOfAscension=false
+doCompanionPointsSummon=false
+doCollectOakPresents=false
+
+# End
+doCollectQuestChests=true
+doCollectMail=true
+doCollectMerchantFreebies=true
+
+```
+
+</details>
 
 <!-- <hr>
 
