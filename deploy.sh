@@ -134,7 +134,7 @@ checkConfig() {
         printWarn "Not found!"
         printTask "Creating new $configFile file..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 
 # Player
 canOpenSoren=false
@@ -315,7 +315,7 @@ checkGitUpdate() {
             printSuccess "Checked/Updated!"
         else
             printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily#troubleshooting"
+            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
         fi
     else
         printTask "Checking for updates..."
@@ -523,7 +523,7 @@ validateConfig() {
         printInfo "Please either delete $configFile and run the script again to generate a new one,"
         printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
-        printInfo "https://github.com/zebscripts/AFK-Daily#configvariables"
+        printInfo "https://github.com/zebscripts/AFK-Daily/wiki/Config"
         exit
     fi
     printSuccess "Passed!"
