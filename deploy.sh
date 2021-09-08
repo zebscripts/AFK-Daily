@@ -332,9 +332,9 @@ checkGitUpdate() {
             printWarn "If it fails, Please download the last version on github."
             printWarn "Link: https://github.com/zebscripts/AFK-Daily"
 
-            curl -s -L -O https://github.com/zebscripts/AFK-Daily/archive/master.zip
+            curl -sLO https://github.com/zebscripts/AFK-Daily/archive/master.zip
             unzip -qq master.zip
-            cp AFK-Daily-master ..
+            cp -r AFK-Daily-master ..
             rm -rf AFK-Daily-master master.zip
 
             printSuccess "Checked/Updated!"
