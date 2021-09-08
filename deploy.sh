@@ -310,7 +310,7 @@ checkGitUpdate() {
     if command -v git &>/dev/null && [ -d "./.git" ]; then # Check if there git command & .git folder
         printTask "Checking for updates..."
         git fetch --all &>/dev/null                 # Dl remote repo
-        if [ "$(git rev-parse HEAD)" == "$(git rev-parse "@{u}")" ]; then # Check if there is any difference
+        if [ "$(git rev-parse HEAD)" != "$(git rev-parse "@{u}")" ]; then # Check if there is any difference
             if git pull &>/dev/null; then           # Try to pull
                 printSuccess "Checked/Updated!"
             elif git reset --hard origin/master; then # Else reset hard
