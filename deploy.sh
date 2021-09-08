@@ -309,9 +309,9 @@ checkEOL() {
 checkGitUpdate() {
     if command -v git &>/dev/null && [ -d "./.git" ]; then # Check if there git command & .git folder
         printTask "Checking for updates..."
-        git fetch --all &>/dev/null                 # Dl remote repo
+        git fetch --all &>/dev/null                                       # Dl remote repo
         if [ "$(git rev-parse HEAD)" != "$(git rev-parse "@{u}")" ]; then # Check if there is any difference
-            if git pull &>/dev/null; then           # Try to pull
+            if git pull &>/dev/null; then                                 # Try to pull
                 printSuccess "Checked/Updated!"
             elif git reset --hard origin/master; then # Else reset hard
                 printSuccess "Checked/Updated!"
@@ -319,6 +319,7 @@ checkGitUpdate() {
                 printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
                 printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
             fi
+            printInfo "Please restart the script."
             exit 1 # Anyway exit, there is an update!
         else
             printSuccess "Checked/Updated!"
@@ -328,7 +329,7 @@ checkGitUpdate() {
         if ./lib/update_git.sh; then
             printSuccess "Checked/Updated!"
         else # There is an update, but no git :(
-            printWarn "Update found! Try to auto update!"
+            printWarn "Update found! Trying to auto update!"
             printWarn "If it fails, Please download the last version on github."
             printWarn "Link: https://github.com/zebscripts/AFK-Daily"
 
@@ -338,6 +339,7 @@ checkGitUpdate() {
             rm -rf AFK-Daily-master master.zip
 
             printSuccess "Checked/Updated!"
+            printInfo "Please restart the script."
             exit 1
         fi
     fi
