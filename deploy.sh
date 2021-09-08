@@ -87,19 +87,19 @@ checkAdb() {
 
             case "$OSTYPE" in # Install depending on installed OS
             "msys")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
-                unzip ./platform-tools-latest-windows.zip                                           # Unzip
-                rm ./platform-tools-latest-windows.zip                                              # Delete .zip
+                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
+                unzip -qq ./platform-tools-latest-windows.zip                                        # Unzip
+                rm ./platform-tools-latest-windows.zip                                               # Delete .zip
                 ;;
             "darwin")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
-                unzip ./platform-tools-latest-darwin.zip                                           # Unzip
-                rm ./platform-tools-latest-darwin.zip                                              # Delete .zip
+                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
+                unzip -qq ./platform-tools-latest-darwin.zip                                        # Unzip
+                rm ./platform-tools-latest-darwin.zip                                               # Delete .zip
                 ;;
             "linux-gnu")
-                curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
-                unzip ./platform-tools-latest-linux.zip                                           # Unzip
-                rm ./platform-tools-latest-linux.zip                                              # Delete .zip
+                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
+                unzip -qq ./platform-tools-latest-linux.zip                                        # Unzip
+                rm ./platform-tools-latest-linux.zip                                               # Delete .zip
                 ;;
             *)
                 printError "Couldn't find OS."
