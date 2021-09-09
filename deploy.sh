@@ -569,7 +569,6 @@ run() {
         checkDevice "Nox"
         deploy "Nox" "$noxDirectory"
     else
-        restartAdb
         checkDevice
     fi
 }
