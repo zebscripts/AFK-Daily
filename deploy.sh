@@ -127,12 +127,12 @@ checkAdb() {
 # Description   : Creates a $configFile file if not found
 # ##############################################################################
 checkConfig() {
-    printTask "Searching for $configFile file..."
+    printTask "Searching for ${cCyan}$configFile${cNc}..."
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
     else
         printWarn "Not found!"
-        printTask "Creating new $configFile file..."
+        printTask "Creating new ${cCyan}$configFile${cNc}..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 
@@ -194,7 +194,7 @@ doCollectMail=true
 doCollectMerchantFreebies=false
 ' >$configFile
         printSuccess "Created!\n"
-        printInfo "Please edit $configFile if necessary and run this script again."
+        printInfo "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
         exit
     fi
 
@@ -335,7 +335,7 @@ checkGitUpdate() {
 checkSetupUpdate() {
     printTask "Checking for setup updates..."
     # .*afkscript.ini
-    for f in .*afkscript.*  ./account-info/acc*.ini; do
+    for f in .*afkscript.* ./account-info/acc*.ini; do
         if [ -e "$f" ]; then
             printInNewLine "$(./lib/update_setup.sh -a)"
             break
@@ -477,7 +477,7 @@ lastWeekly=${newLastWeekly:-$lastWeekly}" >"$tempFile"
 # ##############################################################################
 validateConfig() {
     source $configFile
-    printTask "Validating $configFile..."
+    printTask "Validating ${cCyan}$configFile${cNc}..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
@@ -518,9 +518,9 @@ validateConfig() {
         $doCollectQuestChests || -z \
         $doCollectMail || -z \
         $doCollectMerchantFreebies ]]; then
-        printError "$configFile has missing/wrong entries."
+        printError "${cCyan}$configFile${cNc} has missing/wrong entries."
         echo
-        printInfo "Please either delete $configFile and run the script again to generate a new one,"
+        printInfo "Please either delete ${cCyan}$configFile${cNc} and run the script again to generate a new one,"
         printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily/wiki/Config"
@@ -539,7 +539,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    checkGitUpdate
+    # checkGitUpdate
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
