@@ -165,6 +165,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Tower
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=true
@@ -497,6 +506,13 @@ validateConfig() {
         $buyStoreLimitedDiamOffer || -z \
         $buyWeeklyGuild || -z \
         $buyWeeklyLabyrinth || -z \
+        $doMainTower || -z \
+        $doTowerOfLight || -z \
+        $doTheBrutalCitadel || -z \
+        $doTheWorldTree || -z \
+        $doCelestialSanctum || -z \
+        $doTheForsakenNecropolis || -z \
+        $doInfernalFortress || -z \
         $doLootAfkChest || -z \
         $doChallengeBoss || -z \
         $doFastRewards || -z \

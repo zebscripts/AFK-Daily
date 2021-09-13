@@ -972,33 +972,49 @@ kingsTower() {
 
     if testColorOR 550 150 1a1212; then
         # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
-        printInColor "INFO" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
+        if [ "$doMainTower" = true ]; then
+            printInColor "INFO" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
+        fi
     else
         # King's Tower with Towers of Esperia unlocked (after stage 15-1)
-        printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
+        if [ "$doMainTower" = true ]; then
+            printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
+        fi
 
         if [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
+            if [ "$doTowerOfLight" = true ]; then
+                printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
+            fi
         fi
 
         if [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
+            if [ "$doTheBrutalCitadel" = true ]; then
+                printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
+            fi
         fi
 
         if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
+            if [ "$doTheWorldTree" = true ]; then
+                printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
+            fi
         fi
 
         if [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
+            if [ "$doCelestialSanctum" = true ]; then
+                printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
+            fi
         fi
 
         if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
+            if [ "$doTheForsakenNecropolis" = true ]; then
+                printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
+            fi
         fi
 
         if [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; then
-            printInColor "INFO" "Infernal Fortress $(kingsTower_battle 620 1550)" # Infernal Fortress
+            if [ "$doInfernalFortress" = true ]; then
+                printInColor "INFO" "Infernal Fortress $(kingsTower_battle 620 1550)" # Infernal Fortress
+            fi
         fi
     fi
 
