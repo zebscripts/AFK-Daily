@@ -33,6 +33,7 @@ evt="" # Default dev evt
 # Do not modify
 adb=adb
 devMode=false
+doCheckGitUpdate=true
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
@@ -539,7 +540,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    checkGitUpdate
+    if [ $doCheckGitUpdate = true ] ; then checkGitUpdate; fi
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
@@ -650,6 +651,9 @@ show_help() {
     echo -e "         DEBUG >= 4    Show all functions calls"
     echo -e "         DEBUG >= 9    Show all calls"
     echo -e
+    echo -e "   ${cCyan}-z${cWhite}"
+    echo -e "      Disable auto update."
+    echo -e
     echo -e "EXAMPLES"
     echo -e "   Run script"
     echo -e "      ${cYellow}./deploy.sh${cWhite}"
@@ -694,7 +698,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
+while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -753,6 +757,9 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
         ;;
     w)
         forceWeekly=true
+        ;;
+    z)
+        doCheckGitUpdate=false
         ;;
     :)
         printWarn "Argument required by this option: $OPTARG"
