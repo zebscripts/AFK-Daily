@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [master, develop]
 jobs:
-  Build:
+  Shellcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,7 +13,20 @@ jobs:
       - name: Dependencies
         run: sudo apt install shellcheck -y
 
-      - name: Shellcheck
-        run: shellcheck -x deploy.sh -e SC1090 -e SC1091 -e SC2034 -e SC2154 -e SC3057 -e SC3060
-      # TODO: uncomment when all style is fixed
-      # run: find . -type f -name '*.sh' -print0 | xargs -0 shellcheck
+      - name: Set up Shellcheck
+        run: export SHELLCHECK_OPTS="-e SC1090 -e SC1091 -e SC2009 -e SC2034 -e SC2154 -e SC3057 -e SC3060"
+
+      - name: deploy.sh
+        run: shellcheck -x deploy.sh
+
+      - name: afk-daily.sh
+        run: shellcheck -x afk-daily.sh
+
+      - name: lib/print.sh
+        run: shellcheck -x lib/print.sh
+        
+      - name: lib/update_git.sh
+        run: shellcheck -x lib/update_git.sh
+
+      - name: lib/update_setup.sh
+        run: shellcheck -x lib/update_setup.sh
