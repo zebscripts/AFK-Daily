@@ -33,6 +33,7 @@ evt="" # Default dev evt
 # Do not modify
 adb=adb
 devMode=false
+doCheckGitUpdate=true
 forceFightCampaign=false
 forceWeekly=false
 ignoreResolution=false
@@ -127,12 +128,12 @@ checkAdb() {
 # Description   : Creates a $configFile file if not found
 # ##############################################################################
 checkConfig() {
-    printTask "Searching for $configFile file..."
+    printTask "Searching for ${cCyan}$configFile${cNc}..."
     if [ -f "$configFile" ]; then
         printSuccess "Found!"
     else
         printWarn "Not found!"
-        printTask "Creating new $configFile file..."
+        printTask "Creating new ${cCyan}$configFile${cNc}..."
         printf '# --- CONFIG: Modify accordingly to your game! --- #
 # --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 
@@ -165,6 +166,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=true
@@ -194,7 +204,7 @@ doCollectMail=true
 doCollectMerchantFreebies=false
 ' >$configFile
         printSuccess "Created!\n"
-        printInfo "Please edit $configFile if necessary and run this script again."
+        printInfo "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
         exit
     fi
 
@@ -250,7 +260,7 @@ checkDevice() {
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
-            "$adb" connect localhost:62001 1>/dev/null
+            "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
@@ -494,7 +504,7 @@ lastWeekly=${newLastWeekly:-$lastWeekly}" >"$tempFile"
 # ##############################################################################
 validateConfig() {
     source $configFile
-    printTask "Validating $configFile..."
+    printTask "Validating ${cCyan}$configFile${cNc}..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
         $waitForUpdate || -z \
@@ -514,6 +524,13 @@ validateConfig() {
         $buyStoreLimitedDiamOffer || -z \
         $buyWeeklyGuild || -z \
         $buyWeeklyLabyrinth || -z \
+        $doMainTower || -z \
+        $doTowerOfLight || -z \
+        $doTheBrutalCitadel || -z \
+        $doTheWorldTree || -z \
+        $doCelestialSanctum || -z \
+        $doTheForsakenNecropolis || -z \
+        $doInfernalFortress || -z \
         $doLootAfkChest || -z \
         $doChallengeBoss || -z \
         $doFastRewards || -z \
@@ -535,9 +552,9 @@ validateConfig() {
         $doCollectQuestChests || -z \
         $doCollectMail || -z \
         $doCollectMerchantFreebies ]]; then
-        printError "$configFile has missing/wrong entries."
+        printError "${cCyan}$configFile${cNc} has missing/wrong entries."
         echo
-        printInfo "Please either delete $configFile and run the script again to generate a new one,"
+        printInfo "Please either delete ${cCyan}$configFile${cNc} and run the script again to generate a new one,"
         printInfo "or run ./lib/update_setup.sh -c"
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily/wiki/Config"
@@ -556,7 +573,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    checkGitUpdate
+    if [ $doCheckGitUpdate = true ]; then checkGitUpdate; fi
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
@@ -586,7 +603,6 @@ run() {
         checkDevice "Nox"
         deploy "Nox" "$noxDirectory"
     else
-        restartAdb
         checkDevice
     fi
 }
@@ -667,6 +683,9 @@ show_help() {
     echo -e "         DEBUG >= 4    Show all functions calls"
     echo -e "         DEBUG >= 9    Show all calls"
     echo -e
+    echo -e "   ${cCyan}-z${cWhite}"
+    echo -e "      Disable auto update."
+    echo -e
     echo -e "EXAMPLES"
     echo -e "   Run script"
     echo -e "      ${cYellow}./deploy.sh${cWhite}"
@@ -679,6 +698,9 @@ show_help() {
     echo -e
     echo -e "   Run script forcing fight & weekly"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
+    echo -e
+    echo -e "   Run script with custom config.ini file"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i towers${cWhite}"
     echo -e
     echo -e "   Run script for color testing"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
@@ -711,7 +733,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
+while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -770,6 +792,9 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:w" option; do
         ;;
     w)
         forceWeekly=true
+        ;;
+    z)
+        doCheckGitUpdate=false
         ;;
     :)
         printWarn "Argument required by this option: $OPTARG"
