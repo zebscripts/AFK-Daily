@@ -147,6 +147,15 @@ buyStoreLimitedDiamOffer=${buyStoreLimitedDiamOffer:-"false"}\n\
 buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
 buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\
+# Towers\n\
+doMainTower=${doMainTower:-"true"}\n\
+doTowerOfLight=${doTowerOfLight:-"true"}\n\
+doTheBrutalCitadel=${doTheBrutalCitadel:-"true"}\n\
+doTheWorldTree=${doTheWorldTree:-"true"}\n\
+doCelestialSanctum=${doCelestialSanctum:-"true"}\n\
+doTheForsakenNecropolis=${doTheForsakenNecropolis:-"true"}\n\
+doInfernalFortress=${doInfernalFortress:-"true"}\n\
+\n\
 # --- Actions --- #\n\
 # Campaign\n\
 doLootAfkChest=${doLootAfkChest:-"true"}\n\

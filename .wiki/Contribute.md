@@ -1,9 +1,9 @@
 Thank you for thinking about contributing! Help is always welcome.
 
-- [Join the project](#Join-the-project)
-- [Editor](#Editor)
-  - [Extensions](#Extensions)
-  - [Settings](#Settings)
+- [Join the project](#join-the-project)
+- [Editor](#editor)
+  - [Extensions](#extensions)
+  - [Settings](#settings)
 - [Check before a pull request](#check-before-a-pull-request)
 - [Clean code](#clean-code)
   - [Markdown - MarkdownLint](#markdown---markdownlint)
@@ -291,6 +291,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -357,6 +366,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign
@@ -425,6 +443,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -492,6 +519,15 @@ buyStoreLimitedDiamOffer=true
 buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -558,6 +594,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign

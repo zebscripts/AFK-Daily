@@ -166,6 +166,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=true
@@ -498,6 +507,13 @@ validateConfig() {
         $buyStoreLimitedDiamOffer || -z \
         $buyWeeklyGuild || -z \
         $buyWeeklyLabyrinth || -z \
+        $doMainTower || -z \
+        $doTowerOfLight || -z \
+        $doTheBrutalCitadel || -z \
+        $doTheWorldTree || -z \
+        $doCelestialSanctum || -z \
+        $doTheForsakenNecropolis || -z \
+        $doInfernalFortress || -z \
         $doLootAfkChest || -z \
         $doChallengeBoss || -z \
         $doFastRewards || -z \
@@ -540,7 +556,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    if [ $doCheckGitUpdate = true ] ; then checkGitUpdate; fi
+    if [ $doCheckGitUpdate = true ]; then checkGitUpdate; fi
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
@@ -665,6 +681,9 @@ show_help() {
     echo -e
     echo -e "   Run script forcing fight & weekly"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
+    echo -e
+    echo -e "   Run script with custom config.ini file"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i towers${cWhite}"
     echo -e
     echo -e "   Run script for color testing"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
