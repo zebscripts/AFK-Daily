@@ -1,37 +1,72 @@
+#!/bin/bash
+# ##############################################################################
+# Script Name   : print.sh
+# Description   : Small lib containing basic print functions
+# GitHub        : https://github.com/zebscripts/AFK-Daily
+# License       : MIT
+# ##############################################################################
 # Colors
-cNc='\033[0m'
-cRed='\033[0;31m'
-cBlue='\033[0;34m'
-cGreen='\033[0;32m'
-cYellow='\033[0;33m'
-cCyan='\033[0;36m'
+cNc="\033[0m"        # Text Reset
+cRed="\033[0;91m"    # Red
+cGreen="\033[0;92m"  # Green
+cYellow="\033[0;93m" # Yellow
+cBlue="\033[0;94m"   # Blue
+cPurple="\033[0;95m" # Purple
+cCyan="\033[0;96m"   # Cyan
+cWhite="\033[0;97m"  # White
+
+# Variables
+withoutNewLine=false
+
+checkNewLine() {
+    if [ $withoutNewLine = true ]; then echo; fi
+    withoutNewLine=false
+}
+
+printInNewLine() {
+    if [ -n "$1" ]; then
+        checkNewLine
+        echo "$1"
+    fi
+}
 
 # Task
-function printTask() {
-    printf "${cBlue}Task:${cNc} $1\n"
+printTask() {
+    checkNewLine
+    withoutNewLine=true
+    echo -n -e "${cBlue}[TASK]${cWhite}  $1${cNc} "
 }
 
 # Info
-function printInfo() {
-    printf "${cCyan}Info:${cNc} $1\n"
+printInfo() {
+    checkNewLine
+    echo -e "${cBlue}[INFO]${cWhite}  $1${cNc}"
 }
 
 # Tip
-function printTip() {
-    printf "${cGreen}Tip:${cNc} $1\n"
+printTip() {
+    checkNewLine
+    echo -e "${cPurple}[TIP]${cWhite}   $1${cNc}"
 }
 
 # Success
-function printSuccess() {
-    printf "${cGreen}Success:${cNc} $1\n"
+printSuccess() {
+    if [ $withoutNewLine = false ]; then
+        echo -n "        "
+    else
+        withoutNewLine=false
+    fi
+    echo -e "${cGreen}$1${cNc}"
 }
 
 # Error
-function printError() {
-    printf "${cRed}Error:${cNc} $1\n"
+printError() {
+    checkNewLine
+    echo -e "${cRed}[ERROR]${cWhite} $1${cNc}"
 }
 
 # Warn
-function printWarn() {
-    printf "${cYellow}Warning:${cNc} $1\n"
+printWarn() {
+    checkNewLine
+    echo -e "${cYellow}[WARN]${cWhite}  $1${cNc}"
 }
