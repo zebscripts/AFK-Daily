@@ -81,6 +81,9 @@ DEV OPTIONS
          DEBUG >= 4    Show all functions calls
          DEBUG >= 9    Show all calls
 
+   -z
+      Disable auto update.
+
 EXAMPLES
    Run script
       ./deploy.sh
