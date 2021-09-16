@@ -40,7 +40,7 @@ checkEmulator() {
         if [ -d "./adb" ]; then
             adb="./adb/platform-tools/adb.exe"
         elif [ -d "../adb" ]; then
-            adb="./adb/platform-tools/adb.exe"
+            adb="../adb/platform-tools/adb.exe"
         else # ADB folder not found
             echo -e "${Red}ADB not found!${Color_Off}"
             return 1
