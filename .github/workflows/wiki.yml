@@ -1,4 +1,4 @@
-name: Deploy Wiki
+name: Wiki
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - master
 
 jobs:
-  Wiki:
+  Update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,5 +22,5 @@ jobs:
           # WIKI_DIR's default is wiki/
           WIKI_DIR: wiki/
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_MAIL: ${{ secrets.YOUR_EMAIL }}
+          GH_MAIL: ${{ secrets.OWNER_EMAIL }}
           GH_NAME: ${{ github.repository_owner }}
