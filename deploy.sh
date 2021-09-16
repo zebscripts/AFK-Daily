@@ -83,24 +83,26 @@ checkAdb() {
         else # If not, install it locally for this script
             printWarn "Not found!"
             printTask "Installing adb..."
+            echo
+            echo
             mkdir -p adb       # Create directory
             cd ./adb || exit 1 # Change to new directory
 
             case "$OSTYPE" in # Install depending on installed OS
             "msys")
-                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
-                unzip -qq ./platform-tools-latest-windows.zip                                        # Unzip
-                rm ./platform-tools-latest-windows.zip                                               # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
+                unzip -qq ./platform-tools-latest-windows.zip                                       # Unzip
+                rm ./platform-tools-latest-windows.zip                                              # Delete .zip
                 ;;
             "darwin")
-                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
-                unzip -qq ./platform-tools-latest-darwin.zip                                        # Unzip
-                rm ./platform-tools-latest-darwin.zip                                               # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
+                unzip -qq ./platform-tools-latest-darwin.zip                                       # Unzip
+                rm ./platform-tools-latest-darwin.zip                                              # Delete .zip
                 ;;
             "linux-gnu")
-                curl -sLO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
-                unzip -qq ./platform-tools-latest-linux.zip                                        # Unzip
-                rm ./platform-tools-latest-linux.zip                                               # Delete .zip
+                curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
+                unzip -qq ./platform-tools-latest-linux.zip                                       # Unzip
+                rm ./platform-tools-latest-linux.zip                                              # Delete .zip
                 ;;
             *)
                 printError "Couldn't find OS."
@@ -115,6 +117,7 @@ checkAdb() {
 
             cd .. || exit 1              # Change directory back
             adb=./adb/platform-tools/adb # Set adb path
+            echo
             printSuccess "Installed!"
         fi
     else
@@ -339,15 +342,17 @@ checkGitUpdate() {
         if ./lib/update_git.sh; then
             printSuccess "Checked/Updated!"
         else # There is an update, but no git :(
-            printWarn "Update found! Trying to auto update!"
-            printWarn "If it fails, Please download the last version on github."
+            printTask "Update found! Trying to auto update..."
+            printWarn "If it fails, please download the latest version manually from GitHub."
             printWarn "Link: https://github.com/zebscripts/AFK-Daily"
+            echo
 
-            curl -sLO https://github.com/zebscripts/AFK-Daily/archive/master.zip
+            curl -LO https://github.com/zebscripts/AFK-Daily/archive/master.zip
             unzip -qq master.zip
             cp -r AFK-Daily-master ..
             rm -rf AFK-Daily-master master.zip
 
+            echo
             printSuccess "Checked/Updated!"
             printInfo "Please restart the script."
             exit 1
