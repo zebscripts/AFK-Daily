@@ -4,6 +4,7 @@ The script acts depending on a set of variables. In order to change these, open 
 - [General](#general)
 - [Repetitions](#repetitions)
 - [Store](#store)
+- [Towers](#towers)
 - [Campaign](#campaign)
 - [Dark Forest](#dark-forest)
 - [Ranhorn](#ranhorn)
@@ -51,7 +52,7 @@ The script acts depending on a set of variables. In order to change these, open 
 | `buyWeeklyGuild`           | `Boolean` | If `true`, buys one Stone from Guild Coins once a Week.            | `false` |                                                                                                                               |
 | `buyWeeklyLabyrinth`       | `Boolean` | If `true`, buys Rare Soulstones from Labyrinth Tokens once a Week. | `false` | ![Rare Soulstones](https://user-images.githubusercontent.com/7203617/132167981-baac849d-613a-4716-881e-ee21a9b2d4a1.png)      |
 
-## Tower
+## Towers
 
 | Variable                         |   Type    | Description                                                      | Default |
 | :------------------------------- | :-------: | :--------------------------------------------------------------- | :-----: |
@@ -139,7 +140,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -217,7 +218,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -293,7 +294,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true

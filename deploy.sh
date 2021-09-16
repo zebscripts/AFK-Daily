@@ -166,7 +166,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -556,7 +556,7 @@ validateConfig() {
 check_all() {
     checkFolders
     checkAdb
-    if [ $doCheckGitUpdate = true ] ; then checkGitUpdate; fi
+    if [ $doCheckGitUpdate = true ]; then checkGitUpdate; fi
     checkSetupUpdate
     checkConfig
     checkEOL $tempFile
@@ -681,6 +681,9 @@ show_help() {
     echo -e
     echo -e "   Run script forcing fight & weekly"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
+    echo -e
+    echo -e "   Run script with custom config.ini file"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i towers${cWhite}"
     echo -e
     echo -e "   Run script for color testing"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"

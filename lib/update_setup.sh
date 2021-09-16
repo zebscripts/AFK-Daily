@@ -147,7 +147,7 @@ buyStoreLimitedDiamOffer=${buyStoreLimitedDiamOffer:-"false"}\n\
 buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
 buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\
-# Tower\n\
+# Towers\n\
 doMainTower=${doMainTower:-"true"}\n\
 doTowerOfLight=${doTowerOfLight:-"true"}\n\
 doTheBrutalCitadel=${doTheBrutalCitadel:-"true"}\n\

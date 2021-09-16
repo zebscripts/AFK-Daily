@@ -1,9 +1,9 @@
 Thank you for thinking about contributing! Help is always welcome.
 
-- [Join the project](#Join-the-project)
-- [Editor](#Editor)
-  - [Extensions](#Extensions)
-  - [Settings](#Settings)
+- [Join the project](#join-the-project)
+- [Editor](#editor)
+  - [Extensions](#extensions)
+  - [Settings](#settings)
 - [Check before a pull request](#check-before-a-pull-request)
 - [Clean code](#clean-code)
   - [Markdown - MarkdownLint](#markdown---markdownlint)
@@ -291,7 +291,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -367,7 +367,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -443,7 +443,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -519,7 +519,7 @@ buyStoreLimitedDiamOffer=true
 buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
@@ -595,7 +595,7 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
-# Tower
+# Towers
 doMainTower=true
 doTowerOfLight=true
 doTheBrutalCitadel=true
