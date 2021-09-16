@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 on:
   push:
     branches: [master, develop]
@@ -12,9 +12,6 @@ jobs:
 
       - name: Dependencies
         run: sudo apt install shellcheck -y
-
-      - name: Set up Shellcheck
-        run: export SHELLCHECK_OPTS="-e SC1090 -e SC1091 -e SC2009 -e SC2034 -e SC2154 -e SC3057 -e SC3060"
 
       - name: deploy.sh
         run: shellcheck -x deploy.sh
