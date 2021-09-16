@@ -250,7 +250,7 @@ checkDevice() {
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
-            "$adb" connect localhost:62001 1>/dev/null
+            "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
