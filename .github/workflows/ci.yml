@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Dependencies
-      - run: sudo apt install shellcheck -y
+        run: sudo apt install shellcheck -y
 
       - name: Shellcheck
-      - run: shellcheck -x deploy.sh -e SC1090 -e SC1091 -e SC2034 -e SC2154 -e SC3057 -e SC3060
+        run: shellcheck -x deploy.sh -e SC1090 -e SC1091 -e SC2034 -e SC2154 -e SC3057 -e SC3060
       # TODO: uncomment when all style is fixed
       # run: find . -type f -name '*.sh' -print0 | xargs -0 shellcheck
