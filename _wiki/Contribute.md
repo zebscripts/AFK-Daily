@@ -76,6 +76,7 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
         "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
+        "2039", // https://github.com/koalaman/shellcheck/wiki/SC2039
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
         "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
@@ -292,6 +293,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -358,6 +368,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign
@@ -426,6 +445,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -493,6 +521,15 @@ buyStoreLimitedDiamOffer=true
 buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -559,6 +596,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign
