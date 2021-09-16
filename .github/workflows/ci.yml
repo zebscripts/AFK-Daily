@@ -1,26 +1,19 @@
 name: CI
-
 on:
   push:
-    branches: [ master ]
+    branches: [master, develop]
   pull_request:
-    branches: [ master ]
-
-  workflow_dispatch:
-
+    branches: [master, develop]
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
       - name: Dependencies
-        run: sudo apt install shellcheck -y
+      - run: sudo apt install shellcheck -y
 
       - name: Shellcheck
-        run: |
-          echo 'disable=SC1090, SC1091, SC2034, SC2154, SC3057, SC3060' > .shellcheckrc
-          shellcheck -x deploy.sh
-        # TODO: uncomment when all style is fixed
-        # run: find . -type f -name '*.sh' -print0 | xargs -0 shellcheck
+      - run: shellcheck -x deploy.sh -e SC1090 -e SC1091 -e SC2034 -e SC2154 -e SC3057 -e SC3060
+      # TODO: uncomment when all style is fixed
+      # run: find . -type f -name '*.sh' -print0 | xargs -0 shellcheck
