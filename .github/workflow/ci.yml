@@ -15,12 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Dependencys
-        run: sudo apt-get install -y shellcheck
+      - name: Dependencies
+        run: sudo apt install shellcheck -y
 
       - name: Shellcheck
         run: |
-          echo 'disable=SC1091, SC2154' > .shellcheckrc
+          echo 'disable=SC1090, SC1091, SC2034, SC2154, SC3057, SC3060' > .shellcheckrc
           shellcheck -x deploy.sh
         # TODO: uncomment when all style is fixed
         # run: find . -type f -name '*.sh' -print0 | xargs -0 shellcheck
