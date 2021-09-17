@@ -324,12 +324,15 @@ checkGitUpdate() {
         printTask "Checking for updates..."
         git fetch --all &>/dev/null                                       # Dl remote repo
         if [ "$(git rev-parse HEAD)" != "$(git rev-parse "@{u}")" ]; then # Check if there is any difference
+            if [ -n "$(git status --porcelain)" ]; then
+                printWarn "Update found! But you have modifications!"
+            fi
             if git pull &>/dev/null; then                                 # Try to pull
                 printSuccess "Checked/Updated!"
             elif git reset --hard origin/master; then # Else reset hard
                 printSuccess "Checked/Updated!"
             else # Else fail
-                printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
+                printWarn "Update found! But couldn't pull. Please do it manually."
                 printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
             fi
             printInfo "Please restart the script."
