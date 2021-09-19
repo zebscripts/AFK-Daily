@@ -23,7 +23,7 @@ checkUpdate() {
     localPatch=$(<README.md head -n$headRowPatch | tail -n1 | sed -n 's/.*Patch-\([^"]*\)-.*/\1/p')
     remotePatch=$(curl --silent $remoteURL | head -n$headRowPatch | tail -n1 | sed -n 's/.*Patch-\([^"]*\)-.*/\1/p')
     if [ "$localVersion" = "$remoteVersion" ] && [ "$localPatch" = "$remotePatch" ]; then
-        return 1
+        return 0
     else
         return 1
     fi
