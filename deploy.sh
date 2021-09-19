@@ -347,7 +347,7 @@ to overwrite them and get the latest script version? Config files will not be ov
 
             # Update script with git
             printTask "Updating..."
-            if git pull &>/dev/null; then
+            if git pull origin master &>/dev/null; then
                 printSuccess "Updated!"
             else
                 printError "Failed to update script."
@@ -362,14 +362,12 @@ to overwrite them and get the latest script version? Config files will not be ov
             # git is not installed/available
             printWarn "git is not installed/available."
             printTask "Attempting to auto-update..."
-            echo
 
-            curl -LO https://github.com/zebscripts/AFK-Daily/archive/master.zip
+            curl -sLO https://github.com/zebscripts/AFK-Daily/archive/master.zip
             unzip -qq master.zip
             cp -r AFK-Daily-master ..
             rm -rf AFK-Daily-master master.zip
 
-            echo
             printSuccess "Done!"
 
             # Force script restart to update correctly
