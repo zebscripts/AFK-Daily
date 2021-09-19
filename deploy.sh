@@ -363,10 +363,10 @@ to overwrite them and get the latest script version? Config files will not be ov
             printWarn "git is not installed/available."
             printTask "Attempting to auto-update..."
 
+            cd ..
             curl -sLO https://github.com/zebscripts/AFK-Daily/archive/master.zip
-            unzip -qq master.zip
-            cp -r AFK-Daily-master ..
-            rm -rf AFK-Daily-master master.zip
+            unzip -qqo master.zip
+            rm master.zip
 
             printSuccess "Done!"
 
