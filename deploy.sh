@@ -320,34 +320,44 @@ checkEOL() {
 # Description   : Checks for script update (with git)
 # ##############################################################################
 checkGitUpdate() {
-    if command -v git &>/dev/null && [ -d "./.git" ]; then # Check if there git command & .git folder
-        printTask "Checking for updates..."
-        git fetch --all &>/dev/null                                       # Dl remote repo
-        if [ "$(git rev-parse HEAD)" != "$(git rev-parse "@{u}")" ]; then # Check if there is any difference
-            if [ -n "$(git status --porcelain)" ]; then
-                printWarn "Update found! But you have modifications!"
+    printTask "Checking for updates..."
+
+    # Check if there's a new script version
+    if ./lib/update_git.sh; then
+        printSuccess "Checked/Updated!"
+    else
+        printSuccess "Update found!"
+
+        # Check if git is installed and there's a .git folder
+        if command -v git &>/dev/null && [ -d "./.git" ]; then
+            # Fetch latest script version
+            git fetch --all &>/dev/null
+
+            # Check if there are local modifications present and ask if user wants to overwrite them if there are
+            if [ -n "$(git status --porcelain)" ] && ! printQuestion "Local changes found! Do you want \
+to overwrite them and get the latest script version? Config files will not be overwritten. (y/n)"; then
+                printInfo "Alright, not updating. Use -z flag to not check for updates."
+                return 0
             fi
-            if git pull &>/dev/null; then                                 # Try to pull
+
+            # Update script with git
+            if git pull &>/dev/null; then # Try to pull
                 printSuccess "Checked/Updated!"
             elif git reset --hard origin/master; then # Else reset hard
                 printSuccess "Checked/Updated!"
             else # Else fail
-                printWarn "Update found! But couldn't pull. Please do it manually."
-                printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
+                printError "Failed to update script."
+                printInfo "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
+                if printQuestion "Do you want to run the script regardless? (y/n)"; then return 0; else exit 1; fi
             fi
-            printInfo "Please restart the script."
-            exit 1 # Anyway exit, there is an update!
+
+            # Force script restart to update correctly
+            printInfo "Please run the script again for changes to take effect."
+            exit 1
         else
-            printSuccess "Checked/Updated!"
-        fi
-    else # No git :'(
-        printTask "Checking for updates..."
-        if ./lib/update_git.sh; then
-            printSuccess "Checked/Updated!"
-        else # There is an update, but no git :(
-            printTask "Update found! Trying to auto update..."
-            printWarn "If it fails, please download the latest version manually from GitHub."
-            printWarn "Link: https://github.com/zebscripts/AFK-Daily"
+            # git is not installed/available
+            printWarn "git is not installed/available."
+            printTask "Attempting to auto-update..."
             echo
 
             curl -LO https://github.com/zebscripts/AFK-Daily/archive/master.zip
@@ -356,8 +366,10 @@ checkGitUpdate() {
             rm -rf AFK-Daily-master master.zip
 
             echo
-            printSuccess "Checked/Updated!"
-            printInfo "Please restart the script."
+            printSuccess "Done!"
+
+            # Force script restart to update correctly
+            printInfo "Please run the script again for changes to take effect."
             exit 1
         fi
     fi
