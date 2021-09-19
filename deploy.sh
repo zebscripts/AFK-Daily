@@ -83,23 +83,25 @@ checkAdb() {
         else # If not, install it locally for this script
             printWarn "Not found!"
             printTask "Installing adb..."
+            echo
+            echo
             mkdir -p adb       # Create directory
             cd ./adb || exit 1 # Change to new directory
 
             case "$OSTYPE" in # Install depending on installed OS
             "msys")
                 curl -LO https://dl.google.com/android/repository/platform-tools-latest-windows.zip # Windows
-                unzip ./platform-tools-latest-windows.zip                                           # Unzip
+                unzip -qq ./platform-tools-latest-windows.zip                                       # Unzip
                 rm ./platform-tools-latest-windows.zip                                              # Delete .zip
                 ;;
             "darwin")
                 curl -LO https://dl.google.com/android/repository/platform-tools-latest-darwin.zip # MacOS
-                unzip ./platform-tools-latest-darwin.zip                                           # Unzip
+                unzip -qq ./platform-tools-latest-darwin.zip                                       # Unzip
                 rm ./platform-tools-latest-darwin.zip                                              # Delete .zip
                 ;;
             "linux-gnu")
                 curl -LO https://dl.google.com/android/repository/platform-tools-latest-linux.zip # Linux
-                unzip ./platform-tools-latest-linux.zip                                           # Unzip
+                unzip -qq ./platform-tools-latest-linux.zip                                       # Unzip
                 rm ./platform-tools-latest-linux.zip                                              # Delete .zip
                 ;;
             *)
@@ -115,6 +117,7 @@ checkAdb() {
 
             cd .. || exit 1              # Change directory back
             adb=./adb/platform-tools/adb # Set adb path
+            echo
             printSuccess "Installed!"
         fi
     else
@@ -317,23 +320,59 @@ checkEOL() {
 # Description   : Checks for script update (with git)
 # ##############################################################################
 checkGitUpdate() {
-    if command -v git &>/dev/null; then
-        printTask "Checking for updates..."
-        if git pull &>/dev/null; then
-            printSuccess "Checked/Updated!"
-        elif git fetch --all &>/dev/null && git reset --hard origin/master; then
-            printSuccess "Checked/Updated!"
-        else
-            printWarn "Couldn't check for updates. Please do it manually from time to time with 'git pull'."
-            printWarn "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
-        fi
+    printTask "Checking for updates..."
+
+    # Check if there's a new script version
+    if ./lib/update_git.sh; then
+        printSuccess "Checked/Updated!"
     else
-        printTask "Checking for updates..."
-        if ./lib/update_git.sh; then
-            printSuccess "Checked/Updated!"
+        printSuccess "Update found!"
+
+        # Check if git is installed and there's a .git folder
+        if command -v git &>/dev/null && [ -d "./.git" ]; then
+            # Fetch latest script version
+            git fetch --all &>/dev/null
+
+            # Check if there are local modifications present
+            if [ -n "$(git status --porcelain)" ]; then
+                # Ask if user wants to overwrite local changes
+                if printQuestion "Local changes found! Do you want \
+to overwrite them and get the latest script version? Config files will not be overwritten. (y/n)"; then
+                    git reset --hard origin/master &>/dev/null
+                else
+                    printInfo "Alright, not updating. Use -z flag to not check for updates."
+                    return 0
+                fi
+            fi
+
+            # Update script with git
+            printTask "Updating..."
+            if git pull origin master &>/dev/null; then
+                printSuccess "Updated!"
+            else
+                printError "Failed to update script."
+                printInfo "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
+                if printQuestion "Do you want to run the script regardless? (y/n)"; then return 0; else exit 1; fi
+            fi
+
+            # Force script restart to update correctly
+            printInfo "Please run the script again for changes to take effect."
+            exit 1
         else
-            printWarn "Update found! Please download the last version on github."
-            printWarn "Link: https://github.com/zebscripts/AFK-Daily"
+            # git is not installed/available
+            printWarn "git is not installed/available."
+            printTask "Attempting to auto-update..."
+
+            cd ..
+            curl -sLO https://github.com/zebscripts/AFK-Daily/archive/master.zip
+            unzip -qqo master.zip
+            rm master.zip
+
+            printSuccess "Done!"
+
+            # Force script restart to update correctly
+            printInfo "Please run the script again for changes to take effect."
+            exit 1
         fi
     fi
 }

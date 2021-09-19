@@ -70,3 +70,13 @@ printWarn() {
     checkNewLine
     echo -e "${cYellow}[WARN]${cWhite}  $1${cNc}"
 }
+
+# Ask user a yes or no question
+# Returns 0 when yes, 1 when no
+# Might not be possible to use in .sh scripts!
+printQuestion() {
+    checkNewLine
+    echo -ne "${cYellow}[WARN]${cWhite}  $1 ${cNc}"
+    read -r answer
+    if [ "$answer" != "${answer#[Yy]}" ]; then return 0; else return 1; fi
+}

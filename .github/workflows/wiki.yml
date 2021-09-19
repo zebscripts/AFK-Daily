@@ -4,7 +4,7 @@ on:
   push:
     paths:
       # Trigger only when wiki directory changes
-      - "wiki/**"
+      - "_wiki/**"
     branches:
       # And only on master branch
       - master
@@ -20,7 +20,7 @@ jobs:
         env:
           # Make sure you have that / at the end. We use rsync
           # WIKI_DIR's default is wiki/
-          WIKI_DIR: wiki/
+          WIKI_DIR: _wiki/
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_MAIL: ${{ secrets.OWNER_EMAIL }}
           GH_NAME: ${{ github.repository_owner }}
