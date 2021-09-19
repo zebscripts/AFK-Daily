@@ -338,7 +338,7 @@ checkGitUpdate() {
                 # Ask if user wants to overwrite local changes
                 if printQuestion "Local changes found! Do you want \
 to overwrite them and get the latest script version? Config files will not be overwritten. (y/n)"; then
-                    git reset --hard origin/master
+                    git reset --hard origin/master &>/dev/null
                 else
                     printInfo "Alright, not updating. Use -z flag to not check for updates."
                     return 0
@@ -347,7 +347,7 @@ to overwrite them and get the latest script version? Config files will not be ov
 
             # Update script with git
             printTask "Updating..."
-            if git pull; then
+            if git pull &>/dev/null; then
                 printSuccess "Updated!"
             else
                 printError "Failed to update script."
@@ -377,7 +377,6 @@ to overwrite them and get the latest script version? Config files will not be ov
             exit 1
         fi
     fi
-    exit
 }
 
 # ##############################################################################
