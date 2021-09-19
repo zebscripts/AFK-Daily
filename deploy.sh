@@ -333,19 +333,23 @@ checkGitUpdate() {
             # Fetch latest script version
             git fetch --all &>/dev/null
 
-            # Check if there are local modifications present and ask if user wants to overwrite them if there are
-            if [ -n "$(git status --porcelain)" ] && ! printQuestion "Local changes found! Do you want \
+            # Check if there are local modifications present
+            if [ -n "$(git status --porcelain)" ]; then
+                # Ask if user wants to overwrite local changes
+                if printQuestion "Local changes found! Do you want \
 to overwrite them and get the latest script version? Config files will not be overwritten. (y/n)"; then
-                printInfo "Alright, not updating. Use -z flag to not check for updates."
-                return 0
+                    git reset --hard origin/master
+                else
+                    printInfo "Alright, not updating. Use -z flag to not check for updates."
+                    return 0
+                fi
             fi
 
             # Update script with git
-            if git pull &>/dev/null; then # Try to pull
-                printSuccess "Checked/Updated!"
-            elif git reset --hard origin/master; then # Else reset hard
-                printSuccess "Checked/Updated!"
-            else # Else fail
+            printTask "Updating..."
+            if git pull; then
+                printSuccess "Updated!"
+            else
                 printError "Failed to update script."
                 printInfo "Refer to: https://github.com/zebscripts/AFK-Daily/wiki/Troubleshooting"
                 if printQuestion "Do you want to run the script regardless? (y/n)"; then return 0; else exit 1; fi
@@ -373,6 +377,7 @@ to overwrite them and get the latest script version? Config files will not be ov
             exit 1
         fi
     fi
+    exit
 }
 
 # ##############################################################################
