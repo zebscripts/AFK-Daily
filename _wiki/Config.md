@@ -17,6 +17,8 @@ The script acts depending on a set of variables. In order to change these, open 
 | :-------------------- | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `canOpenSoren`        | `Boolean` | If `true`, player has permission to open Soren.                                                                                                           | `false` |
 | `arenaHeroesOpponent` | `Number`  | Choose which opponent to fight in the Arena of Heroes. Possible entries: `1`, `2`, `3`, `4` or `5`, where `1` is the top opponent and `5` the bottom one. |   `5`   |
+| `vipLevel`            | `Number`  | Current VIP level of the account.                                                                                                                         |   `0`   |
+| `campaignStage`       | `Number`  | Current campaign stage of the account.                                                                                                                    |   `0`   |
 
 ## General
 

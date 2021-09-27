@@ -529,6 +529,8 @@ validateConfig() {
     printTask "Validating ${cCyan}$configFile${cNc}..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
+        $vipLevel || -z \
+        $campaignStage || -z \
         $waitForUpdate || -z \
         $endAt || -z \
         $maxCampaignFights || -z \
@@ -581,6 +583,12 @@ validateConfig() {
         printInfo "or check the following link for help:"
         printInfo "https://github.com/zebscripts/AFK-Daily/wiki/Config"
         exit
+    fi
+    if [ "$vipLevel" -eq 0 ]; then
+        printWarn "vipLevel should be edited in ${cCyan}$configFile${cNc} to your current VIP level.";
+    fi
+    if [ "$campaignStage" -eq 0 ]; then
+        printWarn "campaignStage should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
     fi
     printSuccess "Passed!"
 }

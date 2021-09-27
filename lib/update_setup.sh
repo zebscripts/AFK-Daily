@@ -121,6 +121,8 @@ updateConfig() {
 # Player\n\
 canOpenSoren=${canOpenSoren:-"false"}\n\
 arenaHeroesOpponent=${arenaHeroesOpponent:-"5"}\n\
+vipLevel=${vipLevel:-"0"}\n\
+campaignStage=${campaignStage:-"0"}\n\
 \n\
 # General\n\
 waitForUpdate=${waitForUpdate:-"true"}\n\
