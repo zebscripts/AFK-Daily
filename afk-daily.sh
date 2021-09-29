@@ -53,15 +53,15 @@ cCyan="\033[0;96m"   # [INFO]
 while getopts "e:fi:l:s:tv:w" opt; do
     case $opt in
     e)
-        buIFS=IFS
+        buIFS=$IFS
         # Explication: https://stackoverflow.com/a/7718539/7295428
         IFS=','
         for i in $OPTARG; do
-            if [ "$i" = "hoe" ]; then
-                eventHoe=true
-            fi
+            case "$i" in
+            "hoe") eventHoe=true;;
+            esac
         done
-        IFS=buIFS
+        IFS=$buIFS
         ;;
     f)
         forceFightCampaign=true
