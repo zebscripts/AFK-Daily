@@ -111,20 +111,18 @@ checkEmulator() {
 # Args          : <PLATFORM>
 # ##############################################################################
 checkNetwork() {
-    echo -e "${IWhite}Checking Network${Color_Off}"
+    echo -e "${IWhite}Checking Network with a maximum of 5 seconds per request:${Color_Off}"
 
-    echo -n -e "${Color_Off}Trying to download maximum out of 10G in 10s...${Color_Off}\t\t"
-    output10G=$(curl -s --max-time 10 -4 -o /dev/null https://bouygues.testdebit.info/10G.iso -w "%{speed_download}")
-    echo -e "${Color_Off}Average speed: $(checkNetwork_colorOutputSpeed "${output10G:-0}")${Color_Off}"
+    output10G=$(curl -s --max-time 5 -4 -o /dev/null https://bouygues.testdebit.info/10G.iso -w "%{speed_download}")
+    echo -e "${Color_Off}10GB average speed:   $(checkNetwork_colorOutputSpeed "${output10G:-0}")${Color_Off}"
 
-    echo -n -e "${Color_Off}Trying to download 1G...${Color_Off}\t\t\t\t"
-    output1G=$(curl -s -4 -o /dev/null https://bouygues.testdebit.info/1G.iso -w "%{speed_download}")
-    echo -e "${Color_Off}Average speed: $(checkNetwork_colorOutputSpeed "${output1G:-0}")${Color_Off}"
+    output1G=$(curl -s --max-time 5 -4 -o /dev/null https://bouygues.testdebit.info/1G.iso -w "%{speed_download}")
+    echo -e "${Color_Off}1GB average speed:    $(checkNetwork_colorOutputSpeed "${output1G:-0}")${Color_Off}"
 
-    echo -n -e "${Color_Off}Trying to download 100M...${Color_Off}\t\t\t\t"
-    output100M=$(curl -s -4 -o /dev/null https://bouygues.testdebit.info/100M.iso -w "%{speed_download}")
-    echo -e "${Color_Off}Average speed: $(checkNetwork_colorOutputSpeed "${output100M:-0}")${Color_Off}"
+    output100M=$(curl -s --max-time 5 -4 -o /dev/null https://bouygues.testdebit.info/100M.iso -w "%{speed_download}")
+    echo -e "${Color_Off}100MB average speed:  $(checkNetwork_colorOutputSpeed "${output100M:-0}")${Color_Off}"
 
+    echo
     echo -e "${Color_Off}Global average speed: $(checkNetwork_colorOutputSpeed $(((output10G + output1G + output100M) / 3)))${Color_Off} "
 }
 
@@ -184,11 +182,11 @@ show_help() {
     echo -e "      Check Emulator."
     echo -e "   ${ICyan}-n${Color_Off}"
     echo -e "      Check Network."
-    echo -e "      Remark: May take a long time."
+    echo -e "      Remark: May take a few seconds."
 }
 
 if [ -z "$1" ]; then
-    time run
+    run
     exit 0
 fi
 
@@ -199,10 +197,10 @@ while getopts ":hen" opt; do
         exit 0
         ;;
     e)
-        time checkEmulator
+        checkEmulator
         ;;
     n)
-        time checkNetwork
+        checkNetwork
         ;;
     \?)
         echo "$OPTARG : Invalid option"
