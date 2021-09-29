@@ -1,0 +1,31 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  Shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: sudo apt install shellcheck -y
+
+      - name: deploy.sh
+        run: shellcheck -x deploy.sh
+
+      - name: afk-daily.sh
+        run: shellcheck -x afk-daily.sh
+
+      - name: lib/print.sh
+        run: shellcheck -x lib/print.sh
+
+      - name: lib/update_git.sh
+        run: shellcheck -x lib/update_git.sh
+
+      - name: lib/update_setup.sh
+        run: shellcheck -x lib/update_setup.sh

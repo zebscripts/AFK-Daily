@@ -8,7 +8,7 @@ The script is pretty modular, which means users have a lot of control over which
 - **Twisted Realm:** Stage 14-40
 - **Factional Towers:** Stage 15-1
 
-Also, **please make sure to have fought in battles at least once before running the script!** If for example, a new Twisted Realm boss gets released, the game does not know which formation you want to use. Though the script doesn't know this and tries to start the fight regardless, which of course won't work. In case you get into this situation, simply start the fight yourself, and the script should pick up whenever the fight has finished.
+Also, **please make sure your game language is English and to have fought in battles at least once before running the script!** If for example, a new Twisted Realm boss gets released, the game does not know which formation you want to use. Though the script doesn't know this and tries to start the fight regardless, which of course won't work. In case you get into this situation, simply start the fight yourself, and the script should pick up whenever the fight has finished.
 
 <hr>
 

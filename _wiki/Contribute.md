@@ -1,9 +1,9 @@
 Thank you for thinking about contributing! Help is always welcome.
 
-- [Join the project](#Join-the-project)
-- [Editor](#Editor)
-  - [Extensions](#Extensions)
-  - [Settings](#Settings)
+- [Join the project](#join-the-project)
+- [Editor](#editor)
+  - [Extensions](#extensions)
+  - [Settings](#settings)
 - [Check before a pull request](#check-before-a-pull-request)
 - [Clean code](#clean-code)
   - [Markdown - MarkdownLint](#markdown---markdownlint)
@@ -74,7 +74,9 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
     "shellcheck.exclude": [
         "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
+        "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
+        "2039", // https://github.com/koalaman/shellcheck/wiki/SC2039
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
         "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
@@ -291,6 +293,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -357,6 +368,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign
@@ -425,6 +445,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -492,6 +521,15 @@ buyStoreLimitedDiamOffer=true
 buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -558,6 +596,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign

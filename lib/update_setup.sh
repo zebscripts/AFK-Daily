@@ -38,7 +38,7 @@ convertAKFScriptTMPtoINI() {
             echo "lastCampaign=$(date -d "@$(cat "$f")" +%Y%m%d)" >>./account-info/acc.ini
             ;;
         esac
-        printInfo "$f converted"
+        printInfo "${cCyan}$f${cNc} converted"
     done
 }
 
@@ -79,7 +79,7 @@ lastWeekly=${lastWeekly:-$lastWeekly_default}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            printInfo "$f updated"
+            printInfo "${cCyan}$f${cNc} updated"
         fi
     done
 }
@@ -104,7 +104,7 @@ convertConfigSHtoINI() {
     for f in config*.sh; do
         if [ ! -f "$f" ]; then continue; fi
         cp "$f" ./config/config.ini # Copy new files
-        # printSuccess "$f converted"
+        printInfo "${cCyan}$f${cNc} converted"
     done
 }
 
@@ -147,6 +147,15 @@ buyStoreLimitedDiamOffer=${buyStoreLimitedDiamOffer:-"false"}\n\
 buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
 buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\
+# Towers\n\
+doMainTower=${doMainTower:-"true"}\n\
+doTowerOfLight=${doTowerOfLight:-"true"}\n\
+doTheBrutalCitadel=${doTheBrutalCitadel:-"true"}\n\
+doTheWorldTree=${doTheWorldTree:-"true"}\n\
+doCelestialSanctum=${doCelestialSanctum:-"true"}\n\
+doTheForsakenNecropolis=${doTheForsakenNecropolis:-"true"}\n\
+doInfernalFortress=${doInfernalFortress:-"true"}\n\
+\n\
 # --- Actions --- #\n\
 # Campaign\n\
 doLootAfkChest=${doLootAfkChest:-"true"}\n\
@@ -187,7 +196,7 @@ doCollectMerchantFreebies=${doCollectMerchantFreebies:-"false"}" >"$f.tmp"
             rm -f "$f.tmp"
         else
             mv "$f.tmp" "$f"
-            printInfo "$f updated"
+            printInfo "${cCyan}$f${cNc} updated"
         fi
     done
 }

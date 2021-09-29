@@ -4,6 +4,7 @@ The script acts depending on a set of variables. In order to change these, open 
 - [General](#general)
 - [Repetitions](#repetitions)
 - [Store](#store)
+- [Towers](#towers)
 - [Campaign](#campaign)
 - [Dark Forest](#dark-forest)
 - [Ranhorn](#ranhorn)
@@ -50,6 +51,18 @@ The script acts depending on a set of variables. In order to change these, open 
 | `buyStoreLimitedDiamOffer` | `Boolean` | If `true`, buys Limited offer for Diamonds.                        | `false` | ![Limited Diam Offer](https://user-images.githubusercontent.com/7203617/132167220-86102296-3e75-49f9-a7e1-cff87ff0f4f3.png)   |
 | `buyWeeklyGuild`           | `Boolean` | If `true`, buys one Stone from Guild Coins once a Week.            | `false` |                                                                                                                               |
 | `buyWeeklyLabyrinth`       | `Boolean` | If `true`, buys Rare Soulstones from Labyrinth Tokens once a Week. | `false` | ![Rare Soulstones](https://user-images.githubusercontent.com/7203617/132167981-baac849d-613a-4716-881e-ee21a9b2d4a1.png)      |
+
+## Towers
+
+| Variable                         |   Type    | Description                                                      | Default |
+| :------------------------------- | :-------: | :--------------------------------------------------------------- | :-----: |
+| `doMainTower`                    | `Boolean` | If `true`, tries to battle in Main Tower                         | `true`  |
+| `doTowerOfLight`                 | `Boolean` | If `true`, tries to battle in Tower of Light                     | `true`  |
+| `doTheBrutalCitadel`             | `Boolean` | If `true`, tries to battle in The Brutal Citadel                 | `true`  |
+| `doTheWorldTree`                 | `Boolean` | If `true`, tries to battle in The World Tree                     | `true`  |
+| `doCelestialSanctum`             | `Boolean` | If `true`, tries to battle in Celestial Sanctum                  | `true`  |
+| `doTheForsakenNecropolis`        | `Boolean` | If `true`, tries to battle in The Forsaken Necropolis            | `true`  |
+| `doInfernalFortress`             | `Boolean` | If `true`, tries to battle in InfernalFortress                   | `true`  |
 
 ## Campaign
 
@@ -127,6 +140,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -196,6 +218,15 @@ buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
+
 # --- Actions --- #
 # Campaign
 doLootAfkChest=false
@@ -262,6 +293,15 @@ buyStoreLimitedGoldOffer=false
 buyStoreLimitedDiamOffer=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
+
+# Towers
+doMainTower=true
+doTowerOfLight=true
+doTheBrutalCitadel=true
+doTheWorldTree=true
+doCelestialSanctum=true
+doTheForsakenNecropolis=true
+doInfernalFortress=true
 
 # --- Actions --- #
 # Campaign
