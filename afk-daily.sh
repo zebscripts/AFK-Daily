@@ -2,8 +2,8 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : [-d DEVICE] [-e EVENT] [-f] [-i INI] [-l LOCATION]
-#                 [-s TOTEST] [-t] [-w]
+# Args          : [-e EVENT] [-f] [-i INI] [-l LOCATION]
+#                 [-s TOTEST] [-t] [-v DEBUG] [-w]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
 # ##############################################################################
@@ -50,11 +50,8 @@ cBlue="\033[0;94m"   # Values
 cPurple="\033[0;95m" # [DEBUG]
 cCyan="\033[0;96m"   # [INFO]
 
-while getopts "d:e:fi:l:s:tw" opt; do
+while getopts "e:fi:l:s:tv:w" opt; do
     case $opt in
-    d)
-        DEBUG=$OPTARG
-        ;;
     e)
         buIFS=$IFS
         # Explication: https://stackoverflow.com/a/7718539/7295428
@@ -81,6 +78,9 @@ while getopts "d:e:fi:l:s:tw" opt; do
         ;;
     t)
         testServer=true
+        ;;
+    v)
+        DEBUG=$OPTARG
         ;;
     w)
         forceWeekly=true

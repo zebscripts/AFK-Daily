@@ -455,7 +455,7 @@ deploy() {
     "$adb" push afk-daily.sh "$2"/scripts/afk-arena 1>/dev/null # Push script to device
     "$adb" push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
 
-    args="-d $debug -i $configFile -l $2"
+    args="-v $debug -i $configFile -l $2"
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
