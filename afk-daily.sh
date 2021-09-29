@@ -1622,6 +1622,8 @@ checkWhereToEnd() {
 collectQuestChests() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectQuestChests" >&2; fi
     # WARN: May break because "some resources have exceeded their maximum limit"
+    # WARN: This actually happened to me today, and the script handled it well, as it thought it had one more chest to collect
+    # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
 
