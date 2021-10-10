@@ -145,6 +145,41 @@ checkNetwork_colorOutputSpeed() {
 }
 
 # ##############################################################################
+# Function Name : killAll
+# Description   : Kill everything linked to the script (Emulator & ADB)
+# ##############################################################################
+killAll() {
+    # Bluestacks 4 & 5
+    killAll_facto "Bluestacks"
+    killAll_facto "HD-Player"
+    killAll_facto "BstkSVC"
+
+    # Memu
+    killAll_facto "MEmu"
+
+    # Nox
+    killAll_facto "Nox"
+
+    # ADB
+    killAll_facto "adb"
+}
+
+# ##############################################################################
+# Function Name : killAll_facto
+# Description   : I hate to write the same line 10 times :)
+# ##############################################################################
+killAll_facto() {
+    case "$(uname -s)" in # Check OS
+    Darwin | Linux)       # Mac / Linux
+        ps | awk "/$1/,NF=1" | xargs kill -f
+        ;;
+    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+        ps -W | awk "/$1/,NF=1" | xargs kill -f
+        ;;
+    esac
+}
+
+# ##############################################################################
 # Function Name : run
 # Description   : Run all checks
 # ##############################################################################
@@ -180,6 +215,8 @@ show_help() {
     echo -e "      Show help."
     echo -e "   ${ICyan}-e${Color_Off}"
     echo -e "      Check Emulator."
+    echo -e "   ${ICyan}-k${Color_Off}"
+    echo -e "      Kill everything linked to the script (Emulator & ADB)."
     echo -e "   ${ICyan}-n${Color_Off}"
     echo -e "      Check Network."
     echo -e "      Remark: May take a few seconds."
@@ -190,7 +227,7 @@ if [ -z "$1" ]; then
     exit 0
 fi
 
-while getopts ":hen" opt; do
+while getopts ":hekn" opt; do
     case $opt in
     h)
         show_help
@@ -198,6 +235,9 @@ while getopts ":hen" opt; do
         ;;
     e)
         checkEmulator
+        ;;
+    k)
+        killAll
         ;;
     n)
         checkNetwork
