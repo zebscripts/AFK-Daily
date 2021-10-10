@@ -324,7 +324,7 @@ checkGitUpdate() {
 
     # Check if there's a new script version
     if ./lib/update_git.sh; then
-        printSuccess "Checked/Updated!"
+        printSuccess "Checked!"
     else
         printSuccess "Update found!"
 
@@ -397,7 +397,7 @@ checkSetupUpdate() {
             break
         fi
     done
-    printSuccess "Checked/Updated!"
+    printSuccess "Checked!"
 }
 
 # ##############################################################################
