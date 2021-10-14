@@ -28,7 +28,7 @@ noxDirectory="data"
 configFile="config/config.ini"
 tempFile="account-info/acc.ini"
 device="default"
-evt="hoe" # Default dev evt
+evt="" # Default dev evt
 
 # Do not modify
 adb=adb
