@@ -127,92 +127,6 @@ checkAdb() {
 }
 
 # ##############################################################################
-# Function Name : checkConfig
-# Description   : Creates a $configFile file if not found
-# ##############################################################################
-checkConfig() {
-    printTask "Searching for ${cCyan}$configFile${cNc}..."
-    if [ -f "$configFile" ]; then
-        printSuccess "Found!"
-    else
-        printWarn "Not found!"
-        printTask "Creating new ${cCyan}$configFile${cNc}..."
-        printf '# --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
-
-# Player
-canOpenSoren=false
-arenaHeroesOpponent=5
-
-# General
-waitForUpdate=true
-endAt="championship"
-guildBattleType=quick
-allowCrystalLevelUp=false
-
-# Repetitions
-maxCampaignFights=5
-maxKingsTowerFights=5
-totalAmountArenaTries=2+0
-totalAmountTournamentTries=0
-totalAmountGuildBossTries=2+0
-totalAmountTwistedRealmBossTries=1
-
-# Store
-buyStoreDust=true
-buyStorePoeCoins=true
-buyStorePrimordialEmblem=false
-buyStoreAmplifyingEmblem=false
-buyStoreSoulstone=false
-buyStoreLimitedGoldOffer=false
-buyStoreLimitedDiamOffer=false
-buyWeeklyGuild=false
-buyWeeklyLabyrinth=false
-
-# Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
-
-# --- Actions --- #
-# Campaign
-doLootAfkChest=true
-doChallengeBoss=true
-doFastRewards=true
-doCollectFriendsAndMercenaries=true
-
-# Dark Forest
-doSoloBounties=true
-doTeamBounties=true
-doArenaOfHeroes=true
-doLegendsTournament=true
-doKingsTower=true
-
-# Ranhorn
-doGuildHunts=true
-doTwistedRealmBoss=true
-doBuyFromStore=true
-doStrengthenCrystal=true
-doTempleOfAscension=false
-doCompanionPointsSummon=false
-doCollectOakPresents=true
-
-# End
-doCollectQuestChests=true
-doCollectMail=true
-doCollectMerchantFreebies=false
-' >$configFile
-        printSuccess "Created!\n"
-        printInfo "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
-        exit
-    fi
-}
-
-# ##############################################################################
 # Function Name : checkDate
 # Description   : Check date to decide whether to beat campaign or not.
 # ##############################################################################
@@ -529,7 +443,6 @@ check_all() {
     checkFolders
     checkAdb
     if [ $doCheckGitUpdate = true ]; then checkGitUpdate; fi
-    checkConfig
     checkSetupUpdate
     checkEOL $tempFile
     checkEOL $configFile
