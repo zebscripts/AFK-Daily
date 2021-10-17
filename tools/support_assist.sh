@@ -34,16 +34,21 @@ checkEmulator() {
             echo -e "${Color_Off}Emulator:\t\t${IRed}not found!${Color_Off}"
             return 2
         fi
-    else # Else let's find ADB folder
-        if [ -d "./adb" ]; then
+    else
+        # Else let's find ADB
+        if command -v adb &>/dev/null; then # Check if ADB is already installed (with Path)
+            adb="adb"
+            echo -e "${Color_Off}Using:\t\t\t${IBlue}Path adb${Color_Off}"
+        elif [ -d "./adb" ]; then
             adb="./adb/platform-tools/adb.exe"
+            echo -e "${Color_Off}Using:\t\t\t${IBlue}./adb/platform-tools/adb.exe${Color_Off}"
         elif [ -d "../adb" ]; then
             adb="../adb/platform-tools/adb.exe"
+            echo -e "${Color_Off}Using:\t\t\t${IBlue}../adb/platform-tools/adb.exe${Color_Off}"
         else # ADB folder not found
             echo -e "${IRed}ADB not found!${Color_Off}"
             return 1
         fi
-        echo -e "${Color_Off}Using:\t\t\t${IBlue}ADB${Color_Off}"
 
         # Restart ADB
         "$adb" kill-server 1>/dev/null 2>&1
@@ -151,7 +156,6 @@ checkNetwork_colorOutputSpeed() {
 killAll() {
     # Bluestacks 4 & 5
     killAll_facto "Bluestacks"
-    killAll_facto "HD-Player"
     killAll_facto "BstkSVC"
 
     # Memu
@@ -174,7 +178,12 @@ killAll_facto() {
         ps | awk "/$1/,NF=1" | xargs kill -f
         ;;
     CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
-        ps -W | awk "/$1/,NF=1" | xargs kill -f
+        KILL_PID=$(ps -W | grep -i "$1" | tr -s ' ' | cut -d ' ' -f2)
+        if [ -n "$KILL_PID" ]; then
+            echo "Killing $1 processes..."
+            # Do not put quotes around $KILL_PID as kill won't kill every process returned
+            /bin/kill -f $KILL_PID
+        fi
         ;;
     esac
 }
