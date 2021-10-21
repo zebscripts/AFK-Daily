@@ -52,7 +52,7 @@ printTip() {
 # Success
 printSuccess() {
     if [ $withoutNewLine = false ]; then
-        echo -n "${cGreen}[DONE]  $1${cNc}"
+        echo -n -e "${cGreen}[DONE]  ${cNc}"
     else
         withoutNewLine=false
     fi
