@@ -24,7 +24,14 @@ checkEmulator() {
     echo -e "${IWhite}Checking Emulator${Color_Off}"
 
     # Auto detect nox & emulator <3
-    adb="$(ps -W | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+    case "$(uname -s)" in # Check OS
+    Darwin | Linux)       # Mac / Linux
+        adb="$(ps | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+        ;;
+    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+        adb="$(ps -W | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+        ;;
+    esac
     if [ -n "$adb" ]; then # nox_adb.exe is running :)
         echo -e "${Color_Off}Using:\t\t\t${IBlue}Nox ADB${Color_Off}"
         "$adb" connect localhost:62001 1>/dev/null
