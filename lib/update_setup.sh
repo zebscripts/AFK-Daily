@@ -122,6 +122,7 @@ updateConfig() {
 canOpenSoren=${canOpenSoren:-"false"}\n\
 arenaHeroesOpponent=${arenaHeroesOpponent:-"5"}\n\
 vipLevel=${vipLevel:-"0"}\n\
+campaignChapter=${campaignChapter:-"0"}\n\
 campaignStage=${campaignStage:-"0"}\n\
 \n\
 # General\n\

@@ -143,6 +143,9 @@ checkConfig() {
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
@@ -530,6 +533,7 @@ validateConfig() {
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \
         $vipLevel || -z \
+        $campaignChapter || -z \
         $campaignStage || -z \
         $waitForUpdate || -z \
         $endAt || -z \

@@ -317,6 +317,41 @@ readHEX() {
     HEX="${HEX// /}"
 }
 
+
+# ##############################################################################
+# Function Name : requiredLevel
+# Descripton    : Gets pixel color
+# Args          : <VIP> <Chapter> <Stage>
+# Output        : if true, return 0, else 1
+# ##############################################################################
+requiredLevel() {
+    if [ "$#" -ne 2 ]; then
+        echo "Usage: requiredLevel <VIP> <Chapter> <Stage>" >&2
+        return
+    fi
+    if [ "$DEBUG" -ge 2 ]; then printInColor "DEBUG" "requiredLevel ${cPurple}$*${cNc}" >&2; fi
+
+    # If nothing initialized, just ignore this test
+    if [ "$vipLevel" -eq 0 ] || [ "$campaignChapter" -eq 0 ] || [ "$campaignStage" -eq 0 ]; then
+        return 0
+    else
+        # Check if VIP is asked & compare to player config vipLevel
+        if [ "$1" -ge 0 ] && [ "$vipLevel" -ge "$1" ]; then
+            return 0
+        fi
+        # Check if Chapter is asked & compare to player config campaignChapter
+        if [ "$2" -ge 0 ] && [ "$campaignChapter" -ge "$1" ]; then
+            # I do not check if Stage is >0 because maybe we could just ask for a specific chapter
+            # Compare to player config campaignChapter
+            if [ "$campaignStage" -ge "$1" ]; then
+                return 0
+            fi
+        fi
+    fi
+
+    return 1
+}
+
 # ##############################################################################
 # Function Name : startApp
 # Descripton    : Starts AFK Arena
@@ -2147,7 +2182,7 @@ run() {
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
     if checkToDo doCollectOakPresents; then
-        if [ "$campaignStage" -ge 18 ] || [ "$campaignStage" -eq 0 ]; then
+        if requiredLevel 0 18 0; then
             oakInnSpeedy;
         else
             oakInn_Old;
