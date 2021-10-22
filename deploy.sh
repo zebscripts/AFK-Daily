@@ -723,7 +723,7 @@ show_help() {
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
     echo -e
     echo -e "   Run script with custom config.ini file"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i towers${cWhite}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"Push_Campaign\"${cWhite}"
     echo -e
     echo -e "   Run script for color testing"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
