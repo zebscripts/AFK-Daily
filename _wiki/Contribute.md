@@ -284,14 +284,14 @@ Some other useful documentation:
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=false
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -315,13 +315,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -340,7 +340,7 @@ doKingsTower=false
 # Ranhorn
 doGuildHunts=false
 doTwistedRealmBoss=false
-doBuyFromStore=true
+doBuyFromStore=false
 doStrengthenCrystal=false
 doTempleOfAscension=false
 doCompanionPointsSummon=false
@@ -360,7 +360,7 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -372,7 +372,7 @@ guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
-maxCampaignFights=10
+maxCampaignFights=500
 maxKingsTowerFights=0
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
@@ -391,20 +391,20 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
-doLootAfkChest=true
+doLootAfkChest=false
 doChallengeBoss=true
-doFastRewards=true
-doCollectFriendsAndMercenaries=true
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
 
 # Dark Forest
 doSoloBounties=false
@@ -436,14 +436,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -512,14 +512,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=true
 
@@ -543,13 +543,13 @@ buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -588,14 +588,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -619,13 +619,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
