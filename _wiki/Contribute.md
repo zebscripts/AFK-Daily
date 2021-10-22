@@ -72,12 +72,13 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "-x" // https://github.com/koalaman/shellcheck/wiki/SC1091
     ],
     "shellcheck.exclude": [
+        "1017", // https://github.com/koalaman/shellcheck/wiki/SC1017
         "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
         "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
-        "2039", // https://github.com/koalaman/shellcheck/wiki/SC2039
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
+        "3003", // https://github.com/koalaman/shellcheck/wiki/SC3003
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
         "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
     ],
@@ -86,7 +87,27 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "FIXME",
         "TODO",
         "WARN"
-    ]
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "FIXME": {
+            "foreground": "white",
+            "background": "red",
+            "icon": "flame",
+            "iconColour": "red"
+        },
+        "TODO": {
+            "foreground": "black",
+            "background": "green",
+            "icon": "check",
+            "iconColour": "green"
+        },
+        "WARN": {
+            "foreground": "black",
+            "background": "yellow",
+            "icon": "alert",
+            "iconColour": "yellow"
+        }
+    }
     // Extension - Guides > https://marketplace.visualstudio.com/items?itemName=spywhere.guides
     // Extension - shell-format > https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
     // Extension - Trailing Spaces > https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces

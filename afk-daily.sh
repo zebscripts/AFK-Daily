@@ -307,7 +307,7 @@ printInColor() {
     shift
     msg="$msg$1${cNc}" # The ${cNc} is a security if we forgot to reset color at the end of our message
     if [ "$withColors" = false ]; then
-        msg=$(echo "$msg" | sed "s/\x1B\[[0-9;]*[A-Za-z]//g")
+        msg=$(echo "$msg" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g') # Source: https://stackoverflow.com/a/54648447
     fi
     echo "$msg"
 }
