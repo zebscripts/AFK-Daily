@@ -107,7 +107,7 @@ doLootAfkChest2="$doLootAfkChest"
 # ##############################################################################
 # Function Name : checkToDo
 # Description   : Check if argument is ToDo
-# Args          : <TODO>: boolean
+# Args          : <TODO>: name of the variable containing the boolean
 # Output        : return 0/1
 # ##############################################################################
 checkToDo() {
