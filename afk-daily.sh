@@ -93,7 +93,6 @@ while getopts "e:fi:l:s:tv:w" opt; do
 done
 
 . "$INILOCATION$INIFILE"
-doLootAfkChest2="$doLootAfkChest"
 
 # ##############################################################################
 # Section       : Core Functions
@@ -332,7 +331,7 @@ requiredLevel() {
     if [ "$DEBUG" -ge 2 ]; then printInColor "DEBUG" "requiredLevel ${cPurple}$*${cNc}" >&2; fi
 
     # If nothing initialized, just ignore this test
-    if [ "$vipLevel" -eq 0 ] || [ "$campaignChapter" -eq 0 ] || [ "$campaignStage" -eq 0 ]; then
+    if [ "$vipLevel" -eq 0 ] && [ "$campaignChapter" -eq 0 ] && [ "$campaignStage" -eq 0 ]; then
         return 0
     else
         # Check if VIP is asked & compare to player config vipLevel
@@ -2101,6 +2100,12 @@ fi
 # Remark        : Can be skipped if you are already in the game
 # ##############################################################################
 init() {
+    # Init values
+    doLootAfkChest2="$doLootAfkChest"
+    if [ "$guildBattleType" = "quick" ] && ! requiredLevel 6 0 0; then
+        guildBattleType="challenge"
+    fi
+
     closeApp
     sleep 0.5
     startApp
