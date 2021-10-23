@@ -77,6 +77,7 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
         "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
+        "2039", // https://github.com/koalaman/shellcheck/wiki/SC2039
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
         "3003", // https://github.com/koalaman/shellcheck/wiki/SC3003
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
@@ -150,7 +151,9 @@ If you need to remove rules, please be certain that is your only choice. Here th
 - [1091](https://github.com/koalaman/shellcheck/wiki/SC1091): Not following (Source not found) -> link to the previous one
 - [2009](https://github.com/koalaman/shellcheck/wiki/SC2009): `pgrep` doesn't exixts in Git Bash
 - [2034](https://github.com/koalaman/shellcheck/wiki/SC2034): `foo` appears unused. Verify it or export it
+- [2039](https://github.com/koalaman/shellcheck/wiki/SC2039): In POSIX `sh`, string ... is undefined.
 - [2154](https://github.com/koalaman/shellcheck/wiki/SC2154): var is referenced but not assigned -> link to the previous one
+- [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX `sh`, string `$'..'` is undefined (Well, it works, required for Nox)
 - [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX `sh`, string indexing is undefined (Well, it works)
 - [3060](https://github.com/koalaman/shellcheck/wiki/SC3060): In POSIX `sh`, string replacement is undefined (Well, it works)
 
