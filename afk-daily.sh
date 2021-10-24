@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : [-e EVENT] [-f] [-i INI] [-l LOCATION]
+# Args          : [-c] [-e EVENT] [-f] [-i INI] [-l LOCATION]
 #                 [-s TOTEST] [-t] [-v DEBUG] [-w]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
@@ -40,6 +40,7 @@ oakRes=0
 screenshotRequired=true
 testServer=false
 SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
+withColors=true
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -50,8 +51,11 @@ cBlue="\033[0;94m"   # Values
 cPurple="\033[0;95m" # [DEBUG]
 cCyan="\033[0;96m"   # [INFO]
 
-while getopts "e:fi:l:s:tv:w" opt; do
+while getopts "ce:fi:l:s:tv:w" opt; do
     case $opt in
+    c)
+        withColors=false
+        ;;
     e)
         buIFS=$IFS
         # Explication: https://stackoverflow.com/a/7718539/7295428
@@ -103,7 +107,7 @@ doLootAfkChest2="$doLootAfkChest"
 # ##############################################################################
 # Function Name : checkToDo
 # Description   : Check if argument is ToDo
-# Args          : <TODO>: boolean
+# Args          : <TODO>: name of the variable containing the boolean
 # Output        : return 0/1
 # ##############################################################################
 checkToDo() {
@@ -301,7 +305,11 @@ printInColor() {
         msg="        "
     fi
     shift
-    echo "$msg$1${cNc}" # The ${cNc} is a security if we forgot to reset color at the end of our message
+    msg="$msg$1${cNc}" # The ${cNc} is a security if we forgot to reset color at the end of our message
+    if [ "$withColors" = false ]; then
+        msg=$(echo "$msg" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g') # Source: https://stackoverflow.com/a/54648447
+    fi
+    echo "$msg"
 }
 
 # ##############################################################################
@@ -1193,7 +1201,7 @@ buyFromStore() {
         buyFromStore_buyItem 175 1690
     fi
     # Amplifying Emblem
-    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 c59e71; then
+    if [ "$buyStoreAmplifyingEmblem" = true ] && testColorOR -d "$DEFAULT_DELTA" 175 1690 c59e71 cca67a; then
         buyFromStore_buyItem 175 1690
     fi
     if [ "$buyStoreSoulstone" = true ]; then                     # Soulstone (widh 90 diamonds)
