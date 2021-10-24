@@ -294,6 +294,7 @@ to overwrite them and get the latest script version? Config files will not be ov
 # Description   : Checks for setup update (.*afkscript.ini, config*.ini)
 # ##############################################################################
 checkSetupUpdate() {
+    checkSetupUpdate_updated=false
     printTask "Checking for setup updates..."
     # .*afkscript.ini
     for f in .*afkscript.* ./account-info/acc*.ini; do
@@ -305,11 +306,21 @@ checkSetupUpdate() {
     # config
     for f in config*.* ./config/config*.ini; do
         if [ -e "$f" ]; then
-            printInNewLine "$(./lib/update_setup.sh -c)"
+            checkSetupUpdate_config="$(./lib/update_setup.sh -c)"
+            printInNewLine "$checkSetupUpdate_config"
+            if [[ $checkSetupUpdate_config =~ "updated" ]]; then
+                checkSetupUpdate_updated=true
+            fi
             break
         fi
     done
-    printSuccess "Checked/Updated!"
+    if [ "$checkSetupUpdate_updated" = false ]; then
+        printSuccess "Checked!"
+    else
+        printSuccess "Updated!"
+        printWarn "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
+        exit
+    fi
 }
 
 # ##############################################################################
@@ -443,6 +454,7 @@ check_all() {
     checkFolders
     checkAdb
     if [ $doCheckGitUpdate = true ]; then checkGitUpdate; fi
+    touch $configFile # Create if not already existing
     checkSetupUpdate
     checkEOL $tempFile
     checkEOL $configFile
