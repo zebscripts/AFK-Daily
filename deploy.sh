@@ -722,7 +722,7 @@ show_help() {
     echo -e "   Run script forcing fight & weekly"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
     echo -e
-    echo -e "   Run script with custom config.ini file"
+    echo -e "   Run script with custom config.ini file named 'config-Push_Campaign.ini'"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"Push_Campaign\"${cWhite}"
     echo -e
     echo -e "   Run script for color testing"

@@ -97,6 +97,9 @@ EXAMPLES
    Run script forcing fight & weekly
       ./deploy.sh -fw
 
+   Run script with custom config.ini file named 'config-Push_Campaign.ini'
+      ./deploy.sh -i "Push_Campaign"
+
    Run script for color testing
       ./deploy.sh -s 800,600
 
