@@ -113,21 +113,21 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=championship
 guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
 maxCampaignFights=0
 maxKingsTowerFights=0
-totalAmountArenaTries=50
+totalAmountArenaTries=25
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=0
 totalAmountTwistedRealmBossTries=0
@@ -144,13 +144,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -191,7 +191,7 @@ Need to be run with `-f` flag!
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -203,7 +203,7 @@ guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
-maxCampaignFights=50
+maxCampaignFights=500
 maxKingsTowerFights=0
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
@@ -222,13 +222,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -267,7 +267,7 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -280,7 +280,7 @@ allowCrystalLevelUp=false
 
 # Repetitions
 maxCampaignFights=0
-maxKingsTowerFights=50
+maxKingsTowerFights=500
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=0

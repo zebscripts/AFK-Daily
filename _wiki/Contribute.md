@@ -72,12 +72,14 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "-x" // https://github.com/koalaman/shellcheck/wiki/SC1091
     ],
     "shellcheck.exclude": [
+        "1017", // https://github.com/koalaman/shellcheck/wiki/SC1017
         "1090", // https://github.com/koalaman/shellcheck/wiki/SC1090
         "1091", // https://github.com/koalaman/shellcheck/wiki/SC1091
         "2009", // https://github.com/koalaman/shellcheck/wiki/SC2009
         "2034", // https://github.com/koalaman/shellcheck/wiki/SC2034
         "2039", // https://github.com/koalaman/shellcheck/wiki/SC2039
         "2154", // https://github.com/koalaman/shellcheck/wiki/SC2154
+        "3003", // https://github.com/koalaman/shellcheck/wiki/SC3003
         "3057", // https://github.com/koalaman/shellcheck/wiki/SC3057
         "3060"  // https://github.com/koalaman/shellcheck/wiki/SC3060
     ],
@@ -86,7 +88,27 @@ Visual Studio Code generates a custom file inside repositories (`.vscode/setting
         "FIXME",
         "TODO",
         "WARN"
-    ]
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "FIXME": {
+            "foreground": "white",
+            "background": "red",
+            "icon": "flame",
+            "iconColour": "red"
+        },
+        "TODO": {
+            "foreground": "black",
+            "background": "green",
+            "icon": "check",
+            "iconColour": "green"
+        },
+        "WARN": {
+            "foreground": "black",
+            "background": "yellow",
+            "icon": "alert",
+            "iconColour": "yellow"
+        }
+    }
     // Extension - Guides > https://marketplace.visualstudio.com/items?itemName=spywhere.guides
     // Extension - shell-format > https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
     // Extension - Trailing Spaces > https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces
@@ -129,7 +151,9 @@ If you need to remove rules, please be certain that is your only choice. Here th
 - [1091](https://github.com/koalaman/shellcheck/wiki/SC1091): Not following (Source not found) -> link to the previous one
 - [2009](https://github.com/koalaman/shellcheck/wiki/SC2009): `pgrep` doesn't exixts in Git Bash
 - [2034](https://github.com/koalaman/shellcheck/wiki/SC2034): `foo` appears unused. Verify it or export it
+- [2039](https://github.com/koalaman/shellcheck/wiki/SC2039): In POSIX `sh`, string ... is undefined.
 - [2154](https://github.com/koalaman/shellcheck/wiki/SC2154): var is referenced but not assigned -> link to the previous one
+- [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX `sh`, string `$'..'` is undefined (Well, it works, required for Nox)
 - [3057](https://github.com/koalaman/shellcheck/wiki/SC3057): In POSIX `sh`, string indexing is undefined (Well, it works)
 - [3060](https://github.com/koalaman/shellcheck/wiki/SC3060): In POSIX `sh`, string replacement is undefined (Well, it works)
 
@@ -263,14 +287,14 @@ Some other useful documentation:
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=false
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -294,13 +318,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -319,7 +343,7 @@ doKingsTower=false
 # Ranhorn
 doGuildHunts=false
 doTwistedRealmBoss=false
-doBuyFromStore=true
+doBuyFromStore=false
 doStrengthenCrystal=false
 doTempleOfAscension=false
 doCompanionPointsSummon=false
@@ -339,7 +363,7 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -351,7 +375,7 @@ guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
-maxCampaignFights=10
+maxCampaignFights=500
 maxKingsTowerFights=0
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
@@ -370,20 +394,20 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
-doLootAfkChest=true
+doLootAfkChest=false
 doChallengeBoss=true
-doFastRewards=true
-doCollectFriendsAndMercenaries=true
+doFastRewards=false
+doCollectFriendsAndMercenaries=false
 
 # Dark Forest
 doSoloBounties=false
@@ -415,14 +439,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -491,14 +515,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=true
 
@@ -522,13 +546,13 @@ buyWeeklyGuild=true
 buyWeeklyLabyrinth=true
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -567,14 +591,14 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=mail
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -598,13 +622,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
