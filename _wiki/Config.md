@@ -40,29 +40,29 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ## Store
 
-| Variable                   |   Type    | Description                                                        | Default | Image                                                                                                                         |
+| Variable                   |   Type    | Description                                                        | Default |                                                             Image                                                             |
 | :------------------------- | :-------: | :----------------------------------------------------------------- | :-----: | :---------------------------------------------------------------------------------------------------------------------------: |
-| `buyStoreDust`             | `Boolean` | If `true`, buys Dust for Gold.                                     | `true`  | ![Hero's Essence](https://user-images.githubusercontent.com/7203617/132167221-91cfdb08-a624-4ad0-8c6d-d565683298c1.png)       |
-| `buyStorePoeCoins`         | `Boolean` | If `true`, buys Poe Coins for Gold.                                | `true`  | ![Poe Coins](https://user-images.githubusercontent.com/7203617/132167219-2e50cc20-56d3-485c-ae8a-1668e1fb6f9c.png)            |
-| `buyStorePrimordialEmblem` | `Boolean` | If `true` and possible, buys Primordial Emblems for Gold.          | `false` | ![Primordial Emblem](https://user-images.githubusercontent.com/7203617/132167223-8847e3a0-f793-4fd1-a5c6-9c00267e54d1.png)    |
-| `buyStoreAmplifyingEmblem` | `Boolean` | If `true` and possible, buys Amplifying Emblems for Gold.          | `false` | ![Amplifying Emblem](https://user-images.githubusercontent.com/7203617/132167227-82508558-3021-493c-8cfc-bcf2b6071ce8.png)    |
+| `buyStoreDust`             | `Boolean` | If `true`, buys Dust for Gold.                                     | `true`  |    ![Hero's Essence](https://user-images.githubusercontent.com/7203617/132167221-91cfdb08-a624-4ad0-8c6d-d565683298c1.png)    |
+| `buyStorePoeCoins`         | `Boolean` | If `true`, buys Poe Coins for Gold.                                | `true`  |      ![Poe Coins](https://user-images.githubusercontent.com/7203617/132167219-2e50cc20-56d3-485c-ae8a-1668e1fb6f9c.png)       |
+| `buyStorePrimordialEmblem` | `Boolean` | If `true` and possible, buys Primordial Emblems for Gold.          | `false` |  ![Primordial Emblem](https://user-images.githubusercontent.com/7203617/132167223-8847e3a0-f793-4fd1-a5c6-9c00267e54d1.png)   |
+| `buyStoreAmplifyingEmblem` | `Boolean` | If `true` and possible, buys Amplifying Emblems for Gold.          | `false` |  ![Amplifying Emblem](https://user-images.githubusercontent.com/7203617/132167227-82508558-3021-493c-8cfc-bcf2b6071ce8.png)   |
 | `buyStoreSoulstone`        | `Boolean` | If `true` and possible, buys Elite Soulstones for Diamonds.        | `false` | ![Elite Hero Soulstone](https://user-images.githubusercontent.com/7203617/132287360-45c1eb6d-9ddf-45a8-9060-64aa867737b2.png) |
-| `buyStoreLimitedGoldOffer` | `Boolean` | If `true`, buys Limited offer for Gold.                            | `false` | ![Limited Gold Offer](https://user-images.githubusercontent.com/7203617/132167224-49b5dfb6-fce5-4a95-a702-9423ec23939e.png)   |
-| `buyStoreLimitedDiamOffer` | `Boolean` | If `true`, buys Limited offer for Diamonds.                        | `false` | ![Limited Diam Offer](https://user-images.githubusercontent.com/7203617/132167220-86102296-3e75-49f9-a7e1-cff87ff0f4f3.png)   |
+| `buyStoreLimitedGoldOffer` | `Boolean` | If `true`, buys Limited offer for Gold.                            | `false` |  ![Limited Gold Offer](https://user-images.githubusercontent.com/7203617/132167224-49b5dfb6-fce5-4a95-a702-9423ec23939e.png)  |
+| `buyStoreLimitedDiamOffer` | `Boolean` | If `true`, buys Limited offer for Diamonds.                        | `false` |  ![Limited Diam Offer](https://user-images.githubusercontent.com/7203617/132167220-86102296-3e75-49f9-a7e1-cff87ff0f4f3.png)  |
 | `buyWeeklyGuild`           | `Boolean` | If `true`, buys one Stone from Guild Coins once a Week.            | `false` |                                                                                                                               |
-| `buyWeeklyLabyrinth`       | `Boolean` | If `true`, buys Rare Soulstones from Labyrinth Tokens once a Week. | `false` | ![Rare Soulstones](https://user-images.githubusercontent.com/7203617/132167981-baac849d-613a-4716-881e-ee21a9b2d4a1.png)      |
+| `buyWeeklyLabyrinth`       | `Boolean` | If `true`, buys Rare Soulstones from Labyrinth Tokens once a Week. | `false` |   ![Rare Soulstones](https://user-images.githubusercontent.com/7203617/132167981-baac849d-613a-4716-881e-ee21a9b2d4a1.png)    |
 
 ## Towers
 
-| Variable                         |   Type    | Description                                                      | Default |
-| :------------------------------- | :-------: | :--------------------------------------------------------------- | :-----: |
-| `doMainTower`                    | `Boolean` | If `true`, tries to battle in Main Tower                         | `true`  |
-| `doTowerOfLight`                 | `Boolean` | If `true`, tries to battle in Tower of Light                     | `true`  |
-| `doTheBrutalCitadel`             | `Boolean` | If `true`, tries to battle in The Brutal Citadel                 | `true`  |
-| `doTheWorldTree`                 | `Boolean` | If `true`, tries to battle in The World Tree                     | `true`  |
-| `doCelestialSanctum`             | `Boolean` | If `true`, tries to battle in Celestial Sanctum                  | `true`  |
-| `doTheForsakenNecropolis`        | `Boolean` | If `true`, tries to battle in The Forsaken Necropolis            | `true`  |
-| `doInfernalFortress`             | `Boolean` | If `true`, tries to battle in InfernalFortress                   | `true`  |
+| Variable                  |   Type    | Description                                           | Default |
+| :------------------------ | :-------: | :---------------------------------------------------- | :-----: |
+| `doMainTower`             | `Boolean` | If `true`, tries to battle in Main Tower              | `true`  |
+| `doTowerOfLight`          | `Boolean` | If `true`, tries to battle in Tower of Light          | `true`  |
+| `doTheBrutalCitadel`      | `Boolean` | If `true`, tries to battle in The Brutal Citadel      | `true`  |
+| `doTheWorldTree`          | `Boolean` | If `true`, tries to battle in The World Tree          | `true`  |
+| `doCelestialSanctum`      | `Boolean` | If `true`, tries to battle in Celestial Sanctum       | `true`  |
+| `doTheForsakenNecropolis` | `Boolean` | If `true`, tries to battle in The Forsaken Necropolis | `true`  |
+| `doInfernalFortress`      | `Boolean` | If `true`, tries to battle in InfernalFortress        | `true`  |
 
 ## Campaign
 
@@ -110,21 +110,21 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt=campaign
+endAt=championship
 guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
 maxCampaignFights=0
 maxKingsTowerFights=0
-totalAmountArenaTries=50
+totalAmountArenaTries=25
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=0
 totalAmountTwistedRealmBossTries=0
@@ -141,13 +141,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -188,7 +188,7 @@ Need to be run with `-f` flag!
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -200,7 +200,7 @@ guildBattleType=quick
 allowCrystalLevelUp=false
 
 # Repetitions
-maxCampaignFights=50
+maxCampaignFights=500
 maxKingsTowerFights=0
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
@@ -219,13 +219,13 @@ buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
 # Towers
-doMainTower=true
-doTowerOfLight=true
-doTheBrutalCitadel=true
-doTheWorldTree=true
-doCelestialSanctum=true
-doTheForsakenNecropolis=true
-doInfernalFortress=true
+doMainTower=false
+doTowerOfLight=false
+doTheBrutalCitadel=false
+doTheWorldTree=false
+doCelestialSanctum=false
+doTheForsakenNecropolis=false
+doInfernalFortress=false
 
 # --- Actions --- #
 # Campaign
@@ -264,7 +264,7 @@ doCollectMerchantFreebies=false
 
 ```ini
 # --- CONFIG: Modify accordingly to your game! --- #
-# --- Use this link for help: https://github.com/zebscripts/AFK-Daily#configvariables --- #
+# --- Use this link for help: https://github.com/zebscripts/AFK-Daily/wiki/Config --- #
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
@@ -277,7 +277,7 @@ allowCrystalLevelUp=false
 
 # Repetitions
 maxCampaignFights=0
-maxKingsTowerFights=50
+maxKingsTowerFights=500
 totalAmountArenaTries=0
 totalAmountTournamentTries=0
 totalAmountGuildBossTries=0
