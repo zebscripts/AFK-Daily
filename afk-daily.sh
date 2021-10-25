@@ -62,7 +62,7 @@ while getopts "ce:fi:l:s:tv:w" opt; do
         IFS=','
         for i in $OPTARG; do
             case "$i" in
-            "hoe") eventHoe=true;;
+            "hoe") eventHoe=true ;;
             esac
         done
         IFS=$buIFS
@@ -323,7 +323,6 @@ readHEX() {
     HEX=${HEX:9:9}
     HEX="${HEX// /}"
 }
-
 
 # ##############################################################################
 # Function Name : requiredLevel
@@ -2197,10 +2196,16 @@ run() {
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
     if checkToDo doCollectOakPresents; then
-        if requiredLevel 0 18 0; then
-            oakInnSpeedy;
+        # Check if Oak Inn is unlocked
+        if requiredLevel 0 5 0; then
+            # Check which oakInn collection type to use
+            if requiredLevel 0 17 0; then
+                oakInnSpeedy
+            else
+                oakInn_Old
+            fi
         else
-            oakInn_Old;
+            echo "Your Campaign level is not high enough to collect Oak Inn presents."
         fi
     fi
 
@@ -2217,6 +2222,9 @@ run() {
 
 printInColor "INFO" "Starting script... ($(date))"
 if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
+if [ "$vipLevel" -gt 0 ]; then printInColor "INFO" "VIP Level: ${cBlue}$vipLevel${cNc}"; else printInColor "INFO" "VIP Level: ${cBlue}Not set${cNc}"; fi
+if [ "$campaignChapter " -gt 0 ]; then printInColor "INFO" "Campaign Chapter: ${cBlue}$campaignChapter ${cNc}"; else printInColor "INFO" "Campaign Chpater: ${cBlue}Not set${cNc}"; fi
+if [ "$campaignStage " -gt 0 ]; then printInColor "INFO" "Campaign Stage: ${cBlue}$campaignStage ${cNc}"; else printInColor "INFO" "Campaign Stage: ${cBlue}Not set${cNc}"; fi
 if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign: ${cBlue}ON${cNc}"; else printInColor "INFO" "Fight Campaign: ${cBlue}OFF${cNc}"; fi
 if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}"; else printInColor "INFO" "Weekly: ${cBlue}OFF${cNc}"; fi
 if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${cNc}"; fi
