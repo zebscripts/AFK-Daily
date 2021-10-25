@@ -28,7 +28,7 @@ noxDirectory="data"
 configFile="config/config.ini"
 tempFile="account-info/acc.ini"
 device="default"
-evt="hoe" # Default dev evt
+evt="" # Default dev evt
 
 # Do not modify
 adb=adb
@@ -236,7 +236,7 @@ checkGitUpdate() {
 
     # Check if there's a new script version
     if ./lib/update_git.sh; then
-        printSuccess "Checked/Updated!"
+        printSuccess "Checked!"
     else
         printSuccess "Update found!"
 
@@ -382,6 +382,7 @@ deploy() {
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
+    if [ "$device" == "Nox" ]; then args="$args -c"; fi
     if [ -n "$totest" ]; then args="$args -s $totest"; fi
     if [ -n "$evt" ]; then args="$args -e $evt"; fi
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
@@ -579,8 +580,8 @@ show_help() {
     echo -e "   Run script forcing fight & weekly"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-fw${cWhite}"
     echo -e
-    echo -e "   Run script with custom config.ini file"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i towers${cWhite}"
+    echo -e "   Run script with custom config.ini file named 'config-Push_Campaign.ini'"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"Push_Campaign\"${cWhite}"
     echo -e
     echo -e "   Run script for color testing"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
@@ -632,7 +633,14 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
             device="Memu"
         elif [ "$OPTARG" == "Nox" ] || [ "$OPTARG" == "nox" ]; then
             device="Nox"
-            adb="$(ps -W | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+            case "$(uname -s)" in # Check OS
+            Darwin | Linux)       # Mac / Linux
+                adb="$(ps | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+                ;;
+            CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+                adb="$(ps -W | grep -i nox_adb.exe | tr -s ' ' | cut -d ' ' -f 9-100 | sed -e 's/^/\//' -e 's/://' -e 's#\\#/#g')"
+                ;;
+            esac
             if [ -z "$adb" ]; then
                 printError "nox_adb.exe not found, please check your Nox settings"
                 exit 1
@@ -689,6 +697,7 @@ done
 
 clear
 if [ "$output" != "" ]; then
+    mkdir -p "$(dirname "$output")"
     touch "$output"
     run 2>&1 | tee -a "$output"
 else
