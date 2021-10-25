@@ -117,6 +117,9 @@ The script acts depending on a set of variables. In order to change these, open 
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
@@ -195,6 +198,9 @@ Need to be run with `-f` flag!
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
@@ -271,6 +277,9 @@ doCollectMerchantFreebies=false
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
