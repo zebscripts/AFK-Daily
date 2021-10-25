@@ -595,6 +595,9 @@ validateConfig() {
     if [ "$campaignStage" -eq 0 ]; then
         printWarn "campaignStage should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
     fi
+    if [ "$campaignChapter" -eq 0 ]; then
+        printWarn "campaignChapter should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
+    fi
     printSuccess "Passed!"
 }
 

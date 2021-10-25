@@ -343,11 +343,11 @@ requiredLevel() {
         return 0
     else
         # Check if VIP is asked & compare to player config vipLevel
-        if [ "$1" -ge 0 ] && [ "$vipLevel" -ge "$1" ]; then
+        if [ "$1" -gt 0 ] && [ "$vipLevel" -ge "$1" ]; then
             return 0
         fi
         # Check if Chapter is asked & compare to player config campaignChapter
-        if [ "$2" -ge 0 ] && [ "$campaignChapter" -ge "$1" ]; then
+        if [ "$2" -gt 0 ] && [ "$campaignChapter" -ge "$1" ]; then
             # I do not check if Stage is >0 because maybe we could just ask for a specific chapter
             # Compare to player config campaignChapter
             if [ "$campaignStage" -ge "$1" ]; then
