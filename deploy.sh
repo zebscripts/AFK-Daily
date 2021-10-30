@@ -590,7 +590,7 @@ validateConfig() {
         exit
     fi
     if [ "$vipLevel" -eq 0 ]; then
-        printWarn "vipLevel should be edited in ${cCyan}$configFile${cNc} to your current VIP level.";
+        printWarn "vipLevel is not defined in the config file ${cCyan}$configFile${cNc}.";
     fi
     if [ "$campaignStage" -eq 0 ]; then
         printWarn "campaignStage should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
