@@ -593,7 +593,7 @@ validateConfig() {
         printWarn "vipLevel is not defined in the config file ${cCyan}$configFile${cNc}.";
     fi
     if [ "$campaignStage" -eq 0 ]; then
-        printWarn "campaignStage should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
+        printWarn "campaignStage is not defined in the config file ${cCyan}$configFile${cNc}.";
     fi
     if [ "$campaignChapter" -eq 0 ]; then
         printWarn "campaignChapter should be edited in ${cCyan}$configFile${cNc} to your current campaign stage.";
