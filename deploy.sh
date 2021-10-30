@@ -318,7 +318,7 @@ checkSetupUpdate() {
         printSuccess "Checked!"
     else
         printSuccess "Updated!"
-        printWarn "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
+        printInfo "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
         exit
     fi
 }
