@@ -1832,11 +1832,16 @@ twistedRealmBoss() {
     # inputTapSleep 380 360 10
     ## End of testing ##
 
-    inputTapSleep 820 820 # Twisted Realm
+    inputTapSleep 820 820 2 # Twisted Realm
 
     if testColorOR 540 1220 9aedc1; then # Check if TR is being calculated
         printInColor "INFO" "Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
+        # Check for cursed realm screen
+        if testColorOR 750 100 1c2d3e; then
+            inputTapSleep 550 700 2 # Twisted Realm
+        fi
+
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
             inputTapSleep 550 1850               # Challenge
