@@ -331,7 +331,7 @@ readHEX() {
 # Output        : if true, return 0, else 1
 # ##############################################################################
 requiredLevel() {
-    if [ "$#" -ne 2 ]; then
+    if [ "$#" -ne 3 ]; then
         echo "Usage: requiredLevel <VIP> <Chapter> <Stage>" >&2
         return
     fi
@@ -346,10 +346,9 @@ requiredLevel() {
             return 0
         fi
         # Check if Chapter is asked & compare to player config campaignChapter
-        if [ "$2" -gt 0 ] && [ "$campaignChapter" -ge "$1" ]; then
-            # I do not check if Stage is >0 because maybe we could just ask for a specific chapter
-            # Compare to player config campaignChapter
-            if [ "$campaignStage" -ge "$1" ]; then
+        if [ "$2" -gt 0 ] && [ "$campaignChapter" -ge "$2" ]; then
+            # Check if Stage is asked & compare to player config campaignStage
+            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then
                 return 0
             fi
         fi
@@ -2116,9 +2115,6 @@ fi
 init() {
     # Init values
     doLootAfkChest2="$doLootAfkChest"
-    if [ "$guildBattleType" = "quick" ] && ! requiredLevel 6 0 0; then
-        guildBattleType="challenge"
-    fi
 
     closeApp
     sleep 0.5
@@ -2176,10 +2172,16 @@ run() {
 
     # DARK FOREST TAB
     switchTab "Dark Forest"
-    if checkToDo doSoloBounties; then
-        soloBounties
-        if checkToDo doTeamBounties; then teamBounties; fi
-    elif checkToDo doTeamBounties; then teamBounties true; fi
+    if [ "$doSoloBounties" = true ] || [ "$doTeamBounties" = true ]; then
+        if requiredLevel 6 0 0; then
+            if checkToDo doSoloBounties; then
+                soloBounties
+                if checkToDo doTeamBounties; then teamBounties; fi
+            elif checkToDo doTeamBounties; then teamBounties true; fi
+        else
+            printInColor "INFO" "Your VIP level is not high enough to use Autofill in Bounties."
+        fi
+    fi
     if checkToDo doArenaOfHeroes; then
         arenaOfHeroes
         if checkToDo doLegendsTournament; then legendsTournament; fi
@@ -2189,8 +2191,21 @@ run() {
     # RANHORN TAB
     switchTab "Ranhorn"
     if checkToDo doGuildHunts; then
-        guildHunts
-        if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
+        if [ "$guildBattleType" = "quick" ] && requiredLevel 6 0 0; then
+            guildHunts
+            if requiredLevel 0 13 1; then
+                if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
+            else
+                printInColor "INFO" "You still haven't unlocked Twisted Realms."
+            fi
+        else
+            printInColor "INFO" "Your VIP level is not high enough to run quick battles in Guild Bosses."
+            if requiredLevel 0 13 1; then
+                if checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
+            else
+                printInColor "INFO" "You still haven't unlocked Twisted Realms."
+            fi
+        fi
     elif checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
     if checkToDo doBuyFromStore; then
         if [ "$testServer" = true ]; then
@@ -2202,9 +2217,9 @@ run() {
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
     if checkToDo doCollectOakPresents; then
         # Check if Oak Inn is unlocked
-        if requiredLevel 0 5 0; then
+        if requiredLevel 0 5 1; then
             # Check which oakInn collection type to use
-            if requiredLevel 0 17 0; then
+            if requiredLevel 0 17 1; then
                 oakInnSpeedy
             else
                 oakInn_Old
