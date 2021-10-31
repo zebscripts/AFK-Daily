@@ -15,23 +15,19 @@ A clear and concise description of what the bug is.
 
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+**Screenshots/Logs**
 
-If applicable, add screenshots to help explain your problem.
-
-**Logs**
-
-If applicable, add screenshots a text copy of the output console.
+If applicable, add screenshots of the console (or send the logs).
 
 **Desktop (please complete the following information):**
 
-- OS: [e.g. W10]
+- OS: [e.g. Windows 10]
 
 **Smartphone (please complete the following information):**
 
 - Emulator: [e.g. BlueStacks]
 - Version [e.g. 5.3.86.1001 N32]
 
-**Additional context**
+**Additional information**
 
-Add any other context about the problem here.
+Add any other information about the problem here.
