@@ -1125,6 +1125,7 @@ legendsTournament() {
             inputTapSleep 550 800 4 # Tap anywhere to close
         else
             printInColor "WARN" "Failed to enter battle at the Legends Tournament."
+            inputTapSleep 70 1810
         fi
         totalAmountTournamentTries=$((totalAmountTournamentTries - 1)) # Dicrement
     done
