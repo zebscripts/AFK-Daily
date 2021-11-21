@@ -1504,7 +1504,7 @@ strengthenCrystal() {
     else
         printInColor "INFO" "Not necessary to strengthen the resonating Crystal."
     fi
-    verifyHEX 20 1775 d49a61 "Strenghened resonating Crystal." "Failed to Strenghen Resonating Crystal."
+    verifyHEX 20 1775 d49a61 "Strengthened resonating Crystal." "Failed to Strenghen Resonating Crystal."
 }
 
 # ##############################################################################
