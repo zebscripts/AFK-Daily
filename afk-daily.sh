@@ -1724,8 +1724,8 @@ collectMerchants() {
     fi
     inputTapSleep 550 300 1 # Collect rewards
 
-    if testColorOR -d "$DEFAULT_DELTA" 345 1525 f01d04; then # Check if red mark - Weekly Deals
-        inputTapSleep 280 1620 1                             # Weekly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 432 1525 f01d04; then # Check if red mark - Weekly Deals
+        inputTapSleep 370 1620 1                             # Weekly Deals
         if testColorNAND 375 940 050a0f; then                # Checks for Special Weekly Bundles
             inputTapSleep 200 1200 1                         # Free
         else
@@ -1736,8 +1736,8 @@ collectMerchants() {
         printInColor "INFO" "No weekly reward to collect."
     fi
 
-    if testColorOR -d "$DEFAULT_DELTA" 520 1525 f21e05; then # Check if red mark - Monthly Deals
-        inputTapSleep 460 1620 1                             # Monthly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 607 1525 f21e05; then # Check if red mark - Monthly Deals
+        inputTapSleep 545 1620 1                             # Monthly Deals
         if testColorNAND 375 940 0b080a; then                # Checks for Special Monthly Bundles
             inputTapSleep 200 1200 1                         # Free
         else
