@@ -4,7 +4,8 @@
 # Description   : Used to run afk-daily on phone
 # Args          : [-h, --help] [-a, --account [ACCOUNT]] [-c, --check]
 #                 [-d, --device [DEVICE]] [-e, --event [EVENT]] [-f, --fight]
-#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]] [-r]
+#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]]
+#                 [-p, --port [PORT]] [-r]
 #                 [-s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]]
 #                 [-t, --test] [-v, --verbose [DEBUG]] [-w, --weekly]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
@@ -42,6 +43,7 @@ testServer=false
 debug=0
 output=""
 totest=""
+port="5555"
 
 # ##############################################################################
 # Section       : Functions
@@ -185,6 +187,9 @@ checkDevice() {
         fi
     else # If parameters aren't sent
         printTask "Searching for device through ADB..."
+        if [ "$port" != "5555" ]; then
+            "$adb" connect localhost:"$port" 1>/dev/null
+        fi
 
         if ! "$adb" get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
@@ -531,6 +536,9 @@ show_help() {
     echo -e "   ${cCyan}-n${cWhite}"
     echo -e "      Disable heads-up notifications while script is running."
     echo -e
+    echo -e "   ${cCyan}-n${cWhite}^, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
+    echo -e "      Specify port for ADB connect."
+    echo -e
     echo -e "   ${cCyan}-r${cWhite}"
     echo -e "      Ignore resolution warning. Use this at your own risk."
     echo -e
@@ -605,6 +613,7 @@ for arg in "$@"; do
     "--ini") set -- "$@" "-i" ;;
     "--notifications") set -- "$@" "-n" ;;
     "--output") set -- "$@" "-o" ;;
+    "--port") set -- "$@" "-p" ;;
     "--resolution") set -- "$@" "-r" ;;
     "--hex") set -- "$@" "-s" ;;
     "--test") set -- "$@" "-t" ;;
@@ -614,7 +623,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
+while getopts ":a:bcd:e:fhi:no:p:rs:tv:wz" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -665,6 +674,9 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
         ;;
     o)
         output="${OPTARG}"
+        ;;
+    p)
+        port="${OPTARG}"
         ;;
     r)
         ignoreResolution=true
