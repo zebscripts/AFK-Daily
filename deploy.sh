@@ -43,7 +43,7 @@ testServer=false
 debug=0
 output=""
 totest=""
-port="5555"
+custom_port=""
 
 # ##############################################################################
 # Section       : Functions
@@ -168,7 +168,14 @@ checkDevice() {
             fi
         elif [ "$1" = "Memu" ]; then # Memu
             printTask "Searching for Memu through ADB..."
-            "$adb" connect localhost:21503 1>/dev/null
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:21503 1>/dev/null
+            fi
+
+            # Check for device
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
@@ -177,7 +184,14 @@ checkDevice() {
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
-            "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
+            fi
+
+            # Check for device
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
@@ -187,10 +201,13 @@ checkDevice() {
         fi
     else # If parameters aren't sent
         printTask "Searching for device through ADB..."
-        if [ "$port" != "5555" ]; then
-            "$adb" connect localhost:"$port" 1>/dev/null
+        # Use custom port if set
+        if [ -n "$custom_port" ]; then
+            echo "$custom_port"
+            "$adb" connect 127.0.0.1:"$custom_port"
         fi
 
+        # Check for device
         if ! "$adb" get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
@@ -537,7 +554,7 @@ show_help() {
     echo -e "      Disable heads-up notifications while script is running."
     echo -e
     echo -e "   ${cCyan}-n${cWhite}^, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
-    echo -e "      Specify port for ADB connect."
+    echo -e "      Specify ADB port."
     echo -e
     echo -e "   ${cCyan}-r${cWhite}"
     echo -e "      Ignore resolution warning. Use this at your own risk."
@@ -676,7 +693,7 @@ while getopts ":a:bcd:e:fhi:no:p:rs:tv:wz" option; do
         output="${OPTARG}"
         ;;
     p)
-        port="${OPTARG}"
+        custom_port="${OPTARG}"
         ;;
     r)
         ignoreResolution=true
