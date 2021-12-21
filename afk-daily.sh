@@ -1640,9 +1640,11 @@ collectQuestChests() {
     # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
+    sleep 2
 
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
+    sleep 2
 
     #WARN: May break if the reward is a new champ...
     inputTapSleep 930 1650                                     # Campaign
