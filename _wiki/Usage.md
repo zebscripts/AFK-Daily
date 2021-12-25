@@ -48,6 +48,9 @@ OPTIONS
    -n
       Disable heads-up notifications while script is running.
 
+   -p, --port  [PORT]
+      Specify ADB port.
+
    -r
       Ignore resolution warning. Use this at your own risk.
 
@@ -91,6 +94,9 @@ EXAMPLES
    Run script with specific emulator (for example Nox)
       ./deploy.sh -d nox
 
+   Run script with specific port (for example 52086)
+      ./deploy.sh -p 52086
+
    Run script on test server
       ./deploy.sh -t
 
@@ -104,10 +110,10 @@ EXAMPLES
       ./deploy.sh -s 800,600
 
    Run script with output file and with disabled notifications
-      ./deploy.sh -n -o ".history/$(date +%Y%m%d).log"
+      ./deploy.sh -no ".history/$(date +%Y%m%d).log"
 
    Run script on test server with output file and with disabled notifications
-      ./deploy.sh -n -t -a "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
+      ./deploy.sh -nta "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
 ```
 
 ## Examples

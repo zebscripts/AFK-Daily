@@ -553,7 +553,7 @@ show_help() {
     echo -e "   ${cCyan}-n${cWhite}"
     echo -e "      Disable heads-up notifications while script is running."
     echo -e
-    echo -e "   ${cCyan}-n${cWhite}^, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
+    echo -e "   ${cCyan}-p${cWhite}, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
     echo -e "      Specify ADB port."
     echo -e
     echo -e "   ${cCyan}-r${cWhite}"
@@ -599,6 +599,9 @@ show_help() {
     echo -e "   Run script with specific emulator (for example Nox)"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}nox${cWhite}"
     echo -e
+    echo -e "   Run script with specific port (for example 52086)"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-p${cWhite} ${cGreen}52086${cWhite}"
+    echo -e
     echo -e "   Run script on test server"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-t${cWhite}"
     echo -e
@@ -612,10 +615,10 @@ show_help() {
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
     echo -e
     echo -e "   Run script with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-no${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
     echo -e
     echo -e "   Run script on test server with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-t${cWhite} ${cCyan}-a${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-nta${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
 }
 
 for arg in "$@"; do
