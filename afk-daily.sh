@@ -1669,7 +1669,7 @@ collectQuestChests_quick() {
 
     if testColorNAND -d "$DEFAULT_DELTA" 265 450 4b2711 && testColorNAND 295 410 71211e; then # OFF: 4b2711 COLLECTED: 71211e
         inputTapSleep 330 430                                                                 # Chest 20
-        inputTapSleep 580 600 0                                                               # Collect
+        inputTapSleep 580 1850 0                                                              # Collect
     fi
     # if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
     #     inputTapSleep 500 430                                                                 # Chest 40
@@ -1702,10 +1702,10 @@ collectMail() {
         inputTapSleep 790 1470                               # Collect all
         inputTapSleep 110 1850                               # Return
         inputTapSleep 110 1850                               # Return
+        verifyHEX 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
     else
         printInColor "INFO" "No mail to collect."
     fi
-    verifyHEX 20 1775 d49a61 "Collected Mail." "Failed to collect Mail."
 }
 
 # ##############################################################################
@@ -1717,7 +1717,7 @@ collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
     inputTapSleep 120 300 3 # Merchants
     # WARN: Breaks if a pop-up message shows up
-    inputTapSleep 780 1820 # Merchant Ship
+    inputTapSleep 780 1820 2 # Merchant Ship
 
     if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1          # Free
@@ -1750,7 +1750,7 @@ collectMerchants() {
         printInColor "INFO" "No monthly reward to collect."
     fi
 
-    inputTapSleep 70 1810 1
+    inputTapSleep 70 1810 2
     verifyHEX 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
 }
 
@@ -1856,7 +1856,7 @@ init() {
     if testColorOR -f 740 205 ffc359; then # Check if game is being updated
         printInColor "INFO" "Game is being updated!" >&2
         if [ "$waitForUpdate" = true ]; then
-            printInColor "INFO" "Waiting for game to finish update..."
+            printInColor "INFO" "Waiting for game to finish update..." >&2
             loopUntilNotRGB 5 740 205 ffc359
             printInColor "DONE" "Game finished updating."
         else

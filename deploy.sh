@@ -181,7 +181,7 @@ checkDevice() {
             fi
 
             # Check for device
-            if ! "$adb" get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
@@ -197,7 +197,7 @@ checkDevice() {
             fi
 
             # Check for device
-            if ! "$adb" get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
