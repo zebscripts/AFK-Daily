@@ -5,7 +5,17 @@ While creating this repository and script, we wanted to make it as easy as possi
 - Check what type of device is connected per ADB, and connect accordingly
 - Auto-update the script if a new version is found
 
-You can also execute the script with the following optional parameters:
+Here's the most basic way to run the script:
+
+```sh
+./deploy.sh
+```
+
+*Note: By running the above command, the script will automatically try to figure out what platform you want to run the script on! If this doesn't work, please specify the platform with the `-d` flag.*
+
+## Flags
+
+There are more features though and it's possible to execute the script with the following optional parameters:
 
 ```text
 $ ./deploy.sh -h
@@ -114,22 +124,6 @@ EXAMPLES
 
    Run script on test server with output file and with disabled notifications
       ./deploy.sh -nta "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
-```
-
-## Examples
-
-The most basic way to run the script:
-
-```sh
-./deploy.sh
-```
-
-*Note: By running the above command, the script will automatically try to figure out what platform you want to run the script on! If this doesn't work, please specify the platform.*
-
-Running the script on Bluestacks:
-
-```sh
-./deploy.sh -d bs
 ```
 
 <hr>

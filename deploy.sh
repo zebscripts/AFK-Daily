@@ -159,8 +159,13 @@ checkDate() {
 checkDevice() {
     if [ "$#" -gt "0" ]; then            # If parameters are sent
         if [ "$1" = "Bluestacks" ]; then # Bluestacks
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            fi
+
             printTask "Searching for Bluestacks through ADB... "
-            if ! "$adb" get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
@@ -203,8 +208,7 @@ checkDevice() {
         printTask "Searching for device through ADB..."
         # Use custom port if set
         if [ -n "$custom_port" ]; then
-            echo "$custom_port"
-            "$adb" connect 127.0.0.1:"$custom_port"
+            "$adb" connect localhost:"$custom_port" 1>/dev/null
         fi
 
         # Check for device
@@ -214,10 +218,10 @@ checkDevice() {
             exit
         else
             if [[ $("$adb" devices) =~ emulator ]]; then # Bluestacks
-                printSuccess "Found Bluestacks!"
-                deploy "Bluestacks" "$bluestacksDirectory"
+                printSuccess "Emulator found!"
+                deploy "Emulator" "$bluestacksDirectory"
             else # Personal
-                printSuccess "Found Personal Device!"
+                printSuccess "Device found!"
                 deploy "Personal" "$personalDirectory"
             fi
         fi
