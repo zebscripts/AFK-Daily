@@ -1640,9 +1640,11 @@ collectQuestChests() {
     # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
+    sleep 2
 
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
+    sleep 2
 
     #WARN: May break if the reward is a new champ...
     inputTapSleep 930 1650                                     # Campaign
@@ -1669,22 +1671,22 @@ collectQuestChests_quick() {
         inputTapSleep 330 430                                                                 # Chest 20
         inputTapSleep 580 600 0                                                               # Collect
     fi
-    if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
-        inputTapSleep 500 430                                                                 # Chest 40
-        inputTapSleep 580 600 0                                                               # Collect
-    fi
-    if testColorNAND -d "$DEFAULT_DELTA" 595 450 4e2713 && testColorNAND 625 410 8f2d28; then # OFF: 4e2713 COLLECTED: 8f2d28
-        inputTapSleep 660 430                                                                 # Chest 60
-        inputTapSleep 580 600 0                                                               # Collect
-    fi
-    if testColorNAND -d "$DEFAULT_DELTA" 760 450 502611 && testColorNAND 785 410 c21c22; then # OFF: 502611 COLLECTED: c21c22
-        inputTapSleep 830 430                                                                 # Chest 80
-        inputTapSleep 580 600 0                                                               # Collect
-    fi
-    if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 950 410 6e1819; then # OFF: 662611 COLLECTED: 6e1819
-        inputTapSleep 990 430                                                                 # Chest 100
-        inputTapSleep 580 600                                                                 # Collect
-    fi
+    # if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
+    #     inputTapSleep 500 430                                                                 # Chest 40
+    #     inputTapSleep 580 600 0                                                               # Collect
+    # fi
+    # if testColorNAND -d "$DEFAULT_DELTA" 595 450 4e2713 && testColorNAND 625 410 8f2d28; then # OFF: 4e2713 COLLECTED: 8f2d28
+    #     inputTapSleep 660 430                                                                 # Chest 60
+    #     inputTapSleep 580 600 0                                                               # Collect
+    # fi
+    # if testColorNAND -d "$DEFAULT_DELTA" 760 450 502611 && testColorNAND 785 410 c21c22; then # OFF: 502611 COLLECTED: c21c22
+    #     inputTapSleep 830 430                                                                 # Chest 80
+    #     inputTapSleep 580 600 0                                                               # Collect
+    # fi
+    # if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 950 410 6e1819; then # OFF: 662611 COLLECTED: 6e1819
+    #     inputTapSleep 990 430                                                                 # Chest 100
+    #     inputTapSleep 580 600                                                                 # Collect
+    # fi
 }
 
 # ##############################################################################
@@ -1709,13 +1711,13 @@ collectMail() {
 # ##############################################################################
 # Function Name : collectMerchants
 # Descripton    : Collects Daily/Weekly/Monthly from the merchants page
-# Remark        : Breaks if a pop-up message shows up
+# Remark        : Breaks if a pop-up message shows up or the merchant ship moves location "drastically"
 # ##############################################################################
 collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
     inputTapSleep 120 300 3 # Merchants
     # WARN: Breaks if a pop-up message shows up
-    inputTapSleep 510 1820 # Merchant Ship
+    inputTapSleep 780 1820 # Merchant Ship
 
     if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1          # Free
