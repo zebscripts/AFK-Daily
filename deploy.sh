@@ -4,7 +4,8 @@
 # Description   : Used to run afk-daily on phone
 # Args          : [-h, --help] [-a, --account [ACCOUNT]] [-c, --check]
 #                 [-d, --device [DEVICE]] [-e, --event [EVENT]] [-f, --fight]
-#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]] [-r]
+#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]]
+#                 [-p, --port [PORT]] [-r]
 #                 [-s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]]
 #                 [-t, --test] [-v, --verbose [DEBUG]] [-w, --weekly]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
@@ -42,6 +43,7 @@ testServer=false
 debug=0
 output=""
 totest=""
+custom_port=""
 
 # ##############################################################################
 # Section       : Functions
@@ -157,8 +159,13 @@ checkDate() {
 checkDevice() {
     if [ "$#" -gt "0" ]; then            # If parameters are sent
         if [ "$1" = "Bluestacks" ]; then # Bluestacks
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            fi
+
             printTask "Searching for Bluestacks through ADB... "
-            if ! "$adb" get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
@@ -166,7 +173,14 @@ checkDevice() {
             fi
         elif [ "$1" = "Memu" ]; then # Memu
             printTask "Searching for Memu through ADB..."
-            "$adb" connect localhost:21503 1>/dev/null
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:21503 1>/dev/null
+            fi
+
+            # Check for device
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
@@ -175,7 +189,14 @@ checkDevice() {
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
-            "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
+            fi
+
+            # Check for device
             if ! "$adb" get-state 1>/dev/null; then
                 printError "Not found!"
                 exit
@@ -185,17 +206,22 @@ checkDevice() {
         fi
     else # If parameters aren't sent
         printTask "Searching for device through ADB..."
+        # Use custom port if set
+        if [ -n "$custom_port" ]; then
+            "$adb" connect localhost:"$custom_port" 1>/dev/null
+        fi
 
+        # Check for device
         if ! "$adb" get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
             exit
         else
             if [[ $("$adb" devices) =~ emulator ]]; then # Bluestacks
-                printSuccess "Found Bluestacks!"
-                deploy "Bluestacks" "$bluestacksDirectory"
+                printSuccess "Emulator found!"
+                deploy "Emulator" "$bluestacksDirectory"
             else # Personal
-                printSuccess "Found Personal Device!"
+                printSuccess "Device found!"
                 deploy "Personal" "$personalDirectory"
             fi
         fi
@@ -531,6 +557,9 @@ show_help() {
     echo -e "   ${cCyan}-n${cWhite}"
     echo -e "      Disable heads-up notifications while script is running."
     echo -e
+    echo -e "   ${cCyan}-p${cWhite}, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
+    echo -e "      Specify ADB port."
+    echo -e
     echo -e "   ${cCyan}-r${cWhite}"
     echo -e "      Ignore resolution warning. Use this at your own risk."
     echo -e
@@ -574,6 +603,9 @@ show_help() {
     echo -e "   Run script with specific emulator (for example Nox)"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}nox${cWhite}"
     echo -e
+    echo -e "   Run script with specific port (for example 52086)"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-p${cWhite} ${cGreen}52086${cWhite}"
+    echo -e
     echo -e "   Run script on test server"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-t${cWhite}"
     echo -e
@@ -587,10 +619,10 @@ show_help() {
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
     echo -e
     echo -e "   Run script with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-no${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
     echo -e
     echo -e "   Run script on test server with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-t${cWhite} ${cCyan}-a${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-nta${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
 }
 
 for arg in "$@"; do
@@ -605,6 +637,7 @@ for arg in "$@"; do
     "--ini") set -- "$@" "-i" ;;
     "--notifications") set -- "$@" "-n" ;;
     "--output") set -- "$@" "-o" ;;
+    "--port") set -- "$@" "-p" ;;
     "--resolution") set -- "$@" "-r" ;;
     "--hex") set -- "$@" "-s" ;;
     "--test") set -- "$@" "-t" ;;
@@ -614,7 +647,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
+while getopts ":a:bcd:e:fhi:no:p:rs:tv:wz" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -665,6 +698,9 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
         ;;
     o)
         output="${OPTARG}"
+        ;;
+    p)
+        custom_port="${OPTARG}"
         ;;
     r)
         ignoreResolution=true
