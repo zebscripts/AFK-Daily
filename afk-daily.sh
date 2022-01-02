@@ -1672,26 +1672,22 @@ collectQuestChests_quick() {
         inputTapSleep 930 680
     done
 
-    if testColorNAND -d "$DEFAULT_DELTA" 265 450 4b2711 && testColorNAND 295 410 71211e; then # OFF: 4b2711 COLLECTED: 71211e
-        inputTapSleep 330 430                                                                 # Chest 20
-        inputTapSleep 580 1850 0                                                              # Collect
+    if testColorNAND -d "$DEFAULT_DELTA" 265 450 4b2711 && testColorNAND 295 410 71211e; then   # OFF: 4b2711 COLLECTED: 71211e
+        inputTapSleep 330 430                                                                   # Chest 20
+        inputTapSleep 580 1850 0                                                                # Collect
+    elif testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
+        inputTapSleep 500 430                                                                   # Chest 40
+        inputTapSleep 580 600 0                                                                 # Collect
+    elif testColorNAND -d "$DEFAULT_DELTA" 595 450 4e2713 && testColorNAND 625 410 8f2d28; then # OFF: 4e2713 COLLECTED: 8f2d28
+        inputTapSleep 660 430                                                                   # Chest 60
+        inputTapSleep 580 600 0                                                                 # Collect
+    elif testColorNAND -d "$DEFAULT_DELTA" 760 450 502611 && testColorNAND 785 410 c21c22; then # OFF: 502611 COLLECTED: c21c22
+        inputTapSleep 830 430                                                                   # Chest 80
+        inputTapSleep 580 600 0                                                                 # Collect
+    elif testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 950 410 6e1819; then # OFF: 662611 COLLECTED: 6e1819
+        inputTapSleep 990 430                                                                   # Chest 100
+        inputTapSleep 580 600                                                                   # Collect
     fi
-    # if testColorNAND -d "$DEFAULT_DELTA" 430 450 552813 && testColorNAND 460 410 ad2c27; then # OFF: 552813 COLLECTED: ad2c27
-    #     inputTapSleep 500 430                                                                 # Chest 40
-    #     inputTapSleep 580 600 0                                                               # Collect
-    # fi
-    # if testColorNAND -d "$DEFAULT_DELTA" 595 450 4e2713 && testColorNAND 625 410 8f2d28; then # OFF: 4e2713 COLLECTED: 8f2d28
-    #     inputTapSleep 660 430                                                                 # Chest 60
-    #     inputTapSleep 580 600 0                                                               # Collect
-    # fi
-    # if testColorNAND -d "$DEFAULT_DELTA" 760 450 502611 && testColorNAND 785 410 c21c22; then # OFF: 502611 COLLECTED: c21c22
-    #     inputTapSleep 830 430                                                                 # Chest 80
-    #     inputTapSleep 580 600 0                                                               # Collect
-    # fi
-    # if testColorNAND -d "$DEFAULT_DELTA" 920 450 662611 && testColorNAND 950 410 6e1819; then # OFF: 662611 COLLECTED: 6e1819
-    #     inputTapSleep 990 430                                                                 # Chest 100
-    #     inputTapSleep 580 600                                                                 # Collect
-    # fi
 }
 
 # ##############################################################################
