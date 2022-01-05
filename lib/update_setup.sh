@@ -142,8 +142,9 @@ buyStorePoeCoins=${buyStorePoeCoins:-"true"}\n\
 buyStorePrimordialEmblem=${buyStorePrimordialEmblem:-"false"}\n\
 buyStoreAmplifyingEmblem=${buyStoreAmplifyingEmblem:-"false"}\n\
 buyStoreSoulstone=${buyStoreSoulstone:-"false"}\n\
-buyStoreLimitedGoldOffer=${buyStoreLimitedGoldOffer:-"false"}\n\
-buyStoreLimitedDiamOffer=${buyStoreLimitedDiamOffer:-"false"}\n\
+buyStoreLimitedElementalShard=${buyStoreLimitedElementalShard:-"false"}\n\
+buyStoreLimitedElementalCore=${buyStoreLimitedElementalCore:-"false"}\n\
+buyStoreLimitedTimeEmblem=${buyStoreLimitedTimeEmblem:-"false"}\n\
 buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
 buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\

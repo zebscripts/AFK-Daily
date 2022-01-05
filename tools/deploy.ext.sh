@@ -44,8 +44,9 @@ buyStorePoeCoins=true
 buyStorePrimordialEmblem=false
 buyStoreAmplifyingEmblem=false
 buyStoreSoulstone=false
-buyStoreLimitedGoldOffer=false
-buyStoreLimitedDiamOffer=false
+buyStoreLimitedElementalShard=false
+buyStoreLimitedElementalCore=false
+buyStoreLimitedTimeEmblem=false
 buyWeeklyGuild=false
 buyWeeklyLabyrinth=false
 
@@ -114,8 +115,9 @@ validateConfig() {
         $buyStorePrimordialEmblem || -z \
         $buyStoreAmplifyingEmblem || -z \
         $buyStoreSoulstone || -z \
-        $buyStoreLimitedGoldOffer || -z \
-        $buyStoreLimitedDiamOffer || -z \
+        $buyStoreLimitedElementalShard || -z \
+        $buyStoreLimitedElementalCore || -z \
+        $buyStoreLimitedTimeEmblem || -z \
         $buyWeeklyGuild || -z \
         $buyWeeklyLabyrinth || -z \
         $doMainTower || -z \
