@@ -1335,18 +1335,22 @@ buyFromStore_test() {
             inputTapSleep 1020 1810          # Labyrinth Store
             inputSwipe 1050 1600 1050 750 50 # Swipe all the way down
             wait
-            if testColorOR -d "$DEFAULT_DELTA" 900 1500 36bae4; then # row 6, item 4 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-                buyFromStore_buyItem 900 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 660 1500 7fd1e7; then # row 6, item 3 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-                buyFromStore_buyItem 660 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 420 1500 91abac; then # row 6, item 2 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-                buyFromStore_buyItem 420 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 180 1500 8fdbf4; then # row 6, item 1 >  60 Rare Hero Soulstone / 2400 Labyrinth Tokens
-                buyFromStore_buyItem 180 1500
-            elif testColorOR -d "$DEFAULT_DELTA" 900 1200 88d8ff; then # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
-                buyFromStore_buyItem 900 1200
-            elif testColorOR -d "$DEFAULT_DELTA" 660 1200 67d2fc; then # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
-                buyFromStore_buyItem 660 1200
+            if testColorOR -d "$DEFAULT_DELTA" 180 1350 0c8bbd; then # row 5, item 1 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 180 1350
+            elif testColorOR -d "$DEFAULT_DELTA" 420 1350 2a99cc; then # row 5, item 2 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 420 1350
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1350 8ca5a3; then # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 660 1350
+            elif testColorOR -d "$DEFAULT_DELTA" 900 1350 f9f9fb; then # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+                buyFromStore_buyItem 900 1350
+            elif testColorOR -d "$DEFAULT_DELTA" 180 1600 2b2c4a; then # row 6, item 1 >  60 Soulstones (Ira) / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 180 1600
+            elif testColorOR -d "$DEFAULT_DELTA" 420 1600 3d2f30; then # row 6, item 2 >  60 Soulstones (Golus) / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 420 1600
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1600 1b151a; then # row 6, item 3 >  60 Soulstones (Mirael) / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 660 1600
+            elif testColorOR -d "$DEFAULT_DELTA" 900 1600 999f9f; then # row 6, item 4 >  60 Soulstones (Silvina) / 2400 Labyrinth Tokens
+                buyFromStore_buyItem 900 1600
             else
                 printInColor "INFO" "Can't buy item from Labyrinth store"
             fi
