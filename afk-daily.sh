@@ -1250,7 +1250,7 @@ buyFromStore() {
                 buyFromStore_buyItem 180 1350
             elif testColorOR -d "$DEFAULT_DELTA" 420 1350 2a99cc; then # row 5, item 2 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
                 buyFromStore_buyItem 420 1350
-            elif testColorOR -d "$DEFAULT_DELTA" 660 1350 8ca5a3; then # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
+            elif testColorOR -d "$DEFAULT_DELTA" 660 1350 81938e; then # row 5, item 3 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
                 buyFromStore_buyItem 660 1350
             elif testColorOR -d "$DEFAULT_DELTA" 900 1350 f9f9fb; then # row 5, item 4 > 120 Rare Hero Soulstone / 4800 Labyrinth Tokens
                 buyFromStore_buyItem 900 1350
@@ -1528,7 +1528,7 @@ strengthenCrystal() {
 # ##############################################################################
 templeOfAscension() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "templeOfAscension" >&2; fi
-    if testColorOR -d "$DEFAULT_DELTA" 450 1050 fe1c0c; then # If red circle
+    if testColorOR -d "$DEFAULT_DELTA" 450 1050 ff1706; then # If red circle
         inputTapSleep 280 960                                # Temple Of Ascension
         inputTapSleep 900 1800                               # Auto Ascend
         inputTapSleep 550 1460                               # Confirm
@@ -1708,7 +1708,7 @@ collectQuestChests_quick() {
 collectMail() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMail" >&2; fi
     # WARN: May break because "some resources have exceeded their maximum limit"
-    if testColorOR -d "$DEFAULT_DELTA" 1020 580 e51f06; then # Red mark
+    if testColorOR -d "$DEFAULT_DELTA" 1011 569 fd2b1a; then # Red mark
         inputTapSleep 960 630                                # Mail
         inputTapSleep 790 1470                               # Collect all
         inputTapSleep 110 1850                               # Return
