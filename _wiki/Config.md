@@ -20,12 +20,12 @@ The script acts depending on a set of variables. In order to change these, open 
 
 ## General
 
-| Variable              |   Type    | Description                                                                                                                                  |    Default     |
-| :-------------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
-| `waitForUpdate`       | `Boolean` | If `true`, waits until the in-game update has finished.                                                                                      |     `true`     |
-| `endAt`               | `String`  | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`. | `championship` |
-| `guildBattleType`     | `String`  | Choose type of Guild fight. Possible entries: `quick` or `challenge`.                                                                        |    `quick`     |
-| `allowCrystalLevelUp` | `Boolean` | If `true`, allows the Resonating Crystal to be leveled up.                                                                                   |     `true`     |
+| Variable              |   Type    | Description                                                                                                                                              |    Default     |
+| :-------------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
+| `waitForUpdate`       | `Boolean` | If `true`, waits until the in-game update has finished.                                                                                                  |     `true`     |
+| `endAt`               | `String`  | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`, `closeApp`. | `championship` |
+| `guildBattleType`     | `String`  | Choose type of Guild fight. Possible entries: `quick` or `challenge`.                                                                                    |    `quick`     |
+| `allowCrystalLevelUp` | `Boolean` | If `true`, allows the Resonating Crystal to be leveled up.                                                                                               |     `true`     |
 
 ## Repetitions
 

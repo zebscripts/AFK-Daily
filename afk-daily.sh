@@ -1645,6 +1645,9 @@ checkWhereToEnd() {
             inputTapSleep 550 1680 0
         fi
         ;;
+    "closeApp")
+        closeApp
+        ;;
     *)
         printInColor "WARN" "Unknown location to end script on. Ignoring..." >&2
         ;;
