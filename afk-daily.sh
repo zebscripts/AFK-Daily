@@ -2,7 +2,7 @@
 # ##############################################################################
 # Script Name   : afk-daily.sh
 # Description   : Script automating daily
-# Args          : [-c] [-e EVENT] [-f] [-i INI] [-l LOCATION]
+# Args          : [-c] [-e EVENT] [-f] [-g] [-i INI] [-l LOCATION]
 #                 [-s TOTEST] [-t] [-v DEBUG] [-w]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
 # License       : MIT
@@ -41,6 +41,7 @@ screenshotRequired=true
 testServer=false
 SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
 withColors=true
+hexdumpSu=false
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -51,7 +52,7 @@ cBlue="\033[0;94m"   # Values
 cPurple="\033[0;95m" # [DEBUG]
 cCyan="\033[0;96m"   # [INFO]
 
-while getopts "ce:fi:l:s:tv:w" opt; do
+while getopts "ce:fgi:l:s:tv:w" opt; do
     case $opt in
     c)
         withColors=false
@@ -69,6 +70,9 @@ while getopts "ce:fi:l:s:tv:w" opt; do
         ;;
     f)
         forceFightCampaign=true
+        ;;
+    g)
+        hexdumpSu=true
         ;;
     i)
         INIFILE="${OPTARG#config/}"
@@ -320,7 +324,11 @@ printInColor() {
 # ##############################################################################
 readHEX() {
     offset=$((DEVICEWIDTH * $2 + $1 + 3))
-    HEX=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
+    if [ "$hexdumpSu" = true ]; then
+        HEX=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | su -c hexdump -C)
+    else
+        HEX=$(dd if="$SCREENSHOTLOCATION" bs=4 skip="$offset" count=1 2>/dev/null | hexdump -C)
+    fi
     HEX=${HEX:9:9}
     HEX="${HEX// /}"
 }

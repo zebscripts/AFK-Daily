@@ -37,6 +37,7 @@ devMode=false
 doCheckGitUpdate=true
 forceFightCampaign=false
 forceWeekly=false
+hexdumpSu=false
 ignoreResolution=false
 disableNotif=false
 testServer=false
@@ -279,6 +280,30 @@ resetResolution() {
 }
 
 # ##############################################################################
+# Function Name : checkHexdump
+# Description   : Check if device is able to run hexdump command
+# ##############################################################################
+checkHexdump() {
+    printTask "Checking hexdump support..."
+
+    # Check if hexdump is found
+    if ! "$adb" shell 'command -v hexdump 1>/dev/null'; then
+        echo
+        printError "Hexdump not found on device."
+        printInfo "If you are runing the script on your personal device, make sure BusyBox is installed."
+        printInfo "More info here: https://github.com/zebscripts/AFK-Daily/wiki/Supported-Devices#personal-android-device"
+        exit 1
+    fi
+
+    # Check if hexdump needs to be run with su
+    if "$adb" shell 'hexdump --help 2>&1' | grep -q 'Permission denied'; then
+        hexdumpSu=true
+    fi
+
+    printSuccess "Done!"
+}
+
+# ##############################################################################
 # Function Name : checkGitUpdate
 # Description   : Checks for script update (with git)
 # ##############################################################################
@@ -401,6 +426,7 @@ datediff() {
 # ##############################################################################
 deploy() {
     if [ $ignoreResolution = false ]; then setResolution; fi # Set Resolution
+    checkHexdump
 
     echo
     printInfo "Platform: ${cCyan}$1${cNc}"
@@ -416,6 +442,7 @@ deploy() {
     "$adb" push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
 
     args="-v $debug -i $configFile -l $2"
+    if [ $hexdumpSu = true ]; then args="$args -g"; fi
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
