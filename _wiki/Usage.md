@@ -5,7 +5,17 @@ While creating this repository and script, we wanted to make it as easy as possi
 - Check what type of device is connected per ADB, and connect accordingly
 - Auto-update the script if a new version is found
 
-You can also execute the script with the following optional parameters:
+Here's the most basic way to run the script:
+
+```sh
+./deploy.sh
+```
+
+*Note: By running the above command, the script will automatically try to figure out what platform you want to run the script on! If this doesn't work, please specify the platform with the `-d` flag.*
+
+## Flags
+
+There are more features though and it's possible to execute the script with the following optional parameters:
 
 ```text
 $ ./deploy.sh -h
@@ -47,6 +57,9 @@ OPTIONS
 
    -n
       Disable heads-up notifications while script is running.
+
+   -p, --port  [PORT]
+      Specify ADB port.
 
    -r
       Ignore resolution warning. Use this at your own risk.
@@ -91,6 +104,9 @@ EXAMPLES
    Run script with specific emulator (for example Nox)
       ./deploy.sh -d nox
 
+   Run script with specific port (for example 52086)
+      ./deploy.sh -p 52086
+
    Run script on test server
       ./deploy.sh -t
 
@@ -104,26 +120,10 @@ EXAMPLES
       ./deploy.sh -s 800,600
 
    Run script with output file and with disabled notifications
-      ./deploy.sh -n -o ".history/$(date +%Y%m%d).log"
+      ./deploy.sh -no ".history/$(date +%Y%m%d).log"
 
    Run script on test server with output file and with disabled notifications
-      ./deploy.sh -n -t -a "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
-```
-
-## Examples
-
-The most basic way to run the script:
-
-```sh
-./deploy.sh
-```
-
-*Note: By running the above command, the script will automatically try to figure out what platform you want to run the script on! If this doesn't work, please specify the platform.*
-
-Running the script on Bluestacks:
-
-```sh
-./deploy.sh -d bs
+      ./deploy.sh -nta "test" -i "test" -o ".history/$(date +%Y%m%d).test.log"
 ```
 
 <hr>

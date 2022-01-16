@@ -49,16 +49,13 @@ convertAKFScriptTMPtoINI() {
 updateAFKScript() {
     # Date 3 days ago
     # Saturday 2 weeks ago
-    case "$(uname -s)" in # Check OS
-    Darwin | Linux)       # Mac / Linux
+    if date -v -1d >/dev/null 2>&1; then
         lastCampaign_default=$(date -v -3d +%Y%m%d)
         lastWeekly_default=$(date -v -sat +%Y%m%d)
-        ;;
-    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+    else
         lastCampaign_default=$(date -d 'now - 3day' +%Y%m%d)
         lastWeekly_default=$(date -dlast-saturday +%Y%m%d)
-        ;;
-    esac
+    fi
 
     for f in ./account-info/acc*.ini; do
         if [ ! -f "$f" ]; then continue; fi
@@ -145,8 +142,9 @@ buyStorePoeCoins=${buyStorePoeCoins:-"true"}\n\
 buyStorePrimordialEmblem=${buyStorePrimordialEmblem:-"false"}\n\
 buyStoreAmplifyingEmblem=${buyStoreAmplifyingEmblem:-"false"}\n\
 buyStoreSoulstone=${buyStoreSoulstone:-"false"}\n\
-buyStoreLimitedGoldOffer=${buyStoreLimitedGoldOffer:-"false"}\n\
-buyStoreLimitedDiamOffer=${buyStoreLimitedDiamOffer:-"false"}\n\
+buyStoreLimitedElementalShard=${buyStoreLimitedElementalShard:-"false"}\n\
+buyStoreLimitedElementalCore=${buyStoreLimitedElementalCore:-"false"}\n\
+buyStoreLimitedTimeEmblem=${buyStoreLimitedTimeEmblem:-"false"}\n\
 buyWeeklyGuild=${buyWeeklyGuild:-"false"}\n\
 buyWeeklyLabyrinth=${buyWeeklyLabyrinth:-"false"}\n\
 \n\

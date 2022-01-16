@@ -4,7 +4,8 @@
 # Description   : Used to run afk-daily on phone
 # Args          : [-h, --help] [-a, --account [ACCOUNT]] [-c, --check]
 #                 [-d, --device [DEVICE]] [-e, --event [EVENT]] [-f, --fight]
-#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]] [-r]
+#                 [-i, --ini [SUB]] [-n] [-o, --output [OUTPUT_FILE]]
+#                 [-p, --port [PORT]] [-r]
 #                 [-s <X>,<Y>[,<COLOR_TO_COMPARE>[,<REPEAT>[,<SLEEP>]]]]
 #                 [-t, --test] [-v, --verbose [DEBUG]] [-w, --weekly]
 # GitHub        : https://github.com/zebscripts/AFK-Daily
@@ -31,17 +32,21 @@ device="default"
 evt="" # Default dev evt
 
 # Do not modify
+script_scr="$0"
+script_args="$*"
 adb=adb
 devMode=false
 doCheckGitUpdate=true
 forceFightCampaign=false
 forceWeekly=false
+hexdumpSu=false
 ignoreResolution=false
 disableNotif=false
 testServer=false
 debug=0
 output=""
 totest=""
+custom_port=""
 
 # ##############################################################################
 # Section       : Functions
@@ -157,45 +162,72 @@ checkDate() {
 checkDevice() {
     if [ "$#" -gt "0" ]; then            # If parameters are sent
         if [ "$1" = "Bluestacks" ]; then # Bluestacks
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            fi
+
             printTask "Searching for Bluestacks through ADB... "
-            if ! "$adb" get-state 1>/dev/null; then
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
                 printSuccess "Found Bluestacks!"
+                deploy "Bluestacks" "$bluestacksDirectory"
             fi
         elif [ "$1" = "Memu" ]; then # Memu
             printTask "Searching for Memu through ADB..."
-            "$adb" connect localhost:21503 1>/dev/null
-            if ! "$adb" get-state 1>/dev/null; then
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:21503 1>/dev/null
+            fi
+
+            # Check for device
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
                 printSuccess "Found Memu!"
+                deploy "Memu" "$memuDirectory"
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
-            "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
-            if ! "$adb" get-state 1>/dev/null; then
+            # Use custom port if set
+            if [ -n "$custom_port" ]; then
+                "$adb" connect localhost:"$custom_port" 1>/dev/null
+            else
+                "$adb" connect localhost:62001 1>/dev/null # If it's not working, try with 127.0.0.1 instead of localhost
+            fi
+
+            # Check for device
+            if ! "$adb" get-state 1>/dev/null 2>/dev/null; then
                 printError "Not found!"
                 exit
             else
                 printSuccess "Found Nox!"
+                deploy "Nox" "$noxDirectory"
             fi
         fi
     else # If parameters aren't sent
         printTask "Searching for device through ADB..."
+        # Use custom port if set
+        if [ -n "$custom_port" ]; then
+            "$adb" connect localhost:"$custom_port" 1>/dev/null
+        fi
 
+        # Check for device
         if ! "$adb" get-state 1>/dev/null 2>&1; then # Checks if adb finds device
             printError "No device found!"
             printInfo "Please make sure it's connected."
             exit
         else
             if [[ $("$adb" devices) =~ emulator ]]; then # Bluestacks
-                printSuccess "Found Bluestacks!"
-                deploy "Bluestacks" "$bluestacksDirectory"
+                printSuccess "Emulator found!"
+                deploy "Emulator" "$bluestacksDirectory"
             else # Personal
-                printSuccess "Found Personal Device!"
+                printSuccess "Device found!"
                 deploy "Personal" "$personalDirectory"
             fi
         fi
@@ -225,6 +257,52 @@ checkEOL() {
             printSuccess "Passed!"
         fi
     fi
+}
+
+# ##############################################################################
+# Function Name : setResolution
+# Description   : Set device resolution and density
+# ##############################################################################
+setResolution() {
+    printTask "Setting screen resolution and density..."
+    "$adb" shell wm size 1080x1920 # Set resolution
+    "$adb" shell wm density 240    # Set density
+    printSuccess "Done!"
+}
+
+# ##############################################################################
+# Function Name : resetResolution
+# Description   : Reset device resolution and density
+# ##############################################################################
+resetResolution() {
+    printTask "Reseting screen resolution and density..."
+    "$adb" shell wm size reset    # Reset resolution
+    "$adb" shell wm density reset # Reset density
+    printSuccess "Done!"
+}
+
+# ##############################################################################
+# Function Name : checkHexdump
+# Description   : Check if device is able to run hexdump command
+# ##############################################################################
+checkHexdump() {
+    printTask "Checking hexdump support..."
+
+    # Check if hexdump is found
+    if ! "$adb" shell 'command -v hexdump 1>/dev/null'; then
+        echo
+        printError "Hexdump not found on device."
+        printInfo "If you are runing the script on your personal device, make sure BusyBox is installed."
+        printInfo "More info here: https://github.com/zebscripts/AFK-Daily/wiki/Supported-Devices#personal-android-device"
+        exit 1
+    fi
+
+    # Check if hexdump needs to be run with su
+    if "$adb" shell 'hexdump --help 2>&1' | grep -q 'Permission denied'; then
+        hexdumpSu=true
+    fi
+
+    printSuccess "Done!"
 }
 
 # ##############################################################################
@@ -268,8 +346,7 @@ to overwrite them and get the latest script version? Config files will not be ov
             fi
 
             # Force script restart to update correctly
-            printInfo "Please run the script again for changes to take effect."
-            exit 1
+            exec "$script_scr" "$script_args"
         else
             # git is not installed/available
             printWarn "git is not installed/available."
@@ -283,8 +360,7 @@ to overwrite them and get the latest script version? Config files will not be ov
             printSuccess "Done!"
 
             # Force script restart to update correctly
-            printInfo "Please run the script again for changes to take effect."
-            exit 1
+            exec "$script_scr" "$script_args"
         fi
     fi
 }
@@ -330,16 +406,13 @@ checkSetupUpdate() {
 # Output        : stdout <days>
 # ##############################################################################
 datediff() {
-    case "$(uname -s)" in # Check OS
-    Darwin | Linux)       # Mac / Linux
+    if date -v -1d >/dev/null 2>&1; then
         d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
         d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
-        ;;
-    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+    else
         d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
         d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
-        ;;
-    esac
+    fi
     echo $(((d1 - d2) / 86400))
 }
 
@@ -349,23 +422,10 @@ datediff() {
 # Args          : <PLATFORM> <DIRECTORY>
 # ##############################################################################
 deploy() {
-    if [[ $("$adb" shell wm size) != *"1080x1920"* ]] && [[ $("$adb" shell wm size) != *"1920x1080"* ]]; then # Check for resolution
-        echo
-        printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
-        if [ $ignoreResolution = false ]; then
-            printInfo "$(adb shell wm size)"
-            printInfo "$(adb shell wm density)"
-            # "$adb" shell dumpsys display
-            printWarn "Please let us know by opening an issue with a screenshot of this terminal output."
-            printWarn "If you're sure your device settings are correct and want to force the script to run regardless, use the -r flag."
-            printWarn "The script does NOT work on resolutions other than 1080x1920!"
-            exit
-        else
-            printWarn "Running script regardless..."
-        fi
-    fi
+    if [ $ignoreResolution = false ]; then setResolution; fi # Set Resolution
+    checkHexdump
 
-    printf "\n"
+    echo
     printInfo "Platform: ${cCyan}$1${cNc}"
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
     if [ $disableNotif = true ]; then
@@ -379,6 +439,7 @@ deploy() {
     "$adb" push $configFile "$2"/scripts/afk-arena 1>/dev/null  # Push config to device
 
     args="-v $debug -i $configFile -l $2"
+    if [ $hexdumpSu = true ]; then args="$args -g"; fi
     if [ $forceFightCampaign = true ]; then args="$args -f"; fi
     if [ $forceWeekly = true ]; then args="$args -w"; fi
     if [ $testServer = true ]; then args="$args -t"; fi
@@ -387,8 +448,10 @@ deploy() {
     if [ -n "$evt" ]; then args="$args -e $evt"; fi
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
+    # Reset resolution
+    if [ $ignoreResolution = false ]; then resetResolution; fi
+    # Enable notifications in case they got deactivated before
     if [ $disableNotif = true ]; then
-        echo
         "$adb" shell settings put global heads_up_notifications_enabled 1
         printInfo "Notifications: ${cCyan}ON${cNc}\n"
     fi
@@ -428,14 +491,11 @@ saveDate() {
             newLastCampaign=$(date +%Y%m%d)
         fi
         if [ $forceWeekly = true ] || [ ! -f $tempFile ]; then
-            case "$(uname -s)" in # Check OS
-            Darwin | Linux)       # Mac / Linux
+            if date -v -1d >/dev/null 2>&1; then
                 newLastWeekly=$(date -v -sat +%Y%m%d)
-                ;;
-            CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+            else
                 newLastWeekly=$(date -dlast-saturday +%Y%m%d)
-                ;;
-            esac
+            fi
         fi
 
         echo -e "# afk-daily\n\
@@ -476,16 +536,11 @@ run() {
 
     if [ "$device" == "Bluestacks" ]; then
         checkDevice "Bluestacks"
-        deploy "Bluestacks" "$bluestacksDirectory"
     elif [ "$device" == "Memu" ]; then
         checkDevice "Memu"
-        deploy "Memu" "$memuDirectory"
     elif [ "$device" == "Nox" ]; then
         checkDevice "Nox"
-        deploy "Nox" "$noxDirectory"
-    else
-        checkDevice
-    fi
+    else checkDevice; fi
 }
 
 # ##############################################################################
@@ -531,6 +586,9 @@ show_help() {
     echo -e "   ${cCyan}-n${cWhite}"
     echo -e "      Disable heads-up notifications while script is running."
     echo -e
+    echo -e "   ${cCyan}-p${cWhite}, ${cCyan}--port${cWhite}  ${cGreen}[PORT]${cWhite}"
+    echo -e "      Specify ADB port."
+    echo -e
     echo -e "   ${cCyan}-r${cWhite}"
     echo -e "      Ignore resolution warning. Use this at your own risk."
     echo -e
@@ -574,6 +632,9 @@ show_help() {
     echo -e "   Run script with specific emulator (for example Nox)"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-d${cWhite} ${cGreen}nox${cWhite}"
     echo -e
+    echo -e "   Run script with specific port (for example 52086)"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-p${cWhite} ${cGreen}52086${cWhite}"
+    echo -e
     echo -e "   Run script on test server"
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-t${cWhite}"
     echo -e
@@ -587,10 +648,10 @@ show_help() {
     echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-s${cWhite} ${cGreen}800,600${cWhite}"
     echo -e
     echo -e "   Run script with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-no${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).log\"${cWhite}"
     echo -e
     echo -e "   Run script on test server with output file and with disabled notifications"
-    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-n${cWhite} ${cCyan}-t${cWhite} ${cCyan}-a${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
+    echo -e "      ${cYellow}./deploy.sh${cWhite} ${cCyan}-nta${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-i${cWhite} ${cGreen}\"test\"${cWhite} ${cCyan}-o${cWhite} ${cGreen}\".history/\$(date +%Y%m%d).test.log\"${cNc}"
 }
 
 for arg in "$@"; do
@@ -605,6 +666,7 @@ for arg in "$@"; do
     "--ini") set -- "$@" "-i" ;;
     "--notifications") set -- "$@" "-n" ;;
     "--output") set -- "$@" "-o" ;;
+    "--port") set -- "$@" "-p" ;;
     "--resolution") set -- "$@" "-r" ;;
     "--hex") set -- "$@" "-s" ;;
     "--test") set -- "$@" "-t" ;;
@@ -614,7 +676,7 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
+while getopts ":a:bcd:e:fhi:no:p:rs:tv:wz" option; do
     case $option in
     a)
         tempFile="account-info/acc-${OPTARG}.ini"
@@ -665,6 +727,9 @@ while getopts ":a:bcd:e:fhi:no:rs:tv:wz" option; do
         ;;
     o)
         output="${OPTARG}"
+        ;;
+    p)
+        custom_port="${OPTARG}"
         ;;
     r)
         ignoreResolution=true
