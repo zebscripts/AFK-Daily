@@ -1881,7 +1881,7 @@ init() {
 # Descripton    : Run the script based on config
 # ##############################################################################
 run() {
-    if [ "$hasEnded" = true ]; then return 0; fi # if the script has restarted we need a way to stop looping at the end.
+    if [ "$hasEnded" = true ]; then return 0; fi # If the script has restarted we need a way to stop looping at the end.
 
     # CAMPAIGN TAB
     switchTab "Campaign"

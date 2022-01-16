@@ -170,6 +170,7 @@ checkDevice() {
                 exit
             else
                 printSuccess "Found Bluestacks!"
+                deploy "Bluestacks" "$bluestacksDirectory"
             fi
         elif [ "$1" = "Memu" ]; then # Memu
             printTask "Searching for Memu through ADB..."
@@ -186,6 +187,7 @@ checkDevice() {
                 exit
             else
                 printSuccess "Found Memu!"
+                deploy "Memu" "$memuDirectory"
             fi
         elif [ "$1" = "Nox" ]; then # Nox
             printTask "Searching for Nox through ADB..."
@@ -202,6 +204,7 @@ checkDevice() {
                 exit
             else
                 printSuccess "Found Nox!"
+                deploy "Nox" "$noxDirectory"
             fi
         fi
     else # If parameters aren't sent
@@ -251,6 +254,28 @@ checkEOL() {
             printSuccess "Passed!"
         fi
     fi
+}
+
+# ##############################################################################
+# Function Name : setResolution
+# Description   : Set device resolution and density
+# ##############################################################################
+setResolution() {
+    printTask "Setting screen resolution and density..."
+    "$adb" shell wm size 1080x1920 # Set resolution
+    "$adb" shell wm density 240    # Set density
+    printSuccess "Done!"
+}
+
+# ##############################################################################
+# Function Name : resetResolution
+# Description   : Reset device resolution and density
+# ##############################################################################
+resetResolution() {
+    printTask "Resetting screen resolution and density..."
+    "$adb" shell wm size reset    # Reset resolution
+    "$adb" shell wm density reset # Reset density
+    printSuccess "Done!"
 }
 
 # ##############################################################################
@@ -375,23 +400,9 @@ datediff() {
 # Args          : <PLATFORM> <DIRECTORY>
 # ##############################################################################
 deploy() {
-    if [[ $("$adb" shell wm size) != *"1080x1920"* ]] && [[ $("$adb" shell wm size) != *"1920x1080"* ]]; then # Check for resolution
-        echo
-        printWarn "It seems like your device does not have the correct resolution! Please use a resolution of 1080x1920."
-        if [ $ignoreResolution = false ]; then
-            printInfo "$(adb shell wm size)"
-            printInfo "$(adb shell wm density)"
-            # "$adb" shell dumpsys display
-            printWarn "Please let us know by opening an issue with a screenshot of this terminal output."
-            printWarn "If you're sure your device settings are correct and want to force the script to run regardless, use the -r flag."
-            printWarn "The script does NOT work on resolutions other than 1080x1920!"
-            exit
-        else
-            printWarn "Running script regardless..."
-        fi
-    fi
+    if [ $ignoreResolution = false ]; then setResolution; fi # Set Resolution
 
-    printf "\n"
+    echo
     printInfo "Platform: ${cCyan}$1${cNc}"
     printInfo "Script Directory: ${cCyan}$2/scripts/afk-arena${cNc}"
     if [ $disableNotif = true ]; then
@@ -413,8 +424,10 @@ deploy() {
     if [ -n "$evt" ]; then args="$args -e $evt"; fi
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
+    # Reset resolution
+    if [ $ignoreResolution = false ]; then resetResolution; fi
+    # Enable notifications in case they got deactivated before
     if [ $disableNotif = true ]; then
-        echo
         "$adb" shell settings put global heads_up_notifications_enabled 1
         printInfo "Notifications: ${cCyan}ON${cNc}\n"
     fi
@@ -502,16 +515,11 @@ run() {
 
     if [ "$device" == "Bluestacks" ]; then
         checkDevice "Bluestacks"
-        deploy "Bluestacks" "$bluestacksDirectory"
     elif [ "$device" == "Memu" ]; then
         checkDevice "Memu"
-        deploy "Memu" "$memuDirectory"
     elif [ "$device" == "Nox" ]; then
         checkDevice "Nox"
-        deploy "Nox" "$noxDirectory"
-    else
-        checkDevice
-    fi
+    else checkDevice; fi
 }
 
 # ##############################################################################
