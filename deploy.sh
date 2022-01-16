@@ -32,6 +32,8 @@ device="default"
 evt="" # Default dev evt
 
 # Do not modify
+script_scr="$0"
+script_args="$*"
 adb=adb
 devMode=false
 doCheckGitUpdate=true
@@ -344,8 +346,7 @@ to overwrite them and get the latest script version? Config files will not be ov
             fi
 
             # Force script restart to update correctly
-            printInfo "Please run the script again for changes to take effect."
-            exit 1
+            exec "$script_scr" "$script_args"
         else
             # git is not installed/available
             printWarn "git is not installed/available."
@@ -359,8 +360,7 @@ to overwrite them and get the latest script version? Config files will not be ov
             printSuccess "Done!"
 
             # Force script restart to update correctly
-            printInfo "Please run the script again for changes to take effect."
-            exit 1
+            exec "$script_scr" "$script_args"
         fi
     fi
 }
