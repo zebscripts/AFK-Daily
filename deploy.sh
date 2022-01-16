@@ -273,7 +273,7 @@ setResolution() {
 # Description   : Reset device resolution and density
 # ##############################################################################
 resetResolution() {
-    printTask "Resetting screen resolution and density..."
+    printTask "Reseting screen resolution and density..."
     "$adb" shell wm size reset    # Reset resolution
     "$adb" shell wm density reset # Reset density
     printSuccess "Done!"
@@ -406,16 +406,13 @@ checkSetupUpdate() {
 # Output        : stdout <days>
 # ##############################################################################
 datediff() {
-    case "$(uname -s)" in # Check OS
-    Darwin | Linux)       # Mac / Linux
+    if date -v -1d >/dev/null 2>&1; then
         d1=$(date -v "${1:-"$(date +%Y%m%d)"}" +%s)
         d2=$(date -v "${2:-"$(date +%Y%m%d)"}" +%s)
-        ;;
-    CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+    else
         d1=$(date -d "${1:-"$(date +%Y%m%d)"}" +%s)
         d2=$(date -d "${2:-"$(date +%Y%m%d)"}" +%s)
-        ;;
-    esac
+    fi
     echo $(((d1 - d2) / 86400))
 }
 
@@ -494,14 +491,11 @@ saveDate() {
             newLastCampaign=$(date +%Y%m%d)
         fi
         if [ $forceWeekly = true ] || [ ! -f $tempFile ]; then
-            case "$(uname -s)" in # Check OS
-            Darwin | Linux)       # Mac / Linux
+            if date -v -1d >/dev/null 2>&1; then
                 newLastWeekly=$(date -v -sat +%Y%m%d)
-                ;;
-            CYGWIN* | MINGW32* | MSYS* | MINGW*) # Windows
+            else
                 newLastWeekly=$(date -dlast-saturday +%Y%m%d)
-                ;;
-            esac
+            fi
         fi
 
         echo -e "# afk-daily\n\
