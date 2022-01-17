@@ -114,9 +114,12 @@ done
 # Output        : return 0/1
 # ##############################################################################
 checkToDo() {
+    # Check if variable is false
     if [ "$(eval echo \$"$1")" = false ]; then
         return 1
     fi
+
+    # Increment tries if necessary
     if [ "$1" = "$currentPos" ]; then
         tries=$((tries + 1))
         printInColor "DEBUG" "checkToDo > $currentPos [$tries]"
@@ -125,6 +128,8 @@ checkToDo() {
         currentPos="$1"
         tries=0
     fi
+
+    # Check if script should retry operation
     if [ $tries -lt 3 ]; then
         return 0
     else
@@ -1497,11 +1502,11 @@ nobleTavern() {
 }
 
 # ##############################################################################
-# Function Name : oakInnSpeedy
+# Function Name : oakInn_Speedy
 # Descripton    : Collect Oak Inn faster than oakInn()
 # Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
 # ##############################################################################
-oakInnSpeedy() {
+oakInn_Speedy() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
@@ -2245,7 +2250,7 @@ run() {
         if requiredLevel 0 5 1; then
             # Check which oakInn collection type to use
             if requiredLevel 0 17 1; then
-                oakInnSpeedy
+                oakInn_Speedy
             else
                 oakInn_Old
             fi
