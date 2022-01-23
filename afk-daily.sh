@@ -545,6 +545,7 @@ switchTab() {
             [ "$doFastRewards" = true ] ||
             [ "$doCollectFriendsAndMercenaries" = true ] ||
             [ "$doLootAfkChest" = true ]; then
+            inputTapSleep 550 1850 2
             inputTapSleep 550 1850
             activeTab="$1"
             verifyHEX 450 1775 cc9261 "Switched to the Campaign Tab." "Failed to switch to the Campaign Tab."
@@ -557,6 +558,7 @@ switchTab() {
             [ "$doArenaOfHeroes" = true ] ||
             [ "$doLegendsTournament" = true ] ||
             [ "$doKingsTower" = true ]; then
+            inputTapSleep 300 1850 2
             inputTapSleep 300 1850
             activeTab="$1"
             verifyHEX 240 1775 d49a61 "Switched to the Dark Forest Tab." "Failed to switch to the Dark Forest Tab."
@@ -574,6 +576,7 @@ switchTab() {
             [ "$doCollectQuestChests" = true ] ||
             [ "$doCollectMail" = true ] ||
             [ "$doCollectMerchantFreebies" = true ]; then
+            inputTapSleep 110 1850 2
             inputTapSleep 110 1850
             activeTab="$1"
             verifyHEX 20 1775 d49a61 "Switched to the Ranhorn Tab." "Failed to switch to the Ranhorn Tab."
@@ -1666,11 +1669,11 @@ collectQuestChests() {
     # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
-    sleep 2
+    sleep 4
 
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
-    sleep 2
+    sleep 4
 
     #WARN: May break if the reward is a new champ...
     inputTapSleep 930 1650                                     # Campaign
