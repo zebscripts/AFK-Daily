@@ -12,7 +12,7 @@ Here's a list of devices where the script has been successfully run at least onc
 ## [Bluestacks 5](https://www.bluestacks.com/)
 
    1. **Display:**
-      - Change the resolution to `1080x1920`
+      - Change the resolution to `1080x1920` (Portrait) or `1920x1080` (Landscape)
       - *Optional:* Change from Landscape (Tablet mode) to Portrait (Phone mode)
       - *Recommended:* Use `240 DPI` (shouldn't affect the script, but you never know)
    2. **Device Settings:**
@@ -25,18 +25,20 @@ Here's a list of devices where the script has been successfully run at least onc
 ## [MEmu](https://www.memuplay.com/)
 
    1. **Display:**
-      - Change the resolution to `1080x1920`
+      - Change the resolution to `1080x1920` (Portrait) or `1920x1080` (Landscape)
       - *Optional:* Change from Landscape (Tablet mode) to Portrait (Phone mode)
 
 <hr>
 
 ## [Nox](https://www.bignox.com/)
 
+> Nox is most likely broken again, we do **not** recommend using it.
+
 1. **Settings:** Under Nox settings, make sure to make the following changes:
    1. **General:**
        - Enable Root
    2. **Performance:**
-       - Change the resolution to `1080x1920`
+       - Change the resolution to `1080x1920` (Portrait) or `1920x1080` (Landscape)
        - *Optional:* Mobile Phone (instead of Tablet)
 2. **USB Debugging:** Visit [this link](https://www.xda-developers.com/install-adb-windows-macos-linux/) on how to enable USB Debugging. It's in the beginning, under the `Phone Setup` part. *The settings on Nox are inside a folder called Tools.*
 
