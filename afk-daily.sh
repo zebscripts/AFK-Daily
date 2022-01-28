@@ -339,35 +339,43 @@ readHEX() {
 
 # ##############################################################################
 # Function Name : requiredLevel
-# Descripton    : Gets pixel color
+# Descripton    : Checks if Player has required VIP and Chapter/Stage levels
 # Args          : <VIP> <Chapter> <Stage>
-# Output        : if true, return 0, else 1
+# Output        : If true return 0, else 1
 # ##############################################################################
 requiredLevel() {
+    # Check amount of arguments
     if [ "$#" -ne 3 ]; then
         echo "Usage: requiredLevel <VIP> <Chapter> <Stage>" >&2
         return
     fi
     if [ "$DEBUG" -ge 2 ]; then printInColor "DEBUG" "requiredLevel ${cPurple}$*${cNc}" >&2; fi
 
-    # If nothing initialized, just ignore this test
-    if [ "$vipLevel" -eq 0 ] && [ "$campaignChapter" -eq 0 ] && [ "$campaignStage" -eq 0 ]; then
-        return 0
-    else
-        # Check if VIP is asked & compare to player config vipLevel
-        if [ "$1" -gt 0 ] && [ "$vipLevel" -ge "$1" ]; then
+    if [ "$1" -gt 0 ] && [ "$2" -gt 0 ]; then                                # Both VIP and Chapter matter
+        if [ "$vipLevel" -ge "$1" ] || [ "$campaignChapter" -ge "$2" ]; then # Player VIP and Chapter high enough
+            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then         # Player stage high enough
+                return 0
+            else
+                return 1
+            fi
             return 0
         fi
-        # Check if Chapter is asked & compare to player config campaignChapter
-        if [ "$2" -gt 0 ] && [ "$campaignChapter" -ge "$2" ]; then
-            # Check if Stage is asked & compare to player config campaignStage
-            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then
+    elif [ "$1" -gt 0 ]; then             # Only VIP matters
+        if [ "$vipLevel" -ge "$1" ]; then # Player VIP high enough
+            return 0
+        fi
+    elif [ "$2" -gt 0 ]; then                                        # Only Chapter matters
+        if [ "$campaignChapter" -ge "$2" ]; then                     # Player chapter high enough
+            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then # Player stage high enough
                 return 0
+            else
+                return 1
             fi
+            return 0
+        else
+            return 1
         fi
     fi
-
-    return 1
 }
 
 # ##############################################################################
@@ -2141,6 +2149,37 @@ fi
 # ##############################################################################
 
 # ##############################################################################
+# Function Name : checkRequirements
+# Descripton    : Checks if it's possible to run current config with given VIP
+#                 level, Chapter and Stage. Any new config entry that is
+#                 dependent on one of the three must be checked here. Let's
+#                 players know that the script cannot run a feature if necessary.
+# ##############################################################################
+checkRequirements() {
+    # endAt
+    # guildBattleType
+    # Maybe a store item
+    # doCollectFriendsAndMercenaries (should be split into two differnt things to do or maybe mercenaries should be removed)
+    # doSoloBounties (collect all or not)
+    # doTeamBounties (collect all or not)
+    # doArenaOfHeroes (skip battles)
+    # doLegendsTournament (maybe...?)
+    # doKingsTower
+    # doGuildHunts (Quick battles)
+    # doTwistedRealmBoss
+    # doTempleOfAscension (when do you unlock the temple?)
+    # doCompanionPointsSummon (when do you unlock the tavern?)
+    # doCollectOakPresents (if at all, and then speedy or not)
+
+    # Check if Oak Inn is unlocked
+    if ! requiredLevel 0 5 0; then
+        echo "Your Campaign level is not high enough to collect Oak Inn presents."
+        # A message for sure, and change config variables if necessary!
+        # TODO: Needs to be checked again in the oak_inn function to know which function to run (speedy or not). Or have a variable that saves this. Eh.
+    fi
+}
+
+# ##############################################################################
 # Function Name : init
 # Descripton    : Init the script (close/start app, preload, wait for update)
 # Remark        : Can be skipped if you are already in the game
@@ -2287,6 +2326,7 @@ if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia
 if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
 echo
+if [ "$vipLevel" -ne 0 ] && [ "$campaignChapter" -ne 0 ] && [ "$campaignStage" -ne 0 ]; then checkRequirements; fi
 init
 run
 
