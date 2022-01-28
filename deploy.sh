@@ -260,14 +260,46 @@ checkEOL() {
 }
 
 # ##############################################################################
-# Function Name : setResolution
-# Description   : Set device resolution and density
+# Function Name : checkResolution
+# Description   : Check device resolution
 # ##############################################################################
-setResolution() {
-    printTask "Setting screen resolution and density..."
-    "$adb" shell wm size 1080x1920 # Set resolution
-    "$adb" shell wm density 240    # Set density
-    printSuccess "Done!"
+checkResolution() {
+    # Prints info related to debugging the resolution
+    printDebugResolution() {
+        printInfo "$("$adb" shell wm size)"
+        printInfo "$("$adb" shell wm density)"
+        # "$adb" shell dumpsys display
+        printWarn "In case you're having trouble, join our Discord server and ask in the #need-help channel."
+        printWarn "If you're sure your device settings are correct and want to force the script to run regardless, use the -r flag."
+        printWarn "The script does NOT work on resolutions other than 1080x1920 (Portrait) or 1920x1080 (Landscape)!"
+        exit
+    }
+
+    if [[ $("$adb" shell wm size) != *"Physical size: 1080x1920"* ]] && [[ $("$adb" shell wm size) != *"Physical size: 1920x1080"* ]]; then # Check for resolution
+        echo
+        printError "It seems like your device does not have the correct resolution!"
+        printWarn "Please use a resolution of 1080x1920 (Portrait) or 1920x1080 (Landscape)."
+
+        if [ $ignoreResolution = false ]; then
+            printDebugResolution
+        else
+            printWarn "Running script regardless..."
+        fi
+    elif [[ $("$adb" shell wm size) == *"Override"* ]]; then # Check for Override
+        echo
+        printError "It seems like your device is overriding the default resolution!"
+        printWarn "This may break the script."
+
+        if [ $ignoreResolution = false ]; then
+            if printQuestion "Do you want the script to try to fix the resolution for you? (y/n)"; then
+                resetResolution
+            else
+                printDebugResolution
+            fi
+        else
+            printWarn "Running script regardless..."
+        fi
+    fi
 }
 
 # ##############################################################################
@@ -275,9 +307,8 @@ setResolution() {
 # Description   : Reset device resolution and density
 # ##############################################################################
 resetResolution() {
-    printTask "Reseting screen resolution and density..."
-    "$adb" shell wm size reset    # Reset resolution
-    "$adb" shell wm density reset # Reset density
+    printTask "Reseting screen resolution..."
+    "$adb" shell wm size reset # Reset resolution
     printSuccess "Done!"
 }
 
@@ -422,8 +453,8 @@ datediff() {
 # Args          : <PLATFORM> <DIRECTORY>
 # ##############################################################################
 deploy() {
-    if [ $ignoreResolution = false ]; then setResolution; fi # Set Resolution
-    checkHexdump
+    checkResolution # Check Resolution
+    checkHexdump    # Check if hexdump should be run with su
 
     echo
     printInfo "Platform: ${cCyan}$1${cNc}"
@@ -448,8 +479,6 @@ deploy() {
     if [ -n "$evt" ]; then args="$args -e $evt"; fi
     "$adb" shell sh "$2"/scripts/afk-arena/afk-daily.sh "$args" && saveDate
 
-    # Reset resolution
-    if [ $ignoreResolution = false ]; then resetResolution; fi
     # Enable notifications in case they got deactivated before
     if [ $disableNotif = true ]; then
         "$adb" shell settings put global heads_up_notifications_enabled 1
