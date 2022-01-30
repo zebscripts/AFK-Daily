@@ -1513,40 +1513,33 @@ nobleTavern() {
 }
 
 # ##############################################################################
-# Function Name : oakInn_Speedy
+# Function Name : oakInnSpeedy
 # Descripton    : Collect Oak Inn faster than oakInn()
 # Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
 # ##############################################################################
-oakInn_Speedy() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
+oakInnSpeedy() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInnSpeedy" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
-    _oakInn_COUNT=0
-    _oakInn_COLLECTED=0
-    until [ "$_oakInn_COLLECTED" -ge "$totalAmountOakRewards" ] || [ "$_oakInn_COUNT" -ge $((totalAmountOakRewards * 10)) ]; do
-        _oakInn_ROW_COUNT=0
-        screenshotRequired=true
-        until [ "$_oakInn_ROW_COUNT" -ge 100 ]; do
-            if testColorOR -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
-                inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
-                if testColorOR 250 1200 eaddb8; then
-                    inputTapSleep 540 1650 1                     # Ok
-                    inputTapSleep 540 1650 .5                    # Collect reward
-                    _oakInn_COLLECTED=$((_oakInn_COLLECTED + 1)) # Increment
-                    break
-                fi
+    _oakInn_ROW_COUNT=0
+    until [ "$_oakInn_ROW_COUNT" -ge 3000 ]; do
+        if testColorOR -f -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
+            inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
+            if testColorOR 250 1200 eaddb8; then
+                inputTapSleep 540 1650 1  # Ok
+                inputTapSleep 540 1650 .5 # Collect reward
+                break
             fi
-            _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment
-        done
-        _oakInn_COUNT=$((_oakInn_COUNT + 1)) # Increment
+        fi
+        _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment
     done
 
     inputTapSleep 70 1810 0
 
     wait
     verifyHEX 20 1775 d49a61 \
-        "Attempted to collect Oak Inn presents. [${cCyan}$_oakInn_COLLECTED${cNc}]" \
-        "Failed to collect Oak Inn presents. [${cCyan}$_oakInn_COLLECTED${cNc}]"
+        "Attempted to collect Oak Inn presents." \
+        "Failed to collect Oak Inn presents."
 }
 
 # ##############################################################################
@@ -2292,7 +2285,7 @@ run() {
         if requiredLevel 0 5 1; then
             # Check which oakInn collection type to use
             if requiredLevel 0 17 1; then
-                oakInn_Speedy
+                oakInnSpeedy
             else
                 oakInn_Old
             fi
