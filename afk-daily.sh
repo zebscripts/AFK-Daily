@@ -1478,7 +1478,7 @@ oakInnSpeedy() {
     printInColor "INFO" "Searching for presents to collect..."
     _oakInn_ROW_COUNT=0
     until [ "$_oakInn_ROW_COUNT" -ge 3000 ]; do
-        if testColorOR -fd 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
+        if testColorOR -f -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
             inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
             if testColorOR 250 1200 eaddb8; then
                 inputTapSleep 540 1650 1  # Ok
