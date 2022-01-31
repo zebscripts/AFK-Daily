@@ -992,12 +992,12 @@ kingsTower() {
     if testColorOR 550 150 1a1212; then
         # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
         if [ "$doMainTower" = true ]; then
-            printInColor "INFO" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
+            printInColor "DONE" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
         fi
     else
         # King's Tower with Towers of Esperia unlocked (after stage 15-1)
         if [ "$doMainTower" = true ]; then
-            printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
+            printInColor "DONE" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
         fi
 
         if [ "$doTowerOfLight" = true ] && { [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; }; then
