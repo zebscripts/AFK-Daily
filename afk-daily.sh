@@ -354,10 +354,12 @@ requiredLevel() {
 
     if [ "$1" -gt 0 ] && [ "$2" -gt 0 ]; then                                # Both VIP and Chapter matter
         if [ "$vipLevel" -ge "$1" ] || [ "$campaignChapter" -ge "$2" ]; then # Player VIP and Chapter high enough
-            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then         # Player stage high enough
-                return 0
-            else
-                return 1
+            if [ "$3" -gt 1 ]; then                                          # Player stage set
+                if [ "$campaignStage" -ge "$3" ]; then                       # Player stage high enough
+                    return 0
+                else
+                    return 1
+                fi
             fi
             return 0
         fi
@@ -365,12 +367,14 @@ requiredLevel() {
         if [ "$vipLevel" -ge "$1" ]; then # Player VIP high enough
             return 0
         fi
-    elif [ "$2" -gt 0 ]; then                                        # Only Chapter matters
-        if [ "$campaignChapter" -ge "$2" ]; then                     # Player chapter high enough
-            if [ "$3" -gt 0 ] && [ "$campaignStage" -ge "$3" ]; then # Player stage high enough
-                return 0
-            else
-                return 1
+    elif [ "$2" -gt 0 ]; then                          # Only Chapter matters
+        if [ "$campaignChapter" -ge "$2" ]; then       # Player chapter high enough
+            if [ "$3" -gt 1 ]; then                    # Player stage set
+                if [ "$campaignStage" -ge "$3" ]; then # Player stage high enough
+                    return 0
+                else
+                    return 1
+                fi
             fi
             return 0
         else
@@ -1591,74 +1595,6 @@ oakInn_Old() {
 }
 
 # ##############################################################################
-# Function Name : oakInn_presentTab
-# Descripton    : Search available present tabs in Oak Inn
-# ##############################################################################
-oakInn_presentTab() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_presentTab" >&2; fi
-    oakInn_presentTabs=0
-    if testColorOR 270 1800 c79663; then                  # 1 gift c79663
-        oakInn_presentTabs=$((oakInn_presentTabs + 1000)) # Increment
-    fi
-    if testColorOR 410 1800 bb824f; then                 # 2 gift bb824f
-        oakInn_presentTabs=$((oakInn_presentTabs + 200)) # Increment
-    fi
-    if testColorOR 550 1800 af6e3b; then                # 3 gift af6e3b
-        oakInn_presentTabs=$((oakInn_presentTabs + 30)) # Increment
-    fi
-    if testColorOR 690 1800 b57b45; then               # 4 gift b57b45
-        oakInn_presentTabs=$((oakInn_presentTabs + 4)) # Increment
-    fi
-}
-
-# ##############################################################################
-# Function Name : oakInn_searchPresent
-# Descripton    : Searches for a "good" present in oak Inn
-# ##############################################################################
-oakInn_searchPresent() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_searchPresent " >&2; fi
-    inputSwipe 400 1600 400 310 50 # Swipe all the way down
-    sleep 1
-
-    if testColorOR 540 990 833f0e; then # 1 red 833f0e blue 903da0
-        inputTapSleep 540 990 3         # Tap present
-        inputTapSleep 540 1650 1        # Ok
-        inputTapSleep 540 1650 0        # Collect reward
-        oakRes=1
-    else
-        if testColorOR 540 800 a21a1a; then # 2 red a21a1a blue 9a48ab
-            inputTapSleep 540 800 3
-            inputTapSleep 540 1650 1 # Ok
-            inputTapSleep 540 1650 0 # Collect reward
-            oakRes=1
-        else
-            if testColorOR 540 610 aa2b27; then # 3 red aa2b27 blue b260aa
-                inputTapSleep 540 610 3
-                inputTapSleep 540 1650 1 # Ok
-                inputTapSleep 540 1650 0 # Collect reward
-                oakRes=1
-            else
-                if testColorOR 540 420 bc3f36; then # 4 red bc3f36 blue c58c7b
-                    inputTapSleep 540 420 3
-                    inputTapSleep 540 1650 1 # Ok
-                    inputTapSleep 540 1650 0 # Collect reward
-                    oakRes=1
-                else
-                    if testColorOR 540 220 bb3734; then # 5 red bb3734 blue 9442a5
-                        inputTapSleep 540 220 3
-                        inputTapSleep 540 1650 1 # Ok
-                        inputTapSleep 540 1650 0 # Collect reward
-                        oakRes=1
-                    else # If no present found, search for other tabs
-                        oakRes=0
-                    fi
-                fi
-            fi
-        fi
-    fi
-}
-
-# ##############################################################################
 # Function Name : oakInn_tryCollectPresent
 # Descripton    : Tries to collect a present from one Oak Inn friend
 # ##############################################################################
@@ -1800,6 +1736,74 @@ oakInn_tryCollectPresent() {
             fi
             ;;
         esac
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_searchPresent
+# Descripton    : Searches for a "good" present in oak Inn
+# ##############################################################################
+oakInn_searchPresent() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_searchPresent " >&2; fi
+    inputSwipe 400 1600 400 310 50 # Swipe all the way down
+    sleep 1
+
+    if testColorOR 540 990 833f0e; then # 1 red 833f0e blue 903da0
+        inputTapSleep 540 990 3         # Tap present
+        inputTapSleep 540 1650 1        # Ok
+        inputTapSleep 540 1650 0        # Collect reward
+        oakRes=1
+    else
+        if testColorOR 540 800 a21a1a; then # 2 red a21a1a blue 9a48ab
+            inputTapSleep 540 800 3
+            inputTapSleep 540 1650 1 # Ok
+            inputTapSleep 540 1650 0 # Collect reward
+            oakRes=1
+        else
+            if testColorOR 540 610 aa2b27; then # 3 red aa2b27 blue b260aa
+                inputTapSleep 540 610 3
+                inputTapSleep 540 1650 1 # Ok
+                inputTapSleep 540 1650 0 # Collect reward
+                oakRes=1
+            else
+                if testColorOR 540 420 bc3f36; then # 4 red bc3f36 blue c58c7b
+                    inputTapSleep 540 420 3
+                    inputTapSleep 540 1650 1 # Ok
+                    inputTapSleep 540 1650 0 # Collect reward
+                    oakRes=1
+                else
+                    if testColorOR 540 220 bb3734; then # 5 red bb3734 blue 9442a5
+                        inputTapSleep 540 220 3
+                        inputTapSleep 540 1650 1 # Ok
+                        inputTapSleep 540 1650 0 # Collect reward
+                        oakRes=1
+                    else # If no present found, search for other tabs
+                        oakRes=0
+                    fi
+                fi
+            fi
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_presentTab
+# Descripton    : Search available present tabs in Oak Inn
+# ##############################################################################
+oakInn_presentTab() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_presentTab" >&2; fi
+    oakInn_presentTabs=0
+    if testColorOR 276 1806 f2f29e; then                  # 1 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 1000)) # Increment
+    fi
+    if testColorOR 419 1806 f9f9a4; then                 # 2 gift f9f9a4
+        oakInn_presentTabs=$((oakInn_presentTabs + 200)) # Increment
+    fi
+    if testColorOR 557 1806 f2f29e; then                # 3 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 30)) # Increment
+    fi
+    if testColorOR 699 1806 f2f29e; then               # 4 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 4)) # Increment
     fi
 }
 
@@ -1968,11 +1972,11 @@ collectQuestChests() {
     # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
-    sleep 4
+    sleep 5
 
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
-    sleep 4
+    sleep 5
 
     #WARN: May break if the reward is a new champ...
     inputTapSleep 930 1650                                     # Campaign
@@ -2039,9 +2043,9 @@ collectMail() {
 # ##############################################################################
 collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
-    inputTapSleep 120 300 3 # Merchants
+    inputTapSleep 120 300 6 # Merchants
     # WARN: Breaks if a pop-up message shows up
-    inputTapSleep 780 1820 2 # Merchant Ship
+    inputTapSleep 780 1820 4 # Merchant Ship
 
     if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
         inputTapSleep 200 1200 1          # Free
@@ -2162,10 +2166,10 @@ checkRequirements() {
     # endAt
     if [ "$endAt" = "oak" ] && ! requiredLevel 0 5 1; then
         printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'oak'! Using 'campaign' instead."
-        guildBattleType="campaign"
+        endAt="campaign"
     elif [ "$endAt" = "championship" ] && ! requiredLevel 0 3 1; then
         printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'championship'! Using 'campaign' instead."
-        guildBattleType="campaign"
+        endAt="campaign"
     fi
 
     # guildBattleType
@@ -2174,7 +2178,7 @@ checkRequirements() {
         guildBattleType="challenge"
     fi
 
-    # buyStorePoeCoins: Yet to find out when they unlock! Maybe when the Oak Inn unlocks?
+    # buyStorePoeCoins: Am yet to find out when they unlock! Maybe when the Oak Inn unlocks?
 
     # buyStoreLimitedElementalShard
     if [ "$buyStoreLimitedElementalShard" = true ] && ! requiredLevel 0 22 1; then
@@ -2209,6 +2213,7 @@ checkRequirements() {
     fi
 
     # --- GAME? --- #
+    echo
 }
 
 # ##############################################################################
@@ -2339,10 +2344,13 @@ run() {
 }
 
 printInColor "INFO" "Starting script... ($(date))"
-if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
+
+# Player levels
 if [ "$vipLevel" -gt 0 ]; then printInColor "INFO" "VIP Level: ${cBlue}$vipLevel${cNc}"; else printInColor "INFO" "VIP Level: ${cBlue}Not set${cNc}"; fi
 if [ "$campaignChapter " -gt 0 ]; then printInColor "INFO" "Campaign Chapter: ${cBlue}$campaignChapter ${cNc}"; else printInColor "INFO" "Campaign Chpater: ${cBlue}Not set${cNc}"; fi
 if [ "$campaignStage " -gt 0 ]; then printInColor "INFO" "Campaign Stage: ${cBlue}$campaignStage ${cNc}"; else printInColor "INFO" "Campaign Stage: ${cBlue}Not set${cNc}"; fi
+echo
+if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
 if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign: ${cBlue}ON${cNc}"; else printInColor "INFO" "Fight Campaign: ${cBlue}OFF${cNc}"; fi
 if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}"; else printInColor "INFO" "Weekly: ${cBlue}OFF${cNc}"; fi
 if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${cNc}"; fi
@@ -2351,8 +2359,7 @@ if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${
 if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia |"; fi
 if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
-echo
-if [ "$vipLevel" -ne 0 ] && [ "$campaignChapter" -ne 0 ] && [ "$campaignStage" -ne 0 ]; then checkRequirements; fi
+if [ "$vipLevel" -ne 0 ] && [ "$campaignChapter" -ne 0 ]; then checkRequirements; fi
 init
 run
 
