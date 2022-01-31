@@ -124,7 +124,7 @@ campaignStage=${campaignStage:-"0"}\n\
 \n\
 # General\n\
 waitForUpdate=${waitForUpdate:-"true"}\n\
-endAt=${endAt:-"championship"}\n\
+endAt=${endAt:-"campaign"}\n\
 guildBattleType=${guildBattleType:-"quick"}\n\
 allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 \n\

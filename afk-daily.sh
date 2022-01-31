@@ -22,7 +22,7 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-eventHoe=false  # Set to `true` if "Heroes of Esperia" event is live
+eventHoe=true   # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -42,6 +42,7 @@ testServer=false
 SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
 withColors=true
 hexdumpSu=false
+runOakSpeedy=false
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -375,6 +376,8 @@ requiredLevel() {
         else
             return 1
         fi
+    else
+        return 1
     fi
 }
 
@@ -1513,12 +1516,12 @@ nobleTavern() {
 }
 
 # ##############################################################################
-# Function Name : oakInnSpeedy
+# Function Name : oakInn_Speedy
 # Descripton    : Collect Oak Inn faster than oakInn()
 # Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
 # ##############################################################################
-oakInnSpeedy() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInnSpeedy" >&2; fi
+oakInn_Speedy() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_Speedy" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
     _oakInn_ROW_COUNT=0
@@ -2149,9 +2152,42 @@ fi
 #                 players know that the script cannot run a feature if necessary.
 # ##############################################################################
 checkRequirements() {
+    # Player not even in chapter 2-1
+    if ! requiredLevel 0 2 1; then
+        printInColor "ERROR" "You haven't even finished the tutorial yet... Please run this script after doing that."
+        exit
+    fi
+
+    # --- CONFIG --- #
     # endAt
+    if [ "$endAt" = "oak" ] && ! requiredLevel 0 5 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'oak'! Using 'campaign' instead."
+        guildBattleType="campaign"
+    elif [ "$endAt" = "championship" ] && ! requiredLevel 0 3 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'championship'! Using 'campaign' instead."
+        guildBattleType="campaign"
+    fi
+
     # guildBattleType
-    # Maybe a store item
+    if [ "$guildBattleType" = "quick" ] && ! requiredLevel 6 0 0; then
+        printInColor "WARN" "Your VIP level is not high enough for 'guildBattleType' to be 'quick'! Using 'challenge' instead."
+        guildBattleType="challenge"
+    fi
+
+    # buyStorePoeCoins: Yet to find out when they unlock! Maybe when the Oak Inn unlocks?
+
+    # buyStoreLimitedElementalShard
+    if [ "$buyStoreLimitedElementalShard" = true ] && ! requiredLevel 0 22 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'buyStoreLimitedElementalShard' to be 'true'! Using 'false' instead."
+        buyStoreLimitedElementalShard=false
+    fi
+
+    # buyStoreLimitedElementalCore
+    if [ "$buyStoreLimitedElementalCore" = true ] && ! requiredLevel 0 24 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'buyStoreLimitedElementalCore' to be 'true'! Using 'false' instead."
+        buyStoreLimitedElementalCore=false
+    fi
+
     # doCollectFriendsAndMercenaries (should be split into two differnt things to do or maybe mercenaries should be removed)
     # doSoloBounties (collect all or not)
     # doTeamBounties (collect all or not)
@@ -2163,13 +2199,16 @@ checkRequirements() {
     # doTempleOfAscension (when do you unlock the temple?)
     # doCompanionPointsSummon (when do you unlock the tavern?)
     # doCollectOakPresents (if at all, and then speedy or not)
-
-    # Check if Oak Inn is unlocked
-    if ! requiredLevel 0 5 0; then
-        echo "Your Campaign level is not high enough to collect Oak Inn presents."
-        # A message for sure, and change config variables if necessary!
-        # TODO: Needs to be checked again in the oak_inn function to know which function to run (speedy or not). Or have a variable that saves this. Eh.
+    if [ "$doCollectOakPresents" = true ]; then
+        if ! requiredLevel 0 5 1; then
+            printInColor "WARN" "Your Chapter/Stage level is not high enough for 'doCollectOakPresents' to be 'true'! Using 'false' instead."
+            doCollectOakPresents=false
+        elif requiredLevel 0 17 1; then
+            runOakSpeedy=true
+        fi
     fi
+
+    # --- GAME? --- #
 }
 
 # ##############################################################################
@@ -2281,16 +2320,10 @@ run() {
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
     if checkToDo doCollectOakPresents; then
-        # Check if Oak Inn is unlocked
-        if requiredLevel 0 5 1; then
-            # Check which oakInn collection type to use
-            if requiredLevel 0 17 1; then
-                oakInnSpeedy
-            else
-                oakInn_Old
-            fi
+        if [ "$runOakSpeedy" = true ]; then
+            oakInn_Speedy
         else
-            echo "Your Campaign level is not high enough to collect Oak Inn presents."
+            oakInn_Old
         fi
     fi
 
