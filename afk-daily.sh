@@ -22,7 +22,7 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-eventHoe=true  # Set to `true` if "Heroes of Esperia" event is live
+eventHoe=true   # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -1538,13 +1538,13 @@ templeOfAscension() {
         inputTapSleep 550 1460                               # Confirm
         inputTapSleep 550 1810                               # Close
         inputTapSleep 70 1810                                # Exit
+
+        inputTapSleep 70 1810 # Exit
+        wait
+        verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
     else
         printInColor "INFO" "No heroes to ascend."
     fi
-
-    inputTapSleep 70 1810 # Exit
-    wait
-    verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
 }
 
 # ##############################################################################

@@ -377,7 +377,8 @@ to overwrite them and get the latest script version? Config files will not be ov
             fi
 
             # Force script restart to update correctly
-            exec "$script_scr" "$script_args"
+            # shellcheck disable=SC2086
+            exec "$script_scr" $script_args
         else
             # git is not installed/available
             printWarn "git is not installed/available."
@@ -391,7 +392,8 @@ to overwrite them and get the latest script version? Config files will not be ov
             printSuccess "Done!"
 
             # Force script restart to update correctly
-            exec "$script_scr" "$script_args"
+            # shellcheck disable=SC2086
+            exec "$script_scr" $script_args
         fi
     fi
 }
