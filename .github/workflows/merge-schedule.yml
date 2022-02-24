@@ -1,4 +1,5 @@
 name: Merge Schedule
+
 on:
   pull_request:
     types:
