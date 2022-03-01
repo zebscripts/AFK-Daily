@@ -22,7 +22,7 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-eventHoe=true   # Set to `true` if "Heroes of Esperia" event is live
+eventHoe=false  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -1044,36 +1044,36 @@ kingsTower() {
     if testColorOR 550 150 1a1212; then
         # King's Tower without Towers of Esperia unlocked (between stage 2-12 and 15-1)
         if [ "$doMainTower" = true ]; then
-            printInColor "INFO" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
+            printInColor "DONE" "Main Tower $(kingsTower_battle -1 -1)" # Main Tower
         fi
     else
         # King's Tower with Towers of Esperia unlocked (after stage 15-1)
         if [ "$doMainTower" = true ]; then
-            printInColor "INFO" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
+            printInColor "DONE" "Main Tower $(kingsTower_battle 550 800)" # Main Tower
         fi
 
         if [ "$doTowerOfLight" = true ] && { [ "$dayofweek" -eq 1 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
+            printInColor "DONE" "Tower of Light $(kingsTower_battle 300 950)" # Tower of Light
         fi
 
         if [ "$doTheBrutalCitadel" = true ] && { [ "$dayofweek" -eq 2 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
+            printInColor "DONE" "The Brutal Citadel $(kingsTower_battle 400 1250)" # The Brutal Citadel
         fi
 
         if [ "$doTheWorldTree" = true ] && { [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
+            printInColor "DONE" "The World Tree $(kingsTower_battle 750 660)" # The World Tree
         fi
 
         if [ "$doCelestialSanctum" = true ] && { [ "$dayofweek" -eq 3 ] || [ "$dayofweek" -eq 5 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
+            printInColor "DONE" "Celestial Sanctum $(kingsTower_battle 270 500)" # Celestial Sanctum
         fi
 
         if [ "$doTheForsakenNecropolis" = true ] && { [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
+            printInColor "DONE" "The Forsaken Necropolis $(kingsTower_battle 780 1100)" # The Forsaken Necropolis
         fi
 
         if [ "$doInfernalFortress" = true ] && { [ "$dayofweek" -eq 4 ] || [ "$dayofweek" -eq 6 ] || [ "$dayofweek" -eq 7 ]; }; then
-            printInColor "INFO" "Infernal Fortress $(kingsTower_battle 620 1550)" # Infernal Fortress
+            printInColor "DONE" "Infernal Fortress $(kingsTower_battle 620 1550)" # Infernal Fortress
         fi
     fi
 
@@ -1848,13 +1848,13 @@ templeOfAscension() {
         inputTapSleep 550 1460                               # Confirm
         inputTapSleep 550 1810                               # Close
         inputTapSleep 70 1810                                # Exit
+
+        inputTapSleep 70 1810 # Exit
+        wait
+        verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
     else
         printInColor "INFO" "No heroes to ascend."
     fi
-
-    inputTapSleep 70 1810 # Exit
-    wait
-    verifyHEX 20 1775 d49a61 "Attempted to ascend heroes." "Failed to ascend heroes."
 }
 
 # ##############################################################################
@@ -2047,39 +2047,29 @@ collectMerchants() {
     # WARN: Breaks if a pop-up message shows up
     inputTapSleep 780 1820 4 # Merchant Ship
 
-    if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
-        inputTapSleep 200 1200 1          # Free
+    # Check for Special Daily Bundles
+    if testColorNAND 375 940 0b080a; then
+        inputTapSleep 200 1200 1 # Free
     else
         inputTapSleep 200 750 1 # Free
     fi
     inputTapSleep 550 300 1 # Collect rewards
 
-    if testColorOR -d "$DEFAULT_DELTA" 432 1525 f01d04; then # Check if red mark - Weekly Deals
-        inputTapSleep 370 1620 1                             # Weekly Deals
-        if testColorNAND 375 940 050a0f; then                # Checks for Special Weekly Bundles
-            inputTapSleep 200 1200 1                         # Free
+    # Check if red mark - Biweekly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 518 1524 f51f06; then
+        inputTapSleep 370 1620 1              # Biweekly Deals
+        if testColorNAND 375 940 050a0f; then # Checks for Special Biweekly Bundles
+            inputTapSleep 200 1200 1          # Free
         else
             inputTapSleep 200 750 1 # Free
         fi
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "INFO" "No weekly reward to collect."
-    fi
-
-    if testColorOR -d "$DEFAULT_DELTA" 607 1525 f21e05; then # Check if red mark - Monthly Deals
-        inputTapSleep 545 1620 1                             # Monthly Deals
-        if testColorNAND 375 940 0b080a; then                # Checks for Special Monthly Bundles
-            inputTapSleep 200 1200 1                         # Free
-        else
-            inputTapSleep 200 750 # Free
-        fi
-        inputTapSleep 550 300 1 # Collect rewards
-    else
-        printInColor "INFO" "No monthly reward to collect."
+        printInColor "INFO" "No biweekly reward to collect."
     fi
 
     inputTapSleep 70 1810 2
-    verifyHEX 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
+    verifyHEX 20 1775 d49a61 "Collected daily/biweekly offer." "Failed to collect daily/biweekly offer."
 }
 
 # ##############################################################################
