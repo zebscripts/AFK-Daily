@@ -22,7 +22,7 @@ DEBUG=0
 # DEBUG >= 9    Show tap calls
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
-eventHoe=false   # Set to `true` if "Heroes of Esperia" event is live
+eventHoe=false  # Set to `true` if "Heroes of Esperia" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -1737,39 +1737,29 @@ collectMerchants() {
     # WARN: Breaks if a pop-up message shows up
     inputTapSleep 780 1820 2 # Merchant Ship
 
-    if testColorNAND 375 940 0b080a; then # Checks for Special Daily Bundles
-        inputTapSleep 200 1200 1          # Free
+    # Check for Special Daily Bundles
+    if testColorNAND 375 940 0b080a; then
+        inputTapSleep 200 1200 1 # Free
     else
         inputTapSleep 200 750 1 # Free
     fi
     inputTapSleep 550 300 1 # Collect rewards
 
-    if testColorOR -d "$DEFAULT_DELTA" 432 1525 f01d04; then # Check if red mark - Weekly Deals
-        inputTapSleep 370 1620 1                             # Weekly Deals
-        if testColorNAND 375 940 050a0f; then                # Checks for Special Weekly Bundles
-            inputTapSleep 200 1200 1                         # Free
+    # Check if red mark - Biweekly Deals
+    if testColorOR -d "$DEFAULT_DELTA" 518 1524 f51f06; then
+        inputTapSleep 370 1620 1              # Biweekly Deals
+        if testColorNAND 375 940 050a0f; then # Checks for Special Biweekly Bundles
+            inputTapSleep 200 1200 1          # Free
         else
             inputTapSleep 200 750 1 # Free
         fi
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "INFO" "No weekly reward to collect."
-    fi
-
-    if testColorOR -d "$DEFAULT_DELTA" 607 1525 f21e05; then # Check if red mark - Monthly Deals
-        inputTapSleep 545 1620 1                             # Monthly Deals
-        if testColorNAND 375 940 0b080a; then                # Checks for Special Monthly Bundles
-            inputTapSleep 200 1200 1                         # Free
-        else
-            inputTapSleep 200 750 # Free
-        fi
-        inputTapSleep 550 300 1 # Collect rewards
-    else
-        printInColor "INFO" "No monthly reward to collect."
+        printInColor "INFO" "No biweekly reward to collect."
     fi
 
     inputTapSleep 70 1810 2
-    verifyHEX 20 1775 d49a61 "Collected daily/weekly/monthly offer." "Failed to collect daily/weekly/monthly offer."
+    verifyHEX 20 1775 d49a61 "Collected daily/biweekly offer." "Failed to collect daily/biweekly offer."
 }
 
 # ##############################################################################
