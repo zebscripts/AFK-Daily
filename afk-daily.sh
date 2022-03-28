@@ -1476,19 +1476,37 @@ oakInnSpeedy() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInnSpeedy" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
-    _oakInn_ROW_COUNT=0
-    until [ "$_oakInn_ROW_COUNT" -ge 3000 ]; do
-        if testColorOR -f -d 3 $((250 + _oakInn_ROW_COUNT * 5)) 1330 9b3e28 932017 e7af65 8d2911 ffd885; then
-            inputTapSleep $((250 + _oakInn_ROW_COUNT * 5)) 1330 2 # Tap present
+
+    _oakInn_TRIES=0
+    _oakInn_TRIES_MAX=3
+    _oakInn_X_START=230
+    _oakInn_X_END=855
+    until [ "$_oakInn_TRIES" -ge "$_oakInn_TRIES_MAX" ]; do
+        until [ "$_oakInn_X_START" -ge "$_oakInn_X_END" ]; do
+            # Tap on X coord to posibly collect present
+            input tap "$_oakInn_X_START" 1350
+            sleep 2
+
+            # Check if tapped on present
             if testColorOR 250 1200 eaddb8; then
                 inputTapSleep 540 1650 1  # Ok
                 inputTapSleep 540 1650 .5 # Collect reward
-                break
+                printInColor "INFO" "Collected presents at the Oak Inn."
+                break 2
             fi
-        fi
-        _oakInn_ROW_COUNT=$((_oakInn_ROW_COUNT + 1)) # Increment
-    done
 
+            # Increment
+            _oakInn_X_START=$((_oakInn_X_START + 70))
+        done
+
+        _oakInn_X_START=230                  # Reset
+        _oakInn_TRIES=$((_oakInn_TRIES + 1)) # Increment
+
+        # If no present collected, warn user
+        if [ "$_oakInn_TRIES" -ge "$_oakInn_TRIES_MAX" ]; then
+            printInColor "WARN" "No presents collected at the Oak Inn."
+        fi
+    done
     inputTapSleep 70 1810 0
 
     wait
@@ -1567,7 +1585,7 @@ twistedRealmBoss() {
         printInColor "INFO" "Unable to fight in the Twisted Realm because it's being calculated." >&2
     else
         # Check for cursed realm screen
-        if testColorOR 750 100 1c2d3e; then
+        if testColorOR 750 100 1e2e3f; then
             inputTapSleep 550 700 2 # Twisted Realm
         fi
 
@@ -1733,33 +1751,38 @@ collectMail() {
 # ##############################################################################
 collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
-    inputTapSleep 120 300 3 # Merchants
+    inputTapSleep 120 300 10 # Merchants
     # WARN: Breaks if a pop-up message shows up
     inputTapSleep 780 1820 2 # Merchant Ship
 
-    # Check for Special Daily Bundles
-    if testColorNAND 375 940 0b080a; then
-        inputTapSleep 200 1200 1 # Free
-    else
-        inputTapSleep 200 750 1 # Free
-    fi
-    inputTapSleep 550 300 1 # Collect rewards
-
-    # Check if red mark - Biweekly Deals
-    if testColorOR -d "$DEFAULT_DELTA" 518 1524 f51f06; then
-        inputTapSleep 370 1620 1              # Biweekly Deals
-        if testColorNAND 375 940 050a0f; then # Checks for Special Biweekly Bundles
-            inputTapSleep 200 1200 1          # Free
-        else
-            inputTapSleep 200 750 1 # Free
-        fi
+    # Check for "Specials" freebie
+    if testColorOR -d "$DEFAULT_DELTA" 365 740 d10000; then
+        inputTapSleep 210 945 1 # Free
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "INFO" "No biweekly reward to collect."
+        printInColor "INFO" "No 'Specials' reward to collect."
     fi
 
-    inputTapSleep 70 1810 2
-    verifyHEX 20 1775 d49a61 "Collected daily/biweekly offer." "Failed to collect daily/biweekly offer."
+    # Check for "Daily Deals" freebie
+    inputTapSleep 280 1625 1
+    if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
+        inputTapSleep 210 720 1 # Free
+        inputTapSleep 550 300 1 # Collect rewards
+    else
+        printInColor "INFO" "No 'Daily Deals' reward to collect."
+    fi
+
+    # Check for "Biweeklies" freebie
+    inputTapSleep 455 1625 1
+    if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
+        inputTapSleep 210 720 1 # Free
+        inputTapSleep 550 300 1 # Collect rewards
+    else
+        printInColor "INFO" "No 'Biweeklies' reward to collect."
+    fi
+
+    inputTapSleep 70 1810 4
+    verifyHEX 20 1775 d49a61 "Attempted to collect merchant freebies." "Failed to collect merchant freebies."
 }
 
 # ##############################################################################
