@@ -1488,7 +1488,7 @@ oakInnSpeedy() {
             sleep 2
 
             # Check if tapped on present
-            if testColorOR 250 1200 eaddb8; then
+            if testColorNAND 270 1240 251716; then
                 inputTapSleep 540 1650 1  # Ok
                 inputTapSleep 540 1650 .5 # Collect reward
                 printInColor "INFO" "Collected presents at the Oak Inn."
@@ -1592,8 +1592,10 @@ twistedRealmBoss() {
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
             inputTapSleep 550 1850               # Challenge
-            if testColorOR 600 1250 53c6bb; then # Check if notice did popup
-                inputTapSleep 70 1810
+
+            # When no challenges left, a pop-up appears that asks if you want to reset them for 50 diamonds
+            if testColorOR 620 1260 a1eebf; then
+                inputTapSleep 70 1810 # Skip pop-up
                 break
             fi
             inputTapSleep 550 1850 0 # Battle
