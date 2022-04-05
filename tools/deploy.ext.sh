@@ -26,7 +26,7 @@ arenaHeroesOpponent=5
 
 # General
 waitForUpdate=true
-endAt="championship"
+endAt="campaign"
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -86,7 +86,7 @@ doCollectOakPresents=true
 doCollectQuestChests=true
 doCollectMail=true
 doCollectMerchantFreebies=false
-' >$configFile
+' >"$configFile"
         printSuccess "Created!\n"
         printInfo "Please edit ${cCyan}$configFile${cNc} if necessary and run this script again."
         exit
@@ -98,7 +98,7 @@ doCollectMerchantFreebies=false
 # Description   : Checks for every necessary variable that needs to be defined in $configFile
 # ##############################################################################
 validateConfig() {
-    source $configFile
+    source "$configFile"
     printTask "Validating ${cCyan}$configFile${cNc}..."
     if [[ -z $canOpenSoren || -z \
         $arenaHeroesOpponent || -z \

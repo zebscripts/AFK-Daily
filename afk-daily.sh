@@ -42,6 +42,7 @@ testServer=false
 SCREENSHOTLOCATION="/storage/emulated/0/scripts/afk-arena/screen.dump"
 withColors=true
 hexdumpSu=false
+runOakSpeedy=false
 
 # Colors
 cNc="\033[0m"        # Text Reset
@@ -101,7 +102,6 @@ while getopts "ce:fgi:l:s:tv:w" opt; do
 done
 
 . "$INILOCATION$INIFILE"
-doLootAfkChest2="$doLootAfkChest"
 
 # ##############################################################################
 # Section       : Core Functions
@@ -115,9 +115,12 @@ doLootAfkChest2="$doLootAfkChest"
 # Output        : return 0/1
 # ##############################################################################
 checkToDo() {
+    # Check if variable is false
     if [ "$(eval echo \$"$1")" = false ]; then
         return 1
     fi
+
+    # Increment tries if necessary
     if [ "$1" = "$currentPos" ]; then
         tries=$((tries + 1))
         printInColor "DEBUG" "checkToDo > $currentPos [$tries]"
@@ -126,6 +129,8 @@ checkToDo() {
         currentPos="$1"
         tries=0
     fi
+
+    # Check if script should retry operation
     if [ $tries -lt 3 ]; then
         return 0
     else
@@ -331,6 +336,53 @@ readHEX() {
     fi
     HEX=${HEX:9:9}
     HEX="${HEX// /}"
+}
+
+# ##############################################################################
+# Function Name : requiredLevel
+# Descripton    : Checks if Player has required VIP and Chapter/Stage levels
+# Args          : <VIP> <Chapter> <Stage>
+# Output        : If true return 0, else 1
+# ##############################################################################
+requiredLevel() {
+    # Check amount of arguments
+    if [ "$#" -ne 3 ]; then
+        echo "Usage: requiredLevel <VIP> <Chapter> <Stage>" >&2
+        return
+    fi
+    if [ "$DEBUG" -ge 2 ]; then printInColor "DEBUG" "requiredLevel ${cPurple}$*${cNc}" >&2; fi
+
+    if [ "$1" -gt 0 ] && [ "$2" -gt 0 ]; then                                # Both VIP and Chapter matter
+        if [ "$vipLevel" -ge "$1" ] || [ "$campaignChapter" -ge "$2" ]; then # Player VIP and Chapter high enough
+            if [ "$3" -gt 1 ]; then                                          # Player stage set
+                if [ "$campaignStage" -ge "$3" ]; then                       # Player stage high enough
+                    return 0
+                else
+                    return 1
+                fi
+            fi
+            return 0
+        fi
+    elif [ "$1" -gt 0 ]; then             # Only VIP matters
+        if [ "$vipLevel" -ge "$1" ]; then # Player VIP high enough
+            return 0
+        fi
+    elif [ "$2" -gt 0 ]; then                          # Only Chapter matters
+        if [ "$campaignChapter" -ge "$2" ]; then       # Player chapter high enough
+            if [ "$3" -gt 1 ]; then                    # Player stage set
+                if [ "$campaignStage" -ge "$3" ]; then # Player stage high enough
+                    return 0
+                else
+                    return 1
+                fi
+            fi
+            return 0
+        else
+            return 1
+        fi
+    else
+        return 1
+    fi
 }
 
 # ##############################################################################
@@ -1468,12 +1520,12 @@ nobleTavern() {
 }
 
 # ##############################################################################
-# Function Name : oakInnSpeedy
+# Function Name : oakInn_Speedy
 # Descripton    : Collect Oak Inn faster than oakInn()
 # Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
 # ##############################################################################
-oakInnSpeedy() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInnSpeedy" >&2; fi
+oakInn_Speedy() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_Speedy" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
 
@@ -1513,6 +1565,264 @@ oakInnSpeedy() {
     verifyHEX 20 1775 d49a61 \
         "Attempted to collect Oak Inn presents." \
         "Failed to collect Oak Inn presents."
+}
+
+# ##############################################################################
+# Function Name : oakInn_Old
+# Descripton    : Collect Oak Inn
+# ##############################################################################
+oakInn_Old() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
+    inputTapSleep 780 270 5 # Oak Inn
+
+    _oakInn_COUNT=0
+    until [ "$_oakInn_COUNT" -ge "$totalAmountOakRewards" ]; do
+        inputTapSleep 1050 950   # Friends
+        inputTapSleep 1025 400 5 # Top Friend
+        sleep 5
+
+        oakInn_tryCollectPresent
+        if [ "$oakRes" = 0 ]; then # If return value is still 0, no presents were found at first friend
+            # Switch friend and search again
+            inputTapSleep 1050 950   # Friends
+            inputTapSleep 1025 530 5 # Second friend
+
+            oakInn_tryCollectPresent
+            if [ "$oakRes" = 0 ]; then # If return value is again 0, no presents were found at second friend
+                # Switch friend and search again
+                inputTapSleep 1050 950   # Friends
+                inputTapSleep 1025 650 5 # Third friend
+
+                oakInn_tryCollectPresent
+                if [ "$oakRes" = 0 ]; then # If return value is still freaking 0, I give up
+                    printInColor "WARN" "Couldn't collect Oak Inn presents, sowy." >&2
+                    break
+                fi
+            fi
+        fi
+
+        sleep 2
+        _oakInn_COUNT=$((_oakInn_COUNT + 1)) # Increment
+    done
+
+    inputTapSleep 70 1810 3
+    inputTapSleep 70 1810 0
+
+    wait
+    verifyHEX 20 1775 d49a61 "Attempted to collect Oak Inn presents." "Failed to collect Oak Inn presents."
+}
+
+# ##############################################################################
+# Function Name : oakInn_tryCollectPresent
+# Descripton    : Tries to collect a present from one Oak Inn friend
+# ##############################################################################
+oakInn_tryCollectPresent() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_tryCollectPresent" >&2; fi
+    oakInn_searchPresent # Search for a "good" present
+    if [ $oakRes = 0 ]; then
+        oakInn_presentTab # If no present found, search for other tabs
+        case $oakInn_presentTabs in
+        0)
+            oakRes=0
+            ;;
+        4)
+            inputTapSleep 690 1800 3
+            oakInn_searchPresent
+            ;;
+        30)
+            inputTapSleep 550 1800 3
+            oakInn_searchPresent
+            ;;
+        34)
+            inputTapSleep 550 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 690 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        200)
+            inputTapSleep 410 1800 3
+            oakInn_searchPresent
+            ;;
+        204)
+            inputTapSleep 410 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 690 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        230)
+            inputTapSleep 410 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        234)
+            inputTapSleep 410 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+            fi
+            ;;
+        1000)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            ;;
+        1004)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 690 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        1030)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        1034)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 550 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+            fi
+            ;;
+        1200)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+            fi
+            ;;
+        1204)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 690 1800 3
+                    oakInn_searchPresent
+                fi
+            fi
+            ;;
+        1230)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                fi
+            fi
+            ;;
+        1234)
+            inputTapSleep 270 1800 3
+            oakInn_searchPresent
+            if [ $oakRes = 0 ]; then
+                inputTapSleep 410 1800 3
+                oakInn_searchPresent
+                if [ $oakRes = 0 ]; then
+                    inputTapSleep 550 1800 3
+                    oakInn_searchPresent
+                    if [ $oakRes = 0 ]; then
+                        inputTapSleep 690 1800 3
+                        oakInn_searchPresent
+                    fi
+                fi
+            fi
+            ;;
+        esac
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_searchPresent
+# Descripton    : Searches for a "good" present in oak Inn
+# ##############################################################################
+oakInn_searchPresent() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_searchPresent " >&2; fi
+    inputSwipe 400 1600 400 310 50 # Swipe all the way down
+    sleep 1
+
+    if testColorOR 540 990 833f0e; then # 1 red 833f0e blue 903da0
+        inputTapSleep 540 990 3         # Tap present
+        inputTapSleep 540 1650 1        # Ok
+        inputTapSleep 540 1650 0        # Collect reward
+        oakRes=1
+    else
+        if testColorOR 540 800 a21a1a; then # 2 red a21a1a blue 9a48ab
+            inputTapSleep 540 800 3
+            inputTapSleep 540 1650 1 # Ok
+            inputTapSleep 540 1650 0 # Collect reward
+            oakRes=1
+        else
+            if testColorOR 540 610 aa2b27; then # 3 red aa2b27 blue b260aa
+                inputTapSleep 540 610 3
+                inputTapSleep 540 1650 1 # Ok
+                inputTapSleep 540 1650 0 # Collect reward
+                oakRes=1
+            else
+                if testColorOR 540 420 bc3f36; then # 4 red bc3f36 blue c58c7b
+                    inputTapSleep 540 420 3
+                    inputTapSleep 540 1650 1 # Ok
+                    inputTapSleep 540 1650 0 # Collect reward
+                    oakRes=1
+                else
+                    if testColorOR 540 220 bb3734; then # 5 red bb3734 blue 9442a5
+                        inputTapSleep 540 220 3
+                        inputTapSleep 540 1650 1 # Ok
+                        inputTapSleep 540 1650 0 # Collect reward
+                        oakRes=1
+                    else # If no present found, search for other tabs
+                        oakRes=0
+                    fi
+                fi
+            fi
+        fi
+    fi
+}
+
+# ##############################################################################
+# Function Name : oakInn_presentTab
+# Descripton    : Search available present tabs in Oak Inn
+# ##############################################################################
+oakInn_presentTab() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn_presentTab" >&2; fi
+    oakInn_presentTabs=0
+    if testColorOR 276 1806 f2f29e; then                  # 1 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 1000)) # Increment
+    fi
+    if testColorOR 419 1806 f9f9a4; then                 # 2 gift f9f9a4
+        oakInn_presentTabs=$((oakInn_presentTabs + 200)) # Increment
+    fi
+    if testColorOR 557 1806 f2f29e; then                # 3 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 30)) # Increment
+    fi
+    if testColorOR 699 1806 f2f29e; then               # 4 gift f2f29e
+        oakInn_presentTabs=$((oakInn_presentTabs + 4)) # Increment
+    fi
 }
 
 # ##############################################################################
@@ -1682,11 +1992,11 @@ collectQuestChests() {
     # WARN: and closed the warning message. Might not be a problem anymore.
     inputTapSleep 960 250 # Quests
     collectQuestChests_quick
-    sleep 4
+    sleep 5
 
     inputTapSleep 650 1650 # Weeklies
     collectQuestChests_quick
-    sleep 4
+    sleep 5
 
     #WARN: May break if the reward is a new champ...
     inputTapSleep 930 1650                                     # Campaign
@@ -1755,7 +2065,7 @@ collectMerchants() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "collectMerchants" >&2; fi
     inputTapSleep 120 300 10 # Merchants
     # WARN: Breaks if a pop-up message shows up
-    inputTapSleep 780 1820 2 # Merchant Ship
+    inputTapSleep 780 1820 4 # Merchant Ship
 
     # Check for "Specials" freebie
     if testColorOR -d "$DEFAULT_DELTA" 365 740 d10000; then
@@ -1854,11 +2164,82 @@ fi
 # ##############################################################################
 
 # ##############################################################################
+# Function Name : checkRequirements
+# Descripton    : Checks if it's possible to run current config with given VIP
+#                 level, Chapter and Stage. Any new config entry that is
+#                 dependent on one of the three must be checked here. Let's
+#                 players know that the script cannot run a feature if necessary.
+# ##############################################################################
+checkRequirements() {
+    # Player not even in chapter 2-1
+    if ! requiredLevel 0 2 1; then
+        printInColor "ERROR" "You haven't even finished the tutorial yet... Please run this script after doing that."
+        exit
+    fi
+
+    # --- CONFIG --- #
+    # endAt
+    if [ "$endAt" = "oak" ] && ! requiredLevel 0 5 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'oak'! Using 'campaign' instead."
+        endAt="campaign"
+    elif [ "$endAt" = "championship" ] && ! requiredLevel 0 3 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'endAt' to be 'championship'! Using 'campaign' instead."
+        endAt="campaign"
+    fi
+
+    # guildBattleType
+    if [ "$guildBattleType" = "quick" ] && ! requiredLevel 6 0 0; then
+        printInColor "WARN" "Your VIP level is not high enough for 'guildBattleType' to be 'quick'! Using 'challenge' instead."
+        guildBattleType="challenge"
+    fi
+
+    # buyStorePoeCoins: Am yet to find out when they unlock! Maybe when the Oak Inn unlocks?
+
+    # buyStoreLimitedElementalShard
+    if [ "$buyStoreLimitedElementalShard" = true ] && ! requiredLevel 0 22 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'buyStoreLimitedElementalShard' to be 'true'! Using 'false' instead."
+        buyStoreLimitedElementalShard=false
+    fi
+
+    # buyStoreLimitedElementalCore
+    if [ "$buyStoreLimitedElementalCore" = true ] && ! requiredLevel 0 24 1; then
+        printInColor "WARN" "Your Chapter/Stage level is not high enough for 'buyStoreLimitedElementalCore' to be 'true'! Using 'false' instead."
+        buyStoreLimitedElementalCore=false
+    fi
+
+    # doCollectFriendsAndMercenaries (should be split into two differnt things to do or maybe mercenaries should be removed)
+    # doSoloBounties (collect all or not)
+    # doTeamBounties (collect all or not)
+    # doArenaOfHeroes (skip battles)
+    # doLegendsTournament (maybe...?)
+    # doKingsTower
+    # doGuildHunts (Quick battles)
+    # doTwistedRealmBoss
+    # doTempleOfAscension (when do you unlock the temple?)
+    # doCompanionPointsSummon (when do you unlock the tavern?)
+    # doCollectOakPresents (if at all, and then speedy or not)
+    if [ "$doCollectOakPresents" = true ]; then
+        if ! requiredLevel 0 5 1; then
+            printInColor "WARN" "Your Chapter/Stage level is not high enough for 'doCollectOakPresents' to be 'true'! Using 'false' instead."
+            doCollectOakPresents=false
+        elif requiredLevel 0 17 1; then
+            runOakSpeedy=true
+        fi
+    fi
+
+    # --- GAME? --- #
+    echo
+}
+
+# ##############################################################################
 # Function Name : init
 # Descripton    : Init the script (close/start app, preload, wait for update)
 # Remark        : Can be skipped if you are already in the game
 # ##############################################################################
 init() {
+    # Init values
+    doLootAfkChest2="$doLootAfkChest"
+
     closeApp
     sleep 0.5
     startApp
@@ -1915,10 +2296,16 @@ run() {
 
     # DARK FOREST TAB
     switchTab "Dark Forest"
-    if checkToDo doSoloBounties; then
-        soloBounties
-        if checkToDo doTeamBounties; then teamBounties; fi
-    elif checkToDo doTeamBounties; then teamBounties true; fi
+    if [ "$doSoloBounties" = true ] || [ "$doTeamBounties" = true ]; then
+        if requiredLevel 6 0 0; then
+            if checkToDo doSoloBounties; then
+                soloBounties
+                if checkToDo doTeamBounties; then teamBounties; fi
+            elif checkToDo doTeamBounties; then teamBounties true; fi
+        else
+            printInColor "INFO" "Your VIP level is not high enough to use Autofill in Bounties."
+        fi
+    fi
     if checkToDo doArenaOfHeroes; then
         arenaOfHeroes
         if checkToDo doLegendsTournament; then legendsTournament; fi
@@ -1928,8 +2315,21 @@ run() {
     # RANHORN TAB
     switchTab "Ranhorn"
     if checkToDo doGuildHunts; then
-        guildHunts
-        if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
+        if [ "$guildBattleType" = "quick" ] && requiredLevel 6 0 0; then
+            guildHunts
+            if requiredLevel 0 13 1; then
+                if checkToDo doTwistedRealmBoss; then twistedRealmBoss; fi
+            else
+                printInColor "INFO" "You still haven't unlocked Twisted Realms."
+            fi
+        else
+            printInColor "INFO" "Your VIP level is not high enough to run quick battles in Guild Bosses."
+            if requiredLevel 0 13 1; then
+                if checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
+            else
+                printInColor "INFO" "You still haven't unlocked Twisted Realms."
+            fi
+        fi
     elif checkToDo doTwistedRealmBoss; then twistedRealmBoss true; fi
     if checkToDo doBuyFromStore; then
         if [ "$testServer" = true ]; then
@@ -1939,7 +2339,13 @@ run() {
     if checkToDo doStrengthenCrystal; then strengthenCrystal; fi
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
-    if checkToDo doCollectOakPresents; then oakInnSpeedy; fi
+    if checkToDo doCollectOakPresents; then
+        if [ "$runOakSpeedy" = true ]; then
+            oakInn_Speedy
+        else
+            oakInn_Old
+        fi
+    fi
 
     # END
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
@@ -1953,6 +2359,12 @@ run() {
 }
 
 printInColor "INFO" "Starting script... ($(date))"
+
+# Player levels
+if [ "$vipLevel" -gt 0 ]; then printInColor "INFO" "VIP Level: ${cBlue}$vipLevel${cNc}"; else printInColor "INFO" "VIP Level: ${cBlue}Not set${cNc}"; fi
+if [ "$campaignChapter " -gt 0 ]; then printInColor "INFO" "Campaign Chapter: ${cBlue}$campaignChapter ${cNc}"; else printInColor "INFO" "Campaign Chpater: ${cBlue}Not set${cNc}"; fi
+if [ "$campaignStage " -gt 0 ]; then printInColor "INFO" "Campaign Stage: ${cBlue}$campaignStage ${cNc}"; else printInColor "INFO" "Campaign Stage: ${cBlue}Not set${cNc}"; fi
+echo
 if [ "$DEBUG" -gt 0 ]; then printInColor "INFO" "Debug: ${cBlue}ON${cNc} [${cCyan}$DEBUG${cNc}]"; fi
 if [ "$forceFightCampaign" = true ]; then printInColor "INFO" "Fight Campaign: ${cBlue}ON${cNc}"; else printInColor "INFO" "Fight Campaign: ${cBlue}OFF${cNc}"; fi
 if [ "$forceWeekly" = true ]; then printInColor "INFO" "Weekly: ${cBlue}ON${cNc}"; else printInColor "INFO" "Weekly: ${cBlue}OFF${cNc}"; fi
@@ -1962,7 +2374,7 @@ if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${
 if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia |"; fi
 if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
-echo
+if [ "$vipLevel" -ne 0 ] && [ "$campaignChapter" -ne 0 ]; then checkRequirements; fi
 init
 run
 

@@ -118,10 +118,13 @@ updateConfig() {
 # Player\n\
 canOpenSoren=${canOpenSoren:-"false"}\n\
 arenaHeroesOpponent=${arenaHeroesOpponent:-"5"}\n\
+vipLevel=${vipLevel:-"0"}\n\
+campaignChapter=${campaignChapter:-"0"}\n\
+campaignStage=${campaignStage:-"0"}\n\
 \n\
 # General\n\
 waitForUpdate=${waitForUpdate:-"true"}\n\
-endAt=${endAt:-"championship"}\n\
+endAt=${endAt:-"campaign"}\n\
 guildBattleType=${guildBattleType:-"quick"}\n\
 allowCrystalLevelUp=${allowCrystalLevelUp:-"true"}\n\
 \n\

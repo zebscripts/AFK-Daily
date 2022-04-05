@@ -17,15 +17,18 @@ The script acts depending on a set of variables. In order to change these, open 
 | :-------------------- | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
 | `canOpenSoren`        | `Boolean` | If `true`, player has permission to open Soren.                                                                                                           | `false` |
 | `arenaHeroesOpponent` | `Number`  | Choose which opponent to fight in the Arena of Heroes. Possible entries: `1`, `2`, `3`, `4` or `5`, where `1` is the top opponent and `5` the bottom one. |   `5`   |
+| `vipLevel`            | `Number`  | Current account VIP level.                                                                                                                                |   `0`   |
+| `campaignChapter`     | `Number`  | Current account campaign chapter.                                                                                                                         |   `0`   |
+| `campaignStage`       | `Number`  | Current account campaign stage.                                                                                                                           |   `0`   |
 
 ## General
 
-| Variable              |   Type    | Description                                                                                                                                              |    Default     |
-| :-------------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------: |
-| `waitForUpdate`       | `Boolean` | If `true`, waits until the in-game update has finished.                                                                                                  |     `true`     |
-| `endAt`               | `String`  | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`, `closeApp`. | `championship` |
-| `guildBattleType`     | `String`  | Choose type of Guild fight. Possible entries: `quick` or `challenge`.                                                                                    |    `quick`     |
-| `allowCrystalLevelUp` | `Boolean` | If `true`, allows the Resonating Crystal to be leveled up.                                                                                               |     `true`     |
+| Variable              |   Type    | Description                                                                                                                                              |  Default   |
+| :-------------------- | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------: |
+| `waitForUpdate`       | `Boolean` | If `true`, waits until the in-game update has finished.                                                                                                  |   `true`   |
+| `endAt`               | `String`  | Script will end at the chosen location. Possible entries: `oak`, `soren`, `mail`, `chat`, `tavern`, `merchants`, `campaign`, `championship`, `closeApp`. | `campaign` |
+| `guildBattleType`     | `String`  | Choose type of Guild fight. Possible entries: `quick` or `challenge`.                                                                                    |  `quick`   |
+| `allowCrystalLevelUp` | `Boolean` | If `true`, allows the Resonating Crystal to be leveled up.                                                                                               |   `true`   |
 
 ## Repetitions
 
@@ -115,10 +118,13 @@ The script acts depending on a set of variables. In order to change these, open 
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
-endAt=championship
+endAt=campaign
 guildBattleType=quick
 allowCrystalLevelUp=false
 
@@ -194,6 +200,9 @@ Need to be run with `-f` flag!
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
@@ -271,6 +280,9 @@ doCollectMerchantFreebies=false
 # Player
 canOpenSoren=false
 arenaHeroesOpponent=5
+vipLevel=0
+campaignChapter=0
+campaignStage=0
 
 # General
 waitForUpdate=true
