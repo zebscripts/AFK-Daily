@@ -1485,7 +1485,7 @@ oakInnSpeedy() {
         until [ "$_oakInn_X_START" -ge "$_oakInn_X_END" ]; do
             # Tap on X coord to posibly collect present
             input tap "$_oakInn_X_START" 1350
-            sleep 2
+            sleep 3
 
             # Check if tapped on present
             if testColorNAND 270 1240 251716; then
@@ -1591,7 +1591,7 @@ twistedRealmBoss() {
 
         printInColor "INFO" "Fighting Twisted Realm Boss ${cCyan}$totalAmountTwistedRealmBossTries${cNc} time(s)."
         until [ "$totalAmountTwistedRealmBossTries" -le 0 ]; do
-            inputTapSleep 550 1850               # Challenge
+            inputTapSleep 550 1850 # Challenge
 
             # When no challenges left, a pop-up appears that asks if you want to reset them for 50 diamonds
             if testColorOR 620 1260 a1eebf; then
@@ -1878,6 +1878,11 @@ init() {
     sleep 3
     switchTab "Dark Forest"
     sleep 1
+    # Check for HoE event
+    if testColorOR -d "$DEFAULT_DELTA" 770 1165 c19e3a; then
+        printInColor "INFO" "Heroes of Esperia event detected."
+        eventHoe=true
+    fi
     switchTab "Ranhorn"
     sleep 1
     switchTab "Campaign" true

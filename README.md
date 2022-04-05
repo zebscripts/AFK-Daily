@@ -5,8 +5,8 @@
    </a>
 
    <!-- Badges -->
-   <a alt="Script version"><img src="https://img.shields.io/badge/Version-2.5.23-blue"></img></a>
-   <a alt="Latest AFK Arena patch tested on"><img src="https://img.shields.io/badge/Patch-1.86.02-blue"></img></a>
+   <a alt="Script version"><img src="https://img.shields.io/badge/Version-2.5.24-blue"></img></a>
+   <a alt="Latest AFK Arena patch tested on"><img src="https://img.shields.io/badge/Patch-1.86.03-blue"></img></a>
    <a alt="Language" href="https://www.gnu.org/software/bash/"><img src="https://img.shields.io/badge/Language-Shell-yellow?logo=gnu-bash&logoColor=yellow"></img></a>
    <a alt="Discord" href="https://discord.gg/Fq2cfqjp8D"><img src="https://img.shields.io/discord/859136061049143307?label=Discord&logo=discord"></img></a>
    </br>
