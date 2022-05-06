@@ -1483,12 +1483,12 @@ oakInnSpeedy() {
     _oakInn_X_END=855
     until [ "$_oakInn_TRIES" -ge "$_oakInn_TRIES_MAX" ]; do
         until [ "$_oakInn_X_START" -ge "$_oakInn_X_END" ]; do
-            # Tap on X coord to posibly collect present
+            # Tap on X coord to possibly collect present
             input tap "$_oakInn_X_START" 1350
-            sleep 3
+            sleep 2
 
             # Check if tapped on present
-            if testColorNAND 270 1240 251716; then
+            if testColorNAND 955 1235 271616; then
                 inputTapSleep 540 1650 1  # Ok
                 inputTapSleep 540 1650 .5 # Collect reward
                 printInColor "INFO" "Collected presents at the Oak Inn."
@@ -1819,6 +1819,7 @@ doTest() {
 # ##############################################################################
 tests() {
     printInColor "INFO" "Starting tests... ($(date))"
+
     # doTest 450 1050 ef2118 # Random coords
     # doTest 550 740         # Check for Boss in Campaign
     # doTest 660 520         # Check for Solo Bounties HEX
