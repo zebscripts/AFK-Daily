@@ -23,6 +23,7 @@ DEBUG=0
 DEFAULT_DELTA=3 # Default delta for colors
 DEFAULT_SLEEP=2 # equivalent to wait (default 2)
 eventHoe=false  # Set to `true` if "Heroes of Esperia" event is live
+eventTs=false   # Set to `true` if "Treasure Scramble" event is live
 totalAmountOakRewards=3
 
 # Do not modify
@@ -63,7 +64,8 @@ while getopts "ce:fgi:l:s:tv:w" opt; do
         IFS=','
         for i in $OPTARG; do
             case "$i" in
-            "hoe") eventHoe=true ;;
+            "hoe") eventHoe=true ;; # Heroes of Esperia
+            "ts") eventTs=true ;;   # Treasure Scramble (same problem as HoE atm)
             esac
         done
         IFS=$buIFS
@@ -795,7 +797,7 @@ lootAfkChest() {
 arenaOfHeroes() {
     if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "arenaOfHeroes" >&2; fi
     inputTapSleep 740 1050 3
-    if [ "$eventHoe" = false ]; then
+    if [ "$eventHoe" = false ] && [ "$eventTs" = false ]; then
         inputTapSleep 550 450 3
     else
         inputTapSleep 550 900 3
@@ -1102,7 +1104,7 @@ legendsTournament() {
     ## For testing only! Keep as comment ##
     # inputTapSleep 740 1050 1
     ## End of testing ##
-    if [ "$eventHoe" = false ]; then
+    if [ "$eventHoe" = false ] && [ "$eventTs" = false ]; then
         inputTapSleep 550 900 # Legend's Challenger Tournament
     else
         inputTapSleep 550 1450 # Legend's Challenger Tournament
@@ -1468,12 +1470,12 @@ nobleTavern() {
 }
 
 # ##############################################################################
-# Function Name : oakInnSpeedy
-# Descripton    : Collect Oak Inn faster than oakInn()
+# Function Name : oakInn
+# Descripton    : Collect Oak Inn
 # Concept       : https://github.com/Fortigate/AFK-Daily/blob/master/deploy.sh > collectInnGifts()
 # ##############################################################################
-oakInnSpeedy() {
-    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInnSpeedy" >&2; fi
+oakInn() {
+    if [ "$DEBUG" -ge 4 ]; then printInColor "DEBUG" "oakInn" >&2; fi
     inputTapSleep 670 320 5 # Oak Inn
     printInColor "INFO" "Searching for presents to collect..."
 
@@ -1655,7 +1657,7 @@ checkWhereToEnd() {
     "championship")
         switchTab "Dark Forest" true
         inputTapSleep 740 1050
-        if [ "$eventHoe" = false ]; then
+        if [ "$eventHoe" = false ] && [ "$eventTs" = false ]; then
             inputTapSleep 550 1370 0
         else
             inputTapSleep 550 1680 0
@@ -1684,11 +1686,13 @@ collectQuestChests() {
     collectQuestChests_quick
     sleep 4
 
-    inputTapSleep 650 1650 # Weeklies
+    inputTapSleep 650 1650 1 # Weeklies
+    inputTapSleep 650 1650   # Weeklies
     collectQuestChests_quick
     sleep 4
 
     #WARN: May break if the reward is a new champ...
+    inputTapSleep 930 1650 1                                   # Campaign
     inputTapSleep 930 1650                                     # Campaign
     until testColorNAND -d "$DEFAULT_DELTA" 950 610 acf0bd; do # Old value: 82fdf5
         inputTapSleep 860 610
@@ -1762,25 +1766,39 @@ collectMerchants() {
         inputTapSleep 210 945 1 # Free
         inputTapSleep 550 300 1 # Collect rewards
     else
-        printInColor "INFO" "No 'Specials' reward to collect."
+        printInColor "INFO" "No 'Specials' reward to collect. [Tile]"
     fi
 
     # Check for "Daily Deals" freebie
-    inputTapSleep 280 1625 1
-    if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
-        inputTapSleep 210 720 1 # Free
-        inputTapSleep 550 300 1 # Collect rewards
+    if testColorOR -d "$DEFAULT_DELTA" 425 1524 fe4938; then
+        inputTapSleep 280 1625 1
+        if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
+            inputTapSleep 210 720 1 # Free
+            inputTapSleep 550 300 1 # Collect rewards
+        elif testColorOR -d "$DEFAULT_DELTA" 365 1000 cd0000; then
+            inputTapSleep 210 1200 1 # Free
+            inputTapSleep 550 300 1  # Collect rewards
+        else
+            printInColor "INFO" "No 'Daily Deals' reward to collect. [Tile]"
+        fi
     else
-        printInColor "INFO" "No 'Daily Deals' reward to collect."
+        printInColor "INFO" "No 'Daily Deals' reward to collect. [Menu]"
     fi
 
     # Check for "Biweeklies" freebie
-    inputTapSleep 455 1625 1
-    if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
-        inputTapSleep 210 720 1 # Free
-        inputTapSleep 550 300 1 # Collect rewards
+    if testColorOR -d "$DEFAULT_DELTA" 590 1524 ff1e0d; then
+        inputTapSleep 455 1625 1
+        if testColorOR -d "$DEFAULT_DELTA" 365 515 d20101; then
+            inputTapSleep 210 720 1 # Free
+            inputTapSleep 550 300 1 # Collect rewards
+        elif testColorOR -d "$DEFAULT_DELTA" 365 1475 d70000; then
+            inputTapSleep 210 1480 1 # Free
+            inputTapSleep 550 300 1  # Collect rewards
+        else
+            printInColor "INFO" "No 'Biweeklies' reward to collect. [Tile]"
+        fi
     else
-        printInColor "INFO" "No 'Biweeklies' reward to collect."
+        printInColor "INFO" "No 'Biweeklies' reward to collect. [Menu]"
     fi
 
     inputTapSleep 70 1810 4
@@ -1945,7 +1963,7 @@ run() {
     if checkToDo doStrengthenCrystal; then strengthenCrystal; fi
     if checkToDo doTempleOfAscension; then templeOfAscension; fi
     if checkToDo doCompanionPointsSummon; then nobleTavern; fi
-    if checkToDo doCollectOakPresents; then oakInnSpeedy; fi
+    if checkToDo doCollectOakPresents; then oakInn; fi
 
     # END
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
@@ -1966,6 +1984,7 @@ if [ "$testServer" = true ]; then printInColor "INFO" "Test server: ${cBlue}ON${
 
 # Events
 if [ "$eventHoe" = true ]; then activeEvents="${activeEvents}| Heroes of Esperia |"; fi
+if [ "$eventTs" = true ]; then activeEvents="${activeEvents}| Treasure Scramble |"; fi
 if [ -n "$activeEvents" ]; then printInColor "INFO" "Active event(s): ${cBlue}${activeEvents}${cNc}"; fi
 
 echo
