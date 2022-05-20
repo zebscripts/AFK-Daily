@@ -1968,7 +1968,10 @@ run() {
     # END
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
     if checkToDo doCollectMail; then collectMail; fi
-    if checkToDo doCollectMerchantFreebies; then collectMerchants; fi
+    if checkToDo doCollectMerchantFreebies; then
+        collectMerchants
+        doCollectMerchantFreebies=false  # Prevent loop on error
+    fi
     # Ends at given location
     sleep 1
     checkWhereToEnd
