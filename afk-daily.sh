@@ -1967,14 +1967,12 @@ run() {
     # END
     if checkToDo doCollectQuestChests; then collectQuestChests; fi
     if checkToDo doCollectMail; then collectMail; fi
-    if checkToDo doCollectMerchantFreebies; then
-        collectMerchants
-        doCollectMerchantFreebies=false  # Prevent loop on error
-    fi
+    if checkToDo doCollectMerchantFreebies; then collectMerchants; fi
     # Ends at given location
     sleep 1
     checkWhereToEnd
 
+    eval "$currentPos=false" # Prevent loop on error
     hasEnded=true
 }
 
