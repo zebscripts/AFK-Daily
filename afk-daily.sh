@@ -1486,8 +1486,7 @@ oakInn() {
     until [ "$_oakInn_TRIES" -ge "$_oakInn_TRIES_MAX" ]; do
         until [ "$_oakInn_X_START" -ge "$_oakInn_X_END" ]; do
             # Tap on X coord to possibly collect present
-            input tap "$_oakInn_X_START" 1350
-            sleep 2
+            inputTapSleep "$_oakInn_X_START" 1350
 
             # Check if tapped on present
             if testColorNAND 955 1235 271616; then
