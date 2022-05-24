@@ -107,7 +107,7 @@ doLootAfkChest2="$doLootAfkChest"
 
 # ##############################################################################
 # Section       : Core Functions
-# Description   : It's like a library of usefull functions
+# Description   : It's like a library of useful functions
 # ##############################################################################
 
 # ##############################################################################
@@ -707,11 +707,11 @@ challengeBoss() {
         done
 
         # Return to campaign
-        if testColorNAND 450 1775 cc9261; then # For low levels, you are automatically kick out (before stage 4)
+        if testColorNAND 450 1775 cc9261; then # For low levels, you are automatically kicked out (before stage 4)
             inputTapSleep 60 1850              # Return
         fi
 
-        testColorORTapSleep 715 1260 feffff # Check for confirm to exit button
+        testColorORTapSleep 715 1260 fefffe # Check for confirm to exit button
     else
         # Quick exit battle
         inputTapSleep 550 1850 1 # Battle
