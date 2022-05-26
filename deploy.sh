@@ -138,6 +138,7 @@ checkAdb() {
 checkDate() {
     printTask "Checking last time script was run..."
     if [ -f $tempFile ]; then
+        source $configFile
         source $tempFile
         if [ "$doChallengeBoss" = true ] && [ "$(datediff "$lastCampaign")" -le -3 ]; then
             forceFightCampaign=true
@@ -605,7 +606,9 @@ show_help() {
     echo -e
     echo -e "   ${cCyan}-e${cWhite}, ${cCyan}--event${cWhite} ${cGreen}[EVENT]${cWhite}"
     echo -e "      Specify active event."
-    echo -e "      Values for ${cGreen}[EVENT]${cWhite}: hoe"
+    echo -e "      Values for ${cGreen}[EVENT]${cWhite}:"
+    echo -e "         hoe           Heroes of Esperia"
+    echo -e "         ts            Treasure Scramble"
     echo -e
     echo -e "   ${cCyan}-f${cWhite}, ${cCyan}--fight${cWhite}"
     echo -e "      Force campaign battle (ignore 3-day optimisation)."
