@@ -660,7 +660,7 @@ challengeBoss() {
         _challengeBoss_WIN=0
 
         # Check for battle screen
-        until testColorNAND -d "$DEFAULT_DELTA" -f 200 1850 2b1a12 || [ "$maxCampaignFights" -le 0 ]; do
+        until testColorNAND -d "$DEFAULT_DELTA" -f 495 95 f8e28b || [ "$maxCampaignFights" -le 0 ]; do
             inputTapSleep 550 1850 .5 # Battle
             waitBattleStart
             doAuto
