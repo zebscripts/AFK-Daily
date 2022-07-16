@@ -15,7 +15,7 @@
 <!-- Uncomment for news -->
 > ## News
 >
-> [Join us on discord](https://discord.gg/Fq2cfqjp8D) to keep up to date with the latest features, as well as for any troubleshooting or updating help.
+> **This project is not actively maintained anymore**, I do not have the time to work on it. I'll still be around to check Pull Requests, but I will only be developing features and fixes for it whenever I can.
 
 ## Description
 
