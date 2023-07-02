@@ -15,7 +15,7 @@
 <!-- Uncomment for news -->
 > ## News
 >
-> **This project is not actively maintained anymore**, I do not have the time to work on it. I'll still be around to check Pull Requests, but I will only be developing features and fixes for it whenever I can.
+> **This project is not actively maintained anymore**, I do not have the time to work on it. It'll be archived until further notice. Thanks to every one who contributed to it!
 
 ## Description
 
